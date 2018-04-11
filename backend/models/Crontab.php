@@ -46,7 +46,7 @@ class Crontab extends \yii\db\ActiveRecord
             [['last_rundate', 'next_rundate'], 'safe'],
             [['execmemory', 'exectime'], 'number'],
             [['name', 'route', 'crontab_str'], 'string', 'max' => 50],
-            [['switch', 'status'], 'string', 'max' => 1],
+            [['switch'], 'string', 'max' => 1],
         ];
     }
 

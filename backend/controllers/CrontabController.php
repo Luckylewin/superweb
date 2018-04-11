@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\helpers\Url;
 use yii\web\NotFoundHttpException;
 use backend\models\Crontab;
 
@@ -50,7 +51,8 @@ class CrontabController extends BaseController
         $model = new Crontab();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            Yii::$app->session->setFlash('success', '创建成功');
+            return $this->redirect(Url::to(['crontab/index']));
         }
 
         return $this->render('create', [
@@ -70,7 +72,8 @@ class CrontabController extends BaseController
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            Yii::$app->session->setFlash('info', '修改成功');
+            return $this->redirect(Url::to(['crontab/index']));
         }
 
         return $this->render('update', [
