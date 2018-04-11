@@ -60,7 +60,7 @@ class Toastr extends \yii\bootstrap\Widget
                     $function = $this->alertTypes[$type];
                     $view = $this->getView();
                     if ($msgStr = json_decode($message,true)) {
-                        $str = '<b>Excel导入错误信息:</b><br/>';
+                        $str = '<b>导入错误信息:</b><br/>';
                         $num = 0;
                         foreach ($msgStr as $msg) {
                             if ($num < 20) {
@@ -70,7 +70,7 @@ class Toastr extends \yii\bootstrap\Widget
                         }
                         $message = $str;
                     }
-                    echo $js = "toastr.{$function}('{$message}');";
+                    echo $js = "toastr.{$function}('" . str_replace("'","\\'",$message)."');";
                     $view->registerJs($js);
                 }
                 $session->removeFlash($type);
