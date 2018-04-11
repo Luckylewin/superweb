@@ -5,11 +5,7 @@
 use yii\helpers\Html;
 use yii\web\AssetBundle as AppAsset;
 use yii\widgets\Breadcrumbs;
-
-
 AppAsset::register($this);
-
-
 $this->registerJsFile('/statics/themes/default-admin/plugins/toastr/toastr.min.js', ['depends'=>['yii\web\JqueryAsset']]);
 ?>
 <?php $this->beginPage() ?>
@@ -21,11 +17,9 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/toastr/toastr.min.j
     <?= Html::csrfMetaTags() ?>
     <title><?= isset(Yii::$app->params['basic']['sitename']) ? Yii::$app->params['basic']['sitename'] . ' - ' : '' . Html::encode($this->title) ?></title>
     <?php $this->head() ?>
-    <link href="/statics/themes/default-admin/css/style.css?v=4.1.0" rel="stylesheet">
-    <link href="/statics/themes/default-admin/plugins/bootstrap-v3.3/bootstrap.min.css?v=3.3.6" rel="stylesheet">
-    <link href="/statics/themes/default-admin/css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
-    <link href="/statics/themes/default-admin/plugins/toastr/toastr.min.css" rel="stylesheet">
-
+    <?php $this->registerCssFile('/statics/themes/default-admin/css/style.css?v=4.1.0', ['depends' => ['yii\bootstrap\BootstrapAsset']]) ?>
+    <?php $this->registerCssFile('/statics/themes/default-admin/css/style.css?v=4.1.0') ?>
+    <?php $this->registerCssFile('/statics/themes/default-admin/plugins/toastr/toastr.min.css') ?>
 <body>
 <?php $this->beginBody() ?>
 <div class="wrapper">
