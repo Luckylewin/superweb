@@ -472,14 +472,14 @@ $this->params['breadcrumbs'][] = $this->title;
         return option;
     }
 
-    var all_program =       [<?= "'" . implode(" ','", array_keys($programLog['all_program'])) . "'" ?>];
-    var all_program_value = [<?= implode(",", array_values($programLog['all_program'])) ?>];
+    var all_program =       [<?= "'" . implode(" ','", array_keys($programLog['all_program']?$programLog['all_program']:[])) . "'" ?>];
+    var all_program_value = [<?= implode(",", array_values($programLog['all_program']?$programLog['all_program']:[])) ?>];
 
     var local_program = [<?= "'" . implode(" ','", array_keys($programLog['local_program']?$programLog['local_program']:[])) . "'" ?>];
     var local_program_value = [<?= implode(",", array_values($programLog['local_program']?$programLog['local_program']:[])) ?>];
 
-    var server_program = [<?= "'" . implode(" ','", array_keys($programLog['server_program'])) . "'" ?>];
-    var server_program_value = [<?= implode(",", array_values($programLog['server_program'])) ?>];
+    var server_program = [<?= "'" . implode(" ','", array_keys($programLog['server_program']?$programLog['server_program']:[])) . "'" ?>];
+    var server_program_value = [<?= implode(",", array_values($programLog['server_program']?$programLog['server_program']:[])) ?>];
 
     var program = echarts.init(document.getElementById('program'));
     var option = setOption('节目收看排行','服务器+本地解析',all_program,all_program_value);

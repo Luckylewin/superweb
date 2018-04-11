@@ -57,6 +57,14 @@ class MySSH
         if ( strpos($cmd, 'dev/null') === false && $async ) {
             $cmd .= ' > /dev/null 2>&1 &';
         }
-        return ssh2_exec($this->ssh_connection,$cmd);
+        $stream = ssh2_exec(self::$ssh_connection,$cmd);
+        stream_set_blocking($stream, true);
+        return stream_get_contents($stream);
     }
+
+    public function close()
+    {
+        $this->exec("close");
+    }
+
 }

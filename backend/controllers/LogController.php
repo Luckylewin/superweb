@@ -42,6 +42,7 @@ class LogController extends BaseController
         $programLog = ['all_program'=>[], 'local_program'=>[], 'server_program'=>[], 'all_program_sum'=>0];
         $log = ['default' => [0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0]];
 
+
         //接口时段调用统计
         if ($timeLineLog) {
             $log['total_line'] = json_decode($timeLineLog->total_line, true);

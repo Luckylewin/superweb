@@ -33,7 +33,7 @@ $username = Yii::$app->user->isGuest == false ? Yii::$app->user->identity->usern
     <meta http-equiv="refresh" content="0;ie.html" />
     <![endif]-->
 
-    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="shortcut icon" href="/statics/iptv.ico">
     <link href="/statics/themes/default-admin/plugins/bootstrap-v3.3/bootstrap.min.css?v=3.3.6" rel="stylesheet">
     <link href="/statics/themes/default-admin/css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
     <link href="/statics/themes/default-admin/css/animate.css" rel="stylesheet">
