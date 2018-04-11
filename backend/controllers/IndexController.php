@@ -9,9 +9,7 @@
 namespace backend\controllers;
 
 
-use yii\base\Controller;
-
-class IndexController extends Controller
+class IndexController extends BaseController
 {
     public function actionFrame()
     {

@@ -13,7 +13,7 @@ use backend\models\Menu;
 
 AppAsset::register($this);
 $allMenus = Menu::getActualMenu();
-$username = Yii::$app->user->identity->username;
+$username = Yii::$app->user->isGuest == false ? Yii::$app->user->identity->username : '' ;
 
 ?>
 <!DOCTYPE html>
