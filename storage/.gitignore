@@ -1,3 +1,6 @@
-assets/*
-backups/*
-runtime/*
+/runtime/
+/backups/
+/assets/
+!/backups/index.html
+!/assets/index.html
+!/runtime/index.html
