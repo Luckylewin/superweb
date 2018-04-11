@@ -90,18 +90,23 @@ class CronParser
         $dates = [];
 
         // 年份基点
-        $nowyear = ($year) ? $year : date('Y');
+        $nowYear = ($year) ? $year : date('Y');
 
         // 时间基点已当前为准,用于过滤小于当前时间的日期
         $nowtime = strtotime(date("Y-m-d H:i"));
 
         foreach ($crons['month'] as $month) {
             // 获取此月最大天数
-            $maxDay = cal_days_in_month(CAL_GREGORIAN, $month, $nowyear);
+            if (function_exists('cal_days_in_month')) {
+                $maxDay = cal_days_in_month(CAL_GREGORIAN, $month, $nowYear);
+            } else {
+                $maxDay = date('t', strtotime("$nowYear-$month"));
+            }
+
             foreach (range(1, $maxDay) as $day) {
                 foreach ($crons['hours'] as $hours) {
                     foreach ($crons['minutes'] as $minutes) {
-                        $i = mktime($hours, $minutes, 0, $month, $day, $nowyear);
+                        $i = mktime($hours, $minutes, 0, $month, $day, $nowYear);
                         if ($nowtime >= $i) {
                             continue;
                         }
@@ -140,7 +145,7 @@ class CronParser
 
         if (count($dates) != $maxSize) {
             // 向下一年递归
-            $dates = array_merge(self::getDateList($crons, $maxSize, ($nowyear + 1)), $dates);
+            $dates = array_merge(self::getDateList($crons, $maxSize, ($nowYear + 1)), $dates);
         }
 
         return $dates;
