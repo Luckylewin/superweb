@@ -31,6 +31,7 @@ use Yii;
  * @property string $utime
  * @property string $url
  * @property string $act_img 真实图片地址
+ * @property string $is_del 是否软删除
  * @property int $download_flag 是否下载
  */
 class Karaoke extends \yii\db\ActiveRecord
@@ -40,7 +41,7 @@ class Karaoke extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'yii2_karaoke';
+        return 'sys_karaoke';
     }
 
     /**
@@ -52,12 +53,12 @@ class Karaoke extends \yii\db\ActiveRecord
             [['albumName', 'albumImage', 'info', 'year', 'url'], 'required'],
             [['albumName', 'albumImage', 'info'], 'string'],
             [['tid', 'year', 'flag', 'hit_count', 'voole_id', 'price', 'is_finish', 'yesterday_viewed', 'download_flag'], 'integer'],
-            [['updatetime', 'utime'], 'safe'],
+            [['updatetime', 'utime', 'is_del'], 'safe'],
             [['mainActor', 'directors', 'tags', 'area', 'keywords', 'wflag', 'mod_version', 'totalDuration'], 'string', 'max' => 255],
             [['url', 'act_img'], 'string', 'max' => 200],
             [['wflag','tid','flag','tid','mod_version','totalDuration','flag','voole_id','price','is_finish','yesterday_viewed'], 'default' , 'value' => 1],
             [['utime','updatetime'],'default','value' => date('Y-m-d H:i:s')],
-            [['sort'],'default', 'value' => '0']
+            [['sort','is_del'],'default', 'value' => '0']
         ];
     }
 
@@ -92,6 +93,7 @@ class Karaoke extends \yii\db\ActiveRecord
             'url' => 'Url',
             'act_img' => '真实图片地址',
             'download_flag' => '是否下载',
+            'is_del' => '是否软删除',
         ];
     }
 
