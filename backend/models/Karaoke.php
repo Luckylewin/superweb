@@ -3,6 +3,8 @@
 namespace backend\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "albumName_karaoke".
@@ -96,6 +98,21 @@ class Karaoke extends \yii\db\ActiveRecord
             'download_flag' => '是否下载',
             'is_del' => '是否软删除',
             'sort' => '排序',
+        ];
+    }
+
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::className(),
+                'updatedAtAttribute' => 'updatetime',
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['utime', 'updatetime'],
+                    ActiveRecord::EVENT_BEFORE_UPDATE => ['utime']
+                ],
+                'value' => date('Y-m-d H:i:s')
+            ]
         ];
     }
 

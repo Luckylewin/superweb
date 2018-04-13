@@ -36,6 +36,9 @@ class CheckController extends Controller
                     $karaoke = Karaoke::findOne($karaoke['ID']);
                     $karaoke->is_del = 1;
                     $karaoke->save();
+                    echo "----结果：播放失败----- ",PHP_EOL;
+                } else {
+                    echo "----结果：播放成功----- ",PHP_EOL;
                 }
                 sleep(mt_rand(20,30));
             }
