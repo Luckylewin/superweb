@@ -102,7 +102,7 @@ return [
         //redis组件
         'redis' => [
             'class' => 'yii\redis\Connection',
-            'hostname' => '192.168.0.11',
+            'hostname' => '127.0.0.1',
             'port' => 6379,
             'password' => '198721',
             'database' => 0,

@@ -32,6 +32,7 @@ use Yii;
  * @property string $url
  * @property string $act_img 真实图片地址
  * @property string $is_del 是否软删除
+ * @property string $sort 排序
  * @property int $download_flag 是否下载
  */
 class Karaoke extends \yii\db\ActiveRecord
@@ -94,6 +95,7 @@ class Karaoke extends \yii\db\ActiveRecord
             'act_img' => '真实图片地址',
             'download_flag' => '是否下载',
             'is_del' => '是否软删除',
+            'sort' => '排序',
         ];
     }
 
