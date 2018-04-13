@@ -19,7 +19,7 @@ class KaraokeSearch extends Karaoke
     {
         return [
             [['ID', 'tid', 'year', 'flag', 'hit_count', 'voole_id', 'price', 'is_finish', 'yesterday_viewed', 'download_flag'], 'integer'],
-            [['albumName', 'albumImage', 'mainActor', 'directors', 'tags', 'info', 'area', 'keywords', 'wflag', 'mod_version', 'updatetime', 'totalDuration', 'utime', 'url', 'act_img'], 'safe'],
+            [['albumName', 'albumImage', 'mainActor', 'directors', 'tags', 'info', 'area', 'keywords', 'wflag', 'mod_version', 'updatetime', 'totalDuration', 'utime', 'url', 'act_img', 'is_del'], 'safe'],
         ];
     }
 
@@ -68,7 +68,7 @@ class KaraokeSearch extends Karaoke
             'area' => $this->area,
             'year' => $this->year,
             'hit_count' => $this->hit_count,
-
+            'is_del' => $this->is_del,
         ]);
 
         $query

@@ -33,7 +33,7 @@ class CheckController extends Controller
             return false;
         } else {
             preg_match('/(\/\w+)+\w+/', $ffprobe, $ffprobePath);
-            $ffprobePath = $ffprobePath[0];
+
         }
 
         foreach ($query->batch() as $karaokes) {
@@ -42,14 +42,20 @@ class CheckController extends Controller
                 $urlID = $karaoke['url'];
                 $url = common::getVideoUrl($urlID);
                 if ($url) {
-                    $execRes = $ssh->exec("$ffprobePath  -print_format json -show_error $url");
+                    $shell = "$ffprobePath  -print_format json -show_error '$url'";
+                    $execRes = $ssh->exec($shell);
                     $analRes = common::getStatus($karaoke['albumName'], $karaoke['url'], $execRes);
                     if ($analRes['status'] == false) {
                         $karaoke = Karaoke::findOne($karaoke['ID']);
                         $karaoke->is_del = 1;
                         $karaoke->save();
-                        echo "----结果：播放失败----- ",PHP_EOL;
+                        echo "----结果：播放失败({$analRes['msg']})----- ",PHP_EOL;
                     } else {
+                        if (!$karaoke['is_del']) {
+                            $karaoke = Karaoke::findOne($karaoke['ID']);
+                            $karaoke->is_del = 0;
+                            $karaoke->save();
+                        }
                         echo "----结果：播放成功----- ",PHP_EOL;
                     }
                     sleep(mt_rand(20,30));

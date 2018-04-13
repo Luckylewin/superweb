@@ -33,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'albumName',
-                'options' => ['style' => 'width:350px;' ]
+                'options' => ['style' => 'width:300px;' ]
             ],
             [
                     'attribute' => 'url',
@@ -54,6 +54,14 @@ $this->params['breadcrumbs'][] = $this->title;
                     'attribute' => 'area',
                     'filter' => \backend\models\Karaoke::getLang()
 
+            ],
+
+            [
+                    'attribute' => 'is_del',
+                    'filter' => \backend\models\Karaoke::$delStatus,
+                    'value' => function($model) {
+                        return $model->status;
+                    }
             ],
 
             [

@@ -39,6 +39,9 @@ use yii\db\ActiveRecord;
  */
 class Karaoke extends \yii\db\ActiveRecord
 {
+
+    public static $delStatus = ['有效', '无效'];
+
     /**
      * @inheritdoc
      */
@@ -96,7 +99,7 @@ class Karaoke extends \yii\db\ActiveRecord
             'url' => 'Url',
             'act_img' => '真实图片地址',
             'download_flag' => '是否下载',
-            'is_del' => '是否软删除',
+            'is_del' => '是否有效',
             'sort' => '排序',
         ];
     }
@@ -127,6 +130,11 @@ class Karaoke extends \yii\db\ActiveRecord
             'French' => '法语',
             'Other' => '其它',
         ];
+    }
+
+    public function getStatus()
+    {
+        return self::$delStatus[$this->is_del];
     }
 
     public function beforeSave($insert)
