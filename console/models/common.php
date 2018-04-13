@@ -73,8 +73,13 @@ class common
         $Snnopy = new Snoopy();
         $Snnopy->scheme = 'https';
         $Snnopy->_fp_timeout = 15;
-        $Snnopy->fetch('https://www.youtube.com/get_video_info?video_id='.$url);
-        $videoInfo = $Snnopy->results;
+
+        try {
+            $Snnopy->fetch('https://www.youtube.com/get_video_info?video_id='.$url);
+            $videoInfo = $Snnopy->results;
+        }catch (\Exception $e) {
+             return false;
+        }
 
         if (empty($videoInfo)) {
             return false;
