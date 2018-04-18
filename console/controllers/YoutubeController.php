@@ -8,7 +8,11 @@
 
 namespace console\controllers;
 
-
+use backend\models\Karaoke;
+use Google_Client;
+use Google_Service_YouTube;
+use Google_Service_Exception;
+use Google_Exception;
 use yii\console\Controller;
 
 class YoutubeController extends Controller
@@ -21,7 +25,7 @@ class YoutubeController extends Controller
         while (!is_null($nextPage)) {
             if (isset($pageToken) && $pageToken) {
                 $optPara = array(
-                    'q' => 'araoke beat chuẩn',//
+                    'q' => 'karaoke',//
                     'maxResults' => 50,
                     'pageToken' => $pageToken,
                     //'type' => 'video',
@@ -31,7 +35,7 @@ class YoutubeController extends Controller
                 );
             } else {
                 $optPara = array(
-                    'q' => 'araoke beat chuẩn',//
+                    'q' => 'karaoke',//
                     'maxResults' => 50,
                     //'type' => 'video',
                     'order' => 'relevance',
@@ -45,7 +49,8 @@ class YoutubeController extends Controller
         }
     }
 
-    function token($limit, $page) {
+    public function token($limit, $page)
+    {
         $start = 1 + ($page - 1) * $limit;
         $third_chars = array_merge(
             range("A","Z",4),
@@ -120,19 +125,19 @@ class YoutubeController extends Controller
 
     public function collectVideo($searchResult)
     {
-        $data = $this->karaokeModel->getOne('karaoke',$searchResult['snippet']['title']);
 
-        if (empty($data)) {
-
+        $karaoke = Karaoke::findOne(['albumName' => $searchResult['snippet']['title']]);
+        if (is_null($karaoke)) {
             $searchResult['snippet']['title'] = trim($searchResult['snippet']['title']);
             if (!empty($searchResult['snippet']['title'])) {
-                $karaoke['url'] = $searchResult['id']['videoId'];
-                $karaoke['albumName'] = $searchResult['snippet']['title'];
-                $karaoke['albumImage'] = $searchResult['snippet']['thumbnails']['high']['url'];
-                $karaoke['info'] = $searchResult['snippet']['description'];
+                $karaoke = new Karaoke();
+                $karaoke->url = $searchResult['id']['videoId'];
+                $karaoke->albumName = $searchResult['snippet']['title'];
+                $karaoke->albumImage = $searchResult['snippet']['thumbnails']['high']['url'];
+                $karaoke->info = $searchResult['snippet']['description'];
             }
-
-            return $result = $this->karaokeModel->album_insert('karaoke',$karaoke);
+            $karaoke->save(false);
+            echo "插入数据 " . $karaoke->albumName . PHP_EOL;
         } else {
             //echo $searchResult['snippet']['title'] . "已经存在\n";
         }
@@ -140,5 +145,5 @@ class YoutubeController extends Controller
         return false;
     }
 
-}
+
 }
