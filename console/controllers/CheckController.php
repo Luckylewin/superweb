@@ -32,8 +32,7 @@ class CheckController extends Controller
             echo "----未安装ffprobe----", PHP_EOL;
             return ExitCode::SOFTWARE;
         } else {
-            preg_match('/(\/\w+)+\w+/', $ffprobe, $ffprobePath);
-
+            $ffprobePath = '/usr/local/ffmpeg/bin/ffprobe';
         }
 
         foreach ($query->batch() as $karaokes) {
@@ -44,7 +43,7 @@ class CheckController extends Controller
                 if ($url == false) {
                     $karaoke = Karaoke::findOne($karaoke['ID']);
                     $karaoke->is_del = 1;
-                    $karaoke->save();
+                    $karaoke->save(false);
                     echo "----无法获取真实地址----", PHP_EOL;continue;
                 }
 
@@ -59,7 +58,7 @@ class CheckController extends Controller
                     if (!$karaoke['is_del']) {
                         $karaoke = Karaoke::findOne($karaoke['ID']);
                         $karaoke->is_del = 0;
-                        $karaoke->save();
+                        $karaoke->save(false);
                     }
 
                     echo "----结果：播放成功----- ", PHP_EOL;
@@ -74,9 +73,6 @@ class CheckController extends Controller
         return ExitCode::OK;
     }
 
-    public function actionAnnVod()
-    {
-
-    }
+   
 
 }
