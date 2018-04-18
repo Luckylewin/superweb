@@ -71,19 +71,14 @@ class KaraokeSearch extends Karaoke
             'is_del' => $this->is_del,
         ]);
 
-        $query
-            ->andFilterWhere(['like', 'mainActor', $this->mainActor])
-            ->andFilterWhere(['like', 'directors', $this->directors])
-            ->andFilterWhere(['like', 'tags', $this->tags])
-            ->andFilterWhere(['like', 'info', $this->info])
-            ->andFilterWhere(['like', 'area', $this->area])
-            ->andFilterWhere(['like', 'keywords', $this->keywords])
-            ->andFilterWhere(['like', 'wflag', $this->wflag])
-            ->andFilterWhere(['like', 'mod_version', $this->mod_version])
-            ->andFilterWhere(['like', 'totalDuration', $this->totalDuration])
-            ->andFilterWhere(['like', 'url', $this->url])
-            ->andFilterWhere(['like', 'utime', $this->utime])
-            ->andFilterWhere(['like', 'act_img', $this->act_img]);
+        $query->andFilterWhere(['like', 'albumName', $this->tags])
+                ->andFilterWhere(['like', 'tags', $this->tags])
+                ->andFilterWhere(['like', 'info', $this->info])
+                ->andFilterWhere(['like', 'area', $this->area])
+                ->andFilterWhere(['like', 'keywords', $this->keywords])
+                ->andFilterWhere(['like', 'url', $this->url])
+                ->andFilterWhere(['like', 'utime', $this->utime]);
+
 
         return $dataProvider;
     }
