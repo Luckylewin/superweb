@@ -164,10 +164,12 @@ class LogController extends Controller
         $timeLineLog->watch_line = json_encode($watchRequest);
         $timeLineLog->token_line = json_encode($tokenRequest);
         $timeLineLog->year = json_encode($localRequest);
-        $timeLineLog->local_watch_line = json_encode($serverRequest);
-        $timeLineLog->server_watch_line = date('Y-m-d', $this->_setDate());
-        $timeLineLog->date = $this->_setDate();
-        $timeLineLog->save(false);
+        $timeLineLog->local_watch_line = json_encode($localRequest);
+        $timeLineLog->server_watch_line = json_encode($serverRequest);
+        $timeLineLog->date = date('Y-m-d', $this->_setDate());
+        if (!TimelineLog::findOne(['date' => date('Y-m-d', $this->_setDate())])) {
+            $timeLineLog->save(false);
+        }
 
     }
 
