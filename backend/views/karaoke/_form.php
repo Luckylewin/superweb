@@ -30,6 +30,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'year')->textInput() ?>
 
+    <?= $form->field($model, 'hit_count')->textInput()->label('热度') ?>
+
     <?= $form->field($model, 'url')->textInput(['maxlength' => true]) ?>
 
 

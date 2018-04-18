@@ -14,9 +14,24 @@ use console\models\common;
 use yii\console\Controller;
 use yii\console\ExitCode;
 use yii\db\Query;
+use yii\helpers\Console;
 
 class CheckController extends Controller
 {
+    public $date;
+
+    public function options()
+    {
+        return ['date','message'];
+    }
+
+    public function optionAliases()
+    {
+        return [
+            'd' => 'date',
+        ];
+    }
+
     /**
      * 任务检测
      */
@@ -24,7 +39,15 @@ class CheckController extends Controller
     {
         $ssh = MySSH::singleton();
         $query = new Query();
-        $query->from(Karaoke::tableName());
+
+        if (is_null($this->date)) {
+            $this->stdout("未指定日期，检测全部\n",Console::BOLD);
+            $query->from(Karaoke::tableName());
+        } else {
+            $this->stdout("已指定日期". $this->date ."检测\n",Console::BOLD);
+            $query->from(Karaoke::tableName())->andFilterWhere(['like', 'utime', $this->date]);
+        }
+
 
         //获取ffprobe路径
         $ffprobe = $ssh->exec('whereis ffprobe');
@@ -73,6 +96,6 @@ class CheckController extends Controller
         return ExitCode::OK;
     }
 
-   
+
 
 }

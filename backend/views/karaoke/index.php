@@ -64,10 +64,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
             ],
 
+            'utime:date',
+
             [
                 'class' => 'common\grid\MyActionColumn',
                 'header' => '操作'
             ],
+
 
 
             //'directors',
@@ -86,7 +89,7 @@ $this->params['breadcrumbs'][] = $this->title;
             //'price',
             //'is_finish',
             //'yesterday_viewed',
-            //'utime',
+            //,
             //'url:url',
             //'act_img',
             //'download_flag',

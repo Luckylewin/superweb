@@ -20,6 +20,21 @@ use yii\console\ExitCode;
  */
 class HelloController extends Controller
 {
+    public $message;
+    public $day;
+
+    public function options()
+    {
+        return ['day','message'];
+    }
+
+    public function optionAliases()
+    {
+        return [
+            'd' => 'day',
+        ];
+    }
+
     /**
      * This command echoes what you have entered as the message.
      * @param string $message the message to be echoed.
@@ -27,7 +42,7 @@ class HelloController extends Controller
      */
     public function actionIndex($message = 'hello world')
     {
-        echo $message . "\n";
+        echo var_dump($this->day);
 
         return ExitCode::OK;
     }

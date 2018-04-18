@@ -82,6 +82,7 @@ class KaraokeSearch extends Karaoke
             ->andFilterWhere(['like', 'mod_version', $this->mod_version])
             ->andFilterWhere(['like', 'totalDuration', $this->totalDuration])
             ->andFilterWhere(['like', 'url', $this->url])
+            ->andFilterWhere(['like', 'utime', $this->utime])
             ->andFilterWhere(['like', 'act_img', $this->act_img]);
 
         return $dataProvider;
