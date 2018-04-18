@@ -72,6 +72,10 @@ class BaseController extends Controller
         return true;
     }
 
+    public function setFlash($status, $message)
+    {
+        \Yii::$app->session->setFlash($status, $message);
+    }
     
 
 }

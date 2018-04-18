@@ -107,6 +107,12 @@ return [
             'password' => '198721',
             'database' => 0,
         ],
+        'formatter' => [
+            'class' => 'yii\i18n\Formatter',
+            'dateFormat' => 'php:Y.m.d',
+            'datetimeFormat' => 'php:Y/m/d H:i',
+            'timeFormat' => 'php:H:i:s',
+        ]
     ],
 
      //指定时区
