@@ -14,30 +14,38 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a('Update', ['update', 'id' => $model->MAC], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->MAC], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
+
 
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
             'MAC',
             'SN',
-            'use_flag',
+
             'ver',
             'regtime',
             'logintime',
-            'type',
             'duetime',
+            [
+                'attribute' => 'use_flag',
+                'value' => function($model) {
+                    return $model->getUseFlag($model->use_flag);
+                }
+            ],
             'contract_time',
         ],
     ]) ?>
+
+    <p>
+        <?= Html::a('更新', ['update', 'id' => $model->MAC], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('删除', ['delete', 'id' => $model->MAC], [
+            'class' => 'btn btn-danger',
+            'data' => [
+                'confirm' => 'Are you sure you want to delete this item?',
+                'method' => 'post',
+            ],
+        ]) ?>
+        <?= Html::a('返回', ['index'], ['class' => 'btn btn-default']) ?>
+    </p>
 
 </div>

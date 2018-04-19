@@ -94,7 +94,9 @@ class common
         foreach($streams as $stream) {
             parse_str($stream, $real_stream);
             //$video[$real_stream['quality']] = $real_stream['url'];
-            return $real_stream['url'];
+            if (isset($real_stream['url'])) {
+                return $real_stream['url'];
+            }
         }
         if (empty($video)) {
             return false;

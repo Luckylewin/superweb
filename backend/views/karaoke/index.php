@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="album-name-karaoke-index">
 
 
-    <?php Pjax::begin(); ?>
+
     <?php //$this->render('_search', ['model' => $searchModel]); ?>
 
     <?= GridView::widget([
@@ -97,7 +97,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
         ],
     ]); ?>
-
+    <?php Pjax::begin(); ?>
     <?php Pjax::end(); ?>
     <p>
         <?= Html::a('新增视频', ['create'], ['class' => 'btn btn-success']) ?>

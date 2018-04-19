@@ -88,7 +88,10 @@ class MacController extends BaseController
     {
         $model = $this->findModel($id);
 
+        list($model->contract_time, $model->unit) = explode(' ', $model->contract_time);
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $this->setFlash('info', '操作成功');
             return $this->redirect(['view', 'id' => $model->MAC]);
         }
 

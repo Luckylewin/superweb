@@ -27,6 +27,7 @@ class Mac extends \yii\db\ActiveRecord
     const FORBIDDEN  = 3;
 
     public $client_name;
+    public $unit;
 
     /**
      * @inheritdoc
@@ -42,14 +43,18 @@ class Mac extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['MAC', 'ver'], 'required'],
+            [['MAC','SN', 'contract_time'], 'required'],
+            [['MAC', 'SN'], 'unique'],
+            [['contract_time'],'integer','min' => 1],
             [['use_flag', 'type'], 'integer'],
-            [['regtime', 'logintime', 'duetime'], 'safe'],
+            [['regtime', 'logintime', 'duetime', 'unit'], 'safe'],
             [['MAC', 'SN'], 'string', 'max' => 64],
-            [['ver'], 'string', 'max' => 255],
             [['contract_time'], 'string', 'max' => 8],
             [['MAC', 'SN'], 'unique', 'targetAttribute' => ['MAC', 'SN']],
             [['MAC'], 'unique'],
+            [['ver'], 'default', 'value'=>'0'],
+            [['regtime'], 'default', 'value' => date('Y-m-d H:i:s', time())],
+            [['logintime'], 'default', 'value' => '']
         ];
     }
 
@@ -72,6 +77,19 @@ class Mac extends \yii\db\ActiveRecord
         ];
     }
 
+
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            if ($this->isNewRecord == false) {
+                $this->contract_time = str_replace(['year', 'month', 'day'], ['','',''], $this->contract_time);
+            }
+            $this->contract_time .=  (" " . $this->unit);
+            unset($this->unit);
+        }
+        return true;
+    }
+
     public function beforeDelete()
     {
         if (parent::beforeDelete()) {
@@ -83,6 +101,10 @@ class Mac extends \yii\db\ActiveRecord
         return true;
     }
 
+    /**
+     * 获取状态
+     * @return array
+     */
     public static function getUseFlagList()
     {
         return [
@@ -90,6 +112,19 @@ class Mac extends \yii\db\ActiveRecord
            self::NORMAL     => '可用',
            self::EXPIRED    => '过期',
            self::FORBIDDEN  => '禁用'
+        ];
+    }
+
+    /**
+     * 获取开通时长时间单位
+     * @return array
+     */
+    public static function getContractList()
+    {
+        return [
+            'year' => '年',
+            'month' => '月',
+            'day' => '天'
         ];
     }
 
