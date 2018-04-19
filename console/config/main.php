@@ -22,6 +22,7 @@ return [
           ],
     ],
     'components' => [
+
         'log' => [
             'targets' => [
                 [
@@ -39,6 +40,18 @@ return [
             'charset' => 'utf8',
             'tablePrefix' => 'yii2_',
         ],
+        //redis组件
+        'redis' => [
+            'class' => 'yii\redis\Connection',
+            'hostname' => '127.0.0.1',
+            'port' => 6379,
+            'password' => '198721',
+            'database' => 0,
+        ],
+        //cache组件
+        'cache' => [
+            'class' => 'yii\caching\FileCache',
+        ]
     ],
     'params' => $params,
     'modules' => [
@@ -50,4 +63,5 @@ return [
             'dbList' => ['db'],
         ],
     ],
+
 ];
