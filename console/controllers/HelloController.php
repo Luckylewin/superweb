@@ -7,6 +7,7 @@
 
 namespace console\controllers;
 
+use common\models\VodList;
 use yii\console\Controller;
 use yii\console\ExitCode;
 
@@ -42,8 +43,11 @@ class HelloController extends Controller
      */
     public function actionIndex($message = 'hello world')
     {
-        echo var_dump($this->day);
 
+        $vod = VodList::find()->asArray()->all();
+        foreach ($vod as $key => $v) {
+
+        }
         return ExitCode::OK;
     }
 }

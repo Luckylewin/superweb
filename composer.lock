@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "5a89b3aff01a5907d8b53c36ea484b6a",
+    "content-hash": "182dd3b526cb901680c2b2da5ef30861",
     "packages": [
         {
             "name": "aliyuncs/oss-sdk-php",
@@ -948,6 +948,41 @@
                 "storage"
             ],
             "time": "2018-04-06T09:58:14+00:00"
+        },
+        {
+            "name": "snoopy/snoopy",
+            "version": "2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PheRum/snoopy.git",
+                "reference": "660134bc1cfd52c00ded91928320dd4e775ff4d9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://files.phpcomposer.com/files/PheRum/snoopy/660134bc1cfd52c00ded91928320dd4e775ff4d9.zip",
+                "reference": "660134bc1cfd52c00ded91928320dd4e775ff4d9",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Snoopy\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPLv2"
+            ],
+            "authors": [
+                {
+                    "name": "Andrei Zmievski"
+                }
+            ],
+            "description": "snoopy",
+            "time": "2015-07-25T20:02:14+00:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
