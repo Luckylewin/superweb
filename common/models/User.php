@@ -5,7 +5,9 @@ use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use yii\filters\RateLimitInterface;
 use yii\web\IdentityInterface;
+use yii\web\Linkable;
 
 /**
  * User model
@@ -14,18 +16,21 @@ use yii\web\IdentityInterface;
  * @property string $username
  * @property string $password_hash
  * @property string $password_reset_token
+ * @property string $access_token
  * @property string $email
  * @property string $auth_key
  * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
  * @property string $password write-only password
+ * @property string $access_token_expire
+ * @property integer $allowance
+ * @property integer $allowance_updated_at
  */
 class User extends ActiveRecord implements IdentityInterface
 {
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
-
 
     /**
      * {@inheritdoc}
@@ -69,7 +74,10 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
+        return static::find()
+                    ->where(['access_token' => $token])
+                    ->andWhere(['>', 'access_token_expire', time()])
+                    ->one();
     }
 
     /**
@@ -186,4 +194,47 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $this->password_reset_token = null;
     }
+
+    public function generateAccessToken()
+    {
+        $this->access_token = Yii::$app->security->generateRandomString();
+        return $this->access_token;
+    }
+
+    public function fields()
+    {
+        return [
+            'id',
+            'username',
+            'email',
+            'status',
+            'created_at',
+            'updated_at'
+        ];
+    }
+
+    //RateLimitInterface 接口限制 出问题再做限制
+
+    // Loads the number of allowed requests and the corresponding timestamp from a persistent storage.
+    /*public function loadAllowance($request, $action)
+    {
+        return [$this->allowance, $this->allowance_updated_at];
+    }
+
+    public function saveAllowance($request, $action, $allowance, $timestamp)
+    {
+        $this->allowance = $allowance;
+        $this->allowance_updated_at = $timestamp;
+        $this->save(false);
+    }
+
+    public function getRateLimit($request, $action)
+    {
+        //每天只运行请求5000次
+        return [
+            1, 10
+        ];
+    }*/
+
+
 }

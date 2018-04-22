@@ -36,6 +36,15 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
+        //配置数据库
+        'db' => [
+            'class' => 'yii\db\Connection',
+            'dsn' => 'mysql:host=127.0.0.1;dbname=superweb',
+            'username' => 'root',
+            'password' => '12345678',
+            'charset' => 'utf8',
+            'tablePrefix' => 'yii2_',
+        ],
         /*
         'urlManager' => [
             'enablePrettyUrl' => true,

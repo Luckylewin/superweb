@@ -3,7 +3,9 @@
 namespace common\models;
 
 use Yii;
-
+use yii\web\Link;
+use yii\web\Linkable;
+use yii\helpers\Url;
 /**
  * This is the model class for table "iptv_list".
  *
@@ -21,7 +23,7 @@ use Yii;
  * @property int $list_trysee 影片试看时间
  * @property string $list_extend 扩展配置
  */
-class VodList extends \yii\db\ActiveRecord
+class VodList extends \yii\db\ActiveRecord implements Linkable
 {
     private $list_status = [
         '关闭',
@@ -92,6 +94,27 @@ class VodList extends \yii\db\ActiveRecord
             'list_price' => '影片付费',
             'list_trysee' => '影片试看时间(分)',
             'list_extend' => '扩展配置',
+        ];
+    }
+
+    public function fields()
+    {
+        return [
+            'list_id',
+            'list_name',
+            'list_dir',
+            'list_ispay',
+            'list_price',
+            'list_trysee',
+        ];
+    }
+
+    public function getLinks()
+    {
+        return [
+            Link::REL_SELF => Url::to(['type/view', 'id' => $this->list_id], true),
+            'index' => Url::to(['type/index'], true),
+            'vod' => Url::to(['vod/index', 'cid'=> $this->list_id], true)
         ];
     }
 

@@ -66,4 +66,6 @@ class Order extends \yii\db\ActiveRecord
             'order_paytype' => '支付类型',
         ];
     }
+
+
 }

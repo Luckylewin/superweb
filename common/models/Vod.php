@@ -3,6 +3,9 @@
 namespace common\models;
 
 use Yii;
+use yii\helpers\Url;
+use yii\web\Link;
+use yii\web\Linkable;
 
 /**
  * This is the model class for table "iptv_vod".
@@ -59,7 +62,7 @@ use Yii;
  * @property string $vod_douban_score 豆瓣评分
  * @property string $vod_scenario 影片剧情
  */
-class Vod extends \yii\db\ActiveRecord
+class Vod extends \yii\db\ActiveRecord implements Linkable
 {
 
     public $showStatus = [
@@ -168,6 +171,39 @@ class Vod extends \yii\db\ActiveRecord
             'vod_douban_score' => '豆瓣评分',
             'vod_scenario' => '影片剧情',
         ];
+    }
+
+    public function fields()
+    {
+        return [
+            'vod_id',
+            'vod_cid' ,
+            'vod_name',
+            'vod_ename',
+            'vod_type',//喜剧 爱情 恐怖 动作 科幻 剧情 战争 警匪 犯罪 动画 奇幻 武侠 冒险 枪战 恐怖 悬疑 惊悚 经典 青春文艺 微电影 古装 历史运动 农村 儿童 网络电影
+            'vod_actor',
+            'vod_director',
+            'vod_content',
+            'vod_pic',
+            'vod_year' ,
+            'vod_addtime',
+            'vod_filmtime',
+            'vod_ispay',
+            'vod_price',
+            'vod_trysee',
+            'vod_url' => function(){
+                return 'http://img.ksbbs.com/asset/Mon_1703/05cacb4e02f9d9e.mp4';
+            },
+            'vod_gold',
+            'vod_length',
+        ];
+    }
+
+    public function getLinks()
+    {
+       return [
+           Link::REL_SELF => Url::to(['vod/view', 'id' => $this->vod_id], true)
+       ];
     }
 
     public function getStar()

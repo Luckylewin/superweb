@@ -69,7 +69,17 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
             ],
             'vod_addtime:datetime',
-            ['class' => 'common\grid\MyActionColumn'],
+            [
+                    'class' => 'common\grid\MyActionColumn',
+                    'template' => '{banner-create} {view} {update} {delete}',
+                    'buttons' => [
+                            'banner-create' => function($url, $model, $key) {
+                                return \yii\bootstrap\Html::a('发布banner', ['banner/create','vod_id' => $model->vod_id], [
+                                    'class' => 'btn btn-default btn-xs'
+                                ]);
+                            }
+                    ]
+            ],
             //'vod_title',
             //'vod_ename',
             //'vod_keywords',
