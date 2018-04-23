@@ -28,13 +28,15 @@ class VodController extends ActiveController
 
     public function actionIndex()
     {
+        $request =  \Yii::$app->request;
+        $cid = $request->get('cid');
+        $per_page = $request->get('per_page', 12);
         $modelClass = $this->modelClass;
-        $cid = \Yii::$app->request->get();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $cid ? $modelClass::find()->where(['vod_cid' => $cid]) : $modelClass::find(),
             'pagination' => [
-                'pageSize' => 12
+                'pageSize' => $per_page,
             ],
         ]);
 

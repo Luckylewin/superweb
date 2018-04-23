@@ -74,10 +74,28 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        return static::find()
-                    ->where(['access_token' => $token])
-                    ->andWhere(['>', 'access_token_expire', time()])
-                    ->one();
+        $identity = static::find()
+                        ->where(['access_token' => $token])
+                        ->andWhere(['>', 'access_token_expire', time()])
+                        ->one();
+
+        if ($identity) {
+            if (md5(Yii::$app->request->remoteIP) != strstr($identity->access_token, '-', true)) {
+                return false;
+            }
+        }
+
+        return $identity;
+    }
+
+    /**
+     * API access_token 与IP绑定在一起
+     * @return string
+     */
+    public function generateAccessToken()
+    {
+        $this->access_token = md5(Yii::$app->request->userIP) . "-" . Yii::$app->security->generateRandomString() ;
+        return $this->access_token;
     }
 
     /**
@@ -195,11 +213,7 @@ class User extends ActiveRecord implements IdentityInterface
         $this->password_reset_token = null;
     }
 
-    public function generateAccessToken()
-    {
-        $this->access_token = Yii::$app->security->generateRandomString();
-        return $this->access_token;
-    }
+
 
     public function fields()
     {

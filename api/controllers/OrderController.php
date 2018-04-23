@@ -19,19 +19,14 @@ class OrderController extends ActiveController
 
     public function behaviors()
     {
+        \Yii::$app->security->authKeyInfo = 'ZjG5eI88A6L9yLsb';
+
         $behaviors = parent::behaviors();
 
         //鉴权
         $behaviors['authenticator'] = [
             'class' => QueryParamAuth::className()
         ];
-
-        //如果超出每天请求的次数的限制 将会抛出异常
-        /*$behaviors['rateLimiter'] = [
-            'class' => RateLimiter::className(),
-            'enableRateLimitHeaders' => true
-        ];*/
-
         return $behaviors;
     }
 }

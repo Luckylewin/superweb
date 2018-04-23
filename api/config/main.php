@@ -27,36 +27,35 @@ return [
             'class' => 'yii\web\Response',
             'on beforeSend' => function ($event) {
                 $response = $event->sender;
-              /* 允许跨域请求
-                header("Access-Control-Allow-Origin: http://runapi.showdoc.cc");
-                header("Access-Control-Allow-Credentials : true");
-                header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Connection, User-Agent, Cookie");*/
+
                 if ($response->data !== null) {
+
                     if ($response->isSuccessful == false) {
-                        $responseData = $response->data;
-                        if (is_object($responseData)) {
 
-                            $statusCode = isset($response->data->statusCode) ? $response->data->statusCode : $response->statusCode ;
+                        if ( $response instanceof \yii\web\Response) {
+
+                            $statusCode = $response->getStatusCode();
                             $response->statusCode = $statusCode;
-                            $response->data = [
-                                'error' => $statusCode
-                            ];
-                        } elseif ( $response instanceof \yii\web\Response) {
-                            $response->statusCode = 200;
-                            $response->data = [
-                                'error' => $response->data
-                            ];
-                        } else {
 
+                            if (is_array($response->data)) {
+                                $response->data = [
+                                    'error' => isset($response->data['message'])?$response->data['message']:$response->data
+                                ];
+                            } else {
+                                $response->data = $statusCode;
+                            }
+
+                        } else {
+                            $responseData = $response->data;
                             $response->statusCode = isset($responseData['code'])? $responseData['status'] : $response->data->statusCode;
                             $response->data = [
                                 'error' => isset($responseData['code'])? $responseData['message'] : $response->data->statusCode,
                             ];
                         }
-
-
+                        
                     } else {
                         $response->statusCode = 200;
+
                     }
                 }
             },
@@ -100,12 +99,14 @@ return [
             'rules' => [
                [
                    'class' => 'yii\rest\UrlRule',
-                   'controller' => ['type', 'vod', 'banner', 'user','order']
+                   'controller' => ['type', 'vod', 'banner', 'user','order'],
+                   'except' => ['delete','update']
                ],
                [
                    'class' => 'yii\rest\UrlRule',
                    'controller' => 'user',
                    'pluralize' => false, //关闭复数形式
+                   'except' => ['delete','update'],
                    'extraPatterns' => [
                        'POST login' => 'login',
                        'POST signup' => 'signup',
