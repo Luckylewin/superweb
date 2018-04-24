@@ -2,8 +2,7 @@
 $params = array_merge(
     require __DIR__ . '/../../common/config/params.php',
     require __DIR__ . '/../../common/config/params-local.php',
-    require __DIR__ . '/params.php',
-    require __DIR__ . '/params-local.php'
+    require __DIR__ . '/params.php'
 );
 
 return [
@@ -38,8 +37,10 @@ return [
                             $response->statusCode = $statusCode;
 
                             if (is_array($response->data)) {
+                                unset($response->data['type']);
+                                unset($response->data['code']);
                                 $response->data = [
-                                    'error' => isset($response->data['message'])?$response->data['message']:$response->data
+                                    'error' => $response->data
                                 ];
                             } else {
                                 $response->data = $statusCode;
