@@ -51,7 +51,18 @@ $this->params['breadcrumbs'][] = $this->title;
 
             //'list_extend:ntext',
 
-            ['class' => 'common\grid\MyActionColumn'],
+            [
+                    'class' => 'common\grid\MyActionColumn',
+                    'template' => '{vods} {view} {update} {delete}',
+                    'buttons' => [
+                            'vods' => function($url, $model, $key) {
+
+                                return Html::a('查看片源', ['vod/index', 'VodSearch[vod_cid]'=>$model->list_id], [
+                                   'class' => 'btn btn-default btn-xs'
+                                ]);
+                            }
+                    ]
+            ],
         ],
     ]); ?>
 </div>
