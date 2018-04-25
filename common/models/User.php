@@ -10,24 +10,23 @@ use yii\web\IdentityInterface;
 use yii\web\Linkable;
 
 /**
- * User model
+ * This is the model class for table "yii2_user".
  *
- * @property integer $id
+ * @property int $id
  * @property string $username
+ * @property string $auth_key
  * @property string $password_hash
  * @property string $password_reset_token
- * @property string $access_token
  * @property string $email
- * @property string $auth_key
- * @property integer $status
- * @property integer $created_at
- * @property integer $updated_at
- * @property string $password write-only password
- * @property string $access_token_expire
- * @property integer $allowance
- * @property integer $allowance_updated_at
+ * @property int $status
+ * @property int $created_at
+ * @property int $updated_at
+ * @property string $access_token
+ * @property int $access_token_expire API access_token 过期时间
+ * @property int $allowance 剩余请求次数
+ * @property int $allowance_updated_at 最后一次请求更新时间
  * @property string $is_vip
- * @property integer $vip_expire_time
+ * @property int $vip_expire_time
  */
 class User extends ActiveRecord implements IdentityInterface
 {

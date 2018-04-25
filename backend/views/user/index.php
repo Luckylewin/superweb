@@ -44,9 +44,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         return \common\models\User::$vipType[$model->is_vip];
                     }
             ],
-            'vip_expire_time:datetime',
+
             [
-                    'class' => 'common\grid\MyActionColumn',
+               'class' => 'common\grid\MyActionColumn',
             ],
         ],
     ]); ?>
