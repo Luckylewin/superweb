@@ -22,6 +22,18 @@ use Yii;
  */
 class Order extends \yii\db\ActiveRecord
 {
+
+    public static $payType = [
+        'alipay' => '支付宝',
+        'wxpay' => '微信',
+        'paypal' => '贝宝'
+    ];
+
+    public static $payStatus = [
+        '未支付',
+        '已支付'
+    ];
+
     /**
      * @inheritdoc
      */
@@ -64,8 +76,26 @@ class Order extends \yii\db\ActiveRecord
             'order_confirmtime' => '订单确认时间',
             'order_info' => '订单信息',
             'order_paytype' => '支付类型',
+            'user.username' => '用户',
+            'paystatus' => '订单状态'
         ];
     }
 
+    /**
+     *
+     */
+    public function getUser()
+    {
+        return $this->hasOne(User::className(), ['id' => 'order_uid']);
+    }
 
+    public function getPayStatus()
+    {
+        return self::$payStatus[$this->order_ispay];
+    }
+
+    public function getPayType()
+    {
+        return self::$payType[$this->order_paytype];
+    }
 }

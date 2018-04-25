@@ -26,11 +26,18 @@ use yii\web\Linkable;
  * @property string $access_token_expire
  * @property integer $allowance
  * @property integer $allowance_updated_at
+ * @property string $is_vip
+ * @property integer $vip_expire_time
  */
 class User extends ActiveRecord implements IdentityInterface
 {
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
+
+    public static $vipType = [
+        '普通游客',
+        '付费会员'
+    ];
 
     /**
      * {@inheritdoc}
@@ -223,7 +230,9 @@ class User extends ActiveRecord implements IdentityInterface
             'email',
             'status',
             'created_at',
-            'updated_at'
+            'updated_at',
+            'is_vip',
+            'vip_expire_time'
         ];
     }
 
@@ -249,6 +258,18 @@ class User extends ActiveRecord implements IdentityInterface
             1, 10
         ];
     }*/
+
+    public function attributeLabels()
+    {
+        return [
+            'username' => '用户名',
+            'email' => '邮箱',
+            'status' => '状态',
+            'created_at' => '创建时间',
+            'is_vip' => '会员',
+            'vip_expire_time' => '过期时间'
+            ];
+    }
 
 
 }

@@ -101,13 +101,13 @@ return [
                [
                    'class' => 'yii\rest\UrlRule',
                    'controller' => ['type', 'vod', 'banner', 'user','order'],
-                   'except' => ['delete','update']
+                   'except' => ['delete','update','create']
                ],
                [
                    'class' => 'yii\rest\UrlRule',
                    'controller' => 'user',
                    'pluralize' => false, //关闭复数形式
-                   'except' => ['delete','update'],
+                   'except' => ['delete','update', 'create'],
                    'extraPatterns' => [
                        'POST login' => 'login',
                        'POST signup' => 'signup',

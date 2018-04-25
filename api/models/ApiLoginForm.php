@@ -62,7 +62,9 @@ class ApiLoginForm extends Model
                     'access_token' => $this->_user->access_token,
                     'access_token_expire' => $this->_user->access_token_expire,
                     'created_at' => $this->_user->created_at,
-                    'updated_at' => $this->_user->updated_at
+                    'updated_at' => $this->_user->updated_at,
+                    'is_vip' => $this->_user->is_vip,
+                    'vip_expire_time' => $this->_user->vip_expire_time
                 ];
             }
 

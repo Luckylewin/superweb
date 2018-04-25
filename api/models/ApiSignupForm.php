@@ -72,7 +72,9 @@ class ApiSignupForm extends Model
             'access_token' => $user->access_token,
             'access_token_expire' => $user->access_token_expire,
             'created_at' => $user->created_at,
-            'updated_at' => $user->updated_at
+            'updated_at' => $user->updated_at,
+            'is_vip' => 0,
+            'vip_expire_time' => 0,
         ];
 
     }

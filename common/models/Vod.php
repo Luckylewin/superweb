@@ -110,6 +110,7 @@ class Vod extends \yii\db\ActiveRecord implements Linkable
             [['vod_letter'], 'string', 'max' => 2],
             [['vod_weekday'], 'string', 'max' => 60],
             [['vod_series'], 'string', 'max' => 120],
+
         ];
     }
 
@@ -175,6 +176,11 @@ class Vod extends \yii\db\ActiveRecord implements Linkable
 
     public function fields()
     {
+        return self::getFields();
+    }
+
+    public static function getFields()
+    {
         return [
             'vod_id',
             'vod_cid' ,
@@ -191,9 +197,7 @@ class Vod extends \yii\db\ActiveRecord implements Linkable
             'vod_ispay',
             'vod_price',
             'vod_trysee',
-            'vod_url' => function(){
-                return 'http://img.ksbbs.com/asset/Mon_1703/05cacb4e02f9d9e.mp4';
-            },
+            'vod_url',
             'vod_gold',
             'vod_length',
         ];

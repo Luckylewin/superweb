@@ -5,6 +5,8 @@ use yii\widgets\ActiveForm;
 use backend\assets\MyAppAsset;
 use \common\models\VodList;
 use yii\helpers\ArrayHelper;
+use dosamigos\fileupload\FileUploadUI;
+
 /* @var $this yii\web\View */
 /* @var $model common\models\Vod */
 /* @var $form yii\widgets\ActiveForm */
@@ -14,11 +16,11 @@ $this->registerJsFile('/statics/js/miniUtils.js')
 ?>
 <style>
     .single-select{
-
         height: 2.69rem;
         line-height: 3.6rem;
-
-
+    }
+    .preview img{
+        width : 50px;
     }
 </style>
 <div class="vod-form">
@@ -48,12 +50,8 @@ $this->registerJsFile('/statics/js/miniUtils.js')
                         <?= $form->field($model, 'vod_director')->textInput(['maxlength' => true]) ?>
                         <!-- 影片别名  -->
                         <?= $form->field($model, 'vod_ename')->textInput(['maxlength' => true]) ?>
-                        <!-- 海报剧照  -->
-                        <?= $form->field($model, 'vod_pic')->textInput(['maxlength' => true]) ?>
-                        <!-- 海报背景  -->
-                        <?= $form->field($model, 'vod_pic_bg')->textInput(['maxlength' => true]) ?>
-                        <!-- 海报轮播  -->
-                        <?= $form->field($model, 'vod_pic_slide')->textInput(['maxlength' => true]) ?>
+                        <!-- 点播权限 -->
+                        <?= $form->field($model, 'vod_ispay')->dropDownList(\common\models\Vod::$chargeStatus) ?>
                     </div>
 
                     <div class="col-md-4">
@@ -67,12 +65,9 @@ $this->registerJsFile('/statics/js/miniUtils.js')
                         <?= $form->field($model, 'vod_length')->textInput() ?>
                         <!-- 豆瓣ID  -->
                         <?= $form->field($model, 'vod_douban_id')->textInput() ?>
-                        <!-- 海报剧照文件上传  -->
-                        <?= $form->field($model, 'vod_pic')->textInput(['maxlength' => true]) ?>
-                        <!-- 海报背景  -->
-                        <?= $form->field($model, 'vod_pic_bg')->textInput(['maxlength' => true]) ?>
-                        <!-- 海报轮播  -->
-                        <?= $form->field($model, 'vod_pic_slide')->textInput(['maxlength' => true]) ?>
+                        <!-- 单片付费 -->
+                        <?= $form->field($model, 'vod_price')->textInput() ?>
+
                     </div>
 
                     <div class="col-md-4">
@@ -86,12 +81,103 @@ $this->registerJsFile('/statics/js/miniUtils.js')
                         <?= $form->field($model, 'vod_weekday')->textInput(['maxlength' => true]) ?>
                         <!-- 豆瓣评分  -->
                         <?= $form->field($model, 'vod_douban_score')->textInput(['maxlength' => true]) ?>
-                        <!-- 点播权限 -->
-                        <?= $form->field($model, 'vod_ispay')->dropDownList(\common\models\Vod::$chargeStatus) ?>
-                        <!-- 单片付费 -->
-                        <?= $form->field($model, 'vod_price')->textInput() ?>
+
+
                         <!-- 影片试看 -->
                         <?= $form->field($model, 'vod_trysee')->textInput() ?>
+                    </div>
+
+                    <div class="col-md-4">
+                        <!-- 海报剧照文件上传  -->
+                        <?= $form->field($model, 'vod_pic')->textInput(); ?>
+                        <?=  FileUploadUI::widget([
+                            'model' => $model,
+                            'attribute' => 'vod_pic',
+                            'url' => ['media/image-upload', 'attr' => 'vod_pic', 'dir' => 'vod-pic'],
+                            'gallery' => false,
+                            'fieldOptions' => [
+                                'accept' => 'image/*'
+                            ],
+                            'clientOptions' => [
+                                'maxFileSize' => 2000000
+                            ],
+                            // ...
+                            'clientEvents' => [
+                                'fileuploaddone' => 'function(e, data) {
+                                console.log(e);
+                                console.log(data);
+                                var files = data.result.files[0];
+                              
+                                $("#vod-vod_pic").val(files.url);
+                            }',
+                                'fileuploadfail' => 'function(e, data) {
+                                console.log(e);
+                                console.log(data);
+                            }',
+                            ],
+                        ]); ?>
+                    </div>
+
+                    <div class="col-md-4">
+                        <!-- 海报背景  -->
+                        <?= $form->field($model, 'vod_pic_bg')->textInput(['maxlength' => true]) ?>
+                        <?=  FileUploadUI::widget([
+                            'model' => $model,
+                            'attribute' => 'vod_pic_bg',
+                            'url' => ['media/image-upload', 'attr' => 'vod_pic_bg', 'dir' => 'vod-bg', 'attr'=>'vod_pic_bg'],
+                            'gallery' => false,
+                            'fieldOptions' => [
+                                'accept' => 'image/*'
+                            ],
+
+                            'clientOptions' => [
+                                'maxFileSize' => 2000000
+                            ],
+                            // ...
+                            'clientEvents' => [
+                                'fileuploaddone' => 'function(e, data) {
+                                console.log(e);
+                                console.log(data);
+                                var files = data.result.files[0];
+                                $("#vod-vod_pic_bg").val(files.url);
+                            }',
+                                'fileuploadfail' => 'function(e, data) {
+                                console.log(e);
+                                console.log(data);
+                                
+                            }',
+                            ],
+                        ]); ?>
+                    </div>
+
+                    <div class="col-md-4">
+                        <!-- 海报轮播  -->
+                        <?= $form->field($model, 'vod_pic_slide')->textInput(['maxlength' => true]) ?>
+                        <?=  FileUploadUI::widget([
+                            'model' => $model,
+                            'attribute' => 'vod_pic_slide',
+                            'url' => ['media/image-upload','attr' => 'vod_pic_slide', 'dir' => 'vod-slide'],
+                            'gallery' => false,
+                            'fieldOptions' => [
+                                'accept' => 'image/*'
+                            ],
+                            'clientOptions' => [
+                                'maxFileSize' => 2000000
+                            ],
+                            // ...
+                            'clientEvents' => [
+                                'fileuploaddone' => 'function(e, data) {
+                                console.log(e);
+                                console.log(data);
+                                var files = data.result.files[0];
+                                $("#vod-vod_pic_slide").val(files.url);
+                            }',
+                                'fileuploadfail' => 'function(e, data) {
+                                console.log(e);
+                                console.log(data);
+                            }',
+                            ],
+                        ]); ?>
                     </div>
 
                     <div class="col-md-12">
@@ -178,7 +264,7 @@ $this->registerJsFile('/statics/js/miniUtils.js')
         <div class="tab-pane fade" id="ios">
             <div class="panel panel-default" style="margin-top: 20px;">
                 <div class="panel-body">
-                    <?= $form->field($model, 'vod_stars')->textInput() ?>
+                    <?= $form->field($model, 'vod_stars')->dropDownList(\common\models\Vod::$starStatus) ?>
 
                     <?= $form->field($model, 'vod_hits')->textInput() ?>
 
