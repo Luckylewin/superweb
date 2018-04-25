@@ -65,6 +65,8 @@ use yii\web\Linkable;
 class Vod extends \yii\db\ActiveRecord implements Linkable
 {
 
+    public $pic;
+
     public $showStatus = [
         '1' => '显示',
         '0' => '隐藏'
@@ -110,6 +112,7 @@ class Vod extends \yii\db\ActiveRecord implements Linkable
             [['vod_letter'], 'string', 'max' => 2],
             [['vod_weekday'], 'string', 'max' => 60],
             [['vod_series'], 'string', 'max' => 120],
+            ['pic', 'safe']
 
         ];
     }

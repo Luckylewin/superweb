@@ -9,13 +9,14 @@ use yii\grid\GridView;
 $this->title = 'Banners';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<style>
+    td img{
+        width: 300px;
+    }
+</style>
 <div class="banner-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a('Create Banner', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -30,9 +31,6 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                     'attribute' => 'pic',
                     'format' => 'image',
-                    'options' => [
-                            'width' => '100px'
-                    ]
             ],
             //'pic_bg',
 

@@ -92,8 +92,8 @@ $this->registerJsFile('/statics/js/miniUtils.js')
                         <?= $form->field($model, 'vod_pic')->textInput(); ?>
                         <?=  FileUploadUI::widget([
                             'model' => $model,
-                            'attribute' => 'vod_pic',
-                            'url' => ['media/image-upload', 'attr' => 'vod_pic', 'dir' => 'vod-pic'],
+                            'attribute' => 'pic',
+                            'url' => ['media/image-upload', 'attr' => 'pic', 'dir' => 'vod-pic'],
                             'gallery' => false,
                             'fieldOptions' => [
                                 'accept' => 'image/*'
@@ -123,8 +123,8 @@ $this->registerJsFile('/statics/js/miniUtils.js')
                         <?= $form->field($model, 'vod_pic_bg')->textInput(['maxlength' => true]) ?>
                         <?=  FileUploadUI::widget([
                             'model' => $model,
-                            'attribute' => 'vod_pic_bg',
-                            'url' => ['media/image-upload', 'attr' => 'vod_pic_bg', 'dir' => 'vod-bg', 'attr'=>'vod_pic_bg'],
+                            'attribute' => 'pic',
+                            'url' => ['media/image-upload', 'attr' => 'pic', 'dir' => 'vod-bg'],
                             'gallery' => false,
                             'fieldOptions' => [
                                 'accept' => 'image/*'
@@ -152,11 +152,13 @@ $this->registerJsFile('/statics/js/miniUtils.js')
 
                     <div class="col-md-4">
                         <!-- 海报轮播  -->
-                        <?= $form->field($model, 'vod_pic_slide')->textInput(['maxlength' => true]) ?>
+
+                        <?= $form->field($model, 'vod_pic_slide')->textInput() ?>
+
                         <?=  FileUploadUI::widget([
                             'model' => $model,
-                            'attribute' => 'vod_pic_slide',
-                            'url' => ['media/image-upload','attr' => 'vod_pic_slide', 'dir' => 'vod-slide'],
+                            'attribute' => 'pic',
+                            'url' => ['media/image-upload','attr' => 'pic', 'dir' => 'vod-slide'],
                             'gallery' => false,
                             'fieldOptions' => [
                                 'accept' => 'image/*'
@@ -170,6 +172,7 @@ $this->registerJsFile('/statics/js/miniUtils.js')
                                 console.log(e);
                                 console.log(data);
                                 var files = data.result.files[0];
+                               
                                 $("#vod-vod_pic_slide").val(files.url);
                             }',
                                 'fileuploadfail' => 'function(e, data) {

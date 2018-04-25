@@ -23,6 +23,11 @@ class BannerController extends BaseController
     {
         $dataProvider = new ActiveDataProvider([
             'query' => Banner::find(),
+            'sort' => [
+                'defaultOrder' => [
+                    'sort' => SORT_ASC
+                ]
+            ]
         ]);
 
         return $this->render('index', [

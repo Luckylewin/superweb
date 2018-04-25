@@ -71,7 +71,7 @@ class VodController extends BaseController
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
+        
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $this->setFlash('info', '操作成功');
             return $this->redirect(['view', 'id' => $model->vod_id]);
