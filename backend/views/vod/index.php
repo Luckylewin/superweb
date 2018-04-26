@@ -78,7 +78,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'class' => 'btn btn-default btn-xs'
                                 ]);
                             }
-                    ]
+                    ],
+                'options' => ['style' => 'width:250px;']
             ],
             //'vod_title',
             //'vod_ename',
