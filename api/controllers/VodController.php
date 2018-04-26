@@ -31,7 +31,9 @@ class VodController extends ActiveController
     public function actionView($id)
     {
         $vod = Vod::findOne($id);
-        $vod->vod_url = 'http://img.ksbbs.com/asset/Mon_1703/05cacb4e02f9d9e.mp4';
+        if (empty($vod->vod_url)) {
+            $vod->vod_url = 'http://img.ksbbs.com/asset/Mon_1703/05cacb4e02f9d9e.mp4';
+        }
         return $vod;
     }
 
