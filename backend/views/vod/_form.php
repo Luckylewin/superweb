@@ -20,7 +20,7 @@ $this->registerJsFile('/statics/js/miniUtils.js')
         line-height: 3.6rem;
     }
     .preview img{
-        width : 50px;
+        max-width: 100px;
     }
 </style>
 <div class="vod-form">
@@ -123,8 +123,8 @@ $this->registerJsFile('/statics/js/miniUtils.js')
                         <?= $form->field($model, 'vod_pic_bg')->textInput(['maxlength' => true]) ?>
                         <?=  FileUploadUI::widget([
                             'model' => $model,
-                            'attribute' => 'pic',
-                            'url' => ['media/image-upload', 'attr' => 'pic', 'dir' => 'vod-bg'],
+                            'attribute' => 'pic_bg',
+                            'url' => ['media/image-upload', 'attr' => 'pic_bg', 'dir' => 'vod-bg'],
                             'gallery' => false,
                             'fieldOptions' => [
                                 'accept' => 'image/*'
@@ -157,8 +157,8 @@ $this->registerJsFile('/statics/js/miniUtils.js')
 
                         <?=  FileUploadUI::widget([
                             'model' => $model,
-                            'attribute' => 'pic',
-                            'url' => ['media/image-upload','attr' => 'pic', 'dir' => 'vod-slide'],
+                            'attribute' => 'pic_slide',
+                            'url' => ['media/image-upload','attr' => 'pic_slide', 'dir' => 'vod-slide'],
                             'gallery' => false,
                             'fieldOptions' => [
                                 'accept' => 'image/*'

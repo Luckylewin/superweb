@@ -66,6 +66,8 @@ class Vod extends \yii\db\ActiveRecord implements Linkable
 {
 
     public $pic;
+    public $pic_bg;
+    public $pic_slide;
 
     public $showStatus = [
         '1' => '显示',
