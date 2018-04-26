@@ -4,6 +4,8 @@ namespace backend\models;
 
 use common\oss\Aliyunoss;
 use Yii;
+use yii\helpers\Url;
+use yii\web\Linkable;
 
 /**
  * This is the model class for table "apk_list".
@@ -16,7 +18,7 @@ use Yii;
  * @property int $sort
  * @property string $scheme_id
  */
-class ApkList extends \yii\db\ActiveRecord
+class ApkList extends \yii\db\ActiveRecord implements Linkable
 {
     public $dir = 'Android/apk/img/';
 
@@ -76,6 +78,14 @@ class ApkList extends \yii\db\ActiveRecord
         return Scheme::find()->where("id in ({$this->scheme_id})")->all();
     }
 
+    public function getNewest()
+    {
+        return $this->hasOne(ApkDetail::className(), ['apk_ID' => 'ID'])
+                    ->select(['ver', 'url', 'content', 'force_update'])
+                    ->orderBy('apk_detail.ID desc')
+                    ->limit(1);
+    }
+
     public function getVersion()
     {
         return $this->hasMany(ApkDetail::className(), ['apk_ID' => 'ID']);
@@ -99,4 +109,31 @@ class ApkList extends \yii\db\ActiveRecord
         }
         return true;
     }
+
+    public function getLinks()
+    {
+        // TODO: Implement getLinks() method.
+        return [
+            \yii\web\Link::REL_SELF => Url::to(['apk-list/view','id'=>$this->ID])
+        ];
+    }
+
+    public function fields()
+    {
+        return [
+            'typeName',
+            'type',
+            'class',
+            'img',
+            'sort',
+            'scheme_id',
+            'url' => function ($model) {
+               if ($apk = ApkDetail::findOne(['apk_ID' => $this->ID])) {
+                    return Aliyunoss::getDownloadUrl($apk->url);
+               }
+               return null;
+            }
+        ];
+    }
+
 }

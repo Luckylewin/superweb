@@ -8,10 +8,9 @@
 
 namespace api\controllers;
 
-
 use common\models\Vod;
-use common\models\VodList;
 use yii\data\ActiveDataProvider;
+use yii\helpers\Url;
 use yii\rest\ActiveController;
 
 class VodController extends ActiveController
@@ -26,7 +25,6 @@ class VodController extends ActiveController
         unset($actions['view']);
         return $actions;
     }
-
 
     public function actionView($id)
     {

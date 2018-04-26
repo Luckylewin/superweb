@@ -96,13 +96,25 @@ return [
        'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
-            'enableStrictParsing' => false,
+            'enableStrictParsing' => true,
             'rules' => [
                [
                    'class' => 'yii\rest\UrlRule',
-                   'controller' => ['type', 'vod', 'banner', 'user','order'],
+                   'controller' => ['type', 'banner', 'user','order', 'vod', 'recommend'],
                    'except' => ['delete','update','create']
                ],
+
+               [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => ['apk'],
+                    'pluralize' => false, //关闭复数形式
+                    'except' => ['delete','update', 'create', 'view'],
+                    'extraPatterns' => [
+                       'GET upgrade' => 'upgrade'
+                   ]
+
+               ],
+
                [
                    'class' => 'yii\rest\UrlRule',
                    'controller' => 'user',
@@ -113,6 +125,16 @@ return [
                        'POST signup' => 'signup',
                    ]
                ],
+
+               [
+                   'class' => 'yii\rest\UrlRule',
+                   'controller' => 'pay',
+                   'pluralize' => false,
+                   'except' => ['view','update','delete','create','index'],
+                   'extraPatterns' => [
+                       'POST notify' => 'notify'
+                   ]
+               ]
            ],
         ],
 
