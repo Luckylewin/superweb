@@ -8,6 +8,7 @@
 
 namespace backend\controllers;
 
+use common\models\VodList;
 use Yii;
 use common\models\Vod;
 use yii\helpers\FileHelper;
@@ -19,9 +20,22 @@ class MediaController extends BaseController
 {
     public function actionImageUpload()
     {
-        $model = new Vod();
         $dir = Yii::$app->request->get('dir');
         $attribute = Yii::$app->request->get('attr');
+
+        switch ($attribute)
+        {
+            case 'icon':
+                $model = new VodList();
+                break;
+            case 'pic':
+            case 'pic_bg':
+            case 'pic_slide':
+                $model = new Vod();
+                break;
+            default:
+                return Json::encode(['error' => '上传失败']);
+        }
 
         $imageFile = UploadedFile::getInstance($model, $attribute);
 

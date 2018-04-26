@@ -84,6 +84,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'vod_douban_id',
             'vod_douban_score',
             'vod_scenario:ntext',
+            'vod_home'
         ],
     ]) ?>
 

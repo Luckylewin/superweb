@@ -256,6 +256,10 @@ $this->registerJsFile('/statics/js/miniUtils.js')
                         <?= $form->field($model, 'vod_content')->textarea(['rows' => 6]) ?>
                         <!-- 是否完结 -->
                         <?php $form->field($model, 'vod_isend')->textInput() ?>
+                        <!-- 是否完结 -->
+                        <?= $form->field($model, 'vod_home')->dropDownList([
+                            0=>'否', 1=>'是'
+                        ]) ?>
                     </div>
 
 

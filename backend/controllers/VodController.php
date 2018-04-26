@@ -71,7 +71,7 @@ class VodController extends BaseController
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $this->setFlash('info', '操作成功');
             return $this->redirect(['view', 'id' => $model->vod_id]);
@@ -80,6 +80,16 @@ class VodController extends BaseController
         return $this->render('update', [
             'model' => $model,
         ]);
+    }
+
+    public function actionPushHome($id,$action)
+    {
+        $model = $this->findModel($id);
+        $model->vod_home = $action;
+        $model->save(false);
+
+        $this->setFlash('info', '操作成功');
+        return $this->redirect(Yii::$app->request->referrer);
     }
 
     /**

@@ -22,9 +22,12 @@ use yii\helpers\Url;
  * @property int $list_price 影片单独付费
  * @property int $list_trysee 影片试看时间
  * @property string $list_extend 扩展配置
+ * @property string $list_icon 图标
  */
 class VodList extends \yii\db\ActiveRecord implements Linkable
 {
+    public $icon;
+
     private $list_status = [
         '关闭',
         '正常'
@@ -55,7 +58,8 @@ class VodList extends \yii\db\ActiveRecord implements Linkable
             ['list_sid', 'default', 'value' => 1],
             ['list_trysee', 'default', 'value' => 5],
             [['list_name','list_dir'], 'unique'],
-            ['list_price', 'default', 'value' => 0]
+            ['list_price', 'default', 'value' => 0],
+            [['icon', 'list_icon'], 'safe']
         ];
     }
 
@@ -94,6 +98,7 @@ class VodList extends \yii\db\ActiveRecord implements Linkable
             'list_price' => '影片付费',
             'list_trysee' => '影片试看时间(分)',
             'list_extend' => '扩展配置',
+            'list_icon' => '图标',
         ];
     }
 

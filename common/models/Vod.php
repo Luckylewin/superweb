@@ -61,6 +61,7 @@ use yii\web\Linkable;
  * @property int $vod_douban_id 豆瓣ID
  * @property string $vod_douban_score 豆瓣评分
  * @property string $vod_scenario 影片剧情
+ * @property string $vod_home 是否推荐到首页
  */
 class Vod extends \yii\db\ActiveRecord implements Linkable
 {
@@ -114,7 +115,7 @@ class Vod extends \yii\db\ActiveRecord implements Linkable
             [['vod_letter'], 'string', 'max' => 2],
             [['vod_weekday'], 'string', 'max' => 60],
             [['vod_series'], 'string', 'max' => 120],
-            ['pic', 'safe']
+            [['vod_home', 'pic'], 'safe']
 
         ];
     }
@@ -176,6 +177,7 @@ class Vod extends \yii\db\ActiveRecord implements Linkable
             'vod_douban_id' => '豆瓣ID',
             'vod_douban_score' => '豆瓣评分',
             'vod_scenario' => '影片剧情',
+            'vod_home' => '是否推荐到首页',
         ];
     }
 

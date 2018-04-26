@@ -71,15 +71,20 @@ $this->params['breadcrumbs'][] = $this->title;
             'vod_addtime:datetime',
             [
                     'class' => 'common\grid\MyActionColumn',
-                    'template' => '{banner-create} {view} {update} {delete}',
+                    'template' => '{push-home} {banner-create}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{view} {update} {delete}',
                     'buttons' => [
                             'banner-create' => function($url, $model, $key) {
                                 return \yii\bootstrap\Html::a('发布banner', ['banner/create','vod_id' => $model->vod_id], [
                                     'class' => 'btn btn-default btn-xs'
                                 ]);
-                            }
+                            },
+                            'push-home' => function($url, $model, $key) {
+                            return \yii\bootstrap\Html::a('推荐到首页', ['vod/push-home','id' => $model->vod_id,'action' => $model->vod_home ? '0' : '1' ], [
+                                'class' => 'btn btn-xs ' . ($model->vod_home? 'btn-success' : 'btn-default')
+                            ]);
+                        },
                     ],
-                'options' => ['style' => 'width:250px;']
+                    'options' => ['style' => 'width:350px;']
             ],
             //'vod_title',
             //'vod_ename',

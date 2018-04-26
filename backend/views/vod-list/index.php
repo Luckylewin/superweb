@@ -24,6 +24,11 @@ $this->params['breadcrumbs'][] = $this->title;
             //'list_id',
             //'list_pid',
             //'list_sid',
+            [
+                    'attribute' => 'list_icon',
+                    'format' => 'image',
+                    'value' => 'list_icon'
+            ],
             'list_name',
             'list_dir',
             //'list_status',
