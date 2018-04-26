@@ -101,7 +101,10 @@ return [
                [
                    'class' => 'yii\rest\UrlRule',
                    'controller' => ['type', 'banner', 'user','order', 'vod', 'recommend'],
-                   'except' => ['delete','update','create']
+                   'except' => ['delete','update','create'],
+                   'extraPatterns' => [
+                       'GET home' => 'home'
+                   ]
                ],
 
                [

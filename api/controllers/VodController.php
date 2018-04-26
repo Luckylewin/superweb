@@ -54,4 +54,29 @@ class VodController extends ActiveController
 
         return $dataProvider;
     }
+
+    /**
+     * 首页
+     * @return ActiveDataProvider
+     */
+    public function actionHome()
+    {
+        $request =  \Yii::$app->request;
+
+        $per_page = $request->get('per_page', 12);
+        $modelClass = $this->modelClass;
+
+        $fields = Vod::getFields();
+        unset($fields[array_search('vod_url', $fields)]);
+
+        $dataProvider = new ActiveDataProvider([
+            'query' =>  $modelClass::find()->select($fields)->where(['vod_home' => 1]),
+            'pagination' => [
+                'pageSize' => $per_page,
+            ],
+        ]);
+
+        return $dataProvider;
+    }
+
 }

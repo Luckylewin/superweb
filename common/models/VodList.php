@@ -111,6 +111,7 @@ class VodList extends \yii\db\ActiveRecord implements Linkable
             'list_ispay',
             'list_price',
             'list_trysee',
+            'list_icon'
         ];
     }
 

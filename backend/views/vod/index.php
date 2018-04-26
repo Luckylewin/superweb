@@ -79,7 +79,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]);
                             },
                             'push-home' => function($url, $model, $key) {
-                            return \yii\bootstrap\Html::a('推荐到首页', ['vod/push-home','id' => $model->vod_id,'action' => $model->vod_home ? '0' : '1' ], [
+                            $text = $model->vod_home ? '取消推荐' : '首页推荐';
+                            return \yii\bootstrap\Html::a($text, ['vod/push-home','id' => $model->vod_id,'action' => $model->vod_home ? '0' : '1' ], [
                                 'class' => 'btn btn-xs ' . ($model->vod_home? 'btn-success' : 'btn-default')
                             ]);
                         },
