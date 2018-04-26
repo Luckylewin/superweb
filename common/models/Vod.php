@@ -277,7 +277,7 @@ class Vod extends \yii\db\ActiveRecord implements Linkable
         return ['高清版','剧场版','抢先版','OVA','TV','影院版'];
     }
 
-    public function getResourceTypes()
+    public static function getResourceTypes()
     {
         return ['正片','预告片','花絮'];
     }
