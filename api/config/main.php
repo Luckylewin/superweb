@@ -1,4 +1,7 @@
 <?php
+use api\components\Formatter;
+
+
 $params = array_merge(
     require __DIR__ . '/../../common/config/params.php',
     require __DIR__ . '/../../common/config/params-local.php',
@@ -34,29 +37,21 @@ return [
                         if ( $response instanceof \yii\web\Response) {
 
                             $statusCode = $response->getStatusCode();
-                            $response->statusCode = $statusCode;
-
-                            if (is_array($response->data)) {
-                                unset($response->data['type']);
-                                unset($response->data['code']);
-                                $response->data = [
-                                    'error' => $response->data
-                                ];
-                            } else {
-                                $response->data = $statusCode;
-                            }
+                            $message = is_array($response->data) ? $response->data['message'] : $statusCode;
 
                         } else {
-                            $responseData = $response->data;
-                            $response->statusCode = isset($responseData['code'])? $responseData['status'] : $response->data->statusCode;
-                            $response->data = [
-                                'error' => isset($responseData['code'])? $responseData['message'] : $response->data->statusCode,
-                            ];
+                            $statusCode = $response->data->statusCode;
+                            $message = isset($response->data['code'])? $response->data['message'] : $response->data->statusCode;
                         }
-                        
+
+                        $response->statusCode = $statusCode;
+                        $response->data = Formatter::format([], $statusCode, $message);
+
                     } else {
                         $response->statusCode = 200;
-
+                        if (!isset($response->data['code'])) {
+                            $response->data = Formatter::format($response->data);
+                        }
                     }
                 }
             },
@@ -135,7 +130,9 @@ return [
                    'pluralize' => false,
                    'except' => ['view','update','delete','create','index'],
                    'extraPatterns' => [
-                       'POST notify' => 'notify'
+                       'POST notify' => 'notify',
+                       'POST pay' => 'pay',
+                       'POST vip' => 'vip'
                    ]
                ]
            ],

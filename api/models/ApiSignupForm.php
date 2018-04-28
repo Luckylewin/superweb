@@ -25,11 +25,11 @@ class ApiSignupForm extends Model
             ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => '此用户名已经被占用.'],
             ['username', 'string', 'min' => 2, 'max' => 255],
 
-            ['email', 'trim'],
+           /* ['email', 'trim'],
             ['email', 'required'],
             ['email', 'email'],
             ['email', 'string', 'max' => 255],
-            ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => '此邮箱已被占用.'],
+            ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => '此邮箱已被占用.'],*/
 
             ['password', 'required'],
             ['password', 'string', 'min' => 6],

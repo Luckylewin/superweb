@@ -66,6 +66,8 @@ use yii\web\Linkable;
 class Vod extends \yii\db\ActiveRecord implements Linkable
 {
 
+    public $is_buy;
+
     public $pic;
     public $pic_bg;
     public $pic_slide;
@@ -207,6 +209,7 @@ class Vod extends \yii\db\ActiveRecord implements Linkable
             'vod_url',
             'vod_gold',
             'vod_length',
+            'is_buy'
         ];
     }
 

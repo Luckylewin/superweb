@@ -8,10 +8,12 @@
 
 namespace api\controllers;
 
+use api\components\Formatter;
 use Yii;
 use api\models\ApiLoginForm;
 use api\models\ApiSignupForm;
 use yii\filters\auth\QueryParamAuth;
+use yii\helpers\ArrayHelper;
 use yii\rest\ActiveController;
 use yii\web\ForbiddenHttpException;
 
@@ -65,10 +67,11 @@ class UserController extends ActiveController
         $loginModel->password = $request->post('password');
 
         if ( $user = $loginModel->login() ) {
-            return $user;
+            return Formatter::format($user);
         }
 
-        return $loginModel;
+        $msg = current($loginModel->getErrorSummary(false));
+        return Formatter::format([],Formatter::EMPTY_LOGIN_ERROR, $msg);
     }
 
     public function actionSignup()
@@ -77,10 +80,11 @@ class UserController extends ActiveController
         $signupModel->load(Yii::$app->request->post(),'');
 
         if ($user = $signupModel->signup()) {
-            return $user;
+            return Formatter::format($user);
         }
 
-        return $signupModel;
+        $msg = current($signupModel->getErrorSummary(false));
+        return Formatter::format([],Formatter::EMPTY_SIGNUP_ERROR, $msg);
     }
 
 }

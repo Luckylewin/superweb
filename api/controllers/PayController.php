@@ -8,16 +8,21 @@
 
 namespace api\controllers;
 
+use api\components\Formatter;
+use common\models\BuyRecord;
 use Yii;
 use Yansongda\Pay\Log;
 use Yansongda\Pay\Pay;
+use yii\filters\auth\QueryParamAuth;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use yii\rest\ActiveController;
+use yii\web\User;
 
 class PayController extends ActiveController
 {
     public $modelClass = '';
+
 
     public function behaviors()
     {
@@ -27,8 +32,41 @@ class PayController extends ActiveController
                'actions' => [
                    'notify' => ['POST']
                ]
-           ]
+           ],
+            'authenticator' => [
+                'class' => QueryParamAuth::className()
+            ],
+
         ]);
+    }
+
+    public function actionVip()
+    {
+        $user_id = Yii::$app->user->getId();
+        if ($user = \common\models\User::findOne($user_id)) {
+            $user->is_vip = 1;
+            $user->vip_expire_time = 1591234123;
+            $user->save(false);
+            return $user;
+        }
+        return Formatter::format([],0, ['已经是会员']);
+    }
+
+    public function actionPay()
+    {
+        $vod_id = Yii::$app->request->post('vod_id');
+        $user_id = Yii::$app->user->getId();
+        if ($vod_id && $user_id) {
+            $record = BuyRecord::findOne(['vod_id' => $vod_id, 'user_id' => $user_id]);
+            if (is_null($record)) {
+                $record = new BuyRecord();
+                $record->user_id = $user_id;
+                $record->vod_id = $vod_id;
+                $record->save(false);
+                return Formatter::format([], Formatter::SUCCESS, '支付成功');
+            }
+            return Formatter::format([], Formatter::SUCCESS, '已经拥有');
+        }
     }
 
     public function actionNotify()

@@ -9,6 +9,7 @@
 namespace api\controllers;
 
 
+use api\components\Formatter;
 use backend\models\ApkList;
 use common\oss\Aliyunoss;
 use yii\rest\ActiveController;
@@ -34,12 +35,9 @@ class ApkController extends  ActiveController
             if ($ver < $apk['ver']) {
                  return $apk;
             }
-            return [
-                'msg' => 'it is the newest version'
-            ];
         }
 
-        return [];
+        return Formatter::format([], Formatter::NO_NEED_UPDATE, '无新版本');
     }
 
 }
