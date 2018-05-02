@@ -25,6 +25,11 @@ class VodListController extends BaseController
     {
         $dataProvider = new ActiveDataProvider([
             'query' => VodList::find(),
+            'sort' => [
+                'defaultOrder' => [
+                    'list_sort' => SORT_ASC
+                ]
+            ]
         ]);
 
         return $this->render('index', [
@@ -80,6 +85,7 @@ class VodListController extends BaseController
             return $this->redirect(Url::to(['vod-list/index']));
         }
 
+        
         return $this->render('update', [
             'model' => $model,
         ]);

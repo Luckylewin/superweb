@@ -23,6 +23,7 @@ use yii\helpers\Url;
  * @property int $list_trysee 影片试看时间
  * @property string $list_extend 扩展配置
  * @property string $list_icon 图标
+ * @property string $list_sort 排序
  */
 class VodList extends \yii\db\ActiveRecord implements Linkable
 {
@@ -50,7 +51,7 @@ class VodList extends \yii\db\ActiveRecord implements Linkable
             [['list_pid', 'list_price', 'list_trysee'], 'integer'],
             [['list_name'], 'required'],
             [['list_extend'], 'string'],
-            [['list_sid', 'list_status', 'list_ispay'], 'integer', 'max' => 1],
+            [['list_status', 'list_ispay'], 'integer', 'max' => 1],
             [['list_name'], 'string', 'max' => 20],
             [['list_dir'], 'string', 'max' => 90],
             [['list_keywords', 'list_description'], 'string', 'max' => 255],
@@ -58,8 +59,8 @@ class VodList extends \yii\db\ActiveRecord implements Linkable
             ['list_sid', 'default', 'value' => 1],
             ['list_trysee', 'default', 'value' => 5],
             [['list_name','list_dir'], 'unique'],
-            ['list_price', 'default', 'value' => 0],
-            [['icon', 'list_icon'], 'safe']
+            [['list_price', 'list_sort'], 'default', 'value' => 0],
+            [['icon', 'list_icon', 'list_sort'], 'safe']
         ];
     }
 
@@ -99,6 +100,7 @@ class VodList extends \yii\db\ActiveRecord implements Linkable
             'list_trysee' => '影片试看时间(分)',
             'list_extend' => '扩展配置',
             'list_icon' => '图标',
+            'list_sort' => '排序',
         ];
     }
 
@@ -111,7 +113,8 @@ class VodList extends \yii\db\ActiveRecord implements Linkable
             'list_ispay',
             'list_price',
             'list_trysee',
-            'list_icon'
+            'list_icon',
+            'list_sort'
         ];
     }
 

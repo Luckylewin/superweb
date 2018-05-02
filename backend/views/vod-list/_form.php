@@ -22,6 +22,8 @@ $this->registerJsFile('/statics/js/pinyin.js');
 
     <?= $form->field($model, 'list_dir')->textInput(['maxlength' => true]) ?>
 
+    <?= $form->field($model, 'list_sort')->textInput(['maxlength' => true]) ?>
+
     <?= $form->field($model, 'list_keywords')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'list_title')->textInput(['maxlength' => true]) ?>
