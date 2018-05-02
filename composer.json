@@ -31,7 +31,8 @@
         "beaten-sect0r/yii2-db-manager": "*",
         "snoopy/snoopy": "^2.0",
         "2amigos/yii2-file-upload-widget": "^1.0",
-        "yansongda/pay": "^2.1"
+        "yansongda/pay": "^2.1",
+        "paypal/rest-api-sdk-php": "^1.13"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
