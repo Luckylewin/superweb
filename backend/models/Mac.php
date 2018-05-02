@@ -5,6 +5,7 @@ namespace backend\models;
 
 use Yii;
 use backend\components\MyRedis;
+use yii\web\IdentityInterface;
 
 /**
  * This is the model class for table "mac".
@@ -18,8 +19,10 @@ use backend\components\MyRedis;
  * @property int $type 类型
  * @property string $duetime 过期时间
  * @property string $contract_time 有效期
+ * @property string $access_token 有效期
+ * @property string $access_token_expire 有效期
  */
-class Mac extends \yii\db\ActiveRecord
+class Mac extends \yii\db\ActiveRecord implements IdentityInterface
 {
     const NOT_ACTIVE = 0;
     const NORMAL     = 1;
@@ -82,9 +85,9 @@ class Mac extends \yii\db\ActiveRecord
     {
         if (parent::beforeSave($insert)) {
             if ($this->isNewRecord == false) {
-                $this->contract_time = str_replace(['year', 'month', 'day'], ['','',''], $this->contract_time);
+              //  $this->contract_time = str_replace(['year', 'month', 'day'], ['','',''], $this->contract_time);
             }
-            $this->contract_time .=  (" " . $this->unit);
+            //$this->contract_time .=  (" " . $this->unit);
             unset($this->unit);
         }
         return true;
@@ -187,4 +190,84 @@ class Mac extends \yii\db\ActiveRecord
 
         return $str;
     }
+
+    public static function findIdentity($mac)
+    {
+        return static::findOne(['MAC' => $mac]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function findIdentityByAccessToken($token, $type = null)
+    {
+        $identity = static::find()
+                          ->where(['access_token' => $token])
+                          ->andWhere(['>', 'access_token_expire', time()])
+                          ->one();
+
+        if ($identity) {
+            if (md5(Yii::$app->request->remoteIP) != strstr($identity->access_token, '-', true)) {
+                return false;
+            }
+        }
+
+        return $identity;
+    }
+
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getId()
+    {
+        return $this->getPrimaryKey();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAuthKey()
+    {
+        return '';
+    }
+
+
+    /**
+     * {@inheritdoc}
+     */
+    public function validateAuthKey($authKey)
+    {
+        return false;
+    }
+
+
+    /**
+     * API access_token 与IP绑定在一起
+     * @return string
+     */
+    public function generateAccessToken()
+    {
+        $this->access_token = md5(Yii::$app->request->userIP) . "-" . Yii::$app->security->generateRandomString() ;
+        return $this->access_token;
+    }
+
+    public function fields()
+    {
+
+        return [
+            'MAC',
+            'use_flag' => function($model) {
+                return self::getUseFlag($model->use_flag);
+            },
+            'ver',
+            'regtime',
+            'logintime',
+            'duetime',
+            'contract_time',
+            'access_token',
+            'access_token_expire'
+        ];
+    }
+
 }

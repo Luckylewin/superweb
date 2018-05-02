@@ -9,16 +9,15 @@
 namespace api\controllers;
 
 use Yii;
+use api\models\MacLoginForm;
 use api\components\Formatter;
-use api\models\ApiLoginForm;
-use api\models\ApiSignupForm;
 use yii\filters\auth\QueryParamAuth;
 use yii\rest\ActiveController;
 use yii\web\ForbiddenHttpException;
 
-class UserController extends ActiveController
+class AuthController extends ActiveController
 {
-    public $modelClass = 'common\models\User';
+    public $modelClass = 'common\models\Mac';
 
     public function behaviors()
     {
@@ -26,7 +25,7 @@ class UserController extends ActiveController
 
         $behaviors['authenticator'] = [
             'class' => QueryParamAuth::className(),
-            'except' => ['login', 'signup']
+            'except' => ['token']
         ];
 
         return $behaviors;
@@ -43,14 +42,13 @@ class UserController extends ActiveController
     public function beforeAction($action)
     {
         parent::beforeAction($action);
-        if ($action->id == 'signup') {
+        if ($action->id == 'token') {
             $request = Yii::$app->request;
             $sign = $request->post('signature');
-            $username = $request->post('username');
-            $password = $request->post('password');
+            $username = $request->post('mac');
             $timestamp = $request->post('timestamp');
 
-            if ( $sign != md5($username . $password . $timestamp .  'supercinema') ) {
+            if ( $sign != md5(md5($username . $timestamp) . md5('topthinker' . $timestamp)) ) {
                 throw new ForbiddenHttpException('invalid request');
             }
         }
@@ -58,12 +56,11 @@ class UserController extends ActiveController
         return true;
     }
 
-    public function actionLogin()
+    public function actionToken()
     {
         $request = Yii::$app->request;
-        $loginModel = new ApiLoginForm();
-        $loginModel->username = $request->post('username');
-        $loginModel->password = $request->post('password');
+        $loginModel = new MacLoginForm();
+        $loginModel->mac = $request->post('mac');
 
         if ( $user = $loginModel->login() ) {
             return Formatter::format($user);
@@ -74,18 +71,9 @@ class UserController extends ActiveController
         return Formatter::format(null,$errorCode, $errorMessage);
     }
 
-    public function actionSignup()
+    public function actionTest()
     {
-        $signupModel = new ApiSignupForm();
-        $signupModel->load(Yii::$app->request->post(),'');
-
-        if ($user = $signupModel->signup()) {
-            return Formatter::format($user);
-        }
-
-        $errorCode = current($signupModel->getErrorSummary(false));
-        $errorMessage = Formatter::getMessage($errorCode);
-        return Formatter::format(null,$errorCode, $errorMessage);
+        echo 1;
     }
 
 }

@@ -45,7 +45,7 @@ return [
                         }
 
                         $response->statusCode = $statusCode;
-                        $response->data = Formatter::format([], $statusCode, $message);
+                        $response->data = Formatter::format(null, $statusCode, $message);
 
                     } else {
                         $response->statusCode = 200;
@@ -86,6 +86,7 @@ return [
             'password' => '12345678',
             'charset' => 'utf8',
             'tablePrefix' => 'yii2_',
+
         ],
 
        'urlManager' => [
@@ -123,6 +124,17 @@ return [
                        'POST signup' => 'signup',
                    ]
                ],
+
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'auth',
+                    'pluralize' => false, //关闭复数形式
+                    'except' => ['delete','update', 'create'],
+                    'extraPatterns' => [
+                        'POST token' => 'token',
+                        'GET test' => 'test'
+                    ]
+                ],
 
                [
                    'class' => 'yii\rest\UrlRule',

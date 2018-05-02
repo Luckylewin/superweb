@@ -212,4 +212,10 @@ class SiteController extends Controller
             'model' => $model,
         ]);
     }
+
+    public function actionSuccess()
+    {
+        echo "支付成功";
+    }
+
 }

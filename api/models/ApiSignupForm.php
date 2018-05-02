@@ -1,6 +1,7 @@
 <?php
 namespace api\models;
 
+use api\components\Formatter;
 use yii\base\Model;
 use common\models\User;
 
@@ -21,8 +22,8 @@ class ApiSignupForm extends Model
     {
         return [
             ['username', 'trim'],
-            ['username', 'required'],
-            ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => '此用户名已经被占用.'],
+            ['username', 'required', 'message' => Formatter::EMPTY_SIGNUP_ERROR],
+            ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => Formatter::USERNAME_EXIST_ERROR],
             ['username', 'string', 'min' => 2, 'max' => 255],
 
            /* ['email', 'trim'],
@@ -31,8 +32,8 @@ class ApiSignupForm extends Model
             ['email', 'string', 'max' => 255],
             ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => '此邮箱已被占用.'],*/
 
-            ['password', 'required'],
-            ['password', 'string', 'min' => 6],
+            ['password', 'required', 'message' => Formatter::EMPTY_SIGNUP_ERROR],
+            ['password', 'string', 'min' => 6, 'message' => Formatter::PASSWORD_TOO_SHORT_ERROR],
         ];
     }
 

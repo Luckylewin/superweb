@@ -85,7 +85,7 @@ class VodListController extends BaseController
             return $this->redirect(Url::to(['vod-list/index']));
         }
 
-        
+
         return $this->render('update', [
             'model' => $model,
         ]);

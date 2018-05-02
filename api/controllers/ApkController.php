@@ -37,7 +37,7 @@ class ApkController extends  ActiveController
             }
         }
 
-        return Formatter::format([], Formatter::NO_NEED_UPDATE, '无新版本');
+        return Formatter::format(null, Formatter::NO_NEED_UPDATE, '无新版本');
     }
 
 }

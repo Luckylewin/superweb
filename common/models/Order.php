@@ -2,13 +2,11 @@
 
 namespace common\models;
 
-use Yii;
-
 /**
  * This is the model class for table "iptv_order".
  *
  * @property int $order_id
- * @property string $order_sign 订单日期
+ * @property string $order_sign 订单号
  * @property int $order_status 订单状态
  * @property int $order_uid 用户ID
  * @property int $order_total 订单数量
@@ -42,19 +40,32 @@ class Order extends \yii\db\ActiveRecord
         return 'iptv_order';
     }
 
+
+    public function beforeSave($insert)
+    {
+        parent::beforeSave($insert);
+        if ($this->isNewRecord) {
+            $this->order_total = 1;
+            $this->order_addtime = time();
+            $this->order_ispay = 0;
+            $this->order_status = 0;
+        }
+        return true;
+    }
+
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['order_sign', 'order_total', 'order_addtime', 'order_paytime', 'order_confirmtime', 'order_info', 'order_paytype'], 'required'],
+            [['order_sign'], 'required'],
             [['order_uid', 'order_total', 'order_addtime', 'order_paytime', 'order_confirmtime'], 'integer'],
             [['order_money'], 'number'],
             [['order_info'], 'string'],
             [['order_sign'], 'string', 'max' => 32],
             [['order_status', 'order_ispay'], 'string', 'max' => 1],
-            [['order_paytype'], 'string', 'max' => 64],
+            [['order_paytype'], 'string', 'max' => 64]
         ];
     }
 
@@ -98,4 +109,15 @@ class Order extends \yii\db\ActiveRecord
     {
         return self::$payType[$this->order_paytype];
     }
+
+    /**
+     * 产生订单号
+     * @return string
+     */
+    public function generateOrder()
+    {
+        $yCode = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J');
+        return $orderSn = $yCode[intval(date('Y')) - 2018] . strtoupper(dechex(date('m'))) . date('d') . substr(time(), -5) . substr(microtime(), 2, 5) . sprintf('%02d', rand(0, 99));
+    }
+
 }

@@ -1,6 +1,7 @@
 <?php
 namespace api\models;
 
+use api\components\Formatter;
 use common\models\User;
 use yii\base\Model;
 
@@ -25,7 +26,7 @@ class ApiLoginForm extends Model
     {
         return [
             // username and password are both required
-            [['username', 'password'], 'required'],
+            [['username', 'password'], 'required','message' => Formatter::EMPTY_LOGIN_ERROR],
             ['password', 'validatePassword'],
         ];
     }
@@ -38,7 +39,7 @@ class ApiLoginForm extends Model
         if (!$this->hasErrors()) {
             $user = $this->getUser();
             if (!$user || !$user->validatePassword($this->password)) {
-                $this->addError($attribute, '用户名/密码不正确');
+                $this->addError($attribute, Formatter::LOGIN_PASSWORD_ERROR);
             }
         }
     }
