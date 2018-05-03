@@ -10,6 +10,8 @@ use Yii;
  * @property int $id
  * @property int $vod_id
  * @property int $user_id
+ * @property int $is_valid
+ * @property int $order_id
  */
 class BuyRecord extends \yii\db\ActiveRecord
 {
@@ -28,7 +30,7 @@ class BuyRecord extends \yii\db\ActiveRecord
     {
         return [
             [['vod_id', 'user_id'], 'required'],
-            [['vod_id', 'user_id'], 'integer'],
+            [['vod_id', 'user_id', 'is_valid', 'order_id'], 'integer'],
         ];
     }
 

@@ -42,6 +42,7 @@ class Formatter
 
     //影片业务
     const FREE_OF_CHARGE = 1101;
+    const ALREADY_BUY = 1102;
 
 
 
@@ -69,6 +70,8 @@ class Formatter
                 return '账户过期';break;
             case self::MAC_FORBIDDEN:
                 return '账户被禁用';break;
+            case self::FREE_OF_CHARGE:
+                return '非收费';break;
             default:
                 return '其他错误';break;
 

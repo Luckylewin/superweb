@@ -10,6 +10,7 @@ namespace frontend\controllers;
 
 
 use common\models\ActivateLog;
+use common\models\BuyRecord;
 use common\models\Order;
 use frontend\components\paypal;
 use PayPal\Api\Amount;
@@ -139,10 +140,21 @@ class PayController extends Controller
 
                 $order->save(false);
 
+                //更新用户状态
+                switch ($order->order_type)
+                {
+                    case 'vod':
+                        $record = BuyRecord::findOne(['order_id' => $order->order_id]);
+                        $record->is_valid = 1;
+                        $record->save(false);
+                        break;
+                }
+
+
                 return Yii::$app->response->redirect(Url::to(['site/success', 'order' =>  $invoice_number]));
             }
         }catch(\Exception $e){
-            throw new ForbiddenHttpException("The order has been paid successfully, do not repeat the refresh");
+            throw new ForbiddenHttpException("该订单已经支付过了，请勿刷新");
         }
     }
 

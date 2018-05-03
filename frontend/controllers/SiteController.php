@@ -1,8 +1,10 @@
 <?php
 namespace frontend\controllers;
 
+use common\models\Order;
 use Yii;
 use yii\base\InvalidParamException;
+use yii\helpers\Url;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -12,6 +14,7 @@ use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
+use yii\web\NotFoundHttpException;
 
 /**
  * Site controller
@@ -213,9 +216,44 @@ class SiteController extends Controller
         ]);
     }
 
-    public function actionSuccess()
+    public function actionReview($order)
     {
-        echo "支付成功";
+        $this->layout = false;
+        $order = Order::findOne(['order_sign' => $order]);
+        if (is_null($order)) {
+            throw new NotFoundHttpException("页面发生错误", '404');
+        }
+
+        return $this->render('review',[
+            'order' => $order
+        ]);
+    }
+
+    public function actionPreview($order)
+    {
+        $this->layout = false;
+        $order = Order::findOne(['order_sign' => $order]);
+        if (is_null($order)) {
+            throw new NotFoundHttpException("页面发生错误", '404');
+        }
+        //订单是否已经被支付过
+        if ($order->order_ispay) {
+            return $this->redirect(Url::to(['site/review', 'order' => $order->order_sign]));
+        }
+        return $this->render('preview',[
+            'order' => $order
+        ]);
+    }
+
+    public function actionSuccess($order)
+    {
+        $this->layout = false;
+        $order = Order::findOne(['order_sign' => $order]);
+        if (is_null($order)) {
+            throw new \Exception("支付发生错误", '404');
+        }
+
+        return $this->render('success');
     }
 
 }

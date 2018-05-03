@@ -10,6 +10,7 @@ use yii\web\IdentityInterface;
 /**
  * This is the model class for table "mac".
  *
+ * @property int $id id
  * @property string $MAC mac地址
  * @property string $SN sn码
  * @property int $use_flag 是否可用

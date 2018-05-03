@@ -1,6 +1,7 @@
 <?php
 
 namespace common\models;
+use backend\models\Mac;
 
 /**
  * This is the model class for table "iptv_order".
@@ -17,6 +18,7 @@ namespace common\models;
  * @property int $order_confirmtime 订单确认时间
  * @property string $order_info 订单信息
  * @property string $order_paytype 支付类型
+ * @property string $order_type 物品类型
  */
 class Order extends \yii\db\ActiveRecord
 {
@@ -65,7 +67,8 @@ class Order extends \yii\db\ActiveRecord
             [['order_info'], 'string'],
             [['order_sign'], 'string', 'max' => 32],
             [['order_status', 'order_ispay'], 'string', 'max' => 1],
-            [['order_paytype'], 'string', 'max' => 64]
+            [['order_paytype'], 'string', 'max' => 64],
+            ['order_type', 'safe']
         ];
     }
 
@@ -89,6 +92,45 @@ class Order extends \yii\db\ActiveRecord
             'order_paytype' => '支付类型',
             'user.username' => '用户',
             'paystatus' => '订单状态'
+        ];
+    }
+
+    public function fields()
+    {
+        return [
+            //'order_id',
+            'order_sign',
+            'order_status',
+            'order_uid' => function($model) {
+                $user = User::find()->select('username')->where(['id' => $model->order_uid])->one();
+                if ($user) {
+                    return $user->username;
+                }
+                $user = Mac::find()->select('MAC')->where(['id' => $model->order_uid])->one();
+                if ($user) {
+                    return $user->MAC;
+                }
+                return $model->order_uid;
+            },
+            'order_total',
+            'order_money',
+            'order_ispay'=> function($model) {
+                return self::$payStatus[$model->order_ispay];
+            },
+            'order_addtime'=> function($model) {
+                return date('Y-m-d H:i:s', $model->order_addtime);
+            },
+            'order_paytime' => function($model) {
+                return date('Y-m-d H:i:s', $model->order_paytime);
+            },
+            'order_confirmtime' => function($model) {
+                return date('Y-m-d H:i:s', $model->order_confirmtime);
+            },
+            'order_info',
+            'order_paytype' => function($model) {
+                return self::$payType[$model->order_paytype];
+            }
+
         ];
     }
 
