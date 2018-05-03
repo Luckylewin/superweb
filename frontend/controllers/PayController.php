@@ -12,6 +12,8 @@ namespace frontend\controllers;
 use common\models\ActivateLog;
 use common\models\BuyRecord;
 use common\models\Order;
+use common\models\UpgradeRecord;
+use common\models\User;
 use frontend\components\paypal;
 use PayPal\Api\Amount;
 use PayPal\Api\Details;
@@ -148,6 +150,17 @@ class PayController extends Controller
                         $record->is_valid = 1;
                         $record->save(false);
                         break;
+                    case 'vip':
+                        $record = UpgradeRecord::findOne(['order_id' => $order->order_id]);
+                        $record->is_deal = 1;
+                        if ($record) {
+                            $user = User::findOne($record->user_id);
+                            $user->vip_expire_time = $record->expire_time;
+                            $user->is_vip = 1;
+                            $user->save(false);
+                        }
+                        $record->save(false);
+
                 }
 
 

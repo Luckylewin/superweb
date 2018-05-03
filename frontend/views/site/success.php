@@ -35,7 +35,7 @@ $this->title = '支付成功';
     <div class="weui-msg__extra-area">
         <div class="weui-footer">
             <p class="weui-footer__links">
-                <a href="javascript:void(0);" class="weui-footer__link">底部链接文本</a>
+                <a href="javascript:void(0);" class="weui-footer__link">success</a>
             </p>
             <p class="weui-footer__text">Copyright © 2008-2016 weui.io</p>
         </div>

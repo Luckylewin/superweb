@@ -12,15 +12,44 @@ namespace api\controllers;
 use api\components\Formatter;
 use common\models\BuyRecord;
 use common\models\Order;
+use common\models\UpgradeRecord;
 use common\models\Vod;
+use yii\base\InvalidArgumentException;
 use yii\filters\auth\QueryParamAuth;
 
 use yii\helpers\Url;
 use yii\rest\ActiveController;
+use yii\web\HttpException;
 
 class OrderController extends ActiveController
 {
     public $modelClass = 'common\models\Order';
+
+    public $priceList = [
+        1 => [
+            'type' => 1,
+            'title' => '一个月',
+            'price' => '4',
+        ],
+
+        3 => [
+             'type' => 3,
+             'title' => '三个月',
+             'price' => '12'
+        ],
+
+        6 =>  [
+            'type' => 6,
+            'title' => '六个月',
+            'price' => '22'
+        ],
+
+        12 => [
+            'type' => 12,
+            'title' => '一年',
+            'price' => '40'
+        ]
+    ];
 
     public function behaviors()
     {
@@ -51,43 +80,38 @@ class OrderController extends ActiveController
 
     public function actionPrice()
     {
-        $data = [
-            [
-                'title' => '一个月',
-                'price' => '4',
-            ],
-            [
-                'title' => '三个月',
-                'price' => '12'
-            ],
-            [
-                'title' => '六个月',
-                'price' => '22'
-            ],
-            [
-                'title' => '一年',
-                'price' => '40'
-            ]
-        ];
-
-        return $data;
+        return array_values($this->priceList);
     }
 
     public function actionUpgrade()
     {
-        //价格暂时硬编码
-        $price = 10;
-        $month = \Yii::$app->request->post('month');
-        
+        //价格查找
+        $type = \Yii::$app->request->post('type');
+        if (!isset($this->priceList[$type])) {
+            throw new HttpException(400, "参数有误");
+        }
+
+        $price = $this->priceList[$type]['price'];
+        $month = \Yii::$app->request->post('type');
+        $uid = \Yii::$app->user->getId();
+        //生成一个订单
         $order = new Order();
         $order->order_sign = $order->generateOrder();
         $order->order_total = 1;
         $order->order_money = $price;
         $order->order_info = "升级会员";
         $order->order_paytype = 'paypal';
-        $order->order_type = 'vod';
-        $order->order_uid = \Yii::$app->user->getId();
+        $order->order_type = 'vip';
+        $order->order_uid = $uid;
         $order->save(false);
+
+        //生成一条升级记录
+        $record = new UpgradeRecord();
+        $record->user_id = $uid;
+        $record->order_id = $order->order_id;
+        $record->created_at = time();
+        $record->expire_time = strtotime("+$month month");
+        $record->save(false);
 
         return $response = [
             'order_sign' => $order->order_sign,
