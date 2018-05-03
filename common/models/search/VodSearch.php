@@ -2,6 +2,7 @@
 
 namespace common\models\search;
 
+use common\models\VodList;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -62,6 +63,16 @@ class VodSearch extends Vod
             // uncomment the following line if you do not want to return any records when validation fails
             // $query->where('0=1');
             return $dataProvider;
+        }
+
+        if ($this->vod_cid) {
+            $list = VodList::findOne($this->vod_cid);
+
+            if ($list->list_dir == 'shouye') {
+                $query->andFilterWhere(['vod_home' => 1]);
+                unset($this->vod_cid);
+            }
+
         }
 
         // grid filtering conditions
