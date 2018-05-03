@@ -19,6 +19,11 @@ $this->title = '支付成功';
     <title><?= $this->title ?></title>
     <link rel="stylesheet" href="https://cdn.bootcss.com/weui/1.1.2/style/weui.min.css">
     <link rel="stylesheet" href="https://cdn.bootcss.com/jquery-weui/1.2.0/css/jquery-weui.min.css">
+    <style>
+        .weui-icon-success{
+            color: #007bff;
+        }
+    </style>
 </head>
 <body>
 <div class="weui-msg">
