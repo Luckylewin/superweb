@@ -23,6 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'list.list_name',
             'vod_name',
             'vod_ename',
+            'vod_url:ntext',
             'vod_title',
             'vod_keywords',
             'vod_type',
@@ -53,7 +54,13 @@ $this->params['breadcrumbs'][] = $this->title;
             'vod_hits_day',
             'vod_hits_week',
             'vod_hits_month',
-            'vod_stars',
+            [
+                    'attribute' => 'vod_stars',
+                    'format' => 'raw',
+                    'value' => function($model) {
+                        return $model->getStar();
+                    }
+            ],
             'vod_status',
             'vod_up',
             'vod_down',
@@ -84,7 +91,12 @@ $this->params['breadcrumbs'][] = $this->title;
             'vod_douban_id',
             'vod_douban_score',
             'vod_scenario:ntext',
-            'vod_home'
+            [
+                    'attribute' => 'vod_home',
+                    'value' => function($model) {
+                        return $model->vod_home ? '是':"否";
+                    }
+            ]
         ],
     ]) ?>
 
@@ -97,7 +109,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'method' => 'post',
             ],
         ]) ?>
-        <?= Html::a('返回', ['index'], ['class' => 'btn btn-default']) ?>
+        <?=  Html::a('返回', ['vod/index', 'VodSearch[vod_cid]'=>$model->vod_cid], [
+            'class' => 'btn btn-default'
+        ]); ?>
     </p>
 
 </div>

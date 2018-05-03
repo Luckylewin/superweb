@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\Vod;
+use yii\data\Sort;
 
 /**
  * VodSearch represents the model behind the search form of `common\models\Vod`.
@@ -48,6 +49,11 @@ class VodSearch extends Vod
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' => [
+                'defaultOrder' => [
+                    'vod_id' => SORT_DESC
+                ]
+            ]
         ]);
 
         $this->load($params);

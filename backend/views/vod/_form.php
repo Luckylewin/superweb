@@ -29,7 +29,8 @@ $this->registerJsFile('/statics/js/miniUtils.js')
         <li class="active">
             <a href="#home" data-toggle="tab">基本数据</a>
         </li>
-        <li><a href="#ios" data-toggle="tab">扩展数据</a></li>
+        <li><a href="#advance" data-toggle="tab">扩展数据一</a></li>
+        <li><a href="#ios" data-toggle="tab">扩展数据二</a></li>
 
     </ul>
     <?php $form = ActiveForm::begin(); ?>
@@ -40,54 +41,36 @@ $this->registerJsFile('/statics/js/miniUtils.js')
                 <div class="panel-body">
 
                     <div class="col-md-4">
-                        <!-- 影片名称  -->
-                        <?= $form->field($model, 'vod_name')->textInput(['maxlength' => true]) ?>
-                        <!-- 影片副标  -->
-                        <?= $form->field($model, 'vod_title')->textInput(['maxlength' => true]) ?>
-                        <!-- 影片主演  -->
-                        <?= $form->field($model, 'vod_actor')->textInput(['maxlength' => true]) ?>
-                        <!-- 影片导演  -->
-                        <?= $form->field($model, 'vod_director')->textInput(['maxlength' => true]) ?>
-                        <!-- 影片别名  -->
-                        <?= $form->field($model, 'vod_ename')->textInput(['maxlength' => true]) ?>
+                        <!-- 影片分类  -->
+                        <?= $form->field($model, 'vod_cid')->dropDownList(ArrayHelper::map(VodList::getAllList(),'list_id', 'list_name')); ?>
+
                         <!-- 点播权限 -->
                         <?= $form->field($model, 'vod_ispay')->dropDownList(\common\models\Vod::$chargeStatus) ?>
                     </div>
 
                     <div class="col-md-4">
-                        <!-- 影片分类  -->
-                        <?= $form->field($model, 'vod_cid')->dropDownList(ArrayHelper::map(VodList::getAllList(),'list_id', 'list_name')); ?>
-                        <!-- 上映日期  -->
-                        <?= $form->field($model, 'vod_filmtime')->textInput() ?>
-                        <!-- 总共集数  -->
-                        <?= $form->field($model, 'vod_total')->textInput() ?>
-                        <!-- 影片时长  -->
-                        <?= $form->field($model, 'vod_length')->textInput() ?>
-                        <!-- 豆瓣ID  -->
-                        <?= $form->field($model, 'vod_douban_id')->textInput() ?>
+
+                        <!-- 影片名称  -->
+                        <?= $form->field($model, 'vod_name')->textInput([
+                            'placeholder' => '必填'
+                        ])->label('<font style="color: red"><b>*</b></font>影片名称') ?>
                         <!-- 单片付费 -->
-                        <?= $form->field($model, 'vod_price')->textInput() ?>
+                        <?= $form->field($model, 'vod_price')->textInput()->label('单片价格(元)') ?>
 
                     </div>
 
                     <div class="col-md-4">
-                        <!-- 影片状态  -->
-                        <?= $form->field($model, 'vod_status')->dropDownList($model->showStatus) ?>
-                        <!-- 更新日期  -->
-                        <?= $form->field($model, 'vod_addtime')->textInput() ?>
-                        <!-- 连载集数  -->
-                        <?= $form->field($model, 'vod_continu')->textInput(['maxlength' => true]) ?>
-                        <!-- 周期  -->
-                        <?= $form->field($model, 'vod_weekday')->textInput(['maxlength' => true]) ?>
-                        <!-- 豆瓣评分  -->
-                        <?= $form->field($model, 'vod_douban_score')->textInput(['maxlength' => true]) ?>
-
+                        <!-- 播放地址 -->
+                        <?= $form->field($model, 'vod_url')->textInput() ?>
 
                         <!-- 影片试看 -->
-                        <?= $form->field($model, 'vod_trysee')->textInput() ?>
+                        <?= $form->field($model, 'vod_trysee')->textInput([
+                                'placeholder' => '必填'
+                        ])->label('<font style="color: red"><b>*</b></font>影片试看(分钟)') ?>
+
                     </div>
 
-                    <div class="col-md-4">
+                    <div class="col-md-12">
                         <!-- 海报剧照文件上传  -->
                         <?= $form->field($model, 'vod_pic')->textInput(); ?>
                         <?=  FileUploadUI::widget([
@@ -118,7 +101,56 @@ $this->registerJsFile('/statics/js/miniUtils.js')
                         ]); ?>
                     </div>
 
+                </div>
+            </div>
+
+        </div>
+        <div class="tab-pane fade" id="advance">
+            <div class="panel panel-default" style="margin-top: 20px;">
+                <div class="panel-body">
+
                     <div class="col-md-4">
+
+                        <!-- 影片副标  -->
+                        <?= $form->field($model, 'vod_title')->textInput(['maxlength' => true]) ?>
+                        <!-- 影片主演  -->
+                        <?= $form->field($model, 'vod_actor')->textInput(['maxlength' => true]) ?>
+                        <!-- 影片导演  -->
+                        <?= $form->field($model, 'vod_director')->textInput(['maxlength' => true]) ?>
+                        <!-- 影片别名  -->
+                        <?= $form->field($model, 'vod_ename')->textInput(['maxlength' => true]) ?>
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <!-- 上映日期  -->
+                        <?= $form->field($model, 'vod_filmtime')->textInput() ?>
+                        <!-- 总共集数  -->
+                        <?= $form->field($model, 'vod_total')->textInput() ?>
+                        <!-- 影片时长  -->
+                        <?= $form->field($model, 'vod_length')->textInput() ?>
+                        <!-- 豆瓣ID  -->
+                        <?= $form->field($model, 'vod_douban_id')->textInput() ?>
+
+
+                    </div>
+
+                    <div class="col-md-4">
+                        <!-- 影片状态  -->
+                        <?= $form->field($model, 'vod_status')->dropDownList($model->showStatus) ?>
+                        <!-- 更新日期  -->
+                        <?= $form->field($model, 'vod_addtime')->textInput() ?>
+                        <!-- 连载集数  -->
+                        <?= $form->field($model, 'vod_continu')->textInput(['maxlength' => true]) ?>
+                        <!-- 周期  -->
+                        <?= $form->field($model, 'vod_weekday')->textInput(['maxlength' => true]) ?>
+
+
+                    </div>
+
+
+
+                    <div class="col-md-6">
                         <!-- 海报背景  -->
                         <?= $form->field($model, 'vod_pic_bg')->textInput(['maxlength' => true]) ?>
                         <?=  FileUploadUI::widget([
@@ -150,7 +182,7 @@ $this->registerJsFile('/statics/js/miniUtils.js')
                         ]); ?>
                     </div>
 
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <!-- 海报轮播  -->
 
                         <?= $form->field($model, 'vod_pic_slide')->textInput() ?>
@@ -206,8 +238,8 @@ $this->registerJsFile('/statics/js/miniUtils.js')
 
                             'template' => '{label}<div class="row">
                                                     <div class="col-sm-3">{input}{error}{hint}</div><div class="col-sm-7 single-select">'.
-                                                        \common\models\Vod::getSelectList('vod_year')
-                                                    .'</div></div>'
+                                \common\models\Vod::getSelectList('vod_year')
+                                .'</div></div>'
 
 
 
@@ -219,8 +251,8 @@ $this->registerJsFile('/statics/js/miniUtils.js')
 
                             'template' => '{label}<div class="row">
                                                     <div class="col-sm-3">{input}{error}{hint}</div><div class="col-sm-7 single-select">'.
-                                                    \common\models\Vod::getSelectList('vod_area')
-                                                  .'</div></div>'
+                                \common\models\Vod::getSelectList('vod_area')
+                                .'</div></div>'
 
                         ])->textInput() ?>
                         <!-- 影片对白  -->
@@ -228,8 +260,8 @@ $this->registerJsFile('/statics/js/miniUtils.js')
 
                             'template' => '{label}<div class="row">
                                                     <div class="col-sm-3">{input}{error}{hint}</div><div class="col-sm-7 single-select">'.
-                                                        \common\models\Vod::getSelectList('vod_language')
-                                                    .'</div></div>'
+                                \common\models\Vod::getSelectList('vod_language')
+                                .'</div></div>'
 
                         ])->textInput() ?>
                         <!-- 影片版本  -->
@@ -237,21 +269,20 @@ $this->registerJsFile('/statics/js/miniUtils.js')
 
                             'template' => '{label}<div class="row">
                                                     <div class="col-sm-3">{input}{error}{hint}</div><div class="col-sm-7 single-select">'.
-                                                        \common\models\Vod::getSelectList('vod_version')
-                                                    .'</div></div>'
+                                \common\models\Vod::getSelectList('vod_version')
+                                .'</div></div>'
 
                         ])->textInput() ?>
                         <!-- 资源类别 -->
                         <?= $form->field($model, 'vod_state',[
-                                'template' => '{label}<div class="row">
+                            'template' => '{label}<div class="row">
                                                     <div class="col-sm-3">{input}{error}{hint}</div><div class="col-sm-7 single-select">'.
-                                                        \common\models\Vod::getSelectList('vod_state')
-                                                    .'</div></div>'
+                                \common\models\Vod::getSelectList('vod_state')
+                                .'</div></div>'
                         ])->textInput(['maxlength' => true]) ?>
 
 
-                        <!-- 播放地址 -->
-                        <?= $form->field($model, 'vod_url')->textarea(['rows' => 6]) ?>
+
                         <!-- 影片简介 -->
                         <?= $form->field($model, 'vod_content')->textarea(['rows' => 6]) ?>
                         <!-- 是否完结 -->
@@ -261,16 +292,16 @@ $this->registerJsFile('/statics/js/miniUtils.js')
                             0=>'否', 1=>'是'
                         ]) ?>
                     </div>
-
-
-
                 </div>
             </div>
-
         </div>
         <div class="tab-pane fade" id="ios">
             <div class="panel panel-default" style="margin-top: 20px;">
                 <div class="panel-body">
+
+                    <!-- 豆瓣评分  -->
+                    <?= $form->field($model, 'vod_douban_score')->textInput(['maxlength' => true]) ?>
+
                     <?= $form->field($model, 'vod_stars')->dropDownList(\common\models\Vod::$starStatus) ?>
 
                     <?= $form->field($model, 'vod_hits')->textInput() ?>
@@ -313,7 +344,8 @@ $this->registerJsFile('/statics/js/miniUtils.js')
     </div>
 
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton($model->isNewRecord ? '新增':'保存', ['class' => 'btn btn-success']) ?>
+        <?= Html::a('返回', ['vod-list/index'], ['class' => 'btn btn-default']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

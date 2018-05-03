@@ -117,7 +117,7 @@ class Vod extends \yii\db\ActiveRecord implements Linkable
             [['vod_letter'], 'string', 'max' => 2],
             [['vod_weekday'], 'string', 'max' => 60],
             [['vod_series'], 'string', 'max' => 120],
-            [['vod_home', 'pic'], 'safe']
+            [['vod_home', 'pic', 'vod_stars'], 'safe']
 
         ];
     }
