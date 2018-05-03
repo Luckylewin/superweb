@@ -35,16 +35,22 @@ return [
                     if ($response->isSuccessful == false) {
 
                         if ( $response instanceof \yii\web\Response) {
+                            $httpCode = $response->getStatusCode();
+                            if (is_object($response->data) || (!isset($response->data['code']) && $response->data['code']) ) {
+                                $statusCode =  $response->getStatusCode();
+                            } else {
+                                $statusCode = $response->data['code'];
+                            }
 
-                            $statusCode = $response->getStatusCode();
                             $message = is_array($response->data) ? $response->data['message'] : $statusCode;
 
                         } else {
+                            $httpCode = $response->data->statusCode;
                             $statusCode = $response->data->statusCode;
                             $message = isset($response->data['code'])? $response->data['message'] : $response->data->statusCode;
                         }
 
-                        $response->statusCode = $statusCode;
+                        $response->statusCode = $httpCode;
                         $response->data = Formatter::format(null, $statusCode, $message);
 
                     } else {
@@ -96,7 +102,7 @@ return [
             'rules' => [
                [
                    'class' => 'yii\rest\UrlRule',
-                   'controller' => ['type', 'banner', 'user','order', 'vod', 'recommend'],
+                   'controller' => ['type', 'banner', 'user', 'vod', 'recommend'],
                    'except' => ['delete','update','create'],
                    'extraPatterns' => [
                        'GET home' => 'home'
@@ -133,6 +139,18 @@ return [
                     'extraPatterns' => [
                         'POST token' => 'token',
                         'GET test' => 'test'
+                    ]
+                ],
+
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => 'order',
+                    'pluralize' => false, //关闭复数形式
+                    'except' => ['delete','update', 'create'],
+                    'extraPatterns' => [
+                        'POST buy' => 'buy',
+                        'POST upgrade' => 'upgrade',
+                        'GET price' => 'price'
                     ]
                 ],
 

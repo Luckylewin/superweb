@@ -36,8 +36,11 @@ return [
 
                         if ( $response instanceof \yii\web\Response) {
                             $httpCode = $response->getStatusCode();
-
-                            $statusCode = isset($response->data['code']) && $response->data['code'] ? $response->data['code'] : $response->getStatusCode();
+                            if (is_object($response->data) || (!isset($response->data['code']) && $response->data['code']) ) {
+                                $statusCode =  $response->getStatusCode();
+                            } else {
+                                $statusCode = $response->data['code'];
+                            }
                            // $statusCode = $response->getStatusCode();
                             $message = is_array($response->data) ? $response->data['message'] : $statusCode;
 
@@ -134,7 +137,8 @@ return [
                     'except' => ['delete','update', 'create'],
                     'extraPatterns' => [
                         'POST buy' => 'buy',
-                        'POST upgrade' => 'upgrade'
+                        'POST upgrade' => 'upgrade',
+                        'GET price' => 'price'
                     ]
                 ],
 

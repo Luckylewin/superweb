@@ -28,7 +28,8 @@ class OrderController extends ActiveController
 
         //鉴权
         $behaviors['authenticator'] = [
-            'class' => QueryParamAuth::className()
+            'class' => QueryParamAuth::className(),
+            'except' => ['price']
         ];
 
         return $behaviors;
@@ -46,6 +47,30 @@ class OrderController extends ActiveController
         return Order::find()
                     ->where(['order_uid' => $uid])
                     ->all();
+    }
+
+    public function actionPrice()
+    {
+        $data = [
+            [
+                'title' => '一个月',
+                'price' => '4',
+            ],
+            [
+                'title' => '三个月',
+                'price' => '12'
+            ],
+            [
+                'title' => '六个月',
+                'price' => '22'
+            ],
+            [
+                'title' => '一年',
+                'price' => '40'
+            ]
+        ];
+
+        return $data;
     }
 
     public function actionUpgrade()
