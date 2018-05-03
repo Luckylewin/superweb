@@ -17,12 +17,14 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="vod-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <?php Pjax::begin(); ?>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Vod', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('发布片源', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('返回', ['vod-list/index'], ['class' => 'btn btn-default']) ?>
     </p>
+
+    <?php Pjax::begin(); ?>
+    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,

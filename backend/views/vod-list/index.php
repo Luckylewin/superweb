@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="vod-list-index">
 
     <p>
-        <?= Html::a('Create Vod List', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('创建分类', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
