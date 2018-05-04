@@ -25,39 +25,23 @@ class ProfileController extends Controller
             //判断是否已经抓取过
             if ($vod->vod_douban_id == false) {
                 $this->stdout("当前抓取：{$vod->vod_name}" . PHP_EOL);
-                $this->_getUrl($vod->vod_name);
-                $this->_crawlData($this->url);
-                $this->_updateVod($vod);
-                $this->_sleep();
+                try{
+                    $this->_getUrl($vod->vod_name);
+                    $this->_crawlData($this->url);
+                    $this->_updateVod($vod);
+                    $this->_sleep();
+                } catch (\Exception $e) {
+                    $this->stdout($e->getMessage() . PHP_EOL);
+                }
             }
 
         }
-    }
-
-    private function _sleep()
-    {
-        $time = mt_rand(6,12);
-        $this->stdout("------------进入睡眠 $time s------------" . PHP_EOL);
-        sleep($time);
-    }
-
-    private function _updateVod(Vod $vod)
-    {
-        //更新赋值
-        foreach ($this->profileItems as $field => $value) {
-            if (empty($vod->$field) && !empty($value)) {
-                $vod->$field = $value;
-            }
-        }
-        $vod->save(false);
-        print_r($this->profileItems);
-        $this->url = '';
-        $this->profileItems = [];
     }
 
     private function _getUrl($name)
     {
         $url = "https://movie.douban.com/j/subject_suggest?q=" . $name;
+        //$url = "https://movie.douban.com/j/subject_suggest?q=" . '厉害了我的国';
 
         $snnopy = MySnnopy::init();
         $snnopy->fetch($url);
@@ -69,11 +53,11 @@ class ProfileController extends Controller
         $queryData = json_decode($snnopy->results, true);
         $queryData = current($queryData);
 
-        if (isset($queryData['url'])) {
-            return $this->url = $queryData['url'];
+        if (!isset($queryData['url'])) {
+            throw new \Exception("获取url失败");
         }
 
-        return false;
+        return $this->url = $queryData['url'];
     }
 
     private function _crawlData($url)
@@ -159,6 +143,27 @@ class ProfileController extends Controller
 
 
         return $this->profileItems = $profileItems;
+    }
+
+    private function _sleep()
+    {
+        $time = mt_rand(6,12);
+        $this->stdout("------------进入睡眠 $time s------------" . PHP_EOL);
+        sleep($time);
+    }
+
+    private function _updateVod(Vod $vod)
+    {
+        //更新赋值
+        foreach ($this->profileItems as $field => $value) {
+            if (empty($vod->$field) && !empty($value)) {
+                $vod->$field = $value;
+            }
+        }
+        $vod->save(false);
+        print_r($this->profileItems);
+        $this->url = '';
+        $this->profileItems = [];
     }
 
 }
