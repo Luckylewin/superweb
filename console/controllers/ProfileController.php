@@ -28,7 +28,6 @@ class ProfileController extends Controller
                 $this->_getUrl($vod->vod_name);
                 $this->_crawlData($this->url);
                 $this->_updateVod($vod);
-
                 $this->_sleep();
             }
 
@@ -46,11 +45,14 @@ class ProfileController extends Controller
     {
         //更新赋值
         foreach ($this->profileItems as $field => $value) {
-            if (empty($vod->vod_pic)) {
+            if (empty($vod->$field) && !empty($value)) {
                 $vod->$field = $value;
             }
         }
         $vod->save(false);
+        print_r($this->profileItems);
+        $this->url = '';
+        $this->profileItems = [];
     }
 
     private function _getUrl($name)
@@ -154,6 +156,7 @@ class ProfileController extends Controller
         array_walk($profileItems, function(&$v, $k) {
             $v = preg_replace('/\s+/','', $v);
         });
+
 
         return $this->profileItems = $profileItems;
     }
