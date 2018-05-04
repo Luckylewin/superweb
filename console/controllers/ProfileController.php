@@ -46,7 +46,9 @@ class ProfileController extends Controller
     {
         //更新赋值
         foreach ($this->profileItems as $field => $value) {
-            $vod->$field = $value;
+            if (empty($vod->vod_pic)) {
+                $vod->$field = $value;
+            }
         }
         $vod->save(false);
     }
