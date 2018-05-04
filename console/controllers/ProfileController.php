@@ -23,10 +23,10 @@ class ProfileController extends Controller
     {
         foreach (Vod::find()->where(['vod_cid' => '1'])->each(10) as $vod) {
             //判断是否已经抓取过
-            if ($vod->vod_douban_id == false) {
+            if ($vod->vod_douban_id ) {
                 $this->stdout("当前抓取：{$vod->vod_name}" . PHP_EOL);
                 try{
-                    $this->_getUrl($vod->vod_name);
+                    $this->_getUrl("厉害了我的国");
                     $this->_crawlData($this->url);
                     $this->_updateVod($vod);
                     $this->_sleep();
@@ -41,7 +41,6 @@ class ProfileController extends Controller
     private function _getUrl($name)
     {
         $url = "https://movie.douban.com/j/subject_suggest?q=" . $name;
-        //$url = "https://movie.douban.com/j/subject_suggest?q=" . '厉害了我的国';
 
         $snnopy = MySnnopy::init();
         $snnopy->fetch($url);
@@ -54,11 +53,12 @@ class ProfileController extends Controller
         $queryData = current($queryData);
 
         if (!isset($queryData['url'])) {
-            throw new \Exception("获取url失败");
+            throw new \Exception("查询错误");
         }
 
         return $this->url = $queryData['url'];
     }
+
 
     private function _crawlData($url)
     {
@@ -88,17 +88,23 @@ class ProfileController extends Controller
         $profile = $crawler->filter('div.subject');
 
         $items = [];
-        $nodeText = [];
+
         $profileItems = [];
 
         //基本数据
-        $profile->filter('div#info')->each(function(Crawler $node, $i) use(&$items, &$nodeText) {
+        $profile->filter('div#info')->each(function(Crawler $node) use(&$items, $crawler) {
 
-            $node->filterXPath('//text()')->each(function(Crawler $node, $i) use (&$nodeText) {
-                if (trim($node->text())) $nodeText[] = trim($node->text());
-            });
-            $node->filter('span.pl')->each(function(Crawler $node, $i) use (&$items) {
-                if ($next = $node->nextAll()) $items[$node->text()] = $next->text();
+            $node->filter('span.pl')->each(function(Crawler $node) use (&$items, $crawler) {
+                if ($next = $node->nextAll()) {
+                    $text = $node->text();
+                    $items[$text] = $next->text();
+                    if ( $next->nodeName() != 'span') {
+                        $items[$text]  = $crawler->filterXPath('//div[@id="info"]')
+                                                 ->filterXPath("//span[contains(./text(), '$text')]/following::text()[1]")
+                                                 ->text();
+                    }
+                }
+
             });
 
         });
@@ -107,19 +113,12 @@ class ProfileController extends Controller
         foreach ($items as $field => $item) {
             if (isset($fields[$field])) {
                 $key = $fields[$field];
-                if ( in_array($key, ['vod_language', 'vod_area', 'vod_title']) ) {
-                    $nodeKey = array_search($field, $nodeText) + 1;
-                    if (isset($nodeText[$nodeKey])) {
-                        $item = $nodeText[$nodeKey];
-                    }
-                }
                 $profileItems[$key] = $item;
             }
         }
 
         //海报图片
         $profileItems['vod_pic'] = $profile->filter('div#mainpic')->filter('img')->attr('src');
-
         //剧情
         $profileItems['vod_scenario'] = $crawler->filter('div#link-report')->text();
         //简介
