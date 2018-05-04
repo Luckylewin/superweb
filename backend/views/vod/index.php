@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('发布片源', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('发布片源', \yii\helpers\Url::to(['create','vod_cid' => Yii::$app->request->get('VodSearch')['vod_cid']]), ['class' => 'btn btn-success']) ?>
         <?= Html::a('返回', ['vod-list/index'], ['class' => 'btn btn-default']) ?>
     </p>
 

@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use common\models\VodList;
 use Yii;
 use common\models\Vod;
 use common\models\search\VodSearch;
@@ -51,6 +52,12 @@ class VodController extends BaseController
     public function actionCreate()
     {
         $model = new Vod();
+        if ($cid = Yii::$app->request->get('vod_cid')) {
+            $model->vod_cid = $cid;
+            $vodList = VodList::findOne($cid);
+            $model->vod_trysee = $vodList->list_trysee;
+            $model->vod_price = $vodList->list_price;
+        }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->vod_id]);

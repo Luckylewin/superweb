@@ -3,6 +3,8 @@
 namespace common\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
 use yii\helpers\Url;
 use yii\web\Link;
 use yii\web\Linkable;
@@ -104,7 +106,7 @@ class Vod extends \yii\db\ActiveRecord implements Linkable
     public function rules()
     {
         return [
-            [['vod_cid', 'vod_name', 'vod_trysee'], 'required'],
+            [['vod_cid', 'vod_name'], 'required'],
             [['vod_cid', 'vod_year', 'vod_total', 'vod_addtime', 'vod_filmtime', 'vod_hits', 'vod_hits_day', 'vod_hits_week', 'vod_hits_month', 'vod_up', 'vod_down', 'vod_price', 'vod_trysee', 'vod_golder', 'vod_length', 'vod_copyright', 'vod_douban_id'], 'integer'],
             [['vod_content', 'vod_url', 'vod_scenario'], 'string'],
             [['vod_gold', 'vod_douban_score'], 'number'],
@@ -117,9 +119,26 @@ class Vod extends \yii\db\ActiveRecord implements Linkable
             [['vod_letter'], 'string', 'max' => 2],
             [['vod_weekday'], 'string', 'max' => 60],
             [['vod_series'], 'string', 'max' => 120],
-            [['vod_home', 'pic', 'vod_stars'], 'safe']
-
+            [['vod_home', 'pic', 'vod_stars'], 'safe'],
+            [['vod_up', 'vod_down', 'vod_hits', 'vod_hits_day', 'vod_hits_month', 'vod_hits_week'],'default', 'value' => 0]
         ];
+    }
+
+
+    public function beforeSave($insert)
+    {
+        parent::beforeSave($insert);
+
+        if (!$this->vod_trysee) {
+            $vodList = VodList::findOne($this->vod_cid);
+            $this->vod_trysee = $vodList->list_trysee;
+        }
+
+        if (!$this->vod_price) {
+            $vodList = VodList::findOne($this->vod_cid);
+            $this->vod_price = $vodList->list_price;
+        }
+        return true;
     }
 
     /**
@@ -180,6 +199,22 @@ class Vod extends \yii\db\ActiveRecord implements Linkable
             'vod_douban_score' => '豆瓣评分',
             'vod_scenario' => '影片剧情',
             'vod_home' => '是否推荐到首页',
+        ];
+    }
+
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'vod_addtime',
+                'updatedAtAttribute' => 'vod_addtime',
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['vod_addtime'],
+                    ActiveRecord::EVENT_BEFORE_UPDATE => ['vod_addtime'],
+                ],
+                'value' => time()
+            ]
         ];
     }
 
