@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('返回', ['vod-list/index'], ['class' => 'btn btn-default']) ?>
     </p>
 
-    <?php Pjax::begin(); ?>
+
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?= GridView::widget([
@@ -70,24 +70,30 @@ $this->params['breadcrumbs'][] = $this->title;
                         return $model->star;
                     }
             ],
-            'vod_addtime:datetime',
+            'vod_addtime:date',
             [
                     'class' => 'common\grid\MyActionColumn',
-                    'template' => '{push-home} {banner-create}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{view} {update} {delete}',
+                    'template' => '{push-home} {banner-create}&nbsp;&nbsp;&nbsp;&nbsp;{link-create} {view} {update} {delete}',
                     'buttons' => [
                             'banner-create' => function($url, $model, $key) {
-                                return \yii\bootstrap\Html::a('发布banner', ['banner/create','vod_id' => $model->vod_id], [
+                                return Html::a('发布banner', ['banner/create','vod_id' => $model->vod_id], [
                                     'class' => 'btn btn-default btn-xs'
+                                ]);
+                            },
+                            'link-create' => function($url, $model) {
+                                return Html::a('链接列表', ['link/index', 'vod_id' => $model->vod_id], [
+                                    'class' => 'btn btn-success btn-xs'
                                 ]);
                             },
                             'push-home' => function($url, $model, $key) {
                             $text = $model->vod_home ? '取消推荐' : '首页推荐';
-                            return \yii\bootstrap\Html::a($text, ['vod/push-home','id' => $model->vod_id,'action' => $model->vod_home ? '0' : '1' ], [
+                            return Html::a($text, ['vod/push-home','id' => $model->vod_id,'action' => $model->vod_home ? '0' : '1' ], [
                                 'class' => 'btn btn-xs ' . ($model->vod_home? 'btn-success' : 'btn-default')
                             ]);
                         },
                     ],
-                    'options' => ['style' => 'width:350px;']
+                    'options' => ['style' => 'width:350px;'],
+                    'header' => '操作'
             ],
             //'vod_title',
             //'vod_ename',
@@ -141,5 +147,5 @@ $this->params['breadcrumbs'][] = $this->title;
 
         ],
     ]); ?>
-    <?php Pjax::end(); ?>
+
 </div>

@@ -269,6 +269,11 @@ class Vod extends \yii\db\ActiveRecord implements Linkable
         ];
     }
 
+    public function getVodLinks()
+    {
+        return $this->hasMany(Vodlink::className(), ['video_id' => 'vod_id']);
+    }
+
     public function getLinks()
     {
        return [
@@ -376,6 +381,7 @@ class Vod extends \yii\db\ActiveRecord implements Linkable
         }
         return $str;
     }
+
 
 
 }

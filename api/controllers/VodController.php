@@ -11,6 +11,7 @@ namespace api\controllers;
 use common\models\BuyRecord;
 use common\models\User;
 use common\models\Vod;
+use common\models\Vodlink;
 use yii\data\ActiveDataProvider;
 use yii\filters\auth\QueryParamAuth;
 use yii\helpers\Url;
@@ -21,7 +22,7 @@ class VodController extends ActiveController
 {
 
     public $modelClass = 'common\models\Vod';
-   
+
     public function actions()
     {
         $actions = parent::actions();
@@ -64,7 +65,7 @@ class VodController extends ActiveController
         unset($fields[array_search('vod_url', $fields)]);
 
         $dataProvider = new ActiveDataProvider([
-            'query' => $cid ? $modelClass::find()->select($fields)->where(['vod_cid' => $cid])->asArray() : $modelClass::find()->select($fields)->asArray(),
+            'query' => $cid ? $modelClass::find()->select($fields)->where(['vod_cid' => $cid]) : $modelClass::find()->select($fields),
             'pagination' => [
                 'pageSize' => $per_page
             ],
@@ -96,6 +97,11 @@ class VodController extends ActiveController
         ]);
 
         return $dataProvider;
+    }
+
+    public function actionLink($vod_id)
+    {
+      return  $links = Vodlink::find()->where(['video_id'=>$vod_id])->all();
     }
 
 }

@@ -27,6 +27,7 @@ return [
         ],
         'response' => [
             'class' => 'yii\web\Response',
+
             'on beforeSend' => function ($event) {
                 $response = $event->sender;
 
@@ -45,6 +46,7 @@ return [
                             $message = is_array($response->data) ? $response->data['message'] : $statusCode;
 
                         } else {
+
                             $httpCode = $response->data->statusCode;
                             $statusCode = $response->data->statusCode;
                             $message = isset($response->data['code'])? $response->data['message'] : $response->data->statusCode;
@@ -76,7 +78,7 @@ return [
             'targets' => [
                 [
                     'class' => 'yii\log\FileTarget',
-                    'levels' => ['error', 'warning'],
+                    'levels' => ['error'],
                 ],
             ],
         ],
@@ -92,7 +94,20 @@ return [
             'password' => '12345678',
             'charset' => 'utf8',
             'tablePrefix' => 'yii2_',
+            'enableSchemaCache' => true
+        ],
 
+        //redis组件
+        'redis' => [
+            'class' => 'yii\redis\Connection',
+            'hostname' => '127.0.0.1',
+            'port' => 6379,
+            'password' => '198721',
+            'database' => 0,
+        ],
+
+        'cache' => [
+            'class' => 'yii\redis\Cache'
         ],
 
        'urlManager' => [
@@ -105,7 +120,8 @@ return [
                    'controller' => ['type', 'banner', 'user', 'vod', 'recommend'],
                    'except' => ['delete','update','create'],
                    'extraPatterns' => [
-                       'GET home' => 'home'
+                       'GET home' => 'home',
+                       'GET link' => 'link'
                    ]
                ],
 
