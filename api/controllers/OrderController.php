@@ -120,22 +120,24 @@ class OrderController extends ActiveController
             'order_addtime' => $order->order_addtime,
             'order_info' => $order->order_info,
             'order_status' => '未支付',
-            'url' => "http://" . \Yii::$app->request->hostName . ':10080/index.php?r=site/preview&order=' . $order->order_sign
+            'url' => "http://" . \Yii::$app->request->hostName . ':8088/index.php?r=site/preview&order=' . $order->order_sign
         ];
     }
 
     public function actionBuy()
     {
         $vod_id = \Yii::$app->request->post('vod_id');
+
         //查询价格
         $vod = Vod::findOne($vod_id);
         if (empty($vod)) {
-            throw new \Exception("没有数据", Formatter::ITEM_NOT_FOUND);
+            return Formatter::format(null,Formatter::ITEM_NOT_FOUND, "没有数据");
         }
 
         $price = $vod->vod_price;
+
         if ($price <= 0) {
-            throw new \Exception("免费", Formatter::FREE_OF_CHARGE);
+            return Formatter::format(null,Formatter::FREE_OF_CHARGE, "免费");
         }
 
         //查询此人是否已经购买过
@@ -170,7 +172,7 @@ class OrderController extends ActiveController
             'order_addtime' => $order->order_addtime,
             'order_info' => $order->order_info,
             'order_status' => '未支付',
-            'url' => "http://" . \Yii::$app->request->hostName . ':10080/index.php?r=site/preview&order=' . $order->order_sign
+            'url' => "http://" . \Yii::$app->request->hostName . ':8088/index.php?r=site/preview&order=' . $order->order_sign
         ];
 
     }
