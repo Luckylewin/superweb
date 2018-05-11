@@ -220,6 +220,7 @@ class Vod extends \yii\db\ActiveRecord implements Linkable
 
     public function fields()
     {
+
         return [
             'vod_id',
             'vod_cid' ,
@@ -242,6 +243,13 @@ class Vod extends \yii\db\ActiveRecord implements Linkable
             'is_buy' => function($model) {
                 return $model->is_buy;
             }
+        ];
+    }
+
+    public function extraFields()
+    {
+        return [
+            'vodLinks'
         ];
     }
 
@@ -278,7 +286,7 @@ class Vod extends \yii\db\ActiveRecord implements Linkable
     {
        return [
            Link::REL_SELF => Url::to(['vod/view', 'id' => $this->vod_id], true),
-           'recommend' => Url::to(['recommend/view', 'id' => $this->vod_id], true)
+           'recommend' => Url::to(['recommend/view', 'id' => $this->vod_id], true),
        ];
     }
 

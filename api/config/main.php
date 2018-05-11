@@ -36,6 +36,7 @@ return [
                     if ($response->isSuccessful == false) {
 
                         if ( $response instanceof \yii\web\Response) {
+
                             $httpCode = $response->getStatusCode();
                             if (is_object($response->data) || (!isset($response->data['code']) && $response->data['code']) ) {
                                 $statusCode =  $response->getStatusCode();
@@ -120,8 +121,7 @@ return [
                    'controller' => ['type', 'banner', 'user', 'vod', 'recommend'],
                    'except' => ['delete','update','create'],
                    'extraPatterns' => [
-                       'GET home' => 'home',
-                       'GET link' => 'link'
+                       'GET home' => 'home'
                    ]
                ],
 

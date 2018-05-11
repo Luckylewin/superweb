@@ -56,6 +56,13 @@ class Vodlink extends \yii\db\ActiveRecord
         ];
     }
 
+    public function fields()
+    {
+        $parentField = parent::fields();
+        unset($parentField['video_id']);
+        return $parentField;
+    }
+
     public function getVodInfo()
     {
         return $this->hasOne(Vod::className(), ['vod_id' => 'video_id']);

@@ -17,6 +17,7 @@ class Formatter
      * 系统规则错误 无权限等等
      */
     const INVALID_ERROR = 403;
+    const NOT_FOUND = 404;
     const SERVER_ERROR = 500;
 
 
@@ -52,6 +53,8 @@ class Formatter
         {
             case self::SERVER_ERROR:
                 return '服务器暂不可用';break;
+            case self::NOT_FOUND:
+                return '找不到请求的资源';break;
             case self::INVALID_ERROR:
                 return '非法的请求';break;
             case self::EMPTY_LOGIN_ERROR:

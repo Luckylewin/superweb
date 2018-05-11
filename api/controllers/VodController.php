@@ -8,6 +8,8 @@
 
 namespace api\controllers;
 
+use api\components\Formatter;
+use api\components\Response;
 use common\models\BuyRecord;
 use common\models\User;
 use common\models\Vod;
@@ -33,7 +35,12 @@ class VodController extends ActiveController
 
     public function actionView($id)
     {
-        $vod = Vod::findOne($id);
+        $vod = Vod::find()->where(['vod_id' => $id])->limit(1)->with('vodLinks')->one();
+
+        if (is_null($vod)) {
+            return Response::error(Formatter::NOT_FOUND);
+        }
+
         $vod->is_buy = 0;
 
         if ( empty($vod->vod_url) ) {
