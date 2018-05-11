@@ -51,7 +51,7 @@ class VodController extends ActiveController
             $user = User::findIdentityByAccessToken($access_token);
             //查询是否购买过此片
             if ($user) {
-                $record = BuyRecord::findOne( ['user_id' => $user->id, 'vod_id' => $id] );
+                $record = BuyRecord::findOne( ['user_id' => $user->id, 'vod_id' => $id, 'is_valid' => 1] );
                 if ($record) {
                     $vod->is_buy = 1;
                 }
