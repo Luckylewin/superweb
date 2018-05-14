@@ -83,6 +83,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'vod_gold',
             'vod_golder',
             'vod_length',
+            'vod_multiple',
             //'vod_weekday',
             //'vod_series',
             //'vod_copyright',

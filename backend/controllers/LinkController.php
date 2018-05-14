@@ -74,7 +74,8 @@ class LinkController extends BaseController
         }
 
         $model->episode = $model->getNextEpisode($this->vod->vod_id);
-        $model->season = $model->getNextSeason($this->vod->vod_id);
+        $model->hasErrors() && Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
+
 
         return $this->render('create', [
             'model' => $model,
@@ -112,9 +113,11 @@ class LinkController extends BaseController
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        $vod_id = $model->video_id;
+        $model->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['index','vod_id' => $vod_id]);
     }
 
     /**

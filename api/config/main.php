@@ -118,7 +118,7 @@ return [
             'rules' => [
                [
                    'class' => 'yii\rest\UrlRule',
-                   'controller' => ['type', 'banner', 'user', 'vod', 'recommend'],
+                   'controller' => ['type', 'banner', 'user', 'vod', 'recommend','vod-link'],
                    'except' => ['delete','update','create'],
                    'extraPatterns' => [
                        'GET home' => 'home'

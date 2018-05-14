@@ -142,7 +142,7 @@ $this->registerJsFile('/statics/js/miniUtils.js')
                         <?= $form->field($model, 'vod_addtime')->textInput() ?>
                         <!-- 连载集数  -->
                         <?= $form->field($model, 'vod_continu')->textInput(['maxlength' => true]) ?>
-                        <!-- 周期  -->
+
                         <?= $form->field($model, 'vod_weekday')->textInput(['maxlength' => true]) ?>
 
 

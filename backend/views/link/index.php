@@ -29,7 +29,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'video_id',
             'url:url',
             'hd_url:url',
-            'season',
             'episode',
             [
                     'class' => 'common\grid\MyActionColumn',

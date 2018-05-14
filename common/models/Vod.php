@@ -2,7 +2,6 @@
 
 namespace common\models;
 
-use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\helpers\Url;
@@ -64,12 +63,11 @@ use yii\web\Linkable;
  * @property string $vod_douban_score 豆瓣评分
  * @property string $vod_scenario 影片剧情
  * @property string $vod_home 是否推荐到首页
+ * @property string $vod_multiple 是否有多集
  */
 class Vod extends \yii\db\ActiveRecord implements Linkable
 {
-
     public $is_buy;
-
     public $pic;
     public $pic_bg;
     public $pic_slide;
@@ -120,10 +118,9 @@ class Vod extends \yii\db\ActiveRecord implements Linkable
             [['vod_weekday'], 'string', 'max' => 60],
             [['vod_series'], 'string', 'max' => 120],
             [['vod_home', 'pic', 'vod_stars'], 'safe'],
-            [['vod_up', 'vod_down', 'vod_hits', 'vod_hits_day', 'vod_hits_month', 'vod_hits_week'],'default', 'value' => 0]
+            [['vod_up', 'vod_down', 'vod_hits', 'vod_hits_day', 'vod_hits_month', 'vod_hits_week', 'vod_multiple'],'default', 'value' => 0]
         ];
     }
-
 
     public function beforeSave($insert)
     {
@@ -138,6 +135,7 @@ class Vod extends \yii\db\ActiveRecord implements Linkable
             $vodList = VodList::findOne($this->vod_cid);
             $this->vod_price = $vodList->list_price;
         }
+
         return true;
     }
 
@@ -199,6 +197,7 @@ class Vod extends \yii\db\ActiveRecord implements Linkable
             'vod_douban_score' => '豆瓣评分',
             'vod_scenario' => '影片剧情',
             'vod_home' => '是否推荐到首页',
+            'vod_multiple' => '是否有多集'
         ];
     }
 
@@ -220,7 +219,6 @@ class Vod extends \yii\db\ActiveRecord implements Linkable
 
     public function fields()
     {
-
         return [
             'vod_id',
             'vod_cid' ,
@@ -240,6 +238,7 @@ class Vod extends \yii\db\ActiveRecord implements Linkable
             'vod_url',
             'vod_gold',
             'vod_length',
+            'vod_multiple',
             'is_buy' => function($model) {
                 return $model->is_buy;
             }
@@ -273,7 +272,8 @@ class Vod extends \yii\db\ActiveRecord implements Linkable
             'vod_trysee',
             'vod_url',
             'vod_gold',
-            'vod_length'
+            'vod_length',
+            'vod_multiple'
         ];
     }
 
@@ -285,8 +285,9 @@ class Vod extends \yii\db\ActiveRecord implements Linkable
     public function getLinks()
     {
        return [
-           Link::REL_SELF => Url::to(['vod/view', 'id' => $this->vod_id], true),
+           Link::REL_SELF => $this->vod_multiple ? Url::to(['vod/view', 'id' => $this->vod_id], true) : Url::to(["vods/{$this->vod_id}", 'expand' => 'vodLinks'], true),
            'recommend' => Url::to(['recommend/view', 'id' => $this->vod_id], true),
+           'links' => Url::to(['vod-link/index', 'vod_id' => $this->vod_id], true)
        ];
     }
 

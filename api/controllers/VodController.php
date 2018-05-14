@@ -63,18 +63,21 @@ class VodController extends ActiveController
 
     public function actionIndex()
     {
+        $modelClass = $this->modelClass;
         $request =  \Yii::$app->request;
         $cid = $request->get('cid');
-        $per_page = $request->get('per_page', 12);
-        $modelClass = $this->modelClass;
+        $vod_name = $request->get('name', null);
 
         $fields = Vod::getFields();
         unset($fields[array_search('vod_url', $fields)]);
 
+        $query = $cid ? Vod::find()->select($fields)->where(['vod_cid' => $cid]) : Vod::find()->select($fields);
+        $query->andFilterWhere(['like', 'vod_name', $vod_name]);
+
         $dataProvider = new ActiveDataProvider([
-            'query' => $cid ? $modelClass::find()->select($fields)->where(['vod_cid' => $cid]) : $modelClass::find()->select($fields),
+            'query' => $query,
             'pagination' => [
-                'pageSize' => $per_page
+                'pageSize' => $request->get('per_page', 12)
             ],
         ]);
 

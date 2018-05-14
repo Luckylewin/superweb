@@ -12,12 +12,8 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <div class="col-md-12">
-        <?= $form->field($model, 'video_id')->dropDownList([$vod->vod_id => $vod->vod_name]); ?>
-    </div>
-
     <div class="col-md-6">
-        <?= $form->field($model, 'season')->textInput(); ?>
+        <?= $form->field($model, 'video_id')->dropDownList([$vod->vod_id => $vod->vod_name]); ?>
     </div>
 
     <div class="col-md-6">
