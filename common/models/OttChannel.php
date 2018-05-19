@@ -72,9 +72,14 @@ class OttChannel extends \yii\db\ActiveRecord
         return $this->hasOne(SubClass::tableName(), ['id' => 'sub_class_id']);
     }
 
-    public function getOwnLink()
+    public function getOwnLink($where = null)
     {
-        return $this->hasMany(OttLink::className(), ['channel_id' => 'id']);
+        $query = $this->hasMany(OttLink::className(), ['channel_id' => 'id']);
+        if ($where) {
+            $query->where($where);
+        }
+
+        return $query;
     }
 
     public function beforeSave($insert)
@@ -87,4 +92,11 @@ class OttChannel extends \yii\db\ActiveRecord
 
         return true;
     }
+
+    public function beforeDelete()
+    {
+        OttLink::deleteAll(['channel_id' => $this->id]);
+        return true;
+    }
+
 }

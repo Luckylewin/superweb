@@ -16,6 +16,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <?php $form = ActiveForm::begin(); ?>
 
+        <?= $form->field($model, 'mode')->dropDownList(\backend\models\importTextForm::getMode()) ?>
+
         <?= $form->field($model, 'text')->textarea([
             'rows' =>22
         ]) ?>

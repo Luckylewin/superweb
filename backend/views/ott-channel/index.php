@@ -8,8 +8,6 @@ use yii\bootstrap\Modal;
 /* @var $searchModel common\models\search\OttChannelSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-
-
 $this->title = '频道列表';
 $this->params['breadcrumbs'][] = ['label' => $mainClass->zh_name? $mainClass->zh_name:$mainClass->name, 'url' => Url::to(['main-class/index'])];
 $this->params['breadcrumbs'][] = ['label' => $subClass->zh_name?$subClass->zh_name:$subClass->name, 'url' => Url::to(['sub-class/index', 'main-id' => $mainClass->id])];

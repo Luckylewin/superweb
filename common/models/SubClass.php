@@ -87,18 +87,33 @@ class SubClass extends \yii\db\ActiveRecord
      * 关联频道
      * @return \yii\db\ActiveQuery
      */
-    public function getOwnChannel()
+    public function getOwnChannel($where = null)
     {
-        return $this->hasMany(OttChannel::className(), ['sub_class_id' => 'id'])
+        $query = $this->hasMany(OttChannel::className(), ['sub_class_id' => 'id'])
                     ->orderBy([
                         'sort' => SORT_ASC,
                         'sub_class_id' => SORT_ASC,
                         'ott_channel.id' => SORT_ASC
                     ]);
+
+        if ($where) {
+            $query->where($where);
+        }
+
+        return $query;
     }
 
     public function getUseText()
     {
         return $this->use_flag_text[$this->use_flag];
+    }
+
+    public function beforeDelete()
+    {
+        $ownChannel = $this->ownChannel;
+        foreach ($ownChannel as $channel) {
+            $channel->delete();
+        }
+        return true;
     }
 }

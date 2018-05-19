@@ -39,7 +39,6 @@ class OttChannelController extends BaseController
      */
     public function actionIndex()
     {
-
         $channels = SubClass::find()
             ->where(['main_class_id' => $this->subClass->main_class_id])
             ->orderBy(['id' => SORT_DESC])
@@ -124,7 +123,8 @@ class OttChannelController extends BaseController
     {
         $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+        $this->setFlash('success', '操作成功');
+        return $this->redirect(Yii::$app->request->referrer);
     }
 
     /**

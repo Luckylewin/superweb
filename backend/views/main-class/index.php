@@ -15,6 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?= Html::a('Create Main Class', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('批量导入', ['sub-class/import-via-text','mode' => 'mainClass'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([

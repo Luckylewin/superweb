@@ -26,9 +26,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 'id' => 'create'
         ]) ?>
 
-        <?= Html::a('批量导入', Url::to(['sub-class/import-via-text']), [
-            'class' => 'btn btn-success'
+        <?= Html::a('批量导入', Url::to(['sub-class/import-via-text', 'mode' => 'keywordChannel']), [
+            'class' => 'btn btn-info'
         ])  ?>
+
+        <?php if(isset($mainClass)): ?>
+            <?= Html::a('生成缓存', Url::to(['sub-class/generate-cache', 'id' => $mainClass->id]), [
+                'class' => 'btn btn-primary'
+            ])  ?>
+        <?php endif; ?>
 
     </p>
 

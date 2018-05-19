@@ -4,6 +4,12 @@ return [
     'supportEmail' => 'support@example.com',
     'user.passwordResetTokenExpire' => 3600,
 
+    'nginx' => [
+        'upload_dir' => '/home/upload/',
+        'media_port' => 10082,
+        'secret' => 'topthinker'
+    ],
+
     //阿里云OSS配置
     'OSS' =>[
         'ACCESS_ID'=> '',    //ID

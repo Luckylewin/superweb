@@ -27,8 +27,8 @@ class OttLink extends \yii\db\ActiveRecord
 {
 
     public $use_flag_status = [
+        '不可用',
         '可用',
-        '不可用'
     ];
 
     public $use_flag_text;
@@ -93,7 +93,8 @@ class OttLink extends \yii\db\ActiveRecord
             'method',
             'decode',
             'schemeText',
-            'use_flag_text'
+            'use_flag_text',
+            'scheme_id'
         ];
     }
 

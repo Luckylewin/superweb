@@ -57,8 +57,35 @@ class MainClass extends \yii\db\ActiveRecord
      * 与子类的 关联关系
      * @return \yii\db\ActiveQuery
      */
-    public function getSub()
+    public function getSub($where = null)
     {
-        return $this->hasOne(SubClass::className(), ['main_class_id' => 'id'])->inverseOf('main');
+        $query = $this->hasMany(SubClass::className(), ['main_class_id' => 'id']);
+        if ($where) {
+            $query->where($where);
+        }
+        return $query;
+    }
+
+    public function getSubChannel()
+    {
+        return $this->hasMany(OttChannel::className(), ['sub_class_id' => 'id'])
+                    ->via('sub');
+    }
+
+    public function getSubLink()
+    {
+        return $this->hasMany(OttLink::className(), ['channel_id' => 'id'])
+                    ->via('subChannel');
+    }
+
+    public function beforeDelete()
+    {
+       $subClass = $this->sub;
+       if (!empty($subClass)) {
+           foreach ($subClass as $class) {
+               $class->delete();
+           }
+       }
+       return true;
     }
 }

@@ -2,15 +2,20 @@
 
 namespace backend\controllers;
 
-use backend\models\importTextForm;
+use backend\components\MyRedis;
+use backend\models\Scheme;
 use Yii;
+use yii\helpers\ArrayHelper;
+use yii\helpers\Json;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\widgets\ActiveForm;
+use backend\models\importTextForm;
 use common\models\MainClass;
 use common\models\OttChannel;
 use common\models\SubClass;
 use common\models\search\SubClassSearch;
+
 
 /**
  * SubClassController implements the CRUD actions for SubClass model.
@@ -57,8 +62,7 @@ class SubClassController extends BaseController
     public function actionView($id)
     {
         return $this->render('view', [
-            'model' => $this->findModel($id),
-            'mainClass' => $this->mainClass
+            'model' => $this->findModel($id)
         ]);
     }
 
@@ -109,7 +113,6 @@ class SubClassController extends BaseController
 
         return $this->render('update', [
             'model' => $model,
-            'mainClass' => $this->mainClass
         ]);
     }
 
@@ -122,9 +125,12 @@ class SubClassController extends BaseController
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $subClass = $this->findModel($id);
+        $main_class_id = $subClass->main_class_id;
+        $subClass->delete();
 
-        return $this->redirect(['index']);
+        $this->setFlash('success', '操作成功');
+        return $this->redirect(['index', 'main-id' => $main_class_id]);
     }
 
     /**
@@ -182,6 +188,8 @@ class SubClassController extends BaseController
     public function actionImportViaText()
     {
         $importForm = new importTextForm();
+        $importForm->mode = Yii::$app->request->get('mode');
+
 
         if ($importForm->load(Yii::$app->request->post()) && $importForm->validate()) {
             if ($importNum = $importForm->import()) {
@@ -197,5 +205,122 @@ class SubClassController extends BaseController
             'model' => $importForm
         ]);
     }
+
+    public function actionGenerateCache($id)
+    {
+        //按方案号进行缓存
+        $schemes = Scheme::find()->all();
+        foreach ($schemes as $scheme) {
+            $this->setJsonCache($id, $scheme);
+        }
+
+        $this->setFlash('success', '操作成功');
+        return $this->redirect(Yii::$app->request->referrer);
+    }
+
+    private function setJsonCache($id, Scheme $scheme)
+    {
+        $mainClass = MainClass::findOne($id);
+
+        $data['version'] = time();
+        $data['scheme'] = $scheme->schemeName;
+        $data['name'] = $mainClass->name;
+        $data['zh_name'] = $mainClass->zh_name;
+        $data['icon'] = $mainClass->icon;
+        $data['description'] = $mainClass->description;
+        $data['subClass'] = $this->getSubClassLink($mainClass, $scheme);
+        $redis = MyRedis::init(MyRedis::REDIS_PROTOCOL);
+        $redis->set("OTT_LIST_{$data['name']}_{$data['scheme']}", Json::encode($data));
+
+        return $data;
+    }
+
+    /**
+     * @param MainClass $mainClass
+     * @param $mainClass
+     * @param $scheme
+     * @return array
+     */
+    public function getSubClassLink($mainClass, $scheme)
+    {
+        //查询子分类
+        $items = [];
+        $subClass = $mainClass->getSub(['use_flag' => 1])->all();
+        //查询频道
+        if (!empty($subClass)) {
+            foreach ($subClass as $class) {
+                if ($result = $this->getChannel($class, $scheme)) {
+                     $_subClass = ArrayHelper::toArray($class);
+                     $_subClass['channels'] = $result;
+                     $items[] = $_subClass;
+                }
+            }
+        }
+
+        return $items;
+    }
+
+    /**
+     * @param SubClass $class
+     * @param $scheme
+     * @return bool|array
+     */
+    private function getChannel($class, $scheme)
+    {
+        $items = [];
+        $channels = $class->getOwnChannel(['use_flag' => 1])->all();
+
+        if (empty($channels)) {
+            return false;
+        }
+
+        foreach ($channels as $channel) {
+          if ($channel instanceof OttChannel) {
+              if ($links = $this->getLink($channel, $scheme)) {
+                  $channel = ArrayHelper::toArray($channel);
+                  $channel['links'] = $links;
+                  $items[] = $channel;
+              }
+          }
+        }
+
+        return empty($items) ? false : $items;
+    }
+
+    /**
+     * @param OttChannel $channel
+     * @param $channel
+     * @param $scheme
+     * @return array|bool
+     */
+    private function getLink($channel, $scheme)
+    {
+        $items = [];
+        //查询链接
+        $links = $channel->getOwnLink(['use_flag' => 1])->all();
+        if (!empty($links)) {
+            foreach ($links as $link) {
+                $flag = false;
+                if ($link['scheme_id'] == 'all') {
+                    $flag = true;
+                } else {
+                    $scheme_id = explode(',', $link['scheme_id']);
+                    if (in_array($scheme->id, $scheme_id)) {
+                       $flag = true;
+                    }
+                }
+
+                if ($flag) {
+                    unset($link['use_flag_text']);
+                    unset($link['scheme_id']);
+                    $items[] = $link;
+                }
+
+            }
+        }
+
+        return empty($items) ? false : $items;
+    }
+
 
 }
