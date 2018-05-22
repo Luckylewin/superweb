@@ -60,7 +60,8 @@ class UploadController extends BaseController
     public function actionImageUpload()
     {
         $model = new UploadForm();
-        $imageFile = UploadedFile::getInstance($model, 'image');
+        $field = Yii::$app->request->get('field', 'image');
+        $imageFile = UploadedFile::getInstance($model, $field);
         $directory = $this->setPath('images') ;
 
         return Json::encode($this->upload($imageFile, $directory));

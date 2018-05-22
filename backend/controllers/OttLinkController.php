@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\models\Scheme;
 use Yii;
 use common\models\OttLink;
 use common\models\search\OttLinkSearch;
@@ -14,6 +15,8 @@ use yii\web\Response;
  */
 class OttLinkController extends BaseController
 {
+    public $enableCsrfValidation = false;
+
     /**
      * Lists all OttLink models.
      * @return mixed
@@ -78,7 +81,8 @@ class OttLinkController extends BaseController
 
         if (Yii::$app->request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
-            if (Yii::$app->request->get('field') == 'use_flag') {
+            $field = Yii::$app->request->get('field');
+            if ($field == 'use_flag') {
                 $model->use_flag = $model->use_flag ? '0' : '1';
                 $model->save(false);
                 return [
@@ -86,6 +90,23 @@ class OttLinkController extends BaseController
                     'data' => ['use_flag' => $model->use_flag],
                     'msg' => $model->use_flag_status[$model->use_flag]
                 ];
+            } elseif ($field == 'scheme_id') {
+                $scheme_id = Yii::$app->request->post('scheme');
+                $count = Scheme::find()->count('id');
+                if (count($scheme_id) == $count) {
+                    $scheme_id = 'all';
+                } else {
+                    $scheme_id = implode(',', $scheme_id);
+                }
+                $model->scheme_id = $scheme_id;
+                $model->save(false);
+
+                return [
+                    'status' => 0,
+                    'data' => ['use_flag' => $model->use_flag],
+                    'msg' => "修改成功"
+                ];
+
             }
         }
 

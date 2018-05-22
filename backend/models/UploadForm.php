@@ -17,6 +17,8 @@ class UploadForm extends Model
      */
     public $image;
 
+    public $image_hover;
+
     /**
      * @var UploadedFile
      */
@@ -26,6 +28,7 @@ class UploadForm extends Model
     {
         return [
             ['image', 'file', 'skipOnEmpty' => true, 'extensions' => ['jpg','png', 'gif']],
+            ['image_hover', 'file', 'skipOnEmpty' => true, 'extensions' => ['jpg','png', 'gif']],
             ['apk', 'file', 'skipOnEmpty' => true, 'extensions' => ['apk']]
         ];
     }

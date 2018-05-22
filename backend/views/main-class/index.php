@@ -28,12 +28,17 @@ $this->params['breadcrumbs'][] = $this->title;
             'name',
             'zh_name',
             'description',
-
+            [
+                'label' => '缓存版本',
+                'value' => function($model) {
+                    return (new \backend\models\Cache())->getCacheVersion($model->name);
+                }
+            ],
             //'icon',
             //'icon_bg',
 
             [
-               'class' => 'common\grid\MyActionColumn',
+                'class'=> 'common\grid\MyActionColumn',
                 'options' => ['style' => 'width:260px;'],
                 'template' => '{next} &nbsp;&nbsp;&nbsp;&nbsp;| &nbsp;&nbsp;&nbsp;&nbsp;{view} {update} {delete}',
                 'buttons' => [

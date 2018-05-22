@@ -77,6 +77,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
 </div>
 
+
+
 <?php
 
 Modal::begin([
@@ -86,13 +88,18 @@ Modal::begin([
           'footer' => '<a href="#" class="btn btn-default" data-dismiss="modal">关闭</a>',
 ]);
 
+echo "<div class='well'><div class='checkbox'><label><input type='checkbox'>请打勾</label></div></div>";
+
+
 $requestUrl = Url::to(['ott-link/index']);
 $switchUrl = Url::to(['ott-link/update', 'field'=>'use_flag']);
+$schemeUrl = Url::to(['api/scheme']);
+$updateUrl = Url::to(['ott-link/update', 'field'=>'scheme_id', 'id' => '']);
 
 $requestJs=<<<JS
     $('.load-link').click(function(){
         $.getJSON('{$requestUrl}', {channel_id:$(this).attr('data-id')}, function(data) {
-            var table = '<table class="table table-bordered"><thead><tr><th>方案</th><th>来源</th><th width="120px">链接</th><th>算法</th><th width="50px">解码</th><th width="60px">清晰度</th><th width="70px">状态</th><th style="width:150px;">操作</th></tr></thead><tbody>';
+            var table = '<table class="table table-bordered"><thead><tr><th>方案</th><th>来源</th><th width="120px">链接</th><th>算法</th><th width="50px">解码</th><th width="60px">清晰度</th><th width="70px">状态</th><th style="width:250px;">操作</th></tr></thead><tbody>';
             var tr = '';
             
             $.each(data,function(){
@@ -105,7 +112,7 @@ $requestJs=<<<JS
                     tr += '<td>' + $(this).attr('decode') + '</td>';
                     tr += '<td>' + $(this).attr('definition') + '</td>';
                     tr += '<td class="use-flag">' + ($(this).attr('use_flag_text')) + '</td>';
-                    tr += '<td><button class="btn btn-info btn-xs disabled">脚本开关</button>&nbsp;<button class="btn btn-primary btn-xs use-switch">可用开关</btn></td></tr>';
+                    tr += '<td><button class="btn btn-info btn-xs change-scheme" scheme-id=' + $(this).attr('scheme_id') + ' data-id='+ $(this).attr('id') +'>修改方案</button>&nbsp;<button class="btn btn-info btn-xs disabled">脚本开关</button>&nbsp;<button class="btn btn-primary btn-xs use-switch">可用开关</btn></td></tr>';
             });
                 
             table += tr;
@@ -114,15 +121,55 @@ $requestJs=<<<JS
             
         })
     })
-    
+        
+   
     $('body').on('click', '.use-switch' ,function(){
         var tr = $(this).parent().parent();
         var link_id = tr.attr('link-id');
-        
         $.getJSON('{$switchUrl}', {id:link_id}, function(back) {
              $(tr).find('.use-flag').html(back.msg);
         });
-    })
+        
+    }).on('click', '.change-scheme', function() {
+       
+        var link_id = $(this).attr('data-id');
+        var scheme_id = $(this).attr('scheme-id');
+        var schemeArr = scheme_id.split(',');
+        
+        var text = "";
+        $.getJSON('{$schemeUrl}', {}, function(data){
+            text += "<div class='well' id='mywell'>";
+            $.each(data, function() {
+                if (schemeArr.indexOf($(this).attr('id')) >= 0 || schemeArr == 'all') {
+                    text += "<label><input type='checkbox' checked=checked value='" + $(this).attr('id') +"'>"+ $(this).attr('schemeName') +"</label>";
+                } else {
+                    text += "<label><input type='checkbox' value='" + $(this).attr('id') +"'>"+ $(this).attr('schemeName') +"</label>";
+                }
+                
+            })
+           
+            text += '</div><br><div><button class="btn btn btn-info scheme-submit" data-id="' + link_id +'">修改</button></div>';
+            $('.modal-body').html(text);
+        })
+      
+    }).on('click', '.scheme-submit', function() {
+        
+       var chk_value = []; 
+       var link_id = $(this).attr('data-id');
+       var checkbox = $('#mywell').find('input[type=checkbox]:checked');
+       $.each(checkbox, function() {
+            chk_value.push($(this).val());   
+       });
+       
+       $.post('{$updateUrl}' + link_id, {scheme:chk_value}, function(back){
+            $('.modal-body').html("<h3><i style='color:green' class='glyphicon glyphicon-ok-circle'>修改成功</i></h3>");
+            setTimeout(function(){
+                $('#links-modal').modal('hide');
+            },1500);
+       
+       })
+       
+    });
     
 JS;
 

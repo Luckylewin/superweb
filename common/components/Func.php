@@ -47,6 +47,10 @@ class Func
      */
     public static function getAccessUrl($path, $expireTime = 300)
     {
+        if (empty($path)) return '';
+
+        if (strpos($path, '/') === false) return $path;
+
         $url = "http://" . Yii::$app->request->hostName . ":" . Yii::$app->params['nginx']['media_port'] ."{$path}?";
 
         $mac = '287994000001';//mac地址

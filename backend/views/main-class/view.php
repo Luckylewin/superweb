@@ -33,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'zh_name',
             'description',
             'icon',
-            'icon_bg',
+            'icon_hover',
             'sort',
         ],
     ]) ?>

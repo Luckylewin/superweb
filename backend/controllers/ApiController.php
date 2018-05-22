@@ -2,14 +2,17 @@
 
 namespace backend\controllers;
 
+use backend\models\Scheme;
 use Yii;
 use yii\web\Response;
 
 class ApiController extends BaseController
 {
-    public function actionIndex()
+    public function actionScheme()
     {
-
+        $scheme = Scheme::find()->select('id,schemeName')->asArray()->all();
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        return $scheme;
     }
 
     /**

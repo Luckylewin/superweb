@@ -12,6 +12,7 @@ use Yii;
  * @property string $zh_name 中文名字
  * @property string $description
  * @property string $icon 图标
+ * @property string $icon_hover 图标高亮
  * @property string $icon_bg
  * @property string $sort 排序
  */
@@ -32,7 +33,7 @@ class MainClass extends \yii\db\ActiveRecord
     {
         return [
             [['name', 'zh_name'], 'required'],
-            [['name', 'zh_name', 'description', 'icon', 'icon_bg'], 'string', 'max' => 255],
+            [['name', 'zh_name', 'description', 'icon', 'icon_bg','icon_hover'], 'string', 'max' => 255],
             [['sort'], 'string', 'max' => 3],
         ];
     }
@@ -48,6 +49,7 @@ class MainClass extends \yii\db\ActiveRecord
             'zh_name' => '中文名字',
             'description' => '简介',
             'icon' => '图标',
+            'icon_hover' => '图标(高亮)',
             'icon_bg' => 'Icon Bg',
             'sort' => '排序',
         ];

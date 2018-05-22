@@ -12,7 +12,9 @@ use yii\bootstrap\Modal;
 $this->title = '分类列表';
 $this->params['breadcrumbs'][] = ['label' => $mainClass->name, 'url' => Url::to(['main-class/index'])];
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
+
 <div class="sub-class-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
@@ -31,8 +33,12 @@ $this->params['breadcrumbs'][] = $this->title;
         ])  ?>
 
         <?php if(isset($mainClass)): ?>
-            <?= Html::a('生成缓存', Url::to(['sub-class/generate-cache', 'id' => $mainClass->id]), [
-                'class' => 'btn btn-primary'
+            <?= Html::a('生成缓存', '#', [
+                 'url' => Url::to(['sub-class/generate-cache', 'id' => $mainClass->id]),
+                 'class' => 'btn btn-primary',
+                 'id' => 'cache-btn',
+                 'data-toggle' => 'modal',
+                 'data-target' => '#cache-modal',
             ])  ?>
         <?php endif; ?>
 
@@ -76,7 +82,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
 
-    <?php
+<?php
 
     Modal::begin([
         'id' => 'create-modal',
@@ -85,9 +91,19 @@ $this->params['breadcrumbs'][] = $this->title;
     ]);
     Modal::end();
 
+    Modal::begin([
+        'id' => 'cache-modal',
+        'header' => '<h4 class="modal-title">操作提示</h4>',
+        'footer' => '',
+    ]);
+
+    echo "<h3>正在生成缓存</h3>";
+
+    Modal::end();
+
     ?>
 
-    <?php
+<?php
     $requestUrl = Url::toRoute(['sub-class/create', 'main_id' => $mainClass->id]);
     $js = <<<JS
         $(document).on('click', '#create', function() {
@@ -99,7 +115,19 @@ $this->params['breadcrumbs'][] = $this->title;
         })
 JS;
 
-    $this->registerJs($js);
-    ?>
+$this->registerJs($js);
+?>
+
+<?php \common\widgets\Jsblock::begin() ?>
+    <script>
+        $('#cache-btn').click(function() {
+            var link = $(this).attr('url');
+            setTimeout(function(){
+                window.location.href = link;
+            }, 500);
+        });
+    </script>
+<?php \common\widgets\Jsblock::end() ?>
+
 
 </div>

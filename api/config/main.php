@@ -125,6 +125,15 @@ return [
                    ]
                ],
 
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => ['ott'],
+                    'except' => ['delete','update','create', 'view'],
+                    'extraPatterns' => [
+                        'GET list' => 'list'
+                    ]
+                ],
+
                [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => ['apk'],
