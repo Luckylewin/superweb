@@ -34,3 +34,5 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); ?>
 
 </div>
+
+<?= Html::a('返回', ['index'], ['class' => 'btn btn-default']) ?>

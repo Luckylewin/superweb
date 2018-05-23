@@ -142,7 +142,7 @@ class MainClassController extends BaseController
                 }
             }
         }
-    
+
         $dataProvider = new ArrayDataProvider([
             'key' => 'id',
             'models' => $data,
