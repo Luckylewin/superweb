@@ -130,6 +130,13 @@ class OttLinkController extends BaseController
     {
         $this->findModel($id)->delete();
 
+        if (Yii::$app->request->isAjax) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return [
+                'status' => 0
+            ];
+        }
+
         return $this->redirect(['index']);
     }
 

@@ -14,7 +14,11 @@ $this->params['breadcrumbs'][] = ['label' => $mainClass->name, 'url' => Url::to(
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
-
+<style>
+    .grid-view td{
+        text-align: center;
+    }
+</style>
 <div class="sub-class-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
@@ -28,19 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'id' => 'create'
         ]) ?>
 
-        <?= Html::a('批量导入', Url::to(['sub-class/import-via-text', 'mode' => 'keywordChannel']), [
-            'class' => 'btn btn-info'
-        ])  ?>
 
-        <?php if(isset($mainClass)): ?>
-            <?= Html::a('生成缓存', '#', [
-                 'url' => Url::to(['sub-class/generate-cache', 'id' => $mainClass->id]),
-                 'class' => 'btn btn-primary',
-                 'id' => 'cache-btn',
-                 'data-toggle' => 'modal',
-                 'data-target' => '#cache-modal',
-            ])  ?>
-        <?php endif; ?>
 
     </p>
 
@@ -50,28 +42,42 @@ $this->params['breadcrumbs'][] = $this->title;
         'tableOptions' => [
             'class' => 'table table-bordered table-hover'
         ],
+        "options" => ["class" => "grid-view","style"=>"overflow:auto", "id" => "grid"],
         'columns' => [
+            [
+                "class" => "yii\grid\CheckboxColumn",
+                "name" => "id",
+            ],
             ['class' => 'yii\grid\SerialColumn'],
 
             'name',
             'zh_name',
             [
                 'attribute' => 'sort',
-                'options' => ['style' => 'width:70px;']
+                'options' => ['style' => 'width:70px;'],
+                'format' => 'raw',
+                'value' => function($model) {
+                    return \yii\bootstrap\Html::textInput('sort', $model->sort, [
+                            'class' => 'form-control change-sort',
+                            'data-id' => $model->id,
+                            'old-value' => $model->sort
+                    ]);
+                }
             ],
             [
                 'attribute' => 'use_flag',
+                'format' => 'raw',
                 'value' => function($model) {
-                    return $model->getUseText();
+                    return $model->use_flag ? '<i style="color: #23c6c8;font-size: large" class="glyphicon glyphicon-ok-circle"><i>' : '<i style="color: #953b39;font-size: large" class="glyphicon glyphicon-remove-circle"></i>';
                 }
             ],
             [
                     'header' => '操作',
                     'class' => 'common\grid\MyActionColumn',
-                    'template' => '{next} &nbsp;&nbsp;&nbsp;&nbsp;| &nbsp;&nbsp;&nbsp;&nbsp;{view} {update} {delete}',
+                    'template' => '{next} &nbsp;&nbsp;| &nbsp;&nbsp;{update} {delete}',
                     'buttons' => [
                         'next' => function($url ,$model) {
-                            return Html::a('&nbsp;&nbsp;>>&nbsp;&nbsp;', ['ott-channel/index', 'sub-id' => $model->id], [
+                            return Html::a('&nbsp;&nbsp;<i class="glyphicon glyphicon-th-list"></i>&nbsp;&nbsp;', ['ott-channel/index', 'sub-id' => $model->id], [
                                 'class' => 'btn btn-success btn-xs'
                             ]);
                         },
@@ -81,6 +87,49 @@ $this->params['breadcrumbs'][] = $this->title;
 
         ],
     ]); ?>
+
+<div>
+
+    <?php if(isset($mainClass)): ?>
+        <?php $version = (new \backend\models\Cache())->getCacheVersion($mainClass->name); ?>
+        <?= Html::a("生成缓存($version)" , '#', [
+            'url' => Url::to(['sub-class/generate-cache', 'id' => $mainClass->id]),
+            'class' => 'btn btn-success',
+            'id' => 'cache-btn',
+            'data-toggle' => 'modal',
+            'data-target' => '#cache-modal',
+        ])  ?>
+    <?php endif; ?>
+
+    <?= Html::a('重新排列频道号', ['sub-class/reset-number','main_class_id' => $mainClass->id], ['class' => 'btn btn-primary']) ?>
+
+
+    <?= Html::a('批量导入', Url::to(['sub-class/import-via-text', 'mode' => 'keywordChannel']), [
+        'class' => 'btn btn-info'
+    ])  ?>
+
+    <?= Html::button("批量删除",[
+        'class' => 'gridview btn btn-danger',
+    ]) ?>
+
+    <?= Html::a('返回上一级', Url::to(['main-class/index']), ['class' => 'btn btn-default']) ?>
+
+</div>
+
+    <?php
+    $batchDelete = Url::to(['sub-class/batch-delete']);
+
+    $requestJs=<<<JS
+    $(document).on("click", ".gridview", function () {
+                var keys = $("#grid").yiiGridView("getSelectedRows");
+                var url = '{$batchDelete}' + '&id=' + keys.join(',');
+                window.location.href = url;
+            });
+JS;
+
+    $this->registerJs($requestJs);
+    ?>
+
 
 <?php
 
@@ -93,11 +142,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
     Modal::begin([
         'id' => 'cache-modal',
+        'size' => Modal::SIZE_SMALL,
         'header' => '<h4 class="modal-title">操作提示</h4>',
         'footer' => '',
     ]);
 
-    echo "<h3>正在生成缓存</h3>";
+    echo "<h4><i class='fa fa-spinner fa-pulse'> </i> 生成缓存中</h4>";
 
     Modal::end();
 
@@ -128,6 +178,33 @@ $this->registerJs($js);
         });
     </script>
 <?php \common\widgets\Jsblock::end() ?>
+
+
+<?php
+
+    $updateUrl = Url::to(['sub-class/update', 'field' => 'sort', 'id'=>'']);
+    $csrfToken = Yii::$app->request->csrfToken;
+
+    $requestJs=<<<JS
+    $('.change-sort').blur(function(){
+        var newValue = $(this).val();
+        var oldValue = $(this).attr('value');
+    
+        var id = $(this).attr('data-id');
+        var url = '{$updateUrl}' + id;
+       
+        if (newValue === oldValue) return false;
+        
+        $.post(url, {sort:newValue,_csrf:'{$csrfToken}'}, function(data){
+              window.location.reload();
+        })
+    });
+
+JS;
+
+    $this->registerJs($requestJs);
+
+?>
 
 
 </div>

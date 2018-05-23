@@ -81,7 +81,7 @@ class SubClassController extends BaseController
         $model->sort = 0;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->session->setFlash('success', '创建成功');
+            $this->setFlash('success', '创建成功');
             return $this->redirect(['index', 'main-id' => $model->main_class_id]);
         } else {
             return $this->renderAjax('create', ['model' => $model]);
@@ -108,8 +108,21 @@ class SubClassController extends BaseController
     {
         $model = $this->findModel($id);
 
+        if (Yii::$app->request->isAjax) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            $field = Yii::$app->request->get('field');
+            if ($field == 'sort') {
+                $model->sort = Yii::$app->request->post('sort');
+                $model->save(false);
+            }
+            return [
+                'status' => 0
+            ];
+        }
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            $this->setFlash('info', '修改成功');
+            return $this->redirect(['index', 'main-id' => $model->mainClass->id]);
         }
 
         return $this->render('update', [
@@ -133,6 +146,17 @@ class SubClassController extends BaseController
         $this->setFlash('success', '操作成功');
         return $this->redirect(['index', 'main-id' => $main_class_id]);
     }
+
+    public function actionBatchDelete()
+    {
+        $id = Yii::$app->request->get('id');
+        SubClass::deleteAll(['in', 'id', $id]);
+
+        $this->setFlash('info', "批量删除成功");
+
+        return $this->redirect(Yii::$app->request->referrer);
+    }
+
 
     /**
      * Finds the SubClass model based on its primary key value.

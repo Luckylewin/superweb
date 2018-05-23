@@ -15,9 +15,12 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <style>
+    .grid-view td{
+        text-align: center;
+    }
     .modal-lg {
         /* respsonsive width */
-        width: 95%;
+        width: 100%;
     }
 </style>
 
@@ -28,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?= Html::a('添加频道', ['create','sub-id' => $subClass->id], ['class' => 'btn btn-success']) ?>
-        <?= Html::a('重新排列频道号', ['sub-class/reset-number','main_class_id' => $mainClass->id], ['class' => 'btn btn-success']) ?>
+
     </p>
 
     <?= GridView::widget([
@@ -37,7 +40,12 @@ $this->params['breadcrumbs'][] = $this->title;
         'tableOptions' => [
                 'class' => 'table table-bordered table-hover',
         ],
+        'options' => ["class" => "grid-view","style"=>"overflow:auto", "id" => "grid"],
         'columns' => [
+            [
+                "class" => "yii\grid\CheckboxColumn",
+                "name" => "id",
+            ],
             ['class' => 'yii\grid\SerialColumn'],
             //'image',
             //'id',
@@ -45,12 +53,24 @@ $this->params['breadcrumbs'][] = $this->title;
             'name',
             'zh_name',
             'keywords',
-            'sort',
             [
-                    'attribute' => 'use_flag',
-                    'value' => function($model) {
-                        return $model->use_flag ? '可用' : '不可用';
-                    }
+                'attribute' => 'sort',
+                'options' => ['style' => 'width:70px;'],
+                'format' => 'raw',
+                'value' => function($model) {
+                    return \yii\bootstrap\Html::textInput('sort', $model->sort, [
+                        'class' => 'form-control change-sort',
+                        'data-id' => $model->id,
+                        'old-value' => $model->sort
+                    ]);
+                }
+            ],
+            [
+                'attribute' => 'use_flag',
+                'format' => 'raw',
+                'value' => function($model) {
+                    return $model->use_flag ? '<i style="color: #23c6c8;font-size: large" class="glyphicon glyphicon-ok-circle"><i>' : '<i style="color: #953b39;font-size: large" class="glyphicon glyphicon-remove-circle"></i>';
+                }
             ],
             'channel_number',
             //'alias_name',
@@ -60,7 +80,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'template' => '{channel} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;{view} {update} {delete}',
                     'buttons' => [
                             'channel' => function($url, $model, $key) {
-                                return Html::a("&nbsp;>>&nbsp;", null, [
+                                return Html::a("&nbsp;&nbsp;<i class='glyphicon glyphicon-link'></i>&nbsp;&nbsp;", null, [
                                         'class' => 'btn btn-success btn-xs load-link',
                                         'data-toggle' => 'modal',
                                         'data-target' => '#links-modal',
@@ -77,8 +97,49 @@ $this->params['breadcrumbs'][] = $this->title;
 
 </div>
 
+<div>
 
+<?= Html::a('重新排列频道号', ['sub-class/reset-number','main_class_id' => $mainClass->id], ['class' => 'btn btn-primary']) ?>
 
+<?= Html::button("批量删除",[
+    'class' => 'gridview btn btn-danger',
+]) ?>
+
+<?= Html::a('返回上一级', Url::to(['sub-class/index', 'main-id' => $mainClass->id]), ['class' => 'btn btn-default']) ?>
+
+<?php
+    $batchDelete = Url::to(['ott-channel/batch-delete']);
+    $updateUrl = Url::to(['ott-channel/update', 'field' => 'sort', 'id'=>'']);
+    $csrfToken = Yii::$app->request->csrfToken;
+
+    $requestJs=<<<JS
+    
+    $(document).on("click", ".gridview", function () {
+                var keys = $("#grid").yiiGridView("getSelectedRows");
+                var url = '{$batchDelete}' + '&id=' + keys.join(',');
+                window.location.href = url;
+            });
+    
+    $('.change-sort').blur(function(){
+        var newValue = $(this).val();
+        var oldValue = $(this).attr('value');
+    
+        var id = $(this).attr('data-id');
+        var url = '{$updateUrl}' + id;
+       
+        if (newValue === oldValue) return false;
+        
+        $.post(url, {sort:newValue,_csrf:'{$csrfToken}'}, function(data){
+              window.location.reload();
+        })
+    });
+JS;
+
+    $this->registerJs($requestJs);
+?>
+</div>
+
+<!--链接modal部分 开始-->
 <?php
 
 Modal::begin([
@@ -88,18 +149,16 @@ Modal::begin([
           'footer' => '<a href="#" class="btn btn-default" data-dismiss="modal">关闭</a>',
 ]);
 
-echo "<div class='well'><div class='checkbox'><label><input type='checkbox'>请打勾</label></div></div>";
-
-
 $requestUrl = Url::to(['ott-link/index']);
 $switchUrl = Url::to(['ott-link/update', 'field'=>'use_flag']);
 $schemeUrl = Url::to(['api/scheme']);
 $updateUrl = Url::to(['ott-link/update', 'field'=>'scheme_id', 'id' => '']);
+$delLinkUrl = Url::to(['ott-link/delete']);
 
 $requestJs=<<<JS
     $('.load-link').click(function(){
         $.getJSON('{$requestUrl}', {channel_id:$(this).attr('data-id')}, function(data) {
-            var table = '<table class="table table-bordered"><thead><tr><th>方案</th><th>来源</th><th width="120px">链接</th><th>算法</th><th width="50px">解码</th><th width="60px">清晰度</th><th width="70px">状态</th><th style="width:250px;">操作</th></tr></thead><tbody>';
+            var table = '<table class="table table-bordered"><thead><tr><th>方案</th><th>来源</th><th width="120px">链接</th><th>算法</th><th width="50px">解码</th><th width="60px">清晰度</th><th width="70px">状态</th><th style="width:300px;">操作</th></tr></thead><tbody>';
             var tr = '';
             
             $.each(data,function(){
@@ -112,7 +171,7 @@ $requestJs=<<<JS
                     tr += '<td>' + $(this).attr('decode') + '</td>';
                     tr += '<td>' + $(this).attr('definition') + '</td>';
                     tr += '<td class="use-flag">' + ($(this).attr('use_flag_text')) + '</td>';
-                    tr += '<td><button class="btn btn-info btn-xs change-scheme" scheme-id=' + $(this).attr('scheme_id') + ' data-id='+ $(this).attr('id') +'>修改方案</button>&nbsp;<button class="btn btn-info btn-xs disabled">脚本开关</button>&nbsp;<button class="btn btn-primary btn-xs use-switch">可用开关</btn></td></tr>';
+                    tr += '<td><button class="btn btn-info btn-xs change-scheme" scheme-id=' + $(this).attr('scheme_id') + ' data-id='+ $(this).attr('id') +'>修改方案</button>&nbsp;<button class="btn btn-info btn-xs disabled">脚本开关</button>&nbsp;<button class="btn btn-primary btn-xs use-switch">可用开关</button>&nbsp;&nbsp;<button class="btn btn-danger btn-xs link-del">删除</btn></td></tr>';
             });
                 
             table += tr;
@@ -130,6 +189,12 @@ $requestJs=<<<JS
              $(tr).find('.use-flag').html(back.msg);
         });
         
+    }).on('click', '.link-del',function(){
+         var tr = $(this).parent().parent();
+         var link_id = tr.attr('link-id');
+         $.getJSON('{$delLinkUrl}', {id:link_id}, function(back) {
+             tr.css('background','#ccc').slideUp(200);
+        });
     }).on('click', '.change-scheme', function() {
        
         var link_id = $(this).attr('data-id');
@@ -175,11 +240,12 @@ JS;
 
 $this->registerJs($requestJs);
 
-
-
 Modal::end()
 
 ?>
+<!--链接modal部分 结束-->
+
+
 
 
 

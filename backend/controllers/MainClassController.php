@@ -2,10 +2,13 @@
 
 namespace backend\controllers;
 
+use backend\components\MyRedis;
 use Yii;
 use common\models\MainClass;
 use yii\data\ActiveDataProvider;
+use yii\data\ArrayDataProvider;
 use yii\web\NotFoundHttpException;
+use yii\web\Response;
 
 /**
  * MainClassController implements the CRUD actions for MainClass model.
@@ -74,6 +77,18 @@ class MainClassController extends BaseController
     {
         $model = $this->findModel($id);
 
+        if (Yii::$app->request->isAjax) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            $field = Yii::$app->request->get('field');
+            if ($field == 'sort') {
+                  $model->sort = Yii::$app->request->post('sort');
+                  $model->save(false);
+            }
+            return [
+                'status' => 0
+            ];
+        }
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
@@ -113,5 +128,42 @@ class MainClassController extends BaseController
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
+    public function actionListCache($id)
+    {
+        $model = $this->findModel($id);
+        $redis = MyRedis::init(MyRedis::REDIS_PROTOCOL);
+        $cacheKeys = $redis->keys("OTT_LIST_XML_{$model->name}*");
+        $data = [];
+
+        if (!empty($cacheKeys)) {
+            foreach ($cacheKeys as $key => $redisKey) {
+                if (strpos($redisKey, 'VERSION') == false) {
+                    $data[] = ['id' => $key, 'key_name'=>$redisKey];
+                }
+            }
+        }
+    
+        $dataProvider = new ArrayDataProvider([
+            'key' => 'id',
+            'models' => $data,
+            'pagination' => false,
+            'sort' => [
+                'attributes' => ['id', 'key_name']
+            ]
+        ]);
+
+        return $this->render('list-cache', [
+            'dataProvider' => $dataProvider,
+        ]);
+
+    }
+
+    public function actionViewCache($key)
+    {
+        $redis = MyRedis::init(MyRedis::REDIS_PROTOCOL);
+        $cache = $redis->get($key);
+        header("Content-type: application/xml");
+        exit($cache);
+    }
 
 }

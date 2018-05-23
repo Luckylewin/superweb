@@ -91,9 +91,9 @@ class SubClass extends \yii\db\ActiveRecord
     {
         $query = $this->hasMany(OttChannel::className(), ['sub_class_id' => 'id'])
                     ->orderBy([
+                        /*'sub_class_id' => SORT_ASC,
+                        'ott_channel.id' => SORT_ASC,*/
                         'sort' => SORT_ASC,
-                        'sub_class_id' => SORT_ASC,
-                        'ott_channel.id' => SORT_ASC
                     ]);
 
         if ($where) {

@@ -14,16 +14,51 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="sub-class-create">
     <div class="sub-class-form">
 
+        <div class="list-group">
+            <a href="#" class="list-group-item active">
+                <h4 class="list-group-item-heading">
+                    模式一  (一级分类,二级分类,频道名称,链接,算法)
+                </h4>
+            </a>
+            <a href="#" class="list-group-item">
+                <h4 class="list-group-item-heading">
+                    1) 不带方案号默认支持全部<br>
+                    vn,vtv,vtv1,http://ott.realplaytv.net:12388/?header=hplus&name=vtv1&cdn=1,null<br>
+                    vn,vtv,vtv1,https://tvplay.vn/truyen-hinh-70.htm,null,local_tvplay
+                </h4>
+                <br/>
+                <h4 class="list-group-item-heading">
+                    2) 指定支持哪些方案号<br>
+                    vn,vtv,vtv1,http://ott.realplaytv.net:12388/?header=hplus&name=vtv1&cdn=1,null,rk323|rk324|dvb|6605s
+                </h4>
+
+             </a>
+            <a href="#" class="list-group-item active">
+                <h4 class="list-group-item-heading">
+                    模式二  (一级分类,二级分类,频道名称,链接,算法)
+                </h4>
+            </a>
+            <a href="#" class="list-group-item">
+
+                <p class="list-group-item-text">
+                    综合,综合频道,http://ott.realplaytv.net:12388/?header=hplus&name=vtv1&cdn=1,null
+                </p>
+            </a>
+        </div>
+
+
+
         <?php $form = ActiveForm::begin(); ?>
 
         <?= $form->field($model, 'mode')->dropDownList(\backend\models\importTextForm::getMode()) ?>
 
         <?= $form->field($model, 'text')->textarea([
-            'rows' =>22
+            'rows' =>18
         ]) ?>
 
         <div class="form-group">
             <?= Html::submitButton('提交', ['class' => 'btn btn-success']) ?>
+            <?= Html::a('返回', ['main-class/index'], ['class' => 'btn btn-default']) ?>
         </div>
 
         <?php ActiveForm::end(); ?>

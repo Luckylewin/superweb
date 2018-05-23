@@ -7,9 +7,11 @@ use common\models\SubClass;
 use Yii;
 use common\models\OttChannel;
 use common\models\search\OttChannelSearch;
+use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
 
 /**
  * OttChannelController implements the CRUD actions for OttChannel model.
@@ -39,11 +41,6 @@ class OttChannelController extends BaseController
      */
     public function actionIndex()
     {
-        $channels = SubClass::find()
-            ->where(['main_class_id' => $this->subClass->main_class_id])
-            ->orderBy(['id' => SORT_DESC])
-            ->with('ownChannel')
-            ->all();
 
         $searchModel = new OttChannelSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -101,14 +98,25 @@ class OttChannelController extends BaseController
     {
         $model = $this->findModel($id);
 
+        if (Yii::$app->request->isAjax) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            $field = Yii::$app->request->get('field');
+            if ($field == 'sort') {
+                $model->sort = Yii::$app->request->post('sort');
+                $model->save(false);
+            }
+            return [
+                'status' => 0
+            ];
+        }
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            $this->setFlash('info', '修改成功');
+            return $this->redirect(Url::to(['ott-channel/index', 'sub-id' => $model->subClass->id]));
         }
 
         return $this->render('update', [
             'model' => $model,
-            'mainClass' => $this->mainClass,
-            'subClass' => $this->subClass
         ]);
     }
 
@@ -124,6 +132,16 @@ class OttChannelController extends BaseController
         $this->findModel($id)->delete();
 
         $this->setFlash('success', '操作成功');
+        return $this->redirect(Yii::$app->request->referrer);
+    }
+
+    public function actionBatchDelete()
+    {
+        $id = Yii::$app->request->get('id');
+        OttChannel::deleteAll(['in', 'id', $id]);
+
+        $this->setFlash('info', "批量删除成功");
+
         return $this->redirect(Yii::$app->request->referrer);
     }
 

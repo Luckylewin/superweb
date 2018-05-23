@@ -34,7 +34,7 @@ class OttChannel extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['sub_class_id', 'name', 'zh_name', 'keywords', 'alias_name'], 'required'],
+            [['sub_class_id', 'name', 'zh_name', 'keywords'], 'required'],
             [['sub_class_id', 'sort', 'use_flag', 'channel_number'], 'integer'],
             [['name', 'zh_name', 'keywords'], 'string', 'max' => 255],
             [['image'], 'string', 'max' => 50],
@@ -56,7 +56,7 @@ class OttChannel extends \yii\db\ActiveRecord
             'zh_name' => '中文名称',
             'keywords' => '关键字',
             'sort' => '排序',
-            'use_flag' => 'Use Flag',
+            'use_flag' => '是否可用',
             'channel_number' => '频道号',
             'image' => '图标',
             'alias_name' => '别名',
@@ -69,7 +69,7 @@ class OttChannel extends \yii\db\ActiveRecord
      */
     public function getSubClass()
     {
-        return $this->hasOne(SubClass::tableName(), ['id' => 'sub_class_id']);
+        return $this->hasOne(SubClass::className(), ['id' => 'sub_class_id']);
     }
 
     public function getOwnLink($where = null)

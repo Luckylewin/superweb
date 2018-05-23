@@ -15,80 +15,91 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+    <div class="col-md-6">
+        <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+    </div>
 
-    <?= $form->field($model, 'zh_name')->textInput(['maxlength' => true]) ?>
+    <div class="col-md-6">
+        <?= $form->field($model, 'zh_name')->textInput(['maxlength' => true]) ?>
+    </div>
 
-    <?= $form->field($model, 'description')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'icon')->textInput(['maxlength' => true]) ?>
 
-    <?=  \dosamigos\fileupload\FileUploadUI::widget([
-        'model' => new \backend\models\UploadForm(),
-        'attribute' => 'image',
-        'url' => ['upload/image-upload',],
-        'gallery' => false,
+    <div class="col-md-6">
+        <?= $form->field($model, 'icon')->textInput(['maxlength' => true]) ?>
 
-        'fieldOptions' => [
-            'accept' => 'image/*'
-        ],
+        <?=  \dosamigos\fileupload\FileUploadUI::widget([
+            'model' => new \backend\models\UploadForm(),
+            'attribute' => 'image',
+            'url' => ['upload/image-upload',],
+            'gallery' => false,
 
-        'clientOptions' => [
-            'maxFileSize' => 2000000
-        ],
+            'fieldOptions' => [
+                'accept' => 'image/*'
+            ],
 
-        // ...
-        'clientEvents' => [
-            'fileuploaddone' => 'function(e, data) {
+            'clientOptions' => [
+                'maxFileSize' => 2000000
+            ],
+
+            // ...
+            'clientEvents' => [
+                'fileuploaddone' => 'function(e, data) {
                                 console.log(e);
                                 console.log(data);
                                 var files = data.result.files[0];
                               
                                 $("#mainclass-icon").val(files.path);
                             }',
-            'fileuploadfail' => 'function(e, data) {
+                'fileuploadfail' => 'function(e, data) {
                                 console.log(e);
                                 console.log(data);
                             }',
-        ],
-    ]); ?>
+            ],
+        ]); ?>
+    </div>
 
-    <?= $form->field($model, 'icon_hover')->textInput(['maxlength' => true]) ?>
+    <div class="col-md-6">
+        <?= $form->field($model, 'icon_hover')->textInput(['maxlength' => true]) ?>
 
-    <?=  \dosamigos\fileupload\FileUploadUI::widget([
-        'model' => new \backend\models\UploadForm(),
-        'attribute' => 'image_hover',
-        'url' => ['upload/image-upload','field' => 'image_hover'],
-        'gallery' => false,
+        <?=  \dosamigos\fileupload\FileUploadUI::widget([
+            'model' => new \backend\models\UploadForm(),
+            'attribute' => 'image_hover',
+            'url' => ['upload/image-upload','field' => 'image_hover'],
+            'gallery' => false,
 
-        'fieldOptions' => [
-            'accept' => 'image/*'
-        ],
+            'fieldOptions' => [
+                'accept' => 'image/*'
+            ],
 
-        'clientOptions' => [
-            'maxFileSize' => 2000000
-        ],
+            'clientOptions' => [
+                'maxFileSize' => 2000000
+            ],
 
-        // ...
-        'clientEvents' => [
-            'fileuploaddone' => 'function(e, data) {
+            // ...
+            'clientEvents' => [
+                'fileuploaddone' => 'function(e, data) {
                                 console.log(e);
                                 console.log(data);
                                 var files = data.result.files[0];
                               
                                 $("#mainclass-icon_hover").val(files.path);
                             }',
-            'fileuploadfail' => 'function(e, data) {
+                'fileuploadfail' => 'function(e, data) {
                                 console.log(e);
                                 console.log(data);
                             }',
-        ],
-    ]); ?>
+            ],
+        ]); ?>
+    </div>
 
-    <?= $form->field($model, 'sort')->textInput(['maxlength' => true]) ?>
-
-    <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+    <div class="col-md-12">
+        <?= $form->field($model, 'description')->textarea(['rows' => 6]) ?>
+        <?= $form->field($model, 'sort')->textInput(['maxlength' => true]) ?>
+        <div class="form-group">
+            <?= Html::submitButton('保存', ['class' => 'btn btn-success']) ?>
+            <?= Html::a('返回', ['index'], ['class' => 'btn btn-default']) ?>
+        </div>
     </div>
 
     <?php ActiveForm::end(); ?>

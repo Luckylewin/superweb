@@ -6,8 +6,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model common\models\MainClass */
 
-$this->title = 'Create Main Class';
-$this->params['breadcrumbs'][] = ['label' => 'Main Classes', 'url' => ['index']];
+$this->title = '创建分类';
+$this->params['breadcrumbs'][] = ['label' => '分类列表', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="main-class-create">
