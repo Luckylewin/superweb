@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use backend\components\MyRedis;
 use Yii;
 
 /**
@@ -91,5 +92,13 @@ class MainClass extends \yii\db\ActiveRecord
            }
        }
        return true;
+    }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+        $redis = MyRedis::init(MyRedis::REDIS_PROTOCOL);
+        $redis->del("OTT_CLASSIFICATION");
+        return true;
     }
 }

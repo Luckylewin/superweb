@@ -51,13 +51,24 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'name',
-            'zh_name',
+            [
+                'attribute' => 'zh_name',
+                'options' => ['style' => 'width:120px;'],
+                'format' => 'raw',
+                'value' => function($model) {
+                    return Html::textInput('sort', $model->zh_name, [
+                        'class' => 'form-control change',
+                        'data-id' => $model->id,
+                        'old-value' => $model->zh_name
+                    ]);
+                }
+            ],
             [
                 'attribute' => 'sort',
                 'options' => ['style' => 'width:70px;'],
                 'format' => 'raw',
                 'value' => function($model) {
-                    return \yii\bootstrap\Html::textInput('sort', $model->sort, [
+                    return Html::textInput('sort', $model->sort, [
                             'class' => 'form-control change-sort',
                             'data-id' => $model->id,
                             'old-value' => $model->sort
