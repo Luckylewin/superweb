@@ -17,9 +17,9 @@ $this->params['breadcrumbs'][] = $this->title;
 <style>
     .grid-view td{
         text-align: center;
+        vertical-align:middle!important;
     }
     .modal-lg {
-        /* respsonsive width */
         width: 100%;
     }
 </style>
