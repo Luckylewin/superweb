@@ -4,11 +4,13 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\helpers\Url;
 use \yii\bootstrap\Modal;
+use \common\components\Func;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Main Classes';
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
 
 <style>
@@ -30,7 +32,17 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
+            [
+                    'attribute' => 'icon',
+                    'options' => ['style' => 'width:100px;'],
+                    'format' => ['image',['width'=>'100']],
+                    'value' => function($model) {
+                        if (strpos($model->icon, '/') !== false) {
+                            return Func::getAccessUrl($model->icon,600);
+                        }
+                        return null;
+                    }
+            ],
             'name',
             'zh_name',
 

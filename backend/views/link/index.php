@@ -22,16 +22,21 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
+        "options" => ["class" => "grid-view","style"=>"overflow:auto", "id" => "grid"],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'video_id',
+            [
+                "class" => "yii\grid\CheckboxColumn",
+                "name" => "id",
+            ],
+            //'id',
+            //'video_id',
             'url:url',
-            'hd_url:url',
+            //'hd_url:url',
             'episode',
             [
                     'class' => 'common\grid\MyActionColumn',
+                    'template' => '{update} {delete}',
                     'buttons' => [
                             'view' => function($url, $model) {
                                  return Html::a('查看',Url::to(['link/view','vod_id'=>$model->video_id, 'id' => $model->id]),[
@@ -44,3 +49,25 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); ?>
 
 </div>
+
+<?= Html::button("批量删除",[
+    'class' => 'gridview btn btn-danger',
+])?>
+
+<?php
+
+$batchDelete = Url::to(['link/batch-delete']);
+$csrfToken = Yii::$app->request->csrfToken;
+
+$registerJs=<<<JS
+    $(document).on('click', '.gridview', function () {
+         var keys = $("#grid").yiiGridView("getSelectedRows");
+         $.post('{$batchDelete}', {id:keys,_csrf:'{$csrfToken}'}, function(data) {
+              window.location.reload(); 
+         });
+    });
+JS;
+
+$this->registerJs($registerJs);
+
+?>

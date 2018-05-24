@@ -10,6 +10,13 @@ use common\models\Vod;
 $this->title = '点播分类列表';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
+<style>
+    td img{
+        width: 70px;
+    }
+</style>
+
 <div class="vod-list-index">
 
     <p>

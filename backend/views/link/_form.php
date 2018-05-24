@@ -23,9 +23,6 @@ $this->registerJsFile('/statics/js/big-file-uploader/common.js', ['depends' => '
                 </td>
             </tr>
         </script>
-
-    <div class="col-md-12">
-
         <?php $form = ActiveForm::begin([
             'method' => 'post',
             'id' => 'myForm',
@@ -34,67 +31,92 @@ $this->registerJsFile('/statics/js/big-file-uploader/common.js', ['depends' => '
             ]
         ]); ?>
 
-        <table class="table table-bordered" id="upload-list">
-            <caption>
-                <?= Html::fileInput('file',null, [
-                    'id' => 'myFile'
-                ]) ?>
-            </caption>
+    <div class="col-md-6">
+        <div class="form-group well">
+            <label for="myFile">文件上传</label>
+            <?= Html::fileInput('file',null, [
+                'id' => 'myFile'
+            ]) ?>
+            <div class="help-block"></div>
+        </div>
+    </div>
+
+    <div class="col-md-6"></div>
+
+
+    <div class="col-md-6">
+        <table class="table" id="upload-list" style="width:100%;display: none">
             <thead>
-                <tr>
-                    <th>文件名</th>
-                    <th>文件类型</th>
-                    <th>文件大小</th>
-                    <th>上传进度</th>
-                    <th>操作</th>
-                </tr>
+            <tr>
+                <th>文件名</th>
+                <th>类型</th>
+                <th>大小</th>
+                <th>进度</th>
+                <th>操作</th>
+            </tr>
             </thead>
             <tbody>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td>
-                    <?= Html::button('上传',[
-                        'id' => 'upload-all-btn',
-                        'class' => 'btn btn-info'
-                    ]) ?>
-                </td>
-            </tr>
-
             </tbody>
         </table>
-        <?php ActiveForm::end() ?>
-    </div>
-
-<?php
-    $uploadUrl = \yii\helpers\Url::to(['upload/chunk-upload']);
-    $uploadJS=<<<JS
-    
-    UP.afterSuccess = function(callback){
-        $('#vodlink-url').val(callback.path);
-    };
-    UP.__init({
-            myFile: "#myFile", //fileinput节点
-            ServerUrl:"{$uploadUrl}",//服务器地址
-            eachSize:10240000 //分片大小
-        });
-JS;
-    $this->registerJs($uploadJS, $this::POS_END);
-?>
-
-    <?php $form = ActiveForm::begin(); ?>
-
-    <div class="col-md-6">
-        <?= $form->field($model, 'video_id')->dropDownList([$vod->vod_id => $vod->vod_name]); ?>
-    </div>
-
-    <div class="col-md-6">
-        <?= $form->field($model, 'episode')->textInput() ?>
     </div>
 
     <div class="col-md-12">
+        <div class="progress progress-striped active" style="display: none">
+            <div class="progress-bar progress-bar-success" role="progressbar"
+                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+                 style="width: 0;">
+                <span class="sr-only">0% 未开始</span>
+            </div>
+        </div>
+    </div>
+
+
+        <?php ActiveForm::end() ?>
+    </div>
+
+
+<?php
+$uploadUrl = \yii\helpers\Url::to(['upload/chunk-upload']);
+$uploadJS=<<<JS
+    
+    UP.__hook({
+        before:function() {
+            $('.progress').show();
+        }, 
+        process:function(callback) {
+            $('.progress-bar').css('width', callback.progress);
+            $('.sr-only').text(callback.progress + '% 完成');
+        },
+        success:function(callback) {
+             $('.progress-bar').css('width', '100%');
+             $('#vodlink-url').val(callback.path);
+              $('.progress').slideUp(1500);
+        },
+        fail:function(callback) {
+             
+        }  
+    });
+
+    UP.__init({
+            myFile: "#myFile", //fileInput节点
+            ServerUrl:"{$uploadUrl}",//服务器地址
+            eachSize:10240000 //分片大小
+        });
+    
+JS;
+$this->registerJs($uploadJS, $this::POS_END);
+?>
+
+
+
+    <?php $form = ActiveForm::begin(); ?>
+    <div class="col-md-12">
+
+        <?php if($model->isNewRecord): ?>
+           <?= $form->field($model, 'video_id')->dropDownList([$vod->vod_id => $vod->vod_name]); ?>
+        <?php endif; ?>
+
+        <?= $form->field($model, 'episode')->textInput() ?>
 
         <?= $form->field($model, 'url')->textInput(['maxlength' => true]) ?>
 
@@ -103,7 +125,18 @@ JS;
         <?= $form->field($model, 'plot')->textarea(['rows'=>6]) ?>
 
         <div class="form-group">
-            <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+            <?= Html::submitButton('保存', ['class' => 'btn btn-success']) ?>
+
+            <?php if($model->isNewRecord): ?>
+                <?= Html::a('返回', Yii::$app->request->referrer, [
+                        'class' => 'btn btn-default'
+                ]) ?>
+            <?php else: ?>
+                <?= Html::a('返回', \yii\helpers\Url::to(['link/index', 'vod_id' => $model->vodInfo->vod_id]), [
+                    'class' => 'btn btn-default'
+                ]) ?>
+            <?php endif; ?>
+
         </div>
 
     </div>
@@ -111,3 +144,5 @@ JS;
     <?php ActiveForm::end(); ?>
 
 </div>
+
+

@@ -1,21 +1,20 @@
 <?php
 
 use yii\helpers\Html;
-
+use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $model common\models\Vodlink */
 
-$this->title = 'Update Vodlink: {nameAttribute}';
-$this->params['breadcrumbs'][] = ['label' => 'Vodlinks', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$vodInfo = $model->vodInfo;
+$this->title = 'Update Vodlink:';
+$this->params['breadcrumbs'][] = ['label' => '视频列表', 'url' => Url::to(['vod/index'])];
+$this->params['breadcrumbs'][] = ['label' => $vodInfo->vod_name, 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => '链接列表', 'url' => Url::to(['link/index', 'vod_id' => $vodInfo->vod_id])];
+$this->params['breadcrumbs'][] = '编辑';
 ?>
+
 <div class="vodlink-update">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <?= $this->render('_form', [
         'model' => $model,
     ]) ?>
-
 </div>

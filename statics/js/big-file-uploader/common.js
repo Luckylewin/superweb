@@ -3,14 +3,53 @@
  * js文件分片上传
  */
 var UP = {
-
+    /**
+     * 上传之前事件
+     */
+    beforeUpload:{},
+    /**
+     * 上传中事件
+     */
+    underProcess:{},
+    /**
+     * 上传成功事件
+     */
     afterSuccess: {},
+    /**
+     * 上传失败事件
+     */
+    afterFail:{},
+
+    /**
+     * [__hook 钩子程序]
+     * @author lychee
+     * @DateTime 2018/05/24
+     * @DateTime 2018/05/24
+     * @version 1.0
+     * @params {object} 对象
+     */
+    __hook:function(params) {
+
+        if (typeof(params.before) !== "undefined") {
+            this.beforeUpload = params.before
+        }
+        if (typeof(params.process) !== 'undefined') {
+            this.underProcess = params.process
+        }
+        if (typeof(params.success) !== "undefined") {
+             this.afterSuccess = params.success
+        }
+        if (typeof(params.fail) !== "undefined") {
+             this.afterFail = params.fail
+        }
+    },
+
     /**
      * [__init 初始化]
      * @Author   王文凡
      * @DateTime 2017-09-27
      * @version  1.0
-     * @param    {[type]}   param [description]
+     * @param    {object} param [description]
      * @return   {[type]}         [description]
      */
     __init: function(param) {
@@ -84,7 +123,7 @@ var UP = {
             );
         }
 
-        $('#upload-list').children('tbody').html(uploadItem.join('')).end().show();
+        $('#upload-list').css('display', 'block').children('tbody').html(uploadItem.join('')).end().show();
     },
     /**
      * [__allUpload 点击全部上传按钮]
@@ -100,7 +139,7 @@ var UP = {
         }
         // 模拟点击其他可上传的文件
         else {
-            $('#upload-list .upload-item-btn').each(function() {
+            $('.upload-item-btn').each(function() {
                 $(this).click();
             });
         }
@@ -108,8 +147,8 @@ var UP = {
 
     /**
      * 上传文件时，提取相应匹配的文件项
-     * @param  {String} fileName   需要匹配的文件名
-     * @return {FileList}          匹配的文件项目
+     * @param  {String} fileName  需要匹配的文件名
+     * @return {object} FileList  匹配的文件项目
      */
     __findTheFile: function(fileName) {
         var files = $(this.__input.param.myFile)[0].files,
@@ -173,10 +212,10 @@ var UP = {
 
             //中途浏览器刷新断掉后继续上传分片加1
             var c = window.localStorage.getItem(file_obj.fileName + '_chunk');
-            if((file_obj.chunks()-1) == c){
+            if((file_obj.chunks()-1) === c){
                 alert("该文件已上传！");return;
             }
-            if (c > 1 && that.__input.flushStatus == 0) {
+            if (c > 1 && that.__input.flushStatus === 0) {
                 window.localStorage.setItem(file_obj.fileName + '_chunk', ++c);
             }
             that.__input.isPaused = 0;
@@ -203,6 +242,7 @@ var UP = {
         file_obj.chunk = window.localStorage.getItem(file_obj.fileName + '_chunk') || 0;
         file_obj.chunk = parseInt(file_obj.chunk, 10);
         console.log("当前第：" + (file_obj.chunk + 1) + "片");
+
 
         // 判断是否为末分片
         var isLastChunk = (file_obj.chunk == (file_obj.chunks() - 1) ? 1 : 0);
@@ -253,14 +293,22 @@ var UP = {
                         window.localStorage.setItem(file_obj.fileName + '_chunk', ++file_obj.chunk);
                         //显示上传进度条
                         file_obj.progress.text(that.__msg['in'] + percent + '%');
+                        //上传中回调事件
+                        that.__underProcess({
+                            chunk:file_obj.chunk,
+                            progress:percent + '%'
+                        });
+
                         if (!that.__input.isPaused) that.__startUpload();
                     }
                 }
                 // 上传失败，上传失败分很多种情况，具体按实际来设置
                 else if (rs.status === 500) {
                     file_obj.progress.text(that.__msg['failed']);
+                    that.__afterFail(rs);
                 } else if (rs.status === 502) {
                     file_obj.progress.text(that.__msg['incomplete']);
+                    that.__afterFail(rs);
                 }
             },
             error: function() {
@@ -268,10 +316,55 @@ var UP = {
             }
         });
     },
+
+    /**
+     * [__beforeUpload 上传之前的回调函数]
+     * @Author   lychee
+     * @DateTime 2018-05-24
+     * @version  1.0
+     * @return   {[type]}   [description]
+     *
+     */
+    __beforeUpload: function() {
+        var beforeUpload = this.beforeUpload;
+        if (typeof(beforeUpload) === 'function') {
+            beforeUpload();
+        }
+    },
+
+    /**
+     * [__beforeUpload 上传之前的回调函数]
+     * @Author   lychee
+     * @DateTime 2018-05-24
+     * @version  1.0
+     * @return   {[type]}   [description]
+     *
+     */
+    __underProcess: function(callback) {
+        var underProcess = this.underProcess;
+        if (typeof(underProcess) === 'function') {
+            underProcess(callback);
+        }
+    },
+
+    /**
+     * [__afterFail 上传失败后的回调函数]
+     * @Author   lychee
+     * @DateTime 2018-05-24
+     * @version  1.0
+     * @return   {[type]}   [description]
+     */
+    __afterFail: function(callback) {
+        var afterFail = this.afterFail;
+        if (typeof(afterFail) === 'function') {
+            afterFail(callback);
+        }
+    },
+
     /**
      * [__afterSuccess 上传成功后的回调函数]
-     * @Author   王文凡
-     * @DateTime 2017-09-27
+     * @Author   lychee
+     * @DateTime 2018-05-24
      * @version  1.0
      * @return   {[type]}   [description]
      */
@@ -289,6 +382,7 @@ $(function() {
     // 选择文件-显示文件信息
     $(UP.__input.param.myFile).change(function(e) {
         UP.__show(this);
+        UP.__beforeUpload();
     });
 
     // 全部上传操作

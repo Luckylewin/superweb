@@ -7,6 +7,7 @@ use Yii;
 use common\models\Vodlink;
 use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
+use yii\web\Response;
 
 /**
  * LinkController implements the CRUD actions for Vodlink model.
@@ -134,5 +135,16 @@ class LinkController extends BaseController
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionBatchDelete()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $id = Yii::$app->request->post('id');
+        Vodlink::deleteAll(['in', 'id', $id]);
+        $this->setFlash('info', '删除成功');
+        return [
+            'status'=>0
+        ];
     }
 }
