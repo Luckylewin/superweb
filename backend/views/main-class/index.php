@@ -34,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
             [
                     'attribute' => 'icon',
-                    'options' => ['style' => 'width:100px;'],
+                    'options' => ['style' => 'width:40px;'],
                     'format' => ['image',['width'=>'100']],
                     'value' => function($model) {
                         if (strpos($model->icon, '/') !== false) {
