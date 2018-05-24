@@ -207,8 +207,16 @@ $this->params['breadcrumbs'][] = $this->title;
    
      $('.ajax-td').click(function() {
             var td = $('.ajax-td');
-          
-            $(this).find('.input').show().focus().select();
+            var index = $(this).index();
+           
+             $.each(td, function(){
+                 if ($(this).index() !== index) {
+                     $(this).find('.input').hide();
+                     $(this).find('.text').show(); 
+                 }
+                
+          })
+            $(this).find('.input').show();
             $(this).find('.text').hide(); 
      });
 
