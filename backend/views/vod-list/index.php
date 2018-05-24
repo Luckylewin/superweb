@@ -11,12 +11,6 @@ $this->title = '点播分类列表';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
-<style>
-    td img{
-        width: 70px;
-    }
-</style>
-
 <div class="vod-list-index">
 
     <p>
@@ -33,7 +27,8 @@ $this->params['breadcrumbs'][] = $this->title;
             //'list_sid',
             [
                     'attribute' => 'list_icon',
-                    'format' => 'image',
+                    'format' => ['image',['width'=>70]],
+                    'options' => ['style' => 'width:100px;'],
                     'value' => 'list_icon'
             ],
             'list_name',

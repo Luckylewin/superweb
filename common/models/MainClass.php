@@ -13,7 +13,8 @@ use Yii;
  * @property string $description
  * @property string $icon 图标
  * @property string $icon_hover 图标高亮
- * @property string $icon_bg
+ * @property string $icon_bg 大图标
+ * @property string $icon_bg_hover 大图表非高亮
  * @property string $sort 排序
  */
 class MainClass extends \yii\db\ActiveRecord
@@ -33,7 +34,7 @@ class MainClass extends \yii\db\ActiveRecord
     {
         return [
             [['name', 'zh_name'], 'required'],
-            [['name', 'zh_name', 'description', 'icon', 'icon_bg','icon_hover'], 'string', 'max' => 255],
+            [['name', 'zh_name', 'description', 'icon', 'icon_bg','icon_hover', 'icon_bg', 'icon_bg_hover'], 'string', 'max' => 255],
             [['sort'], 'string', 'max' => 3],
         ];
     }
@@ -50,7 +51,8 @@ class MainClass extends \yii\db\ActiveRecord
             'description' => '简介',
             'icon' => '图标',
             'icon_hover' => '图标(高亮)',
-            'icon_bg' => 'Icon Bg',
+            'icon_bg' => '大图标',
+            'icon_bg_hover' => '大图标(高亮)',
             'sort' => '排序',
         ];
     }

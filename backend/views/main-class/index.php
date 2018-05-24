@@ -34,8 +34,8 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
             [
                     'attribute' => 'icon',
-                    'options' => ['style' => 'width:40px;'],
-                    'format' => ['image',['width'=>'100']],
+                    'options' => ['style' => 'width:100px;'],
+                    'format' => ['image',['width'=>'60']],
                     'value' => function($model) {
                         if (strpos($model->icon, '/') !== false) {
                             return Func::getAccessUrl($model->icon,600);

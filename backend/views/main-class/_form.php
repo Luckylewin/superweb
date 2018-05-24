@@ -93,6 +93,74 @@ use yii\widgets\ActiveForm;
         ]); ?>
     </div>
 
+    <div class="col-md-6">
+        <?= $form->field($model, 'icon_bg')->textInput(['maxlength' => true]) ?>
+
+        <?=  \dosamigos\fileupload\FileUploadUI::widget([
+            'model' => new \backend\models\UploadForm(),
+            'attribute' => 'image_big',
+            'url' => ['upload/image-upload','field' => 'image_big'],
+            'gallery' => false,
+
+            'fieldOptions' => [
+                'accept' => 'image/*'
+            ],
+
+            'clientOptions' => [
+                'maxFileSize' => 2000000
+            ],
+
+            // ...
+            'clientEvents' => [
+                'fileuploaddone' => 'function(e, data) {
+                                console.log(e);
+                                console.log(data);
+                                var files = data.result.files[0];
+                              
+                                $("#mainclass-icon_bg").val(files.path);
+                            }',
+                'fileuploadfail' => 'function(e, data) {
+                                console.log(e);
+                                console.log(data);
+                            }',
+            ],
+        ]); ?>
+    </div>
+
+    <div class="col-md-6">
+        <?= $form->field($model, 'icon_bg_hover')->textInput(['maxlength' => true]) ?>
+
+        <?=  \dosamigos\fileupload\FileUploadUI::widget([
+            'model' => new \backend\models\UploadForm(),
+            'attribute' => 'image_big_hover',
+            'url' => ['upload/image-upload','field' => 'image_big_hover'],
+            'gallery' => false,
+
+            'fieldOptions' => [
+                'accept' => 'image/*'
+            ],
+
+            'clientOptions' => [
+                'maxFileSize' => 2000000
+            ],
+
+            // ...
+            'clientEvents' => [
+                'fileuploaddone' => 'function(e, data) {
+                                console.log(e);
+                                console.log(data);
+                                var files = data.result.files[0];
+                              
+                                $("#mainclass-icon_bg_hover").val(files.path);
+                            }',
+                'fileuploadfail' => 'function(e, data) {
+                                console.log(e);
+                                console.log(data);
+                            }',
+            ],
+        ]); ?>
+    </div>
+
     <div class="col-md-12">
         <?= $form->field($model, 'description')->textarea(['rows' => 6]) ?>
         <?= $form->field($model, 'sort')->textInput(['maxlength' => true]) ?>
