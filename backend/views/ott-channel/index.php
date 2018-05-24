@@ -52,6 +52,7 @@ $this->params['breadcrumbs'][] = $this->title;
             //'sub_class_id',
             [
                 'attribute' => 'name',
+                'contentOptions' => ['class' => 'ajax-td'],
                 'options' => ['style' => 'min-width:120px;'],
                 'format' => 'raw',
                 'value' => function($model) {
@@ -66,6 +67,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'zh_name',
+                'contentOptions' => ['class' => 'ajax-td'],
                 'options' => ['style' => 'min-width:120px;'],
                 'format' => 'raw',
                 'value' => function($model) {
@@ -81,12 +83,13 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'attribute' => 'keywords',
+                'contentOptions' => ['class' => 'ajax-td'],
                 'options' => ['style' => 'min-width:120px;'],
                 'format' => 'raw',
                 'value' => function($model) {
                     $str =  Html::textInput('sort', $model->keywords, [
                         'class' => 'form-control ajax-update',
-                        'field' => 'zh_name',
+                        'field' => 'keywords',
                         'data-id' => $model->id,
                         'old-value' => $model->keywords
                     ]);
@@ -95,18 +98,21 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'sort',
+                'contentOptions' => ['class' => 'ajax-td'],
                 'options' => ['style' => 'width:70px;'],
                 'format' => 'raw',
                 'value' => function($model) {
                     return \yii\bootstrap\Html::textInput('sort', $model->sort, [
-                        'class' => 'form-control change-sort ajax-update',
+                        'class' => 'form-control ajax-update',
                         'data-id' => $model->id,
+                        'field' => 'sort',
                         'old-value' => $model->sort
                     ]);
                 }
             ],
             [
                 'attribute' => 'use_flag',
+                'contentOptions' => ['class' => 'ajax-td'],
                 'format' => 'raw',
                 'value' => function($model) {
                     $icon =  $model->use_flag ? '<i style="color: #23c6c8;font-size: large" class="glyphicon glyphicon-ok-circle"></i>' : '<i style="color: #953b39;font-size: large" class="glyphicon glyphicon-remove-circle"></i>';
@@ -177,7 +183,7 @@ $this->params['breadcrumbs'][] = $this->title;
        }
    };   
 
-   $('.ajax-update').blur(function(){
+   $('.ajax-update').change(function(){
         var newValue = $(this).val();
         var oldValue = $(this).attr('value');
         var field = $(this).attr('field');
@@ -186,20 +192,26 @@ $this->params['breadcrumbs'][] = $this->title;
         var updateChannelUrl = '{$updateChannelUrl}' + id;
        
         if (newValue === oldValue) {
-            commonJS.callback($(this), oldValue);
             return false;
         }
         
+      var that = $(this);
         $.post(updateChannelUrl, {field:field,value:newValue,_csrf:'{$csrfToken}'}, function(data){
-              if (field.indexOf(['use_flag','sort'])) window.location.reload();
+               if(field == 'sort' || field == 'use_flag') {
+                   window.location.reload();
+                   return false;
+               }
+               commonJS.callback(that, newValue);
         })
-        commonJS.callback($(this), newValue);
     });
    
-    $('td').click(function(){
+     $('.ajax-td').click(function() {
+            var td = $('.ajax-td');
+          
             $(this).find('.input').show().focus().select();
             $(this).find('.text').hide(); 
-    });
+     });
+
    
 JS;
 

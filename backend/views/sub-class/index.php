@@ -52,6 +52,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'attribute' => 'name',
+                'contentOptions' => [
+                        'class' => 'ajax-td'
+                ],
                 'options' => ['style' => 'width:200px;'],
                 'format' => 'raw',
                 'value' => function($model) {
@@ -66,6 +69,9 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'zh_name',
+                'contentOptions' => [
+                    'class' => 'ajax-td'
+                ],
                 'options' => ['style' => 'width:200px;'],
                 'format' => 'raw',
                 'value' => function($model) {
@@ -80,6 +86,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'sort',
+                'contentOptions' => [ 'class' => 'ajax-td'],
                 'options' => ['style' => 'width:70px;'],
                 'format' => 'raw',
                 'value' => function($model) {
@@ -93,6 +100,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'use_flag',
+                'contentOptions' => ['class' => 'ajax-td'],
                 'format' => 'raw',
                 'value' => function($model) {
                     $icon =  $model->use_flag ? '<i style="color: #23c6c8;font-size: large" class="glyphicon glyphicon-ok-circle"></i>' : '<i style="color: #953b39;font-size: large" class="glyphicon glyphicon-remove-circle"></i>';
@@ -226,15 +234,20 @@ $this->registerJs($js);
     $requestJs=<<<JS
     
     var commonJS = {
-       'callback':function(obj,value) {
+       'callback':function(obj,value=false) {
            var inp = obj.parent();
            var td = inp.parent();
-           td.find('.text').text(value).show();
+           if (value) {
+               td.find('.text').text(value).show();
+           } else {
+               td.find('.text').show();
+           }
            inp.hide();  
        }
    };   
     
-    $('.ajax-update').blur(function(){
+    $('.ajax-update').change(function(event){
+         
         var newValue = $(this).val();
         var oldValue = $(this).attr('value');
         var field = $(this).attr('field');
@@ -243,23 +256,27 @@ $this->registerJs($js);
         var url = '{$updateUrl}' + id;
        
         if (newValue === oldValue) {
-            commonJS.callback($(this), oldValue);
             return false;
         }
-        
+        var that = $(this);
         $.post(url, {field:field,value:newValue,_csrf:'{$csrfToken}'}, function(data){
-              if (field.indexOf(['sort', 'use_flag'])) window.location.reload();
+               if(field == 'sort' || field == 'use_flag') {
+                   window.location.reload();
+                   return false;
+               }
+               commonJS.callback(that, newValue);
         })
         
-        commonJS.callback($(this), newValue); 
-    });
+    })
 
-     $('td').click(function(){
+     $('.ajax-td').click(function() {
+            var td = $('.ajax-td');
+            
             $(this).find('.input').show().focus().select();
-            $(this).find('.text').attr("opc","hidden").hide(); 
-          
-        })
-
+            $(this).find('.text').hide(); 
+        
+     });
+    
 JS;
 
     $this->registerJs($requestJs);

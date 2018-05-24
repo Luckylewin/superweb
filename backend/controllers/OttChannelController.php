@@ -101,7 +101,7 @@ class OttChannelController extends BaseController
         if (Yii::$app->request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
             $field = Yii::$app->request->post('field');
-            if (in_array($field, ['sort','zh_name', 'name', 'use_flag'])) {
+            if (in_array($field, ['sort','zh_name', 'name', 'use_flag','keywords'])) {
                 $model->$field = Yii::$app->request->post('value');
                 $model->save(false);
             }
