@@ -50,17 +50,32 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             ['class' => 'yii\grid\SerialColumn'],
 
-            'name',
             [
-                'attribute' => 'zh_name',
-                'options' => ['style' => 'width:120px;'],
+                'attribute' => 'name',
+                'options' => ['style' => 'width:200px;'],
                 'format' => 'raw',
                 'value' => function($model) {
-                    return Html::textInput('sort', $model->zh_name, [
-                        'class' => 'form-control change',
+                    $str =  Html::textInput('name', $model->name, [
+                        'class' => 'form-control ajax-update',
+                        'field' => 'name',
+                        'data-id' => $model->id,
+                        'old-value' => $model->name
+                    ]);
+                    return $str = "<div class='text'>{$model->name}</div>" . "<div class='input' style='display: none'>$str</div>";
+                }
+            ],
+            [
+                'attribute' => 'zh_name',
+                'options' => ['style' => 'width:200px;'],
+                'format' => 'raw',
+                'value' => function($model) {
+                    $str =  Html::textInput('sort', $model->zh_name, [
+                        'class' => 'form-control ajax-update',
+                        'field' => 'zh_name',
                         'data-id' => $model->id,
                         'old-value' => $model->zh_name
                     ]);
+                    return $str = "<div class='text'>{$model->zh_name}</div>" . "<div class='input' style='display: none'>$str</div>";
                 }
             ],
             [
@@ -69,7 +84,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'value' => function($model) {
                     return Html::textInput('sort', $model->sort, [
-                            'class' => 'form-control change-sort',
+                            'class' => 'form-control ajax-update',
+                            'field' => 'sort',
                             'data-id' => $model->id,
                             'old-value' => $model->sort
                     ]);
@@ -79,7 +95,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'use_flag',
                 'format' => 'raw',
                 'value' => function($model) {
-                    return $model->use_flag ? '<i style="color: #23c6c8;font-size: large" class="glyphicon glyphicon-ok-circle"><i>' : '<i style="color: #953b39;font-size: large" class="glyphicon glyphicon-remove-circle"></i>';
+                    $icon =  $model->use_flag ? '<i style="color: #23c6c8;font-size: large" class="glyphicon glyphicon-ok-circle"></i>' : '<i style="color: #953b39;font-size: large" class="glyphicon glyphicon-remove-circle"></i>';
+                    $dropDownList = Html::dropDownList('use_flag', $model->use_flag, ['不可用','可用'] , [
+                        'class' => 'form-control ajax-update',
+                        'field' => 'use_flag',
+                        'data-id' => $model->id,
+                        'old-value' => $model->use_flag,
+                        'style' => 'width:120px;margin:0 auto;'
+                    ]);
+                    return $str = "<div class='text'>{$icon}</div>" . "<div class='input' style='display: none'>{$dropDownList}</div>";
                 }
             ],
             [
@@ -98,6 +122,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
         ],
     ]); ?>
+
 
 <div>
 
@@ -174,7 +199,9 @@ JS;
                 }
             )
         })
+        
 JS;
+
 
 $this->registerJs($js);
 ?>
@@ -197,19 +224,41 @@ $this->registerJs($js);
     $csrfToken = Yii::$app->request->csrfToken;
 
     $requestJs=<<<JS
-    $('.change-sort').blur(function(){
+    
+    var commonJS = {
+       'callback':function(obj,value) {
+           var inp = obj.parent();
+           var td = inp.parent();
+           td.find('.text').text(value).show();
+           inp.hide();  
+       }
+   };   
+    
+    $('.ajax-update').blur(function(){
         var newValue = $(this).val();
         var oldValue = $(this).attr('value');
-    
+        var field = $(this).attr('field');
+        
         var id = $(this).attr('data-id');
         var url = '{$updateUrl}' + id;
        
-        if (newValue === oldValue) return false;
+        if (newValue === oldValue) {
+            commonJS.callback($(this), oldValue);
+            return false;
+        }
         
-        $.post(url, {sort:newValue,_csrf:'{$csrfToken}'}, function(data){
-              window.location.reload();
+        $.post(url, {field:field,value:newValue,_csrf:'{$csrfToken}'}, function(data){
+              if (field.indexOf(['sort', 'use_flag'])) window.location.reload();
         })
+        
+        commonJS.callback($(this), newValue); 
     });
+
+     $('td').click(function(){
+            $(this).find('.input').show().focus().select();
+            $(this).find('.text').attr("opc","hidden").hide(); 
+          
+        })
 
 JS;
 

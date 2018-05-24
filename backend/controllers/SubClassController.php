@@ -110,9 +110,9 @@ class SubClassController extends BaseController
 
         if (Yii::$app->request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
-            $field = Yii::$app->request->get('field');
-            if ($field == 'sort') {
-                $model->sort = Yii::$app->request->post('sort');
+            $field = Yii::$app->request->post('field');
+            if (in_array($field, ['sort','zh_name', 'name', 'use_flag'])) {
+                $model->$field = Yii::$app->request->post('value');
                 $model->save(false);
             }
             return [

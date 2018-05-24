@@ -100,16 +100,15 @@ class OttChannelController extends BaseController
 
         if (Yii::$app->request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
-            $field = Yii::$app->request->get('field');
-            if ($field == 'sort') {
-                $model->sort = Yii::$app->request->post('sort');
+            $field = Yii::$app->request->post('field');
+            if (in_array($field, ['sort','zh_name', 'name', 'use_flag'])) {
+                $model->$field = Yii::$app->request->post('value');
                 $model->save(false);
             }
             return [
                 'status' => 0
             ];
         }
-
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $this->setFlash('info', '修改成功');
             return $this->redirect(Url::to(['ott-channel/index', 'sub-id' => $model->subClass->id]));
