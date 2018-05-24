@@ -47,7 +47,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 "name" => "id",
             ],
             ['class' => 'yii\grid\SerialColumn'],
-            //'image',
+            [
+                'attribute' => 'image',
+                'format' => ['image',['width'=>70]],
+                'options' => ['style' => 'width:100px;'],
+                'value' => function($model) {
+                    return \common\components\Func::getAccessUrl($model->image);
+                }
+            ],
             //'id',
             //'sub_class_id',
             [
