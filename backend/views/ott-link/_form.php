@@ -2,40 +2,55 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-
+use \yii\helpers\ArrayHelper;
 /* @var $this yii\web\View */
 /* @var $model common\models\OttLink */
 /* @var $form yii\widgets\ActiveForm */
+
+
 ?>
 
-<div class="ott-link-form">
+    <div class="col-md-12">
+        <?php $form = ActiveForm::begin(); ?>
 
-    <?php $form = ActiveForm::begin(); ?>
+        <?php if($model->isNewRecord): ?>
+        <?= $form->field($model, 'channel_id')->hiddenInput()->label(false); ?>
+        <?php endif; ?>
 
-    <?= $form->field($model, 'channel_id')->textInput() ?>
 
-    <?= $form->field($model, 'link')->textarea(['rows' => 6]) ?>
+        <div class="col-md-4">
+            <?= $form->field($model, 'source')->textInput(['value' => 'default']) ?>
+        </div>
 
-    <?= $form->field($model, 'source')->textInput(['maxlength' => true]) ?>
+        <div class="col-md-4">
+            <?= $form->field($model, 'sort')->textInput(['value' => 0]) ?>
+        </div>
 
-    <?= $form->field($model, 'sort')->textInput() ?>
+        <div class="col-md-4">
+            <?= $form->field($model, 'script_deal')->dropDownList(['关','开'], ['value'=>0]) ?>
+        </div>
 
-    <?= $form->field($model, 'use_flag')->textInput(['maxlength' => true]) ?>
+        <div class="col-md-4">
+            <?= $form->field($model, 'definition')->textInput(['value' => 0]) ?>
+        </div>
 
-    <?= $form->field($model, 'format')->textInput() ?>
+        <div class="col-md-4">
+            <?= $form->field($model, 'method')->textInput(['value' => 'null']) ?>
+        </div>
 
-    <?= $form->field($model, 'script_deal')->textInput(['maxlength' => true]) ?>
+        <div class="col-md-4">
+            <?= $form->field($model, 'decode')->dropDownList(['软解', '硬解']) ?>
+        </div>
 
-    <?= $form->field($model, 'definition')->textInput(['maxlength' => true]) ?>
+        <div class="col-md-12">
 
-    <?= $form->field($model, 'method')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'scheme_id')->checkboxList($schemes); ?>
+            <?= $form->field($model, 'link')->textInput(['rows' => 6]) ?>
+            <div class="form-group">
+                <?= Html::submitButton('保存', ['class' => 'btn btn-success']) ?>
+            </div>
+        </div>
 
-    <?= $form->field($model, 'decode')->textInput(['maxlength' => true]) ?>
-
-    <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?php ActiveForm::end(); ?>
     </div>
 
-    <?php ActiveForm::end(); ?>
-
-</div>

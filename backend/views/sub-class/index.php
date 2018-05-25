@@ -23,8 +23,6 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="sub-class-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
     <p>
         <?= Html::a('添加分类', '#', [
                 'class' => 'btn btn-success',
@@ -32,23 +30,19 @@ $this->params['breadcrumbs'][] = $this->title;
                 'data-target' => '#create-modal',
                 'id' => 'create'
         ]) ?>
-
-
-
     </p>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
-        'tableOptions' => [
-            'class' => 'table table-bordered table-hover'
-        ],
+        'tableOptions' => [ 'class' => 'table table-bordered table-hover' ],
         "options" => ["class" => "grid-view","style"=>"overflow:auto", "id" => "grid"],
         'columns' => [
             [
                 "class" => "yii\grid\CheckboxColumn",
                 "name" => "id",
             ],
+
             ['class' => 'yii\grid\SerialColumn'],
 
             [
@@ -68,6 +62,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $str = "<div class='text'>{$model->name}</div>" . "<div class='input' style='display: none'>$str</div>";
                 }
             ],
+
             [
                 'attribute' => 'zh_name',
                 'contentOptions' => [
@@ -85,6 +80,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $str = "<div class='text'>{$model->zh_name}</div>" . "<div class='input' style='display: none'>$str</div>";
                 }
             ],
+
             [
                 'attribute' => 'sort',
                 'contentOptions' => [ 'class' => 'ajax-td'],
@@ -99,6 +95,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]);
                 }
             ],
+
             [
                 'attribute' => 'use_flag',
                 'contentOptions' => ['class' => 'ajax-td'],
@@ -115,6 +112,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $str = "<div class='text'>{$icon}</div>" . "<div class='input' style='display: none'>{$dropDownList}</div>";
                 }
             ],
+
             [
                     'header' => '操作',
                     'class' => 'common\grid\MyActionColumn',
@@ -148,36 +146,16 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= Html::a('重新排列频道号', ['sub-class/reset-number','main_class_id' => $mainClass->id], ['class' => 'btn btn-primary']) ?>
 
+    <?= Html::a('批量导入', Url::to(['sub-class/import-via-text', 'mode' => 'keywordChannel']), ['class' => 'btn btn-info'])  ?>
 
-    <?= Html::a('批量导入', Url::to(['sub-class/import-via-text', 'mode' => 'keywordChannel']), [
-        'class' => 'btn btn-info'
-    ])  ?>
-
-    <?= Html::button("批量删除",[
-        'class' => 'gridview btn btn-danger',
-    ]) ?>
+    <?= Html::button("批量删除",['class' => 'gridview btn btn-danger']) ?>
 
     <?= Html::a('返回上一级', Url::to(['main-class/index']), ['class' => 'btn btn-default']) ?>
 
 </div>
-
-    <?php
-    $batchDelete = Url::to(['sub-class/batch-delete']);
-
-    $requestJs=<<<JS
-    $(document).on("click", ".gridview", function () {
-                var keys = $("#grid").yiiGridView("getSelectedRows");
-                var url = '{$batchDelete}' + '&id=' + keys.join(',');
-                window.location.href = url;
-            });
-JS;
-
-    $this->registerJs($requestJs);
-    ?>
-
+</div>
 
 <?php
-
     Modal::begin([
         'id' => 'create-modal',
         'header' => '<h4 class="modal-title">创建二级分类</h4>',
@@ -195,101 +173,82 @@ JS;
     echo "<h4><i class='fa fa-spinner fa-pulse'> </i> 生成缓存中</h4>";
 
     Modal::end();
-
-    ?>
-
-<?php
-    $requestUrl = Url::toRoute(['sub-class/create', 'main_id' => $mainClass->id]);
-    $js = <<<JS
-        $(document).on('click', '#create', function() {
-            $.get('{$requestUrl}', {},
-                function (data) {
-                    $('.modal-body').html(data);
-                }
-            )
-        })
-        
-JS;
-
-
-$this->registerJs($js);
 ?>
 
-<?php \common\widgets\Jsblock::begin() ?>
-    <script>
+<?php
+$batchDelete = Url::to(['sub-class/batch-delete']);
+$requestUrl = Url::toRoute(['sub-class/create', 'main_id' => $mainClass->id]);
+$updateUrl = Url::to(['sub-class/update', 'field' => 'sort', 'id'=>'']);
+$csrfToken = Yii::$app->request->csrfToken;
+
+$requestJs=<<<JS
+        $(document).on("click", ".gridview", function () {
+                    var keys = $("#grid").yiiGridView("getSelectedRows");
+                    window.location.href = '{$batchDelete}' + '&id=' + keys.join(',');
+        });
+        $(document).on('click', '#create', function() {
+                $.get('{$requestUrl}', {},
+                    function (data) {
+                        $('.modal-body').html(data);
+                    }
+                )
+            })
+         var commonJS = {
+               'callback':function(obj,value=false) {
+                   var inp = obj.parent();
+                   var td = inp.parent();
+                   if (value) {
+                       td.find('.text').text(value).show();
+                   } else {
+                       td.find('.text').show();
+                   }
+                   inp.hide();  
+               }
+           };   
+    
+        $('.ajax-update').change(function(event){
+            var that = $(this); 
+            var newValue = $(this).val();
+            var oldValue = $(this).attr('value');
+            var field = $(this).attr('field');
+            
+            var id = $(this).attr('data-id');
+            var url = '{$updateUrl}' + id;
+           
+            if (newValue === oldValue)  return false;
+            
+            $.post(url, {field:field,value:newValue,_csrf:'{$csrfToken}'}, function(data){
+                   if(field == 'sort' || field == 'use_flag') {
+                       window.location.reload();
+                   } else {
+                       commonJS.callback(that, newValue);
+                   }
+            });
+            
+        });
+    
+         $('.ajax-td').click(function() {
+                var td = $('.ajax-td');
+                var index = $(this).index();
+                $.each(td, function(){
+                     if ($(this).index() !== index) {
+                         $(this).find('.input').hide();
+                         $(this).find('.text').show(); 
+                     }
+                    
+                });
+                $(this).find('.input').show();
+                $(this).find('.text').hide(); 
+         });    
+        
         $('#cache-btn').click(function() {
             var link = $(this).attr('url');
             setTimeout(function(){
                 window.location.href = link;
             }, 500);
         });
-    </script>
-<?php \common\widgets\Jsblock::end() ?>
-
-
-<?php
-
-    $updateUrl = Url::to(['sub-class/update', 'field' => 'sort', 'id'=>'']);
-    $csrfToken = Yii::$app->request->csrfToken;
-
-    $requestJs=<<<JS
-    
-    var commonJS = {
-       'callback':function(obj,value=false) {
-           var inp = obj.parent();
-           var td = inp.parent();
-           if (value) {
-               td.find('.text').text(value).show();
-           } else {
-               td.find('.text').show();
-           }
-           inp.hide();  
-       }
-   };   
-    
-    $('.ajax-update').change(function(event){
-         
-        var newValue = $(this).val();
-        var oldValue = $(this).attr('value');
-        var field = $(this).attr('field');
         
-        var id = $(this).attr('data-id');
-        var url = '{$updateUrl}' + id;
-       
-        if (newValue === oldValue) {
-            return false;
-        }
-        var that = $(this);
-        $.post(url, {field:field,value:newValue,_csrf:'{$csrfToken}'}, function(data){
-               if(field == 'sort' || field == 'use_flag') {
-                   window.location.reload();
-                   return false;
-               }
-               commonJS.callback(that, newValue);
-        })
-        
-    })
-
-     $('.ajax-td').click(function() {
-            var td = $('.ajax-td');
-            var index = $(this).index();
-           
-             $.each(td, function(){
-                 if ($(this).index() !== index) {
-                     $(this).find('.input').hide();
-                     $(this).find('.text').show(); 
-                 }
-                
-          })
-            $(this).find('.input').show();
-            $(this).find('.text').hide(); 
-     });
-    
 JS;
 
-    $this->registerJs($requestJs);
-
+$this->registerJs($requestJs);
 ?>
-
-
-</div>

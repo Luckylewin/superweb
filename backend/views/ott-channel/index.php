@@ -15,12 +15,9 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <style>
-    .grid-view td{
+    .grid-view td {
         text-align: center;
-        vertical-align:middle!important;
-    }
-    .modal-lg {
-        width: 100%;
+        vertical-align: middle !important;
     }
 </style>
 
@@ -46,7 +43,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 "class" => "yii\grid\CheckboxColumn",
                 "name" => "id",
             ],
+
             ['class' => 'yii\grid\SerialColumn'],
+
             [
                 'attribute' => 'image',
                 'format' => ['image',['width'=>70]],
@@ -162,18 +161,144 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <?= Html::a('重新排列频道号', ['sub-class/reset-number','main_class_id' => $mainClass->id], ['class' => 'btn btn-primary']) ?>
 
-<?= Html::button("批量删除",[
-    'class' => 'gridview btn btn-danger',
-]) ?>
+<?= Html::button("批量删除",['class' => 'gridview btn btn-danger']) ?>
 
 <?= Html::a('返回上一级', Url::to(['sub-class/index', 'main-id' => $mainClass->id]), ['class' => 'btn btn-default']) ?>
 
-<?php
-    $batchDelete = Url::to(['ott-channel/batch-delete']);
-    $updateChannelUrl = Url::to(['ott-channel/update', 'id'=>'']);
-    $csrfToken = Yii::$app->request->csrfToken;
+</div>
 
-    $requestJs=<<<JS
+<!--链接modal部分 开始-->
+<?php
+
+Modal::begin([
+         'id' => 'links-modal',
+          'size' => Modal::SIZE_LARGE,
+          'header' => '<h4 class="modal-title">链接</h4>',
+          'footer' => '<a href="#" class="btn btn-info create-link" data-id="0">新增链接</a>&nbsp;<a href="#" class="btn btn-default" data-dismiss="modal">关闭</a>',
+]);
+
+
+$schemeUrl = Url::to(['api/scheme']);
+$requestUrl = Url::to(['ott-link/index']);
+$switchUrl = Url::to(['ott-link/update', 'field'=>'use_flag']);
+$updateUrl = Url::to(['ott-link/update', 'field'=>'scheme_id', 'id' => '']);
+$delLinkUrl = Url::to(['ott-link/delete']);
+$createLinkUrl = Url::to(['ott-link/create']);
+$updateLinkUrl = Url::to(['ott-link/update']);
+
+$requestJs=<<<JS
+    $('.load-link').click(function(){
+        $('.modal-lg').css('width','99%');
+        $('.modal-body').css('min-height','100px'); 
+        $('.create-link').attr('data-id', $(this).attr('data-id'));
+        
+        $.getJSON('{$requestUrl}', {channel_id:$(this).attr('data-id')}, function(data) {
+            var table = '<table class="table table-bordered"><thead><tr><th>方案</th><th>来源</th><th width="120px">链接</th><th>算法</th><th width="50px">解码</th><th width="60px">清晰度</th><th width="70px">状态</th><th style="width:250px;">操作</th></tr></thead><tbody>';
+            var tr = '';
+            
+            $.each(data,function(){
+                    tr += '<tr link-id="' +  $(this).attr('id')  + '">';
+                    tr += '<td>' + $(this).attr('schemeText') + '</td>';
+                    tr += '<td>' + $(this).attr('source') + '</td>';
+                    tr += '<td>' + $(this).attr('link') + '</td>';
+                    tr += '<td>' + $(this).attr('method') + '</td>';
+                    tr += '<td>' + ($(this).attr('decode') === '0' ? '软解':'硬解') + '</td>';
+                    tr += '<td>' + $(this).attr('definition') + '</td>';
+                    tr += '<td class="use-flag">' + ($(this).attr('use_flag_text')) + '</td>';
+                    tr += '<td><button class="btn btn-info btn-xs change-scheme" scheme-id=' + $(this).attr('scheme_id') + ' data-id='+ $(this).attr('id') +'>修改方案</button>&nbsp;<button class="btn btn-primary btn-xs use-switch">可用开关</button>&nbsp;&nbsp;<button class="btn btn-warning btn-xs link-edit">编辑</button>&nbsp;<button class="btn btn-danger btn-xs link-del">删除</button></td></tr>';
+            });
+                
+            table += tr;
+            table += '</tbody></table>';
+            $('.modal-body').html(table)
+            
+        });
+    });
+        
+    $('body').on('click', '.use-switch' ,function(){
+        var tr = $(this).parent().parent();
+        var link_id = tr.attr('link-id');
+        $.getJSON('{$switchUrl}', {id:link_id}, function(back) {
+             $(tr).find('.use-flag').html(back.msg);
+        });
+        
+    }).on('click', '.link-del',function(){
+         var tr = $(this).parent().parent();
+         var link_id = tr.attr('link-id');
+         $.getJSON('{$delLinkUrl}', {id:link_id}, function(back) {
+             tr.css('background','#ccc').slideUp(200);
+        });
+    }).on('click', '.change-scheme', function() {
+       
+        var link_id = $(this).attr('data-id');
+        var scheme_id = $(this).attr('scheme-id');
+        var schemeArr = scheme_id.split(',');
+        
+        var text = "";
+        $.getJSON('{$schemeUrl}', {}, function(data){
+            text += "<div class='well' id='mywell'>";
+            $.each(data, function() {
+                if (schemeArr.indexOf($(this).attr('id')) >= 0 || schemeArr == 'all') {
+                    text += "<label><input type='checkbox' checked=checked value='" + $(this).attr('id') +"'>"+ $(this).attr('schemeName') +"</label>";
+                } else {
+                    text += "<label><input type='checkbox' value='" + $(this).attr('id') +"'>"+ $(this).attr('schemeName') +"</label>";
+                }
+                
+            })
+           
+            text += '</div><br><div><button class="btn btn btn-info scheme-submit" data-id="' + link_id +'">修改</button></div>';
+            $('.modal-body').html(text);
+        })
+      
+    }).on('click', '.scheme-submit', function() {
+        
+       var chk_value = []; 
+       var link_id = $(this).attr('data-id');
+       var checkbox = $('#mywell').find('input[type=checkbox]:checked');
+       $.each(checkbox, function() {
+            chk_value.push($(this).val());   
+       });
+       
+       $.post('{$updateUrl}' + link_id, {scheme:chk_value}, function(back){
+            $('.modal-body').html("<h3><i style='color:green' class='glyphicon glyphicon-ok-circle'>修改成功</i></h3>");
+            setTimeout(function(){
+                $('#links-modal').modal('hide');
+            },1500);
+       
+       })
+       
+    }).on('click','.create-link', function() {
+        var channel_id = $(this).attr('data-id');
+        $.get('{$createLinkUrl}',{id:channel_id}, function(form) {
+            $('.modal-lg').css('width','70%');
+            $('.modal-body').html(form).css('min-height','370px'); 
+        });
+        
+    }).on('click','.link-edit', function() {
+         var tr = $(this).parent().parent();
+         var link_id = tr.attr('link-id');
+         $.get('{$updateLinkUrl}',{id:link_id,modal:'modal'}, function(form) {
+            $('.modal-lg').css('width','70%');
+            $('.modal-body').html(form).css('min-height','370px'); 
+        });
+    });
+
+
+JS;
+
+$this->registerJs($requestJs);
+
+Modal::end()
+
+?>
+<!--链接modal部分 结束-->
+
+<?php
+$batchDelete = Url::to(['ott-channel/batch-delete']);
+$updateChannelUrl = Url::to(['ott-channel/update', 'id'=>'']);
+$csrfToken = Yii::$app->request->csrfToken;
+
+$requestJs=<<<JS
     
     $(document).on("click", ".gridview", function () {
                 var keys = $("#grid").yiiGridView("getSelectedRows");
@@ -230,117 +355,8 @@ $this->params['breadcrumbs'][] = $this->title;
    
 JS;
 
-    $this->registerJs($requestJs);
-?>
-</div>
-
-<!--链接modal部分 开始-->
-<?php
-
-Modal::begin([
-         'id' => 'links-modal',
-          'size' => Modal::SIZE_LARGE,
-          'header' => '<h4 class="modal-title">链接</h4>',
-          'footer' => '<a href="#" class="btn btn-default" data-dismiss="modal">关闭</a>',
-]);
-
-$requestUrl = Url::to(['ott-link/index']);
-$switchUrl = Url::to(['ott-link/update', 'field'=>'use_flag']);
-$schemeUrl = Url::to(['api/scheme']);
-$updateUrl = Url::to(['ott-link/update', 'field'=>'scheme_id', 'id' => '']);
-$delLinkUrl = Url::to(['ott-link/delete']);
-
-$requestJs=<<<JS
-    $('.load-link').click(function(){
-        $.getJSON('{$requestUrl}', {channel_id:$(this).attr('data-id')}, function(data) {
-            var table = '<table class="table table-bordered"><thead><tr><th>方案</th><th>来源</th><th width="120px">链接</th><th>算法</th><th width="50px">解码</th><th width="60px">清晰度</th><th width="70px">状态</th><th style="width:300px;">操作</th></tr></thead><tbody>';
-            var tr = '';
-            
-            $.each(data,function(){
-                console.log($(this));
-                    tr += '<tr link-id="' +  $(this).attr('id')  + '">';
-                    tr += '<td>' + $(this).attr('schemeText') + '</td>';
-                    tr += '<td>' + $(this).attr('source') + '</td>';
-                    tr += '<td>' + $(this).attr('link') + '</td>';
-                    tr += '<td>' + $(this).attr('method') + '</td>';
-                    tr += '<td>' + $(this).attr('decode') + '</td>';
-                    tr += '<td>' + $(this).attr('definition') + '</td>';
-                    tr += '<td class="use-flag">' + ($(this).attr('use_flag_text')) + '</td>';
-                    tr += '<td><button class="btn btn-info btn-xs change-scheme" scheme-id=' + $(this).attr('scheme_id') + ' data-id='+ $(this).attr('id') +'>修改方案</button>&nbsp;<button class="btn btn-info btn-xs disabled">脚本开关</button>&nbsp;<button class="btn btn-primary btn-xs use-switch">可用开关</button>&nbsp;&nbsp;<button class="btn btn-danger btn-xs link-del">删除</btn></td></tr>';
-            });
-                
-            table += tr;
-            table += '</tbody></table>';
-            $('.modal-body').html(table)
-            
-        })
-    })
-        
-   
-    $('body').on('click', '.use-switch' ,function(){
-        var tr = $(this).parent().parent();
-        var link_id = tr.attr('link-id');
-        $.getJSON('{$switchUrl}', {id:link_id}, function(back) {
-             $(tr).find('.use-flag').html(back.msg);
-        });
-        
-    }).on('click', '.link-del',function(){
-         var tr = $(this).parent().parent();
-         var link_id = tr.attr('link-id');
-         $.getJSON('{$delLinkUrl}', {id:link_id}, function(back) {
-             tr.css('background','#ccc').slideUp(200);
-        });
-    }).on('click', '.change-scheme', function() {
-       
-        var link_id = $(this).attr('data-id');
-        var scheme_id = $(this).attr('scheme-id');
-        var schemeArr = scheme_id.split(',');
-        
-        var text = "";
-        $.getJSON('{$schemeUrl}', {}, function(data){
-            text += "<div class='well' id='mywell'>";
-            $.each(data, function() {
-                if (schemeArr.indexOf($(this).attr('id')) >= 0 || schemeArr == 'all') {
-                    text += "<label><input type='checkbox' checked=checked value='" + $(this).attr('id') +"'>"+ $(this).attr('schemeName') +"</label>";
-                } else {
-                    text += "<label><input type='checkbox' value='" + $(this).attr('id') +"'>"+ $(this).attr('schemeName') +"</label>";
-                }
-                
-            })
-           
-            text += '</div><br><div><button class="btn btn btn-info scheme-submit" data-id="' + link_id +'">修改</button></div>';
-            $('.modal-body').html(text);
-        })
-      
-    }).on('click', '.scheme-submit', function() {
-        
-       var chk_value = []; 
-       var link_id = $(this).attr('data-id');
-       var checkbox = $('#mywell').find('input[type=checkbox]:checked');
-       $.each(checkbox, function() {
-            chk_value.push($(this).val());   
-       });
-       
-       $.post('{$updateUrl}' + link_id, {scheme:chk_value}, function(back){
-            $('.modal-body').html("<h3><i style='color:green' class='glyphicon glyphicon-ok-circle'>修改成功</i></h3>");
-            setTimeout(function(){
-                $('#links-modal').modal('hide');
-            },1500);
-       
-       })
-       
-    });
-
-
-JS;
-
 $this->registerJs($requestJs);
-
-Modal::end()
-
 ?>
-<!--链接modal部分 结束-->
-
 
 
 

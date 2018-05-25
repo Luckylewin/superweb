@@ -12,10 +12,11 @@ $this->params['breadcrumbs'][] = 'Update';
 ?>
 <div class="ott-link-update">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+
 
     <?= $this->render('_form', [
         'model' => $model,
+        'schemes' => $schemes
     ]) ?>
 
 </div>

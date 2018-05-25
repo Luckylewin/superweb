@@ -48,13 +48,15 @@ class OttLink extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['channel_id', 'link', 'source', 'format'], 'required'],
+            [['channel_id', 'link', 'source'], 'required'],
             [['channel_id', 'sort', 'format'], 'integer'],
             [['link'], 'string'],
             [['source'], 'string', 'max' => 30],
             [['use_flag', 'script_deal', 'definition', 'decode'], 'string', 'max' => 1],
             [['method'], 'string', 'max' => 20],
-            ['use_flag', 'default', 'value' => 1]
+            [['use_flag'], 'default', 'value' => 1],
+            ['format','default', 'value' => '0'],
+            ['scheme_id', 'safe']
         ];
     }
 
@@ -96,6 +98,22 @@ class OttLink extends \yii\db\ActiveRecord
             'use_flag_text',
             'scheme_id'
         ];
+    }
+    
+    public function beforeValidate()
+    {
+        parent::beforeValidate();
+
+        if (is_array($this->scheme_id)) {
+            $count = Scheme::find()->count('id');
+            if ($count == count($this->scheme_id)) {
+                $this->scheme_id = 'all';
+            } else {
+                $this->scheme_id = implode(',', $this->scheme_id);
+            }
+
+        }
+        return true;
     }
 
     public function afterFind()

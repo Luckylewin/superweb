@@ -6,6 +6,7 @@ use backend\models\Scheme;
 use Yii;
 use common\models\OttLink;
 use common\models\search\OttLinkSearch;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
@@ -58,13 +59,22 @@ class OttLinkController extends BaseController
     public function actionCreate()
     {
         $model = new OttLink();
+        $schemes = Scheme::find()->select('id,schemeName')->all();
+        $schemes = ArrayHelper::map($schemes, 'id', 'schemeName');
+        if (Yii::$app->request->isAjax) {
+            $model->scheme_id = ArrayHelper::getColumn($schemes, 'id');
+            $model->channel_id = Yii::$app->request->get('id');
+            return $this->renderAjax('create', ['model' => $model,'schemes' => $schemes]);
+        }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            $this->setFlash('info', '添加链接成功');
+            return $this->redirect(['ott-channel/index', 'sub-id' => $model->channel->sub_class_id]);
         }
 
         return $this->render('create', [
             'model' => $model,
+            'schemes' => $schemes
         ]);
     }
 
@@ -78,6 +88,20 @@ class OttLinkController extends BaseController
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $schemesMap = Scheme::find()->select('id,schemeName')->all();
+        $schemes = ArrayHelper::map($schemesMap, 'id', 'schemeName');
+
+        if (Yii::$app->request->isAjax && Yii::$app->request->get('modal')) {
+
+            if ($model->scheme_id == 'all') {
+                $model->scheme_id = ArrayHelper::getColumn($schemesMap, 'id');
+            } else {
+                $model->scheme_id = explode(',', $model->scheme_id);
+            }
+            $model->channel_id = Yii::$app->request->get('id');
+
+            return $this->renderAjax('update', ['model' => $model,'schemes' => $schemes]);
+        }
 
         if (Yii::$app->request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
@@ -111,11 +135,13 @@ class OttLinkController extends BaseController
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            $this->setFlash('info', '修改成功');
+            return $this->redirect(['ott-channel/index', 'sub-id' => $model->channel->sub_class_id]);
         }
 
         return $this->render('update', [
             'model' => $model,
+            'schemes' => $schemes
         ]);
     }
 
