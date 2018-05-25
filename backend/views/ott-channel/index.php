@@ -48,7 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'attribute' => 'image',
-                'format' => ['image',['width'=>70]],
+                'format' => ['image',['width'=>80,'height'=>60]],
                 'options' => ['style' => 'width:100px;'],
                 'value' => function($model) {
                     return \common\components\Func::getAccessUrl($model->image);
