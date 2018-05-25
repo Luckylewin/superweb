@@ -22,6 +22,11 @@ class AppMenuController extends BaseController
     {
         $dataProvider = new ActiveDataProvider([
             'query' => AppMenu::find(),
+            'sort' => [
+                'defaultOrder' => [
+                    'sort' => SORT_ASC
+                ]
+            ]
         ]);
 
         return $this->render('index', [
