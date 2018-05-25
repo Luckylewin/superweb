@@ -65,12 +65,17 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                     'class' => 'common\grid\MyActionColumn',
-                    'template' => '{vods} {view} {update} {delete}',
+                    'template' => '{vods} {type} {update} {delete}',
+                    'size' => 'btn-sm',
                     'buttons' => [
                             'vods' => function($url, $model, $key) {
-
-                                return Html::a('查看片源', ['vod/index', 'VodSearch[vod_cid]'=>$model->list_id], [
-                                   'class' => 'btn btn-default btn-xs'
+                                return Html::a('&nbsp;&nbsp;<i class="glyphicon glyphicon-th-list"></i>&nbsp;&nbsp;', ['vod/index', 'VodSearch[vod_cid]'=>$model->list_id], [
+                                   'class' => 'btn btn-success btn-sm'
+                                ]);
+                            },
+                            'type' => function($url, $model, $key) {
+                                return Html::a('查看子类别', ['iptv-type/index', 'list_id'=>$model->list_id], [
+                                    'class' => 'btn btn-default btn-sm'
                                 ]);
                             }
                     ],

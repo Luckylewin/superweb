@@ -6,7 +6,7 @@ use backend\assets\MyAppAsset;
 use \common\models\VodList;
 use yii\helpers\ArrayHelper;
 use dosamigos\fileupload\FileUploadUI;
-
+use \common\models\Vod;
 /* @var $this yii\web\View */
 /* @var $model common\models\Vod */
 /* @var $form yii\widgets\ActiveForm */
@@ -229,7 +229,7 @@ $this->registerJsFile('/statics/js/miniUtils.js')
                                                     <div class="col-sm-3">{input}{error}{hint}</div>
                                                   </div>
                                                   <div class="row multi-select">
-                                                    <div class="col-sm-12">'.\common\models\Vod::getSelectList('vod_type') .'</div>' .
+                                                    <div class="col-sm-12">'.$model->getTypeItems('vod_type') .'</div>' .
                                 '</div>'
 
                         ])->textInput(['maxlength' => true]) ?>
@@ -238,7 +238,7 @@ $this->registerJsFile('/statics/js/miniUtils.js')
 
                             'template' => '{label}<div class="row">
                                                     <div class="col-sm-3">{input}{error}{hint}</div><div class="col-sm-7 single-select">'.
-                                \common\models\Vod::getSelectList('vod_year')
+                                $model->getTypeItems('vod_year')
                                 .'</div></div>'
 
 
@@ -251,7 +251,7 @@ $this->registerJsFile('/statics/js/miniUtils.js')
 
                             'template' => '{label}<div class="row">
                                                     <div class="col-sm-3">{input}{error}{hint}</div><div class="col-sm-7 single-select">'.
-                                \common\models\Vod::getSelectList('vod_area')
+                                $model->getTypeItems('vod_area')
                                 .'</div></div>'
 
                         ])->textInput() ?>
@@ -260,7 +260,7 @@ $this->registerJsFile('/statics/js/miniUtils.js')
 
                             'template' => '{label}<div class="row">
                                                     <div class="col-sm-3">{input}{error}{hint}</div><div class="col-sm-7 single-select">'.
-                                \common\models\Vod::getSelectList('vod_language')
+                                $model->getTypeItems('vod_language')
                                 .'</div></div>'
 
                         ])->textInput() ?>
@@ -269,7 +269,7 @@ $this->registerJsFile('/statics/js/miniUtils.js')
 
                             'template' => '{label}<div class="row">
                                                     <div class="col-sm-3">{input}{error}{hint}</div><div class="col-sm-7 single-select">'.
-                                \common\models\Vod::getSelectList('vod_version')
+                                $model->getTypeItems('vod_version')
                                 .'</div></div>'
 
                         ])->textInput() ?>
@@ -277,7 +277,7 @@ $this->registerJsFile('/statics/js/miniUtils.js')
                         <?= $form->field($model, 'vod_state',[
                             'template' => '{label}<div class="row">
                                                     <div class="col-sm-3">{input}{error}{hint}</div><div class="col-sm-7 single-select">'.
-                                \common\models\Vod::getSelectList('vod_state')
+                                $model->getTypeItems('vod_state')
                                 .'</div></div>'
                         ])->textInput(['maxlength' => true]) ?>
 
