@@ -18,67 +18,61 @@ $this->registerJsFile('/statics/js/pinyin.js');
 
     <?php $form->field($model, 'list_sid')->textInput() ?>
 
-    <?= $form->field($model, 'list_name')->textInput(['maxlength' => true]) ?>
+    <div class="col-md-4">
+        <?= $form->field($model, 'list_name')->textInput(['maxlength' => true]) ?>
+    </div>
 
-    <?= $form->field($model, 'list_dir')->textInput(['maxlength' => true]) ?>
+    <div class="col-md-4"><?= $form->field($model, 'list_dir')->textInput(['maxlength' => true]) ?></div>
 
-    <?= $form->field($model, 'list_sort')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'list_keywords')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'list_title')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'list_description')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'list_ispay')->dropDownList(Vod::$chargeStatus) ?>
-
-    <?= $form->field($model, 'list_price')->textInput() ?>
-
-    <?= $form->field($model, 'list_trysee')->textInput([
-            'placeholder' => 5
-    ]) ?>
-
-    <?= $form->field($model, 'list_icon')->textInput() ?>
-    <?=  \dosamigos\fileupload\FileUploadUI::widget([
-        'model' => $model,
-        'attribute' => 'icon',
-        'url' => ['media/image-upload', 'attr' => 'icon', 'dir' => 'vod-type'],
-        'gallery' => false,
-        'fieldOptions' => [
-            'accept' => 'image/*'
-        ],
-        'clientOptions' => [
-            'maxFileSize' => 2000000,
-            'style'=>'width:200px;'
-        ],
-        // ...
-        'clientEvents' => [
-            'filedeletedone' => 'function(e, data) {
+    <div class="col-md-4"><?= $form->field($model, 'list_sort')->textInput(['maxlength' => true]) ?></div>
+    <div class="col-md-4"><?= $form->field($model, 'list_keywords')->textInput(['maxlength' => true]) ?></div>
+    <div class="col-md-4"><?= $form->field($model, 'list_title')->textInput(['maxlength' => true]) ?></div>
+    <div class="col-md-4"><?= $form->field($model, 'list_description')->textInput(['maxlength' => true]) ?></div>
+    <div class="col-md-4"><?= $form->field($model, 'list_ispay')->dropDownList(Vod::$chargeStatus) ?></div>
+    <div class="col-md-4"><?= $form->field($model, 'list_price')->textInput() ?></div>
+    <div class="col-md-4"><?= $form->field($model, 'list_trysee')->textInput([ 'placeholder' => 5]) ?></div>
+    <div class="col-md-12">
+        <?= $form->field($model, 'list_icon')->textInput() ?>
+        <?=  \dosamigos\fileupload\FileUploadUI::widget([
+            'model' => $model,
+            'attribute' => 'icon',
+            'url' => ['media/image-upload', 'attr' => 'icon', 'dir' => 'vod-type'],
+            'gallery' => false,
+            'fieldOptions' => [
+                'accept' => 'image/*'
+            ],
+            'clientOptions' => [
+                'maxFileSize' => 2000000,
+                'style'=>'width:200px;'
+            ],
+            // ...
+            'clientEvents' => [
+                'filedeletedone' => 'function(e, data) {
                                 console.log(e);
                                 console.log(data);
                                 
                              
                                alert();
                             }',
-            'fileuploaddone' => 'function(e, data) {
+                'fileuploaddone' => 'function(e, data) {
                                 console.log(e);
                                 console.log(data);
                                 var files = data.result.files[0];
                              
                                 $("#vodlist-list_icon").val(files.url);
                             }',
-            'fileuploadfail' => 'function(e, data) {
+                'fileuploadfail' => 'function(e, data) {
                                 console.log(e);
                                 console.log(data);
                             }',
-        ],
-    ]); ?>
-
-
-    <div class="form-group">
-        <?= Html::submitButton('保存', ['class' => 'btn btn-success']) ?>
-        <?= Html::a('返回', ['vod-list/index'], ['class' => 'btn btn-default']) ?>
+            ],
+        ]); ?>
+        <div class="form-group">
+            <?= Html::submitButton('保存', ['class' => 'btn btn-success']) ?>
+            <?= Html::a('返回', ['vod-list/index'], ['class' => 'btn btn-default']) ?>
+        </div>
     </div>
+
 
     <?php ActiveForm::end(); ?>
 
