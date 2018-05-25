@@ -62,9 +62,9 @@ class OttLinkController extends BaseController
         $schemesMap = Scheme::find()->select('id,schemeName')->all();
         $schemes = ArrayHelper::map($schemesMap, 'id', 'schemeName');
         if (Yii::$app->request->isAjax) {
-            $model->scheme_id = ArrayHelper::getColumn($schemes, 'id');
+            $model->scheme_id = ArrayHelper::getColumn($schemesMap, 'id');
             $model->channel_id = Yii::$app->request->get('id');
-            return $this->renderAjax('create', ['model' => $model,'schemes' => $schemesMap]);
+            return $this->renderAjax('create', ['model' => $model,'schemes' => $schemes]);
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -74,7 +74,7 @@ class OttLinkController extends BaseController
 
         return $this->render('create', [
             'model' => $model,
-            'schemes' => $schemesMap
+            'schemes' => $schemes
         ]);
     }
 
