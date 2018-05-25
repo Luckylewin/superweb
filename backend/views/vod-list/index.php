@@ -10,7 +10,12 @@ use common\models\Vod;
 $this->title = '点播分类列表';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-
+<style>
+    .grid-view td {
+        text-align: center;
+        vertical-align: middle !important;
+    }
+</style>
 <div class="vod-list-index">
 
     <p>

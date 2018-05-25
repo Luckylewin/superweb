@@ -14,8 +14,9 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <style>
-    .grid-view td{
+    .grid-view td {
         text-align: center;
+        vertical-align: middle !important;
     }
 </style>
 
