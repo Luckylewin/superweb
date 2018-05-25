@@ -77,18 +77,19 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'class'=> 'common\grid\MyActionColumn',
-                'options' => ['style' => 'width:260px;'],
+                'options' => ['style' => 'width:360px;'],
+                'size' => 'btn-sm',
                 'template' => '{next}&nbsp;&nbsp;| &nbsp;&nbsp;{create-cache} {view} {update} {delete}',
                 'buttons' => [
                         'next' => function($url ,$model) {
                             return Html::a('&nbsp;&nbsp;<i class="glyphicon glyphicon-th-list"></i>&nbsp;&nbsp;', ['sub-class/index', 'main-id' => $model->id], [
-                                'class' => 'btn btn-success btn-xs'
+                                'class' => 'btn btn-success btn-sm'
                             ]);
                         },
                         'create-cache' => function($url, $model) {
                             return Html::a('生成缓存', '#', [
                                 'url' => Url::to(['sub-class/generate-cache', 'id' => $model->id]),
-                                'class' => 'btn btn-primary btn-xs create-cache',
+                                'class' => 'btn btn-success btn-sm create-cache',
                                 'id' => 'cache-btn',
                                 'data-toggle' => 'modal',
                                 'data-target' => '#operate-modal',

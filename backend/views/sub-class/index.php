@@ -116,11 +116,12 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                     'header' => '操作',
                     'class' => 'common\grid\MyActionColumn',
+                    'size' => 'btn-sm',
                     'template' => '{next} &nbsp;&nbsp;| &nbsp;&nbsp;{update} {delete}',
                     'buttons' => [
                         'next' => function($url ,$model) {
                             return Html::a('&nbsp;&nbsp;<i class="glyphicon glyphicon-th-list"></i>&nbsp;&nbsp;', ['ott-channel/index', 'sub-id' => $model->id], [
-                                'class' => 'btn btn-success btn-xs'
+                                'class' => 'btn btn-success btn-sm'
                             ]);
                         },
 

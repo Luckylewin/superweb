@@ -137,20 +137,19 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                     'class' => 'common\grid\MyActionColumn',
+                    'size' => 'btn-sm',
                     'template' => '{channel} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;{view} {update} {delete}',
                     'buttons' => [
                             'channel' => function($url, $model, $key) {
-                                return Html::a("&nbsp;&nbsp;<i class='glyphicon glyphicon-link'></i>&nbsp;&nbsp;", null, [
-                                        'class' => 'btn btn-success btn-xs load-link',
+                                return Html::a("&nbsp;&nbsp;<i class='glyphicon glyphicon-link'></i>链接&nbsp;&nbsp;", null, [
+                                        'class' => 'btn btn-success btn-sm load-link',
                                         'data-toggle' => 'modal',
                                         'data-target' => '#links-modal',
                                         'data-id' => $model->id,
                                 ]);
                             }
                     ],
-                    'options' => [
-                            'style' => 'width:250px;'
-                    ]
+                    'options' => [ 'style' => 'width:350px;']
             ],
         ],
     ]); ?>

@@ -14,16 +14,16 @@ use yii\helpers\Html;
 class MyActionColumn extends \yii\grid\ActionColumn
 {
     public $template = "{view}&nbsp;{update}&nbsp;{delete}";
-
+    public $size = 'btn-xs';
     /**
      * Initializes the default button rendering callbacks.
      */
     protected function initDefaultButtons()
     {
-        $this->initDefaultButton('view', null, ['class'=>'btn btn-info btn-xs']);
-        $this->initDefaultButton('update', null , ['class'=>'btn btn-xs btn-primary']);
+        $this->initDefaultButton('view', null, ['class'=>'btn btn-info ' . $this->size ]);
+        $this->initDefaultButton('update', null , ['class'=>'btn btn-primary '. $this->size]);
         $this->initDefaultButton('delete', null,[
-            'class'=>'btn btn-danger btn-xs',
+            'class'=>'btn btn-danger ' . $this->size ,
             'data-confirm' => Yii::t('yii', '您确定要删除此项吗？?'),
             'data-method' => 'post',
         ]);
