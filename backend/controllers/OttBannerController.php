@@ -135,7 +135,9 @@ class OttBannerController extends BaseController
             try {
                 $channels = $banner->channel;
                 $channel = ArrayHelper::toArray($channels);
+                $channel['mainClass'] = $banner->channel->subClass->mainClass->name;
                 $channel['links'] = ArrayHelper::toArray($channels->ownLink);
+                $channel['id'] = $channel['channel_number'];
                 $banner = ArrayHelper::toArray($banner);
                 $banner['channels'] = $channel;
                 $banners[] = $banner;

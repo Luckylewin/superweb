@@ -230,9 +230,12 @@ class OttChannelController extends BaseController
 
         foreach ($channels as $channel) {
             try {
+                 $mainClassName = $channel->subClass->mainClass->name;
                  $links = ArrayHelper::toArray($channel->ownLink);
                  $channel = ArrayHelper::toArray($channel);
                  $channel['links'] = $links;
+                 $channel['id'] = $channel['channel_number'];
+                 $channel['mainClass'] = $mainClassName;
                  $recommendData[] = $channel;
             } catch (\Exception $e) {
                 continue;
