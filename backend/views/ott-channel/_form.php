@@ -9,7 +9,7 @@ use yii\widgets\ActiveForm;
 ?>
 
 <style>
-    .preview img {width: 200px;}
+    .preview img {width: 100px;}
 </style>
 
 <div class="ott-channel-form">

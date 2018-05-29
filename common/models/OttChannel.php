@@ -2,6 +2,8 @@
 
 namespace common\models;
 
+use backend\models\OttBanner;
+use backend\models\OttRecommend;
 use Yii;
 
 /**
@@ -17,6 +19,7 @@ use Yii;
  * @property int $channel_number 序列号
  * @property string $image 图标
  * @property string $alias_name 别名
+ * @property string $is_recommend 是否被推荐
  */
 class OttChannel extends \yii\db\ActiveRecord
 {
@@ -39,7 +42,7 @@ class OttChannel extends \yii\db\ActiveRecord
             [['name', 'zh_name', 'keywords'], 'string', 'max' => 255],
             [['image'], 'string', 'max' => 50],
             [['alias_name'], 'string', 'max' => 100],
-            [['sort'], 'default', 'value' => '0'],
+            [['sort','is_recommend'], 'default', 'value' => '0'],
             ['use_flag', 'default', 'value' => '1']
         ];
     }
@@ -60,6 +63,7 @@ class OttChannel extends \yii\db\ActiveRecord
             'channel_number' => '频道号',
             'image' => '图标',
             'alias_name' => '别名',
+            'is_recommend' => '推荐',
         ];
     }
 
@@ -72,15 +76,7 @@ class OttChannel extends \yii\db\ActiveRecord
         return $this->hasOne(SubClass::className(), ['id' => 'sub_class_id']);
     }
 
-    public function getOwnLink($where = null)
-    {
-        $query = $this->hasMany(OttLink::className(), ['channel_id' => 'id']);
-        if ($where) {
-            $query->where($where);
-        }
 
-        return $query;
-    }
 
     public function beforeSave($insert)
     {
@@ -97,6 +93,28 @@ class OttChannel extends \yii\db\ActiveRecord
     {
         OttLink::deleteAll(['channel_id' => $this->id]);
         return true;
+    }
+
+    public function getOwnLink($where = null)
+    {
+        $query = $this->hasMany(OttLink::className(), ['channel_id' => 'id']);
+        if ($where) {
+            $query->where($where);
+        }
+
+        return $query;
+    }
+
+    public function getRecommend()
+    {
+        return $this->hasOne(OttRecommend::className(), [
+            'channel_id' => 'id'
+        ])->orderBy('ott_recommend.sort asc');
+    }
+
+    public function getBanner()
+    {
+        return $this->hasOne(OttBanner::className(), ['channel_id' => 'id']);
     }
 
 }

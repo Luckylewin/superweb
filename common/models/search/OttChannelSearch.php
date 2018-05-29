@@ -36,27 +36,36 @@ class OttChannelSearch extends OttChannel
      * Creates data provider instance with search query applied
      *
      * @param array $params
+     * @param array $where
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params, $where = null)
     {
         $query = OttChannel::find();
+
         if ($sub_id = Yii::$app->request->get('sub-id')) {
             $query->where(['sub_class_id' => $sub_id]);
         }
+
+        if ($where) {
+            $query->where($where);
+            $query->joinWith('recommend', true, 'INNER JOIN');
+            $dataProvider = new ActiveDataProvider([
+                'query' => $query
+            ]);
+        } else {
+            $dataProvider = new ActiveDataProvider([
+                'query' => $query,
+                'sort' => [
+                    'defaultOrder' => ['use_flag' =>SORT_DESC, 'channel_number' => SORT_ASC]
+                ]
+            ]);
+        }
+
         // add conditions that should always apply here
 
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-            'sort' => [
-                'defaultOrder' => [
-                    'use_flag' =>SORT_DESC,
-                    'channel_number' => SORT_ASC,
 
-                ]
-            ]
-        ]);
 
         $this->load($params);
 

@@ -145,4 +145,55 @@ class CommonParade
     {
         sleep(mt_rand($min,$max));
     }
+
+    public function getMondayTime()
+    {
+        return time() - ((date('w') == 0 ? 7 : date('w')) - 1) * 24 * 3600;
+    }
+
+    /**
+     * 获取未来{$day}天的时间数组
+     * @param $day
+     * @param $format
+     * @return mixed
+     */
+    public function getFutureTime($day, $format='m-d-y')
+    {
+        $futureTime = [];
+        //获取今天的时间
+        $startTime = strtotime(date('Y-m-d'));
+        for($start = 0; $start <= $day; $start++) {
+            $dateTime = $startTime + 86400 * $start;
+            $futureTime[] = [
+                'timestamp' => $dateTime,
+                'date' => date('Y-m-d', $dateTime),
+                'param' => date($format, $dateTime)
+            ];
+        }
+
+        return $futureTime;
+    }
+
+    /**
+     * 获取本周剩余天数
+     * @return array
+     */
+    public function getWeekTime()
+    {
+        // ① 获得这周周一的时间戳
+        $startTime = $this->getMondayTime();
+        $todayTime = strtotime(date('Y-m-d'));
+        $week = [];
+        for ($start=0; $start<=6; $start++) {
+            $dateTime = $startTime + 86400 * $start;
+            if ($dateTime >= $todayTime) {
+                $week[] = [
+                    'timestamp' =>  $dateTime,
+                    'date' => date('Y-m-d', $dateTime)
+                ];
+            }
+        }
+
+        return $week;
+    }
 }

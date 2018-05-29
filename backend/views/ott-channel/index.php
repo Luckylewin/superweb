@@ -138,7 +138,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                     'class' => 'common\grid\MyActionColumn',
                     'size' => 'btn-sm',
-                    'template' => '{channel} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;{view} {update} {delete}',
+                    'template' => '{channel} &nbsp;|&nbsp;{push-recommend} {push-banner} {view} {update} {delete}',
                     'buttons' => [
                             'channel' => function($url, $model, $key) {
                                 return Html::a("&nbsp;&nbsp;<i class='glyphicon glyphicon-link'></i>链接&nbsp;&nbsp;", null, [
@@ -146,6 +146,18 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'data-toggle' => 'modal',
                                         'data-target' => '#links-modal',
                                         'data-id' => $model->id,
+                                ]);
+                            },
+                            'push-banner' => function($url, $model, $key) {
+                                return Html::a("&nbsp;<i class='glyphicon glyphicon-picture'></i>&nbsp;", Url::to(Url::to(['ott-banner/create', 'channel_id' => $model->id])), [
+                                    'class' => 'btn btn-default btn-sm'
+                                ]);
+                            },
+                            'push-recommend' => function($url, $model, $key) {
+                                $class = $model->is_recommend ? 'btn-warning' : 'btn-default';
+
+                                return Html::a("&nbsp;<i class='glyphicon glyphicon-thumbs-up'></i>&nbsp;", Url::to(Url::to(['ott-channel/update', 'id' => $model->id, 'field'=>'is_recommend'])), [
+                                    'class' => 'btn btn-sm ' . $class
                                 ]);
                             }
                     ],
