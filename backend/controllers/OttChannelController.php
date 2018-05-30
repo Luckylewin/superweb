@@ -232,9 +232,13 @@ class OttChannelController extends BaseController
             try {
                  $mainClassName = $channel->subClass->mainClass->name;
                  $links = ArrayHelper::toArray($channel->ownLink);
+                 array_walk($links, function(&$v) {
+                     unset($v['id'], $v['channel_id'], $v['source'], $v['sort'], $v['use_flag'], $v['format'], $v['script_deal']);
+                 });
                  $channel = ArrayHelper::toArray($channel);
                  $channel['links'] = $links;
                  $channel['id'] = $channel['channel_number'];
+                 unset($channel['sub_class_id'], $channel['alias_name'], $channel['is_recommend']);
                  $channel['mainClass'] = $mainClassName;
                  $recommendData[] = $channel;
             } catch (\Exception $e) {

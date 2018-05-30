@@ -136,8 +136,13 @@ class OttBannerController extends BaseController
                 $channels = $banner->channel;
                 $channel = ArrayHelper::toArray($channels);
                 $channel['mainClass'] = $banner->channel->subClass->mainClass->name;
-                $channel['links'] = ArrayHelper::toArray($channels->ownLink);
+                $links = ArrayHelper::toArray($channels->ownLink);
+                array_walk($links, function(&$v) {
+                    unset($v['id'], $v['channel_id'], $v['source'], $v['sort'], $v['use_flag'], $v['format'], $v['script_deal']);
+                });
+                $channel['links'] = $links;
                 $channel['id'] = $channel['channel_number'];
+                unset($channel['sub_class_id'], $channel['alias_name'], $channel['is_recommend']);
                 $banner = ArrayHelper::toArray($banner);
                 $banner['channels'] = $channel;
                 $banners[] = $banner;
