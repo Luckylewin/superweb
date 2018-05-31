@@ -33,7 +33,7 @@ $data = $model->version;
         </td>
 
         <td>
-            <?= \yii\helpers\Html::a($ver->url, \common\oss\Aliyunoss::getDownloadUrl($ver->ver)) ?>
+            <?= \yii\helpers\Html::a($ver->url, \common\components\Func::getAccessUrl($ver->url)) ?>
         </td>
         <td>
             <?= \yii\helpers\Html::label($ver->force_update ? '是' : '否',null,[
