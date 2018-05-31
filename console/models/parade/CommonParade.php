@@ -25,12 +25,18 @@ class CommonParade
         $this->redis = MyRedis::init(MyRedis::REDIS_PARADE_CONTENT);
     }
 
+    /**
+     * 清除数据
+     */
     protected function _clearOldData()
     {
         $date = date('Y-m-d',strtotime('-2 day'));
         Parade::deleteAll("parade_date <= '$date'");
     }
 
+    /**
+     * 保存到redis中
+     */
     protected function _saveToRedis()
     {
         //获取数据库中的节目数
@@ -83,7 +89,9 @@ class CommonParade
     }
 
     /**
-     *
+     * 补昨天的数据
+     * @param $data
+     * @return bool
      */
     protected function completeYesterday($data)
     {
@@ -107,6 +115,13 @@ class CommonParade
         return false;
     }
 
+    /**
+     * 插入Redis
+     * @param $dayNum
+     * @param $channel
+     * @param $paradeData
+     * @return bool
+     */
     protected function _insertRedis($dayNum,$channel,$paradeData)
     {
         $data = array();
@@ -145,11 +160,20 @@ class CommonParade
         return $this->redis->set($key,$hash);
     }
 
+    /**
+     * 睡眠
+     * @param $min
+     * @param $max
+     */
     public function _sleep($min,$max)
     {
         sleep(mt_rand($min,$max));
     }
 
+    /**
+     * 获取周一时间
+     * @return int
+     */
     public function getMondayTime()
     {
         return time() - ((date('w') == 0 ? 7 : date('w')) - 1) * 24 * 3600;
@@ -234,6 +258,7 @@ class CommonParade
     }
 
     /**
+     * 获取dom
      * @param $url
      * @param string $format
      * @param string $charset

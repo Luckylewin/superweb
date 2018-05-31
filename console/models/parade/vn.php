@@ -10,8 +10,7 @@ namespace console\models\parade;
 
 use console\components\MySnnopy;
 use Symfony\Component\DomCrawler\Crawler;
-use backend\models\ChannelIptv;
-use backend\models\Parade;
+
 
 class vn extends CommonParade
 {
@@ -21,8 +20,6 @@ class vn extends CommonParade
     public function start()
     {
         $this->getviebao();//viebao
-        //$this->getChinaChannel("yangshi"); //央视
-        //$this->getChinaChannel("weishi");  //卫视
     }
 
     //vietbao
@@ -55,17 +52,6 @@ class vn extends CommonParade
             $this->crawlViebao($key, $url);
             sleep(4);
         }
-
-        /*
-         * $channelName = 'vtv1';
-            $url = $data['vtv1'];
-            if (0 && !$str = \Yii::$app->cache->get('vtv1')) {
-            $snnopy = MySnnopy::init();
-            $snnopy->fetch($url);
-            $str = $snnopy->results;
-            \Yii::$app->cache->set('vtv1', $str);
-        }*/
-
 
     }
 
@@ -102,18 +88,7 @@ class vn extends CommonParade
         });
 
         //查找频道是否存在
-        $channel = ChannelIptv::findOne(['name' => $channelName]);
-        if (is_null($channel) || !is_null(Parade::findOne(['channel_name' => $channelName, 'parade_date' => $date])) || empty($paradeData)) {
-            echo "没有这个频道|已经存在|没有预告";
-            return false;
-        }
-
-        $parade = new Parade();
-        $parade->parade_date = $date;
-        $parade->parade_data = json_encode($paradeData);
-        $parade->channel_id = $channel->ID;
-        $parade->channel_name = $channel->name;
-        $parade->save(false);
+        $this->createParade($channelName, $date, $paradeData);
 
         return true;
     }
@@ -131,8 +106,6 @@ class vn extends CommonParade
         ];
 
     }
-
-
 
     public function getTvSouData($channelCatagory)
     {

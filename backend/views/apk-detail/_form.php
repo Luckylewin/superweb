@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use common\widgets\OssUploader;
+use dosamigos\fileupload\FileUploadUI;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\ApkDetail */
@@ -21,18 +22,40 @@ use common\widgets\OssUploader;
 
     <?= $form->field($model, 'ver')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'md5')->textInput(['maxlength' => true]) ?>
 
 
-    <?= OssUploader::widget([
-        'model' => $model,
-        'dir' => $model->dir . $model->isNewRecord? $apkModel->typeName : $model->apkName->typeName . '/',
-        'form' => $form,
-        'field' => 'url',
-        'allowExtension' => [
-            'apk' => 'application/vnd.android.package-archive,.apk,apk'
-        ]
+
+    <?= $form->field($model, 'url')->textInput() ?>
+
+    <?=  FileUploadUI::widget([
+        'model' => new \backend\models\UploadForm(),
+        'attribute' => 'apk',
+        'url' => ['upload/apk-upload'],
+        'gallery' => false,
+        'fieldOptions' => [
+            'accept' => 'apk'
+        ],
+        'clientOptions' => [
+            'maxFileSize' => 50000000
+        ],
+        // ...
+        'clientEvents' => [
+            'fileuploaddone' => 'function(e, data) {
+                                console.log(e);
+                                console.log(data);
+                                var files = data.result.files[0];
+                               
+                                $("#apkdetail-url").val(files.path);
+                                $("#apkdetail-md5").val(files.md5);
+                            }',
+            'fileuploadfail' => 'function(e, data) {
+                                console.log(e);
+                                console.log(data);
+                            }',
+        ],
     ]); ?>
+
+    <?= $form->field($model, 'md5')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'content')->textarea(['rows' => 3]) ?>
 

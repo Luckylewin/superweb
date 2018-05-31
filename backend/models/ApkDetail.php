@@ -2,6 +2,7 @@
 
 namespace backend\models;
 
+use common\components\Func;
 use Yii;
 use common\oss\Aliyunoss;
 
@@ -69,21 +70,9 @@ class ApkDetail extends \yii\db\ActiveRecord
         return $this->hasOne(ApkList::className(), ['ID' => 'apk_ID']);
     }
 
-    public function beforeDelete()
-    {
-        if (parent::beforeDelete()) {
-            try{
-                (new Aliyunoss())->delete($this->url);
-            }catch (\Exception $e){
-                throw new \Exception($e->getMessage(),$e->getCode());
-            }
-        }
-        return true;
-    }
-
     public function getTrueUrl()
     {
-        return Aliyunoss::getDownloadUrl($this->url);
+        return Func::getAccessUrl($this->url, 3600);
     }
 
 }

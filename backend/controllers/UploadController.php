@@ -163,6 +163,7 @@ class UploadController extends BaseController
                             'size' => $FileInstance->size,
                             'path' => $path,
                             'url' => $expireUrl,
+                            'md5' => md5_file($filePath),
                             'thumbnailUrl' => $thumb ? $thumb : $expireUrl,
                             'deleteUrl' => Url::to(['upload/file-delete', 'path' => $path]),
                             'deleteType' => 'POST',

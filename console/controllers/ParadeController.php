@@ -22,6 +22,20 @@ use yii\console\Controller;
 
 class ParadeController extends Controller
 {
+
+    public function actionCollect()
+    {
+        $this->actionVn();
+        $this->actionSky();
+        $this->actionTsn();
+        $this->actionEspn();
+        $this->actionSport();
+        $this->actionSfr();
+        $this->actionEuro();
+        $this->actionBegin();
+        $this->actionCctv5();
+    }
+
     public function actionVn()
     {
         $vn = new vn();

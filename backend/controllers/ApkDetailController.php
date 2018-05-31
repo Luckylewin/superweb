@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use common\components\Func;
 use Yii;
 use common\oss\Aliyunoss;
 use backend\models\ApkList;
@@ -41,7 +42,7 @@ class ApkDetailController extends BaseController
     public function actionView($id)
     {
         $model = $this->findModel($id);
-        $model->url = Aliyunoss::getDownloadUrl($model->url);
+        $model->url = Func::getAccessUrl($model->url, 3600);
 
         return $this->render('view', [
             'model' => $model,
