@@ -25,15 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'class',
             [
                 'attribute' => 'img',
-                'format' => 'raw',
-                'value' => function($data) {
-                    if (!empty($data->img)) {
-                        return Html::img(\app\component\oss\Aliyunoss::getDownloadUrl($data->img),[
-                            'height' => '100px'
-                        ]);
-                    }
-                },
-
+                'format' => ['image', ['width'=> 40]]
             ],
             'sort',
             [
