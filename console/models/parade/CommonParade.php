@@ -10,6 +10,11 @@ namespace console\models\parade;
 
 use backend\models\Parade;
 use backend\components\MyRedis;
+use common\models\OttChannel;
+use Yii;
+use console\components\MySnnopy;
+use Symfony\Component\DomCrawler\Crawler;
+use yii\db\Exception;
 
 class CommonParade
 {
@@ -22,7 +27,6 @@ class CommonParade
 
     protected function _clearOldData()
     {
-        $this->redis->getRedis()->flushDB();
         $date = date('Y-m-d',strtotime('-2 day'));
         Parade::deleteAll("parade_date <= '$date'");
     }
@@ -189,11 +193,70 @@ class CommonParade
             if ($dateTime >= $todayTime) {
                 $week[] = [
                     'timestamp' =>  $dateTime,
-                    'date' => date('Y-m-d', $dateTime)
+                    'date' => date('Y-m-d', $dateTime),
+                    'week' => date('w', $dateTime) ? date('w', $dateTime) : 7
                 ];
             }
         }
 
         return $week;
     }
+
+    /**
+     * 新增一条预告
+     * @param $channelName
+     * @param $paradeDate
+     * @param $paradeData
+     * @return bool
+     */
+    public function createParade($channelName, $paradeDate, $paradeData)
+    {
+        //查找频道是否存在
+        $channel = OttChannel::findOne(['name' => $channelName]);
+        if (!is_null(Parade::findOne(['channel_name' => $channelName, 'parade_date' => $paradeDate])) || empty($paradeData)) {
+            echo "{$channelName} {$paradeDate} 已经存在|没有预告",PHP_EOL;
+            return false;
+        }
+
+        $parade = new Parade();
+        $parade->parade_date = $paradeDate;
+        $parade->parade_data = json_encode($paradeData);
+        $parade->channel_name = $channelName;
+
+        if ($channel) {
+            $parade->channel_id = $channel->id;
+        }
+
+        $parade->save(false);
+
+        echo "新增{$channelName}-{$paradeDate}的预告" , PHP_EOL;
+
+    }
+
+    /**
+     * @param $url
+     * @param string $format
+     * @param string $charset
+     * @return Crawler
+     * @throws \Exception
+     */
+    public function getDom($url, $format='html', $charset="UTF-8")
+    {
+        $snnopy = MySnnopy::init();
+        $snnopy->fetch($url);
+        $data = $snnopy->results;
+        if (empty($data)) {
+            throw new \Exception("没有数据");
+        }
+
+        $dom = new Crawler();
+        if ($format == 'html') {
+            $dom->addHtmlContent($data, $charset);
+        } else {
+            $dom->addXmlContent($data, $charset);
+        }
+
+        return $dom;
+    }
+
 }
