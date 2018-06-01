@@ -4,23 +4,31 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use \backend\models\Mac;
 use backend\assets\MyAppAsset;
+use backend\models\SysClient;
+use yii\helpers\Url;
 
 MyAppAsset::register($this);
 /* @var $this yii\web\View */
-/* @var $model app\models\Mac */
+/* @var $model backend\models\Mac */
 /* @var $form yii\widgets\ActiveForm */
 
 ?>
 
 <div class="mac-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin([
+        'id' => 'form-id',
+        'enableAjaxValidation' => true,
+        'validationUrl' => Url::toRoute(['mac/validate-form']),
+    ]); ?>
 
     <?= $form->field($model, 'MAC')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'SN')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'use_flag')->dropDownList(Mac::getUseFlagList()) ?>
+    <?php $form->field($model, 'use_flag')->dropDownList(Mac::getUseFlagList()) ?>
+
+    <?= $form->field($model, 'client_name')->dropDownList(SysClient::getAll(), ['prompt' => '暂不指定']); ?>
 
     <?= $form->field($model, 'contract_time',[
             'options' => [
@@ -33,20 +41,13 @@ MyAppAsset::register($this);
                 $form->field($model, 'unit')->dropDownList(Mac::getContractList())
             .'   
             </div>
-        </div>{hint}{error}</div>'
+        </div>{hint}{error}'
     ])->textInput()?>
 
     <div class="form-group">
         <?= Html::submitButton('保存', ['class' => 'btn btn-success']) ?>
-        <?= Html::a('返回', ['index'], ['class' => 'btn btn-default']) ?>
     </div>
-
     <?php ActiveForm::end(); ?>
-
 </div>
 
-<?php \common\widgets\Jsblock::begin() ?>
-
-
-<?php \common\widgets\Jsblock::end() ?>
 

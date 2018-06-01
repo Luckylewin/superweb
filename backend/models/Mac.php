@@ -51,7 +51,7 @@ class Mac extends \yii\db\ActiveRecord implements IdentityInterface
             [['MAC', 'SN'], 'unique'],
             [['contract_time'],'integer','min' => 1],
             [['use_flag', 'type'], 'integer'],
-            [['regtime', 'logintime', 'duetime', 'unit'], 'safe'],
+            [['regtime', 'logintime', 'duetime', 'unit', 'client_name'], 'safe'],
             [['MAC', 'SN'], 'string', 'max' => 64],
             [['contract_time'], 'string', 'max' => 8],
             [['MAC', 'SN'], 'unique', 'targetAttribute' => ['MAC', 'SN']],
@@ -81,16 +81,29 @@ class Mac extends \yii\db\ActiveRecord implements IdentityInterface
         ];
     }
 
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+        if (MacDetail::find()->where(['MAC' => $this->MAC])->exists() == false) {
+            $macDetail = new MacDetail();
+            $macDetail->MAC = $this->MAC;
+            $macDetail->client_id = !is_null($this->client_name) ? $this->client_name : '-1';
+
+            $macDetail->save(false);
+        };
+
+        return true;
+    }
 
     public function beforeSave($insert)
     {
-        if (parent::beforeSave($insert)) {
-            if ($this->isNewRecord == false) {
-              //  $this->contract_time = str_replace(['year', 'month', 'day'], ['','',''], $this->contract_time);
-            }
-            //$this->contract_time .=  (" " . $this->unit);
-            unset($this->unit);
+        parent::beforeSave($insert);
+        if ($this->isNewRecord == false) {
+            $this->contract_time = str_replace(['year', 'month', 'day'], ['','',''], $this->contract_time);
         }
+        $this->contract_time .=  (" " . $this->unit);
+        unset($this->unit);
+
         return true;
     }
 

@@ -7,6 +7,14 @@ use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 
+/**
+ * This is the model class for table "sys_client".
+ *
+ * @property int $id
+ * @property string $username
+ * @property string $password
+ * @property string $email
+ */
 class Admin extends ActiveRecord implements IdentityInterface
 {
 

@@ -3,6 +3,8 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+use yii\bootstrap\Modal;
+use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\search\MacSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -14,14 +16,15 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?php Html::encode($this->title) ?></h1>
     <?php Pjax::begin(); ?>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?php echo $this->render('_search', ['model' => $searchModel]); ?>
 
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
         'pager' => [
                 'class' => 'common\widgets\goPager',
+                'firstPageLabel' => '第一页',
+                'lastPageLabel' => '最后一页',
                 'go' => true
         ],
         "options" => ["class" => "grid-view","style"=>"overflow:auto", "id" => "grid"],
@@ -62,6 +65,9 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'regtime',
                 'value' => function($data) {
+                    if ($data->regtime == '0000-00-00 00:00:00') {
+                        return "-";
+                    }
                     return date('Y-m-d', strtotime($data->regtime));
                 },
                 'options' => [
@@ -72,7 +78,10 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'duetime',
                 'value' => function($data) {
-                    if ($data->duetime == '0000-00-00 00:00:00') {
+                    if ($data->use_flag == 1) {
+                        return '未使用';
+                    }
+                    if ($data->duetime == '0000-00-00 00:00:00' && empty($data->contract_time)) {
                         return "无限期";
                     }
                     return date('Y-m-d', strtotime($data->duetime));
@@ -95,34 +104,25 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                  'attribute' => 'use_flag',
                  'format' => 'raw',
-                 'filter' => $searchModel::getUseFlagList(),
                  'value' => function($data) use($searchModel) {
                        return $searchModel->getUseFlagWithLabel($data->use_flag);
                  },
-                 'options' => [
-                         'style' => 'width:56px;'
-                 ]
+                 'options' => ['style' => 'width:56px;']
              ],
 
             [
                 'attribute' => 'online_status',
                 'format' => 'raw',
                 'label' => '在线状态',
-                'filter' => $searchModel::getUseFlagList(),
                 'value' => function() use($searchModel) {
                     return $searchModel->getOnlineWithLabel();
                 },
-                'options' => [
-                    'style' => 'width:46px;'
-                ]
+                'options' => [ 'style' => 'width:46px;']
             ],
-
 
             [
                 'attribute' => 'ver',
-                'options' => [
-                    'style' => 'width:50px;'
-                ]
+                'options' => ['style' => 'width:50px;']
             ],
 
 
@@ -168,7 +168,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php Pjax::end(); ?>
 
     <div>
-        <?= Html::a('新增', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('新增', null, [
+                'class' => 'btn btn-success create',
+                'data-toggle' => 'modal',
+                'data-target' => '#create-modal',
+        ]) ?>
 
         <?= Html::button('批量删除', [
                 'class' => 'btn btn-danger gridview',
@@ -177,9 +181,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <?= Html::a('批量新增', ['batch-create'], ['class' => 'btn btn-default']) ?>
 
-        <?= Html::a('重构缓存', ['batch-cache'], ['class' => 'btn btn-default']) ?>
-
         <?= Html::a('导出mac-sn', \yii\helpers\Url::to(['mac/export', 'queryParams' => $queryParams]), ['class' => 'btn btn-default']) ?>
+
+        <?= Html::a('导入mac-sn', \yii\helpers\Url::to(['mac/import']), ['class' => 'btn btn-default']) ?>
 
     </div>
     </div>
@@ -187,8 +191,19 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <?php
 
-$this->registerJs("
-        $(document).on('click', '.gridview', function () {
+
+
+Modal::begin([
+    'id' => 'create-modal',
+    'size' => Modal::SIZE_DEFAULT,
+    'header' => '<h4 class="modal-title">新增MAC地址</h4>',
+    'footer' => '<a href="#" class="btn btn-default" data-dismiss="modal">关闭</a>',
+]);
+
+$requestUrl = Url::to(['mac/create']);
+
+$requestJs=<<<JS
+     $(document).on('click', '.gridview', function () {
                 var keys = $('#grid').yiiGridView('getSelectedRows');
                 var data = {macs:keys};
                 var url = $(this).attr('url');
@@ -199,7 +214,20 @@ $this->registerJs("
                         window.location.reload();
                     }    
                 });
-});
-    ");
+     });   
+     $(document).on('click', '.create', function() {
+               
+                $.get('{$requestUrl}', {},
+                    function (data) {
+                        $('.modal-body').css('min-height', '200px').html(data);
+                    }
+                )
+            })
+JS;
+
+$this->registerJs($requestJs);
+
+Modal::end();
+
 
 ?>

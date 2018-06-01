@@ -89,6 +89,9 @@ class MacSearch extends Mac
             'client_id' => $this->client_name
         ]);
 
+        $this->MAC = trim($this->MAC);
+        $this->SN = trim($this->SN);
+
         $query->andFilterWhere(['like', 'mac.MAC', $this->MAC])
             ->andFilterWhere(['like', 'SN', $this->SN])
             ->andFilterWhere(['like', 'ver', $this->ver])
