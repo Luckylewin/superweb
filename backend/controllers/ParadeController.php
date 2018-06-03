@@ -72,9 +72,9 @@ class ParadeController extends BaseController
 
     }
 
-    public function actionBatchDelete($id)
+    public function actionBatchDelete($name)
     {
-        Parade::deleteAll(['channel_id' => $id]);
+        Parade::deleteAll(['channel_name' => $name]);
         Yii::$app->session->setFlash('success', "操作成功");
 
         return $this->redirect(Yii::$app->request->referrer);

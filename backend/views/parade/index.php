@@ -54,7 +54,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             },
                         'delete' => function($url, $model, $key) {
                             $title = "删除";
-                            return Html::a($title, \yii\helpers\Url::to(['parade/batch-delete','id'=>$model->channel_id]),[
+                            return Html::a($title, \yii\helpers\Url::to(['parade/batch-delete','name'=>$model->channel_name]),[
                                 'class'=>'btn btn-danger btn-sm',
                                 'title' => $title,
                                 'aria-label' => $title,

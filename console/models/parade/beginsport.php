@@ -53,17 +53,29 @@ class beginsport extends CommonParade implements collector
                      $className = $divDom->attr('id');
                      $divDom->filter('li')->each(function(Crawler $liDom) use(&$paradeData, $date, $className) {
                          $parent = $liDom->attr('parent');
-                         if ($liDom->filter('.onecontent .title')->count() && $parent == $className) {
-                             $paradeTime = $liDom->filter('.timer p')->eq(0)->text();
-                             $paradeTime = explode('-', $paradeTime);
-                             $paradeTime = substr($paradeTime[0],0,5 );
+                         try{
+                             if ($liDom->filter('.onecontent .title')->count() && $parent == $className) {
+                                 $paradeTime = $liDom->filter('.timer p')->eq(0)->text();
+                                 $paradeTime = explode('-', $paradeTime);
+                                 $paradeTime = substr($paradeTime[0],0,5 );
 
-                             $parade = [
-                                 'parade_name' => $liDom->filter('.onecontent .title')->text(),
-                                 'parade_time' =>  $paradeTime,
-                                 'parade_type' => $liDom->filter('.onecontent .format')->text()
-                             ];
-                             $paradeData[] = $parade;
+                                 $parade = [
+                                     'parade_name' => $liDom->filter('.onecontent .title')->text(),
+                                     'parade_time' =>  $paradeTime,
+                                     'parade_type' => $liDom->filter('.onecontent .format')->text()
+                                 ];
+                                 $paradeData[] = $parade;
+                             }else if ($liDom->filter('.onecontent .title_disable')->count()  && $parent == $className) {
+                                 $parade = [
+                                     'parade_name' => $liDom->filter('.onecontent .title_disable')->text(),
+                                     'parade_time' => $liDom->filter('.timer p')->eq(0)->text(),
+                                     'parade_type' => $liDom->filter('.onecontent .format_disable')->text()
+                                 ];
+                                 $paradeData[] = $parade;
+
+                             }
+                         }catch (\Exception $e) {
+
                          }
                      });
 

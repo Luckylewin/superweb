@@ -236,7 +236,7 @@ class CommonParade
     public function createParade($channelName, $paradeDate, $paradeData)
     {
         //查找频道是否存在
-        $channel = OttChannel::findOne(['name' => $channelName]);
+        $channel = OttChannel::find()->where(['or', ['name' => $channelName], ['alias_name' => $channelName]])->one();
         if (!is_null(Parade::findOne(['channel_name' => $channelName, 'parade_date' => $paradeDate])) || empty($paradeData)) {
             echo "{$channelName} {$paradeDate} 已经存在|没有预告",PHP_EOL;
             return false;
