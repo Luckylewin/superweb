@@ -7,6 +7,7 @@
  */
 
 namespace backend\models;
+use common\models\OttChannel;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 
@@ -75,6 +76,6 @@ class Parade extends \yii\db\ActiveRecord
 
     public function getChannel()
     {
-        return $this->hasOne(ChannelIptv::className(), ['ID' => 'channel_id']);
+        return $this->hasOne(OttChannel::className(), ['ID' => 'channel_id']);
     }
 }

@@ -39,7 +39,7 @@ class beginsport extends CommonParade implements collector
         $dom = new Crawler();
         $dom->addHtmlContent($data);
 
-        $dom->filter('.no-gutter')->each(function(Crawler $node) use($date) {
+        $dom->filterXPath("//div[@class='row no-gutter']")->each(function(Crawler $node) use($date) {
             $id = $node->attr('id');
 
             if (preg_match('/^channels_\d+/', $id)) {
@@ -49,25 +49,26 @@ class beginsport extends CommonParade implements collector
                 $paradeData = [];
 
                 //获取预告
-                $node->filter('.slider li')->each(function (Crawler $liDom) use(&$paradeData, $date) {
-                    if ($liDom->filter('.onecontent .title')->count()) {
-                        $parade = [
-                            'parade_name' => $liDom->filter('.onecontent .title')->text(),
-                            'parade_time' => $liDom->filter('.timer p')->eq(0)->text(),
-                            'parade_type' => $liDom->filter('.onecontent .format')->text()
-                        ];
-                        $paradeData[] = $parade;
-                    }else if ($liDom->filter('.onecontent .title_disable')->count()) {
-                        $parade = [
-                            'parade_name' => $liDom->filter('.onecontent .title_disable')->text(),
-                            'parade_time' => $liDom->filter('.timer p')->eq(0)->text(),
-                            'parade_type' => $liDom->filter('.onecontent .format_disable')->text()
-                        ];
-                        $paradeData[] = $parade;
-                    }
-                });
+                $node->filter('.slider')->each(function (Crawler $divDom) use(&$paradeData, $date, $channelName) {
+                     $className = $divDom->attr('id');
+                     $divDom->filter('li')->each(function(Crawler $liDom) use(&$paradeData, $date, $className) {
+                         $parent = $liDom->attr('parent');
+                         if ($liDom->filter('.onecontent .title')->count() && $parent == $className) {
+                             $paradeTime = $liDom->filter('.timer p')->eq(0)->text();
+                             $paradeTime = explode('-', $paradeTime);
+                             $paradeTime = substr($paradeTime[0],0,5 );
 
-                $this->createParade($channelName, $date, $paradeData);
+                             $parade = [
+                                 'parade_name' => $liDom->filter('.onecontent .title')->text(),
+                                 'parade_time' =>  $paradeTime,
+                                 'parade_type' => $liDom->filter('.onecontent .format')->text()
+                             ];
+                             $paradeData[] = $parade;
+                         }
+                     });
+
+                    $this->createParade($channelName, $date, $paradeData);
+                });
 
             }
 

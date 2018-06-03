@@ -9,48 +9,56 @@
 namespace console\models\parade;
 
 
+use console\components\MySnnopy;
 use Symfony\Component\DomCrawler\Crawler;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Json;
 
 class cctv5 extends CommonParade implements collector
 {
-    public $url = 'https://www.tvmao.com/program/CCTV-CCTV5-w{NUM}.html';
-    public $url2 = 'https://www.tvmao.com/program/CCTV-CCTV5-PLUS-w{NUM}.html';
-    public $debug = false;
+    public $url = 'http://sports.cctv.com/nba/show/data/EPG/{DATE}.html?89055392';//20180601
+    public $url2 = 'http://sports.cctv.com/nba/show/data/EPG/{DATE}.html?6039251';
 
     public function start()
     {
         $tasks = $this->getUrlGroup();
         foreach ($tasks as $task) {
             $this->getOneDay($task['url'], $task['date'], $task['name']);
-            $this->_sleep(2, 5);
+            $this->_sleep(2,4);
         }
+
     }
 
     public function getOneDay($url, $date, $name)
     {
-        $dom = $this->getDom($url);
-        $paradeData = $dom->filter('#pgrow')->filterXPath('//li[@class]')->each(function(Crawler $node) {
-            return [
-                'parade_name' => $node->filter('.p_show')->text(),
-                'parade_time' => $node->filter('.am')->text()
+        $snnopy = MySnnopy::init();
+        $snnopy->fetch($url);
+        $data = $snnopy->results;
+
+        $data = json_decode($data, true);
+        $paradeData = [];
+        foreach ($data['sportsEPG'] as $value) {
+
+            $paradeData[] = [
+                'parade_name' => $value['programTitle'],
+                'parade_time' => $value['programTime']
             ];
-        });
+        }
 
         $this->createParade($name, $date, $paradeData);
     }
 
     public function getUrlGroup()
     {
-        $tasks = $this->getWeekTime();
+        $tasks = $this->getFutureTime(6, 'Ymd');
         array_walk($tasks, function(&$v) {
-            $v['url'] = str_replace('{NUM}', $v['week'], $this->url);
+            $v['url'] = str_replace('{DATE}', $v['param'], $this->url);
             $v['name'] = 'CCTV5';
         });
 
-        $tasks2 = $this->getWeekTime();
+        $tasks2 = $this->getFutureTime(6, 'Ymd');
         array_walk($tasks2, function(&$v) {
-            $v['url'] = str_replace('{NUM}', $v['week'], $this->url);
+            $v['url'] = str_replace('{DATE}', $v['param'], $this->url2);
             $v['name'] = 'CCTV5+';
         });
 
