@@ -7,7 +7,10 @@ use backend\models\search\ParadeSearch;
 use Yii;
 use backend\models\Parade;
 
+use yii\helpers\Json;
 use yii\web\NotFoundHttpException;
+use yii\web\Response;
+use yii\widgets\ActiveForm;
 
 /**
  * ParadeController implements the CRUD actions for Parade model.
@@ -58,14 +61,10 @@ class ParadeController extends BaseController
 
     public function actionListChannel($name)
     {
-
-        $searchModel = new ParadeSearch();
         $query = Parade::find()->where(['channel_name' => $name]);
-        $dataProvider = $searchModel->search([], $query);
         $data = $query->all();
 
         return $this->render('list', [
-            'dataProvider' => $dataProvider,
             'data' => $data,
             'channel' => $name
         ]);
@@ -89,8 +88,28 @@ class ParadeController extends BaseController
     {
         $model = new Parade();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['parade/index']);
+        if ( $name = Yii::$app->request->get('name')) {
+            $model->channel_name = $name;
+        }
+
+        if (Yii::$app->request->isPost) {
+            $post = $_POST;
+            $paradeData = [];
+            foreach ($post['name'] as $key => $val) {
+                $paradeData[] = [
+                    'parade_time' => $post['hour'][$key] . ':' . $post['minute'][$key],
+                    'parade_name' => $post['name'][$key]
+                ];
+            }
+
+            $model->load(Yii::$app->request->post());
+            $model->parade_data = json_encode($paradeData);
+            $model->source = '手动添加';
+
+            if ($model->save()) {
+                $this->setFlash('success', '添加成功');
+                return $this->redirect(['parade/list', 'name' => $model->channel_name]);
+            }
         }
 
         return $this->render('create', [
@@ -278,6 +297,17 @@ class ParadeController extends BaseController
             return $data;
         }
         return false;
+    }
+
+    /**
+     *
+     */
+    public function actionValidateForm()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $model = new Parade();
+        $model->load(Yii::$app->request->post());
+        return ActiveForm::validate($model);
     }
 
 }

@@ -54,11 +54,24 @@ class Parade extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['parade_date', 'channel_name'], 'required'],
             [['channel_id'], 'integer'],
             [['parade_date', 'upload_date'], 'safe'],
             [['parade_data', 'source', 'url'], 'string'],
             [['channel_name'], 'string', 'max' => 30],
+            ['parade_date', 'is_exist', 'when' => function($model) {
+                return !empty($model->channel_name);
+            }]
         ];
+    }
+
+    public function is_exist($attribute, $params)
+    {
+        $result = self::find()->where(['channel_name' => $this->channel_name, 'parade_date' => $this->parade_date])->exists();
+        if ($result) {
+            $this->addError($attribute,  $this->parade_date . "的" . $this->channel_name  . "预告已经存在 :(");
+            return false;
+        }
     }
 
     /**

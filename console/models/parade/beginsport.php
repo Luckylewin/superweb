@@ -30,6 +30,10 @@ class beginsport extends CommonParade implements collector
         }
     }
 
+    /**
+     * @param $date
+     * @param $url
+     */
     public function getOneDay($date, $url)
     {
         $snnopy = MySnnopy::init();

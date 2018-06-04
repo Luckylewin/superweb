@@ -77,6 +77,12 @@ $this->registerJsFile('https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.
 
 </div>
 </div>
-<?= Html::a('返回', ['parade/index'], ['class' => 'btn btn-default']) ?>
+
+<div class="col-md-12">
+    <p>
+        <?= Html::a('手动添加', ['parade/create', 'name' => $channel], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('返回', ['parade/index'], ['class' => 'btn btn-default']) ?>
+    </p>
+</div>
 
 
