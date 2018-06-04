@@ -48,9 +48,9 @@ class vn extends CommonParade
         ];
 
         foreach ($data as $key => $url) {
-            echo "get the parade of $key" ,PHP_EOL;
+            //echo "get the parade of $key" ,PHP_EOL;
             $this->crawlViebao($key, $url);
-            sleep(4);
+            $this->_sleep(2, 4);
         }
 
     }
@@ -88,7 +88,7 @@ class vn extends CommonParade
         });
 
         //查找频道是否存在
-        $this->createParade($channelName, $date, $paradeData);
+        $this->createParade($channelName, $date, $paradeData, __CLASS__, $url);
 
         return true;
     }

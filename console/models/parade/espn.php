@@ -30,12 +30,14 @@ class espn extends CommonParade implements collector
         foreach ($tasks as $date => $task) {
             $program = $this->initProgram();
             echo "采集{$date}预告", PHP_EOL;
+
             foreach ($task as $_task) {
                 $this->getOnePage($program, $_task['start'], $_task['url']);
                 $this->_sleep(2,5);
             }
+
             foreach ($program as $_program) {
-                $this->createParade($_program['name'], $date, $_program['parade']);
+                $this->createParade($_program['name'], $date, $_program['parade'], __CLASS__, $task[0]['url']);
             }
             $this->_sleep(2, 5);
         }

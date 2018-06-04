@@ -58,22 +58,7 @@ class tsn extends CommonParade implements collector
                 ];
             }
 
-
-            //查找频道是否存在
-            $channel = OttChannel::findOne(['name' => $name]);
-            if (!is_null(Parade::findOne(['channel_name' => $name, 'parade_date' => $currentDay])) || empty($paradeData)) {
-                echo "已经存在|没有预告",PHP_EOL;
-                continue;
-            }
-
-            $parade = new Parade();
-            $parade->parade_date = $currentDay;
-            $parade->parade_data = json_encode($paradeData);
-            $parade->channel_name = $name;
-            if ($channel) {
-                $parade->channel_id = $channel->id;
-            }
-            $parade->save(false);
+            $this->createParade($name, $currentDay, $paradeData, __CLASS__, $url);
         }
 
     }

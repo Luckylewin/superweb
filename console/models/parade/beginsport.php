@@ -39,7 +39,7 @@ class beginsport extends CommonParade implements collector
         $dom = new Crawler();
         $dom->addHtmlContent($data);
 
-        $dom->filterXPath("//div[@class='row no-gutter']")->each(function(Crawler $node) use($date) {
+        $dom->filterXPath("//div[@class='row no-gutter']")->each(function(Crawler $node) use($date, $url) {
             $id = $node->attr('id');
 
             if (preg_match('/^channels_\d+/', $id)) {
@@ -49,7 +49,7 @@ class beginsport extends CommonParade implements collector
                 $paradeData = [];
 
                 //获取预告
-                $node->filter('.slider')->each(function (Crawler $divDom) use(&$paradeData, $date, $channelName) {
+                $node->filter('.slider')->each(function (Crawler $divDom) use(&$paradeData, $date, $channelName, $url) {
                      $className = $divDom->attr('id');
                      $divDom->filter('li')->each(function(Crawler $liDom) use(&$paradeData, $date, $className) {
                          $parent = $liDom->attr('parent');
@@ -79,7 +79,7 @@ class beginsport extends CommonParade implements collector
                          }
                      });
 
-                    $this->createParade($channelName, $date, $paradeData);
+                    $this->createParade($channelName, $date, $paradeData, __CLASS__, $url);
                 });
 
             }

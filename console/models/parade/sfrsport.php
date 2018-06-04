@@ -65,7 +65,7 @@ class sfrsport extends CommonParade implements collector
 
         foreach ($program as $value) {
             if (!empty($value['parade'])) {
-                $this->createParade($value['name'], $date, $value['parade']);
+                $this->createParade($value['name'], $date, $value['parade'], __CLASS__, $url);
             }
         }
     }

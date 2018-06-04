@@ -44,7 +44,7 @@ class sportnet extends CommonParade implements collector
         $dom = new Crawler();
         $dom->addXmlContent($data);
 
-        $dom->filter('channels channel')->each(function(Crawler $node) use($date) {
+        $dom->filter('channels channel')->each(function(Crawler $node) use($date, $url) {
             $paradeData = [
                 'name' => $node->attr('id'),
                 'parade' => []
@@ -57,7 +57,7 @@ class sportnet extends CommonParade implements collector
             });
 
             if (!empty($paradeData['parade'])) {
-                $this->createParade($paradeData['name'], $date ,$paradeData['parade']);
+                $this->createParade($paradeData['name'], $date ,$paradeData['parade'], __CLASS__, $url);
             }
         });
     }

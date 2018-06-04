@@ -45,7 +45,7 @@ class cctv5 extends CommonParade implements collector
             ];
         }
 
-        $this->createParade($name, $date, $paradeData);
+        $this->createParade($name, $date, $paradeData, __CLASS__, $url);
     }
 
     public function getUrlGroup()

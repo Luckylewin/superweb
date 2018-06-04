@@ -59,7 +59,7 @@ class eurosport extends CommonParade implements collector
             });
 
             foreach ($program as $value) {
-                $this->createParade($value['name'], $date,$value['parade']);
+                $this->createParade($value['name'], $date,$value['parade'], __CLASS__, $this->url);
             }
 
         });

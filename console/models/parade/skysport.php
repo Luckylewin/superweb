@@ -87,22 +87,7 @@ class skysport extends CommonParade implements collector
         });
 
         foreach ($programMap as $value) {
-            //插入数据
-            //查找频道是否存在
-            $channel = OttChannel::findOne(['name' => $value['name']]);
-            if (!is_null(Parade::findOne(['channel_name' => $value['name'], 'parade_date' => $currentDay])) || empty($value)) {
-                echo "已经存在|没有预告";
-                return false;
-            }
-
-            $parade = new Parade();
-            $parade->parade_date = $currentDay;
-            $parade->parade_data = json_encode($value['parade']);
-            $parade->channel_name = $value['name'];
-            if ($channel) {
-                $parade->channel_id = $channel->ID;
-            }
-            $parade->save(false);
+            $this->createParade($value['name'], $currentDay, $value['parade'], __CLASS__, $url);
         }
 
         sleep(mt_rand(2,4));

@@ -25,7 +25,7 @@ class ParadeController extends Controller
 
     public function actionCollect()
     {
-        $this->actionVn();
+        //$this->actionVn();
         $this->actionSky();
         $this->actionTsn();
         $this->actionEspn();

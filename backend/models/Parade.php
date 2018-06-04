@@ -21,6 +21,8 @@ use yii\db\ActiveRecord;
  * @property string $parade_date
  * @property string $upload_date
  * @property string $parade_data
+ * @property string $source
+ * @property string $url
  */
 class Parade extends \yii\db\ActiveRecord
 {
@@ -54,7 +56,7 @@ class Parade extends \yii\db\ActiveRecord
         return [
             [['channel_id'], 'integer'],
             [['parade_date', 'upload_date'], 'safe'],
-            [['parade_data'], 'string'],
+            [['parade_data', 'source', 'url'], 'string'],
             [['channel_name'], 'string', 'max' => 30],
         ];
     }

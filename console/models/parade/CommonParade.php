@@ -226,6 +226,12 @@ class CommonParade
         return $week;
     }
 
+    public function getClassName($class)
+    {
+        $class = explode('\\', $class);
+        return end($class);
+    }
+
     /**
      * 新增一条预告
      * @param $channelName
@@ -233,7 +239,7 @@ class CommonParade
      * @param $paradeData
      * @return bool
      */
-    public function createParade($channelName, $paradeDate, $paradeData)
+    public function createParade($channelName, $paradeDate, $paradeData, $source, $url)
     {
         //查找频道是否存在
         $channel = OttChannel::find()->where(['or', ['name' => $channelName], ['alias_name' => $channelName]])->one();
@@ -246,6 +252,8 @@ class CommonParade
         $parade->parade_date = $paradeDate;
         $parade->parade_data = json_encode($paradeData);
         $parade->channel_name = $channelName;
+        $parade->source = $this->getClassName($source);
+        $parade->url = $url;
 
         if ($channel) {
             $parade->channel_id = $channel->id;
