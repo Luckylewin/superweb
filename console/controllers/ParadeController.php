@@ -13,6 +13,7 @@ use console\models\parade\beginsport;
 use console\models\parade\cctv5;
 use console\models\parade\espn;
 use console\models\parade\eurosport;
+use console\models\parade\manmankan;
 use console\models\parade\sfrsport;
 use console\models\parade\skysport;
 use console\models\parade\sportnet;
@@ -94,6 +95,12 @@ class ParadeController extends Controller
     {
         $cctv5 = new cctv5();
         $cctv5->start();
+    }
+
+    public function actionManmankan()
+    {
+        $kan = new manmankan();
+        $kan->start();
     }
 
 }

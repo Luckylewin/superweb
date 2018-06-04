@@ -45,7 +45,7 @@ class beginsport extends CommonParade implements collector
             if (preg_match('/^channels_\d+/', $id)) {
                 //获取频道名称
                 $picture = $node->filter('.channel .centered img')->attr('src');
-                $channelName = str_replace(['_','/', '.svg'], ['-', '-', ''], $picture);
+                $channelName = 'Bein-Sport-' . basename($picture, '.svg');
                 $paradeData = [];
 
                 //获取预告
@@ -97,11 +97,6 @@ class beginsport extends CommonParade implements collector
               $v['url'] = str_replace('{DATE}', $v['param'], $this->url);
         });
 
-        $tasks2 = $this->getFutureTime(6, 'Y-m-d');
-        array_walk($tasks2, function(&$v) {
-            $v['url'] = str_replace('{DATE}', $v['param'], $this->url2);
-        });
-       
-        return ArrayHelper::merge($tasks, $tasks2);
+        return $tasks;
     }
 }
