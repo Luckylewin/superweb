@@ -4,10 +4,12 @@ namespace backend\controllers;
 
 use backend\components\MyRedis;
 use backend\models\search\ParadeSearch;
+use common\models\OttChannel;
 use Yii;
 use backend\models\Parade;
 
 use yii\helpers\Json;
+use yii\helpers\Url;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\widgets\ActiveForm;
@@ -308,6 +310,24 @@ class ParadeController extends BaseController
         $model = new Parade();
         $model->load(Yii::$app->request->post());
         return ActiveForm::validate($model);
+    }
+
+    public function actionBind()
+    {
+        if (Yii::$app->request->isPost) {
+            $channel = OttChannel::findOne(Yii::$app->request->post('channel'));
+            if ($channel) {
+                $channel->alias_name = Yii::$app->request->post('alias_name');
+                $channel->save(false);
+                $this->setFlash('info', '操作成功');
+                $this->redirect(Yii::$app->request->referrer);
+            }
+        }
+
+        $alias_name = Yii::$app->request->get('id');
+        return $this->renderAjax('bind', [
+            'alias_name' => $alias_name
+        ]);
     }
 
 }

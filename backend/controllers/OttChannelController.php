@@ -262,4 +262,14 @@ class OttChannelController extends BaseController
         return $this->redirect(Yii::$app->request->referrer);
     }
 
+
+    public function actionDropDownList()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        return OttChannel::getDropdownList(Yii::$app->request->get('sub_class_id'));
+
+    }
+
+
 }

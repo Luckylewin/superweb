@@ -89,12 +89,8 @@ class Parade extends \yii\db\ActiveRecord
         ];
     }
 
-    public function getChannel()
-    {
-        return $this->hasOne(OttChannel::className(), ['ID' => 'channel_id']);
-    }
 
-    public function channel()
+    public function getChannel()
     {
         return $this->hasOne(OttChannel::className(), ['alias_name' => 'channel_name']);
     }

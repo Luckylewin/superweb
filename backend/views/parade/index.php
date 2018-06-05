@@ -3,8 +3,11 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+use yii\bootstrap\Modal;
+use yii\helpers\Url;
+
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\query\ParadeQuery */
+/* @var $searchModel backend\models\search\ParadeQuery */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = '节目预告';
@@ -14,10 +17,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
     <?php Pjax::begin(); ?>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-
-
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -36,19 +35,28 @@ $this->params['breadcrumbs'][] = $this->title;
                     return Html::a($data->channel_name,'#',['btn btn-link']);
                 }
             ],
-            'upload_date',
-            //'parade_data:ntext',
+
             [
                     'label' => '关联频道',
                     'format' => 'raw',
                     'value' => function ($model) {
                         $channel = $model->channel;
+
                         if ($channel) {
                             return Html::a($channel->name, \yii\helpers\Url::to(['ott-channel/view', 'id' => $channel->id]),['class'=>'btn btn-link']);
                         }
-                        return false;
+
+                        return Html::a('绑定频道', null, [
+                                'class' => 'btn btn-default btn-sm bind',
+                                'data-toggle' => 'modal',
+                                'data-target' => '#bind-modal',
+                                'data-id' => $model->channel_name,
+                        ]);
                     }
             ],
+
+            'upload_date',
+
             [
                     'class' => 'common\grid\MyActionColumn',
                     'size' => 'btn-sm',
@@ -74,6 +82,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
                 'template' => '{view} &nbsp;{delete}',
             ],
+
+
         ],
     ]); ?>
     <?php Pjax::end(); ?>
@@ -83,3 +93,32 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= Html::a('添加预告', ['create'], ['class' => 'btn btn-success']) ?>
     <?= Html::a("生成缓存($version)", ['create-cache'], ['class' => 'btn btn-default']) ?>
 </p>
+
+
+<?php
+
+Modal::begin([
+    'id' => 'bind-modal',
+    'size' => Modal::SIZE_DEFAULT,
+    'header' => '<h4 class="modal-title">预告(<span id="channel_name"></span>)关联频道</h4>',
+    'footer' => '<a href="#" class="btn btn-default" data-dismiss="modal">关闭</a>',
+]);
+
+$requestUrl = Url::to(['parade/bind']);
+
+$requestJs=<<<JS
+     $(document).on('click', '.bind', function() {
+                var id = $(this).attr('data-id');
+                $('#channel_name').text(id);
+                $.get('{$requestUrl}', {'id':id},
+                    function (data) {
+                        $('.modal-body').css('min-height', '70px').html(data);
+                    }
+           )
+     });
+JS;
+
+$this->registerJs($requestJs);
+
+Modal::end();
+?>

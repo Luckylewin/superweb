@@ -5,6 +5,7 @@ namespace common\models;
 use backend\models\OttBanner;
 use backend\models\OttRecommend;
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "ott_channel".
@@ -115,6 +116,11 @@ class OttChannel extends \yii\db\ActiveRecord
     public function getBanner()
     {
         return $this->hasOne(OttBanner::className(), ['channel_id' => 'id']);
+    }
+
+    public static function getDropdownList($sub_class_id)
+    {
+        return ArrayHelper::map(self::find()->where(['sub_class_id' => $sub_class_id])->all(), 'id', 'name');
     }
 
 }

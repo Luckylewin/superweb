@@ -4,6 +4,7 @@ namespace common\models;
 
 use backend\components\MyRedis;
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "ott_main_class".
@@ -100,5 +101,10 @@ class MainClass extends \yii\db\ActiveRecord
         $redis = MyRedis::init(MyRedis::REDIS_PROTOCOL);
         $redis->del("OTT_CLASSIFICATION");
         return true;
+    }
+
+    public static function getDropdownList()
+    {
+        return ArrayHelper::map(self::find()->all(), 'id', 'name');
     }
 }

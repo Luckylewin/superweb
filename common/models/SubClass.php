@@ -2,9 +2,9 @@
 
 namespace common\models;
 
-use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "ott_sub_class".
@@ -116,4 +116,10 @@ class SubClass extends \yii\db\ActiveRecord
         }
         return true;
     }
+
+    public static function getDropdownList($main_class_id)
+    {
+        return ArrayHelper::map(self::find()->where(['main_class_id' => $main_class_id])->all(), 'id', 'name');
+    }
+
 }

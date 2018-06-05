@@ -242,6 +242,12 @@ class SubClassController extends BaseController
         return $this->redirect(Yii::$app->request->referrer);
     }
 
+    public function actionDropDownList()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        return SubClass::getDropdownList(Yii::$app->request->get('main_class_id'));
+    }
 
 
 }
