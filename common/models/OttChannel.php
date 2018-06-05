@@ -120,7 +120,13 @@ class OttChannel extends \yii\db\ActiveRecord
 
     public static function getDropdownList($sub_class_id)
     {
-        return ArrayHelper::map(self::find()->where(['sub_class_id' => $sub_class_id])->all(), 'id', 'name');
+        $channel = self::find()->where(['sub_class_id' => $sub_class_id])->asArray()->all();
+        if (!empty($channel)) {
+           
+            return ArrayHelper::map($channel, 'id', 'name');
+        }
+
+        return [];
     }
 
 }
