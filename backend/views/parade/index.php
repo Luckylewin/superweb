@@ -38,7 +38,17 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'upload_date',
             //'parade_data:ntext',
-
+            [
+                    'label' => '关联频道',
+                    'format' => 'raw',
+                    'value' => function ($model) {
+                        $channel = $model->channel;
+                        if ($channel) {
+                            return Html::a($channel->name, \yii\helpers\Url::to(['ott-channel/view', 'id' => $channel->id]),['class'=>'btn btn-link']);
+                        }
+                        return false;
+                    }
+            ],
             [
                     'class' => 'common\grid\MyActionColumn',
                     'size' => 'btn-sm',
