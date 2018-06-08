@@ -13,6 +13,7 @@ use console\components\MySnnopy;
 use Symfony\Component\DomCrawler\Crawler;
 use yii\helpers\ArrayHelper;
 
+//美国时间
 class beginsport extends CommonParade implements collector
 {
     //public $url = 'http://www.beinsports.com/france/programmes';2018-06-01
@@ -66,14 +67,20 @@ class beginsport extends CommonParade implements collector
                                  $parade = [
                                      'parade_name' => $liDom->filter('.onecontent .title')->text(),
                                      'parade_time' =>  $paradeTime,
-                                     'parade_type' => $liDom->filter('.onecontent .format')->text()
+                                     'parade_type' => $liDom->filter('.onecontent .format')->text(),
+                                     'parade_timestamp' => strtotime($date . " ". $paradeTime)
                                  ];
                                  $paradeData[] = $parade;
                              }else if ($liDom->filter('.onecontent .title_disable')->count()  && $parent == $className) {
+                                 $paradeTime = $liDom->filter('.timer p')->eq(0)->text();
+                                 $paradeTime = explode('-', $paradeTime);
+                                 $paradeTime = substr($paradeTime[0],0,5 );
+
                                  $parade = [
                                      'parade_name' => $liDom->filter('.onecontent .title_disable')->text(),
-                                     'parade_time' => $liDom->filter('.timer p')->eq(0)->text(),
-                                     'parade_type' => $liDom->filter('.onecontent .format_disable')->text()
+                                     'parade_time' =>  $paradeTime,
+                                     'parade_type' => $liDom->filter('.onecontent .format_disable')->text(),
+                                     'parade_timestamp' => strtotime($date . " ". $paradeTime)
                                  ];
                                  $paradeData[] = $parade;
 

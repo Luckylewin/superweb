@@ -14,7 +14,7 @@ use Yii;
 
 class sfrsport extends CommonParade implements collector
 {
-
+    //需要验证服务器访问是否不同的返回
     public $url = 'http://tv.sfr.fr/epg/maintenant/{DATE}/SFR%20Sport-51601/';
     public $debug = true;
 
@@ -46,9 +46,9 @@ class sfrsport extends CommonParade implements collector
 
         $program = $this->initProgram();
 
-        $dom->filter('.epg_ligne_chaine ')->each(function(Crawler $node, $i) use(&$program) {
+        $dom->filter('.epg_ligne_chaine ')->each(function(Crawler $node, $i) use(&$program, $date) {
 
-            $program[$i]['parade'] = $node->filter('.epg_element_prog')->each(function (Crawler $divDom) {
+            $program[$i]['parade'] = $node->filter('.epg_element_prog')->each(function (Crawler $divDom) use($date) {
                 $timeStart = $divDom->filter('.heure_prog')->text();
                 $programName = $divDom->filter('.lib_prog')->text();
                 $during = $divDom->filter('.duree_prog')->text();
@@ -57,7 +57,8 @@ class sfrsport extends CommonParade implements collector
                     'parade_time' => $timeStart,
                     'parade_name' => $programName,
                     'parade_type' => $type,
-                    'parade_during' => $during
+                    'parade_during' => $during,
+                    'parade_timestamp' => strtotime($date  . ' ' . $timeStart)
                 ];
             });
 

@@ -16,6 +16,7 @@ use yii\helpers\Json;
 
 class tsn extends CommonParade implements collector
 {
+    //https://www.tsn.ca/live/schedule 需要确认服务器影响
     public $url = 'https://capi.9c9media.com/destinations/tsn_web/platforms/desktop/channelAffiliates/';
 
     public function start()
@@ -54,7 +55,8 @@ class tsn extends CommonParade implements collector
                 if (empty($preg)) continue;
                 $paradeData[] = [
                     'parade_name' => $value['Desc'],
-                    'parade_time' => $preg[0]
+                    'parade_time' => $preg[0],
+                    'parade_timestamp' => strtotime($currentDay . ' ' . $preg[0])
                 ];
             }
 

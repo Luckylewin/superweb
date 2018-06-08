@@ -41,7 +41,8 @@ class cctv5 extends CommonParade implements collector
 
             $paradeData[] = [
                 'parade_name' => $value['programTitle'],
-                'parade_time' => $value['programTime']
+                'parade_time' => $value['programTime'],
+                'parade_timestamp' => strtotime($date . " " . $value['programTime'])
             ];
         }
 

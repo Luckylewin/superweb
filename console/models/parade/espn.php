@@ -12,8 +12,10 @@ use Yii;
 use Symfony\Component\DomCrawler\Crawler;
 use console\components\MySnnopy;
 
+//美国时间
 class espn extends CommonParade implements collector
 {
+    //http://www.espn.com/espntv/onair/index?start=5-27-18-5:00-PM
     public $url = 'http://espn.go.com/espntv/onair/index?start=';
     public $debug = false;
 
@@ -32,7 +34,7 @@ class espn extends CommonParade implements collector
             echo "采集{$date}预告", PHP_EOL;
 
             foreach ($task as $_task) {
-                $this->getOnePage($program, $_task['start'], $_task['url']);
+                $this->getOnePage($program, $_task['start'], $_task['url'], $date);
                 $this->_sleep(2,5);
             }
 
@@ -69,7 +71,7 @@ class espn extends CommonParade implements collector
      * @param $timeStart
      * @param $pageUrl
      */
-    public function getOnePage(&$program,$timeStart, $pageUrl)
+    public function getOnePage(&$program,$timeStart, $pageUrl, $date)
     {
         $snnopy = MySnnopy::init();
         $data = Yii::$app->cache->get('espn');
@@ -81,8 +83,9 @@ class espn extends CommonParade implements collector
 
         $dom = new Crawler();
         $dom->addHtmlContent($data);
+        date_default_timezone_set('America/New_York');
 
-        $dom->filter('.listings-grid .row ul')->each(function (Crawler $node, $i) use(&$program, $timeStart) {
+        $dom->filter('.listings-grid .row ul')->each(function (Crawler $node, $i) use(&$program, $timeStart, $date) {
 
             //判断时间
             $num = $node->filter('.divide-line')->count();
@@ -92,7 +95,7 @@ class espn extends CommonParade implements collector
 
             echo "节目" . $program[$i]['name'],PHP_EOL;
 
-            $node->filter('li')->each(function(Crawler $liDom, $ii) use(&$program, &$timeStart, &$lengths, $i) {
+            $node->filter('li')->each(function(Crawler $liDom, $ii) use(&$program, &$timeStart, &$lengths, $i, $date) {
                 $class = str_replace(['divide-line ', 'first'], ['', ''], $liDom->attr('class'));
                 $class && array_push($lengths, $class);
                 if ($liDom->filter('.cell-padding')->count()) {
@@ -107,7 +110,8 @@ class espn extends CommonParade implements collector
 
                     $parade = [
                         'parade_name' => $liDom->filterXPath('//div[@class="cell-padding"]')->text(),
-                        'parade_time' => $timeStart
+                        'parade_time' => $timeStart,
+                        'parade_timestamp' => strtotime($date . " " . $timeStart)
                     ];
                     $program[$i]['parade'][] = $parade;
                 }

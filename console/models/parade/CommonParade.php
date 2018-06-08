@@ -233,10 +233,11 @@ class CommonParade
     }
 
     /**
-     * 新增一条预告
      * @param $channelName
      * @param $paradeDate
      * @param $paradeData
+     * @param $source
+     * @param $url
      * @return bool
      */
     public function createParade($channelName, $paradeDate, $paradeData, $source, $url)
@@ -254,6 +255,7 @@ class CommonParade
         $parade->channel_name = $channelName;
         $parade->source = $this->getClassName($source);
         $parade->url = $url;
+        $parade->parade_timestamp = strtotime($paradeDate);
 
         if ($channel) {
             $parade->channel_id = $channel->id;

@@ -33,11 +33,12 @@ class manmankan extends CommonParade implements collector
     {
         $dom = $this->getDom($url, 'html', 'gb2312');
         $paradeData = [];
-        $dom->filter('.shijian li')->each(function(Crawler $node) use(&$paradeData) {
+        $dom->filter('.shijian li')->each(function(Crawler $node) use(&$paradeData, $date) {
             if ($node->filter('em')->count()) {
                 $paradeData[] = [
                     'parade_time' => $node->filter('em')->text(),
-                    'parade_name' => $node->filter('span')->text()
+                    'parade_name' => $node->filter('span')->text(),
+                    'parade_timestamp' => strtotime($date . ' '. $node->filter('em')->text())
                 ];
             }
         });

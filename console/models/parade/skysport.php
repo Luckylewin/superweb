@@ -15,8 +15,10 @@ use Yii;
 use console\components\MySnnopy;
 
 
+//英国时间
 class skysport extends CommonParade implements collector
 {
+    //确认来访者的影响
     public $debug = false;
     public $url = 'http://www.skysports.com/watch/tv-guide/';
 
@@ -72,8 +74,8 @@ class skysport extends CommonParade implements collector
         });
 
         //整理数据
-        !empty($programMap) && array_walk($programMap ,function (&$v) {
-            !empty($v['parade']) && array_walk($v['parade'], function(&$_v){
+        !empty($programMap) && array_walk($programMap ,function (&$v) use ($currentDay) {
+            !empty($v['parade']) && array_walk($v['parade'], function(&$_v) use($currentDay){
                 $_v = preg_split('/\n/', $_v);
                 array_walk($_v, function(&$temp_v) {
                     $temp_v = trim($temp_v);
@@ -82,11 +84,18 @@ class skysport extends CommonParade implements collector
                 $_v['parade_name'] = $_v[0];
                 $_v[1] = explode(',', $_v[1]);
                 $_v['parade_time'] = date('H:i', strtotime($_v[1][0]));
+
                 unset($_v[0], $_v[1]);
             });
         });
 
+
+
         foreach ($programMap as $value) {
+            array_walk($value['parade'] ,function(&$v) use($currentDay) {
+                $v['parade_timestamp'] = strtotime($currentDay . ' ' . $v['parade_time']);
+            });
+
             $this->createParade($value['name'], $currentDay, $value['parade'], __CLASS__, $url);
         }
 

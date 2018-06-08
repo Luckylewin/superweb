@@ -39,8 +39,8 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::dropDownList('channel', null, [], ['class' => 'form-control', 'id' => 'channel', 'prompt' => '请选择', 'required' => true]); ?>
     </div>
 
-        <button type="submit" class="btn btn-info">关联</button>
-   <?php \yii\widgets\ActiveForm::end(); ?>
+        <button type="submit" class="btn btn-info choose">选择</button>
+   <?php ActiveForm::end(); ?>
 
 </div>
 
@@ -51,23 +51,22 @@ $channelUrl = Url::to(['ott-channel/drop-down-list']);
 
 $requestJs=<<<JS
     var prompt = '<option value="">请选择</option>';
-
-    $('#main-class').change(function() {
-       var main_id = $(this).val();
-       $.getJSON('{$subClassUrl}',{main_class_id:main_id}, function(data) {
-          var sub_class = $('#sub-class');
-              sub_class.html('');
-              sub_class.append(prompt);
-              $('#channel').html(prompt);
+    $(document).on('change', '#main-class', function() {
+         var main_id = $(this).val();
+         $.getJSON('{$subClassUrl}',{main_class_id:main_id}, function(data) {
+              var sub_class = $('#sub-class');
+                  sub_class.html('');
+                  sub_class.append(prompt);
+                  $('#channel').html(prompt);
           $.each(data, function(index, value) {
-              var node = '<option value="'+ index +'">' + value + '</option>';
-              sub_class.append(node);
+                  var node = '<option value="'+ index +'">' + value + '</option>';
+                  sub_class.append(node);
           });
-       }); 
+       });  
     });
-
-    $('#sub-class').change(function() {
-        var sub_id = $(this).val();
+    
+    $(document).on('change', '#sub-class', function() {
+         var sub_id = $(this).val();
         $.getJSON('{$channelUrl}',{sub_class_id:sub_id}, function(data) {
           var channel = $('#channel');
               channel.html('');
@@ -76,7 +75,7 @@ $requestJs=<<<JS
               var node = '<option value="'+ index +'">' + value + '</option>';
               channel.append(node);
           });
-       });        
+       });      
     });
 JS;
 

@@ -12,6 +12,7 @@ use console\components\MySnnopy;
 use Symfony\Component\DomCrawler\Crawler;
 use Yii;
 
+//英国时间
 class eurosport extends CommonParade implements collector
 {
 
@@ -36,6 +37,8 @@ class eurosport extends CommonParade implements collector
             Yii::$app->cache->set('eurosport', $data);
         }
 
+        date_default_timezone_set('Europe/Paris');
+
         $dom = new Crawler();
         $dom->addHtmlContent($data);
 
@@ -48,10 +51,12 @@ class eurosport extends CommonParade implements collector
                 return false;
             }
 
-            $node->filterXPath('//div[@data-ch-id]')->each(function(Crawler $divDom) use(&$program) {
+            $node->filterXPath('//div[@data-ch-id]')->each(function(Crawler $divDom) use(&$program, $date) {
+                $time = date('H:i', strtotime($divDom->filter('.tv-program__tile-time')->text()));
                 $parade = [
                     'parade_name' => $divDom->filter('.tv-program__title')->text(),
-                    'parade_time' => date('H:i', strtotime($divDom->filter('.tv-program__tile-time')->text()))
+                    'parade_time' => $time,
+                    'parade_timestamp' => strtotime($date . ' '. $time)
                 ];
                 //判断是节目1还是节目2
                 $key = $divDom->attr('data-ch-id') == '0' ? 0 : 1;

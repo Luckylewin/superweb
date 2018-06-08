@@ -14,6 +14,8 @@ use Snoopy\Snoopy;
 
 class sportnet extends CommonParade implements collector
 {
+    //西五区时间
+
     public $url = 'https://www.sportsnet.ca/wp-content/themes/sportsnet/broadcast_schedule/ajax/broadcast_schedule/date_files/ONTARIO_';//20180531.xml?r=0.254844711544516042
     public $debug = true;
 
@@ -33,13 +35,12 @@ class sportnet extends CommonParade implements collector
 
     public function getOneDay($date, $url)
     {
-        $data = Yii::$app->cache->get('sport');
-        if ($data == false && $this->debug) {
-            $snnopy = MySnnopy::init();
-            $snnopy->fetch($url);
-            $data = $snnopy->results;
-            Yii::$app->cache->set('sport', $data);
-        }
+        echo $url,PHP_EOL;
+        $snnopy = MySnnopy::init();
+        $snnopy->fetch($url);
+        $data = $snnopy->results;
+
+        date_default_timezone_set('America/New_York');
 
         $dom = new Crawler();
         $dom->addXmlContent($data);
@@ -52,7 +53,8 @@ class sportnet extends CommonParade implements collector
             $node->filter('program')->each(function(Crawler $programNode) use(&$paradeData, $date) {
                 $paradeData['parade'][] = [
                     'parade_name' => $programNode->filter('SeriesName')->text(),
-                    'parade_time' => $programNode->attr('startTime')
+                    'parade_time' => $programNode->attr('startTime'),
+                    'parade_timestamp' => strtotime($date ." ". $programNode->attr('startTime'))
                 ];
             });
 

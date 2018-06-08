@@ -21,6 +21,7 @@ use yii\db\ActiveRecord;
  * @property string $parade_date
  * @property string $upload_date
  * @property string $parade_data
+ * @property string $parade_timestamp
  * @property string $source
  * @property string $url
  */
@@ -56,7 +57,7 @@ class Parade extends \yii\db\ActiveRecord
         return [
             [['parade_date', 'channel_name'], 'required'],
             [['channel_id'], 'integer'],
-            [['parade_date', 'upload_date'], 'safe'],
+            [['parade_date', 'upload_date', 'parade_data'], 'safe'],
             [['parade_data', 'source', 'url'], 'string'],
             [['channel_name'], 'string', 'max' => 30],
             ['parade_date', 'is_exist', 'when' => function($model) {
@@ -86,6 +87,7 @@ class Parade extends \yii\db\ActiveRecord
             'parade_date' => '预告日期',
             'upload_date' => '采集日期',
             'parade_data' => '预告内容',
+            'parade_timestamp' => '世界时间'
         ];
     }
 

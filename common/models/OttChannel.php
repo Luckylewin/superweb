@@ -122,7 +122,7 @@ class OttChannel extends \yii\db\ActiveRecord
     {
         $channel = self::find()->where(['sub_class_id' => $sub_class_id])->asArray()->all();
         if (!empty($channel)) {
-           
+
             return ArrayHelper::map($channel, 'id', 'name');
         }
 
