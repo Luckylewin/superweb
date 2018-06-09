@@ -3,6 +3,8 @@
 namespace backend\models;
 
 use Yii;
+use common\models\OttChannel;
+use yii\helpers\Json;
 
 /**
  * This is the model class for table "ott_major_event".
@@ -33,7 +35,8 @@ class MajorEvent extends \yii\db\ActiveRecord
         return [
             [['time', 'title'], 'required'],
             [['time', 'base_time'], 'string'],
-            [['title', 'live_match', 'match_data', 'sort'], 'string', 'max' => 255],
+            [['match_data'], 'safe'],
+            [['title', 'live_match', 'sort'], 'string', 'max' => 255],
         ];
     }
 
@@ -52,4 +55,38 @@ class MajorEvent extends \yii\db\ActiveRecord
             'sort' => '排序',
         ];
     }
+
+    /**
+     *
+     */
+    public function beforeValidate()
+    {
+       parent::beforeValidate();
+       $this->time = strtotime($this->time);
+       $this->base_time = strtotime($this->time);
+       return true;
+    }
+
+    public function initData($post)
+    {
+        $match_data = [];
+        foreach ($post['channel_id'] as $key => $channel_id) {
+            $channelObject = OttChannel::findOne($channel_id);
+            $match_data[] = [
+                'channel_language' => $post['language'][$key],
+                'main_class' => $post['main_class'][$key],
+                'channel_name' => $channelObject->name,
+                'channel_id' => $channelObject->channel_number,
+                'channel_icon' => $channelObject->image
+            ];
+        }
+
+        if (empty($match_data)) {
+            return false;
+        }
+
+        $this->match_data = Json::encode($match_data);
+        return true;
+    }
+
 }

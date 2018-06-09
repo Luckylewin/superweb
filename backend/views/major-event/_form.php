@@ -17,7 +17,6 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/laydate/laydate.js'
 
 <style>
     .select2-container--open{
-
         z-index:9999999
     }
     .layui-laydate-list>li {width: 50%;}
@@ -62,6 +61,9 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/laydate/laydate.js'
                     <td>
 
                         <div class="input-group" style="position: relative">
+                            <input type="hidden" name="main_class[]" class="main_class">
+                            <input type="hidden" name="channel_id[]" class="channel_id">
+                            <input type="hidden" name="language[]" class="language">
                             <input type="text" name="channel_name[]" class="form-control channel" placeholder="选择频道" readonly="readonly">
                             <span class="input-group-btn">
                                         <?= Html::button('查找', [
@@ -76,6 +78,7 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/laydate/laydate.js'
                     </td>
                     <td>
                         <div class="input-group" style="position: relative">
+
                             <input type="text" name="language_name[]" class="form-control language" placeholder="选择语言" readonly="readonly">
                             <span class="input-group-btn">
                                         <?= Html::button('选择', [
@@ -100,7 +103,6 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/laydate/laydate.js'
         </div>
 
         <div class="col-md-12">
-            <?= $form->field($model, 'match_data')->textInput(['maxlength' => true]) ?>
 
             <?= $form->field($model, 'sort')->textInput(['maxlength' => true]) ?>
 
@@ -182,10 +184,12 @@ $requestJs=<<<JS
     
    //语言选择框
    $(".fastbannerform__country").on('select2:select', function (e) {
-        //console.log(data);
+       
         $(this).val('');
         var data = e.params.data;
+         console.log(data);
         $('.channel_table tr').eq(indexCounter.language).find('.language').val(data.text);
+        $('.language').eq(indexCounter.language).val(data.id);
         //关闭Modal
         $('#language_modal').modal('hide');
             
@@ -204,9 +208,17 @@ $requestJs=<<<JS
      //频道选择事件
      $(document).on('click', '.choose', function() {
                 var index = indexCounter.channel;
-                var channel = $('#channel');
-                var channel_name = channel.find('option:selected').text();
-                $('.channel').eq(index).val(channel_name);
+                var main_class = $('#main-class').find('option:selected').text();
+                
+                var channel = $('#channel').find('option:selected');
+                var text = channel.text(),
+                    channel_id = channel.val();
+                
+                $('.channel').eq(index).val(text);
+                $('.main_class').eq(index).val(main_class);
+                $('.channel_id').eq(index).val(channel_id);
+                
+                //隐藏
                 $('#bind-modal').modal('hide');
                 $('.channel_table tr').eq(index).find('.language-button').eq(0).click();
                 return false;

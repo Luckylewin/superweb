@@ -10,29 +10,18 @@ $this->registerJsFile('/statics/plugins/select2/js/select2.min.js', ['depends' =
 $this->registerJsFile('/statics/plugins/select2/js/select2_1.js', ['depends' => 'yii\web\JqueryAsset']);
 ?>
 <style>
-
     .select2-selection__rendered{
         text-align: center;
     }
-
 </style>
+
+    <?php if($label): ?>
+    <label for="select2-country" class="control-label"><?= $label ?></label>
+    <?php endif; ?>
+
 <div class="head">
-    <select name="country" class="fastbannerform__country" style="width: 200px">
-        <option >请选择</option>
-        <option value="en_US" title="AA" >英语</option>
-        <option value="zh_CN" title="CN" >中文</option>
-        <option value="de_DE" title="DE" >德语</option>
-        <option value="fr_FR" title="FR" >法语</option>
-        <option value="ru_RU" title="RU" >俄语</option>
-        <option value="es_ES" title="ES" >西班牙语</option>
-        <option value="ja_JP" title="JP" >日语</option>
-        <option value="ar_EG" title="EG" >阿拉伯语</option>
-        <option value="ko_KR" title="KR" >韩语</option>
-        <option value="pt_BR" title="PT" >葡萄牙语</option>
-        <option value="hi_IN" title="IN" >印地语</option>
-        <option value="vi_VN" title="VN" >越南语</option>
-        <option value="th_TH" title="TH" >泰语</option>
-        <!--<option value="ASA" title="AA" >America</option>
+    <select name="country" class="fastbannerform__country <?= $colClass ?>"  id="select2-country">
+        <option value="ASA" title="AA" >America</option>
         <option value="AND" title="AD" >Andorra</option>
         <option value="ARE" title="AE" >United Arab Emirates</option>
         <option value="AFG" title="AF" >Afghanistan</option>
@@ -233,5 +222,6 @@ $this->registerJsFile('/statics/plugins/select2/js/select2_1.js', ['depends' => 
         <option value="YEM" title="YE" >Yemen</option>
         <option value="ZAF" title="ZA" >South Africa</option>
         <option value="ZMB" title="ZM" >Zambia</option>
-        <option value="ZWE" title="ZW" >Zimbabwe</option>-->
-</select>
+        <option value="ZWE" title="ZW" >Zimbabwe</option>
+    </select>
+</div>

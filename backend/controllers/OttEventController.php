@@ -2,28 +2,26 @@
 
 namespace backend\controllers;
 
-use common\models\OttChannel;
 use Yii;
-use backend\models\MajorEvent;
+use backend\models\OttEvent;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * MajorEventController implements the CRUD actions for MajorEvent model.
+ * OttEventController implements the CRUD actions for OttEvent model.
  */
-class MajorEventController extends BaseController
+class OttEventController extends BaseController
 {
-
     /**
-     * Lists all MajorEvent models.
+     * Lists all OttEvent models.
      * @return mixed
      */
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => MajorEvent::find(),
+            'query' => OttEvent::find(),
         ]);
 
         return $this->render('index', [
@@ -32,7 +30,7 @@ class MajorEventController extends BaseController
     }
 
     /**
-     * Displays a single MajorEvent model.
+     * Displays a single OttEvent model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -45,16 +43,16 @@ class MajorEventController extends BaseController
     }
 
     /**
-     * Creates a new MajorEvent model.
+     * Creates a new OttEvent model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new MajorEvent();
+        $model = new OttEvent();
 
-        $post = Yii::$app->request->post();
-        if ($model->load($post) && $model->initData($post) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $this->setFlash('success', '添加成功');
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -64,7 +62,7 @@ class MajorEventController extends BaseController
     }
 
     /**
-     * Updates an existing MajorEvent model.
+     * Updates an existing OttEvent model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -84,7 +82,7 @@ class MajorEventController extends BaseController
     }
 
     /**
-     * Deletes an existing MajorEvent model.
+     * Deletes an existing OttEvent model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -98,18 +96,23 @@ class MajorEventController extends BaseController
     }
 
     /**
-     * Finds the MajorEvent model based on its primary key value.
+     * Finds the OttEvent model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return MajorEvent the loaded model
+     * @return OttEvent the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = MajorEvent::findOne($id)) !== null) {
+        if (($model = OttEvent::findOne($id)) !== null) {
             return $model;
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionDropdownlist()
+    {
+        return $this->renderAjax('dropdownlist');
     }
 }
