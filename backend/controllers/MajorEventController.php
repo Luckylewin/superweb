@@ -24,6 +24,12 @@ class MajorEventController extends BaseController
     {
         $dataProvider = new ActiveDataProvider([
             'query' => MajorEvent::find(),
+            'sort' => [
+                'defaultOrder' => [
+                    'time' => SORT_ASC,
+                    'sort' => SORT_ASC
+                ]
+            ]
         ]);
 
         return $this->render('index', [
@@ -54,8 +60,11 @@ class MajorEventController extends BaseController
         $model = new MajorEvent();
 
         $post = Yii::$app->request->post();
+
+
         if ($model->load($post) && $model->initData($post) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            $this->setFlash('success', '操作成功');
+            return $this->redirect(['index']);
         }
 
         return $this->render('create', [
@@ -93,7 +102,7 @@ class MajorEventController extends BaseController
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
-
+        $this->setFlash('info', '操作成功');
         return $this->redirect(['index']);
     }
 

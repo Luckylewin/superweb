@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use common\components\Func;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -23,15 +24,43 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             //'id',
-            'time:datetime',
+            'time:date',
             'title',
-            'live_match',
+
             'base_time:datetime',
-            'match_data',
-             'sort',
+
+            [
+                'attribute' => 'live_match',
+                'format' => 'raw',
+                'value' => function ($model) {
+                     $data = json_decode($model->live_match);
+                     $teamObject = $data->teams;
+                     $teams = $data->teams[0]->team_zh_name . ' ' . Html::img(Func::getAccessUrl($teamObject[0]->team_icon), ['width'=>30]);
+                     $teams .= ' - ';
+                     $teams .= Html::img(Func::getAccessUrl($teamObject[1]->team_icon), ['width'=>30]) . ' '. $data->teams[1]->team_zh_name;
+                     return $text = date('H:i', $data->event_time) . ' ' . $data->event_info . ' ' . $teams ;
+
+                }
+            ],
+            [
+                    'attribute' => 'match_data',
+                    'format' => 'raw',
+                    'value' => function($model) {
+                        $data = json_decode($model->match_data);
+                        $text = '';
+                        foreach ($data as $channel) {
+                            $text .= Html::tag('span', $channel->channel_name, ['class' => 'label label-default']) . ' ';
+                        }
+                        return $text;
+                     }
+
+            ],
+
+
             [
                     'class' => 'common\grid\MyActionColumn',
-                    'size' => 'btn-sm'
+                    'size' => 'btn-sm',
+                    'template' => '{view} {delete}'
             ],
         ],
     ]); ?>

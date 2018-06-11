@@ -2,6 +2,7 @@
 
 namespace backend\models;
 
+use common\components\BaiduTranslator;
 use Yii;
 use common\models\OttChannel;
 use yii\helpers\Json;
@@ -33,10 +34,10 @@ class MajorEvent extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['time', 'title'], 'required'],
-            [['time', 'base_time'], 'string'],
-            [['match_data'], 'safe'],
-            [['title', 'live_match', 'sort'], 'string', 'max' => 255],
+            [['time', 'title', 'time', 'base_time'], 'required'],
+            [['match_data', 'live_match'], 'safe'],
+            [['title'], 'string'],
+            ['sort', 'default' , 'value' => 0]
         ];
     }
 
@@ -48,7 +49,7 @@ class MajorEvent extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'time' => '日期',
-            'title' => '赛事名称',
+            'title' => '赛事轮次信息',
             'live_match' => '赛事信息',
             'base_time' => '比赛时间',
             'match_data' => '匹配预告列表',
@@ -63,12 +64,46 @@ class MajorEvent extends \yii\db\ActiveRecord
     {
        parent::beforeValidate();
        $this->time = strtotime($this->time);
-       $this->base_time = strtotime($this->time);
        return true;
     }
 
+
     public function initData($post)
     {
+
+        $date = $post['MajorEvent']['time'];
+        $this->base_time = strtotime($date . ' ' . trim(strstr($post['MajorEvent']['base_time'], '-', true)));
+
+        $majorEvent = OttEvent::findOne(['event_name_zh' => $post['event_info']]);
+        $teamA = OttEventTeam::findOne(['team_zh_name' => $post['teamA']]);
+        $teamB = OttEventTeam::findOne(['team_zh_name' => $post['teamB']]);
+
+        //赛事信息
+        $event_data = [
+            'title' => (new BaiduTranslator())->translate($post['MajorEvent']['title'], 'zh', 'en'),
+            'title_zh' => $post['MajorEvent']['title'],
+            'event_time' => $this->base_time,
+            'event_info' => $majorEvent->event_name,
+            'event_zh_info' => $majorEvent->event_name_zh,
+            'event_icon' => $majorEvent->event_icon,
+            'teams' => [
+                [
+                    'team_name' => $teamA->team_name,
+                    'team_zh_name' => $teamA->team_zh_name,
+                    'team_icon' => $teamA->team_icon
+                ],
+                [
+                    'team_name' => $teamB->team_name,
+                    'team_zh_name' => $teamB->team_zh_name,
+                    'team_icon' => $teamB->team_icon
+                ]
+            ],
+
+        ];
+
+        $this->live_match = Json::encode($event_data);
+
+        //频道
         $match_data = [];
         foreach ($post['channel_id'] as $key => $channel_id) {
             $channelObject = OttChannel::findOne($channel_id);
@@ -86,6 +121,7 @@ class MajorEvent extends \yii\db\ActiveRecord
         }
 
         $this->match_data = Json::encode($match_data);
+
         return true;
     }
 

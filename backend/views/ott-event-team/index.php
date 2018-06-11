@@ -18,9 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a('添加队伍', Url::to(['ott-event-team/create', 'event_id' => Yii::$app->request->get('event_id')]), ['class' => 'btn btn-success']) ?>
-    </p>
+
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -51,4 +49,9 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ],
     ]); ?>
+
+    <p>
+        <?= Html::a('添加队伍', Url::to(['ott-event-team/create', 'event_id' => Yii::$app->request->get('event_id')]), ['class' => 'btn btn-success']) ?>
+        <?= Html::a('返回', Url::to(['ott-event/index']), ['class' => 'btn btn-default']) ?>
+    </p>
 </div>

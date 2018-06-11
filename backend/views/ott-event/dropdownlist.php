@@ -13,25 +13,22 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
     <div class="parade-create">
 
-        <?php ActiveForm::begin() ?>
-
         <div class="form-group">
-            <label class="sr-only" for="main-class">赛事列表</label>
+            <label for="event">赛事列表</label>
             <?= Html::dropDownList('event', null, $event, ['class' => 'form-control', 'id' => 'event', 'prompt' => '请选择', 'required' => true]); ?>
         </div>
 
         <div class="form-group">
-            <label class="sr-only" for="main-class">队伍一</label>
+            <label  for="teamA">队伍一</label>
             <?= Html::dropDownList('sub-class', null, [], ['class' => 'form-control team', 'id' => 'teamA', 'prompt' => '请选择', 'required' => true]); ?>
         </div>
 
         <div class="form-group">
-            <label class="sr-only" for="main-class">队伍二</label>
+            <label for="teamB">队伍二</label>
             <?= Html::dropDownList('channel', null, [], ['class' => 'form-control team', 'id' => 'teamB', 'prompt' => '请选择', 'required' => true]); ?>
         </div>
 
-        <button type="submit" class="btn btn-info choose">选择</button>
-        <?php ActiveForm::end(); ?>
+        <button class="btn btn-info event-choose">选择</button>
 
     </div>
 

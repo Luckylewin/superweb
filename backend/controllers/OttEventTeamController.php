@@ -6,6 +6,7 @@ use backend\models\OttEvent;
 use Yii;
 use backend\models\OttEventTeam;
 use yii\data\ActiveDataProvider;
+use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -23,7 +24,7 @@ class OttEventTeamController extends BaseController
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => OttEventTeam::find(),
+            'query' => OttEventTeam::find()->where(['event_id' => Yii::$app->request->get('event_id')]),
         ]);
 
         return $this->render('index', [
@@ -59,7 +60,7 @@ class OttEventTeamController extends BaseController
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $this->setFlash('success', '添加成功');
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(Url::to(['ott-event-team/index', 'event_id' => $model->event_id]));
         }
 
         return $this->render('create', [
@@ -79,7 +80,8 @@ class OttEventTeamController extends BaseController
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            $this->setFlash('success', '操作成功');
+            return $this->redirect(Url::to(['ott-event-team/index', 'event_id' => $model->event_id]));
         }
 
         return $this->render('update', [
@@ -96,9 +98,15 @@ class OttEventTeamController extends BaseController
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        if ($model instanceof OttEventTeam) {
+            $event_id = $model->event_id;
+            $this->setFlash('info', '操作成功');
+            $model->delete();
+            return $this->redirect(Url::to(['ott-event-team/index', 'event_id' => $event_id]));
+        }
 
-        return $this->redirect(['index']);
+
     }
 
     /**

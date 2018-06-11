@@ -39,12 +39,28 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/laydate/laydate.js'
             <?= $form->field($model, 'base_time')->textInput(['class' => 'form-control time']) ?>
         </div>
 
+
+
         <div class="col-md-6">
-            <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
+            <label >赛事选择</label>
+            <div class="input-group" style="position: relative">
+                <input type="hidden" name="event_info" class="event_info">
+                <input type="hidden" name="teamA" class="teamA">
+                <input type="hidden" name="teamB" class="teamB">
+                <input type="text" class="form-control event-text" placeholder="选择赛事" readonly="readonly">
+                    <span class="input-group-btn">
+                                <?= Html::button('选择赛事', [
+                                    'class' => 'btn btn-info btn-search event-search',
+                                    'data-toggle' => 'modal',
+                                    'data-target' => '#event-modal',
+                                    'data-index' => 0
+                                ]) ?>
+                    </span>
+            </div>
         </div>
 
         <div class="col-md-6">
-            <?= $form->field($model, 'live_match')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'title')->textInput(['maxlength' => true , 'placeholder' => '例:世界杯小组赛A组']) ?>
         </div>
 
         <div class="col-md-12">
@@ -79,7 +95,7 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/laydate/laydate.js'
                     <td>
                         <div class="input-group" style="position: relative">
 
-                            <input type="text" name="language_name[]" class="form-control language" placeholder="选择语言" readonly="readonly">
+                            <input type="text" name="language_name[]" class="form-control  language-input" placeholder="选择语言" readonly="readonly">
                             <span class="input-group-btn">
                                         <?= Html::button('选择', [
                                             'class' => 'btn btn-default language-button',
@@ -104,7 +120,7 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/laydate/laydate.js'
 
         <div class="col-md-12">
 
-            <?= $form->field($model, 'sort')->textInput(['maxlength' => true]) ?>
+            <?php $form->field($model, 'sort')->textInput(['maxlength' => true]) ?>
 
             <div class="form-group">
                 <?= Html::submitButton('添加', ['class' => 'btn btn-success']) ?>
@@ -135,6 +151,20 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/laydate/laydate.js'
     ?>
 </div>
 
+
+<!--  赛事选择modal:start  -->
+<div>
+    <?php
+        Modal::begin([
+           'id' => 'event-modal',
+           'header' => '<h4 class="modal-title">选择赛事</h4>',
+            'footer' => '<a href="#" class="btn btn-default" data-dismiss="modal">关闭</a>',
+        ]);
+        Modal::end();
+    ?>
+</div>
+<!--  赛事选择model:end  -->
+
 <!--选择频道modal-->
 <div>
     <?php
@@ -150,6 +180,7 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/laydate/laydate.js'
 
 <?php
 
+$eventUrl = Url::to(['ott-event/dropdownlist']);
 $requestUrl = Url::to(['parade/bind']);
 $requestJs=<<<JS
     
@@ -187,8 +218,8 @@ $requestJs=<<<JS
        
         $(this).val('');
         var data = e.params.data;
-         console.log(data);
-        $('.channel_table tr').eq(indexCounter.language).find('.language').val(data.text);
+        // console.log(data);
+        $('.channel_table tr').eq(indexCounter.language).find('.language-input').val(data.text);
         $('.language').eq(indexCounter.language).val(data.id);
         //关闭Modal
         $('#language_modal').modal('hide');
@@ -259,6 +290,33 @@ $requestJs=<<<JS
      $(document).on('click', '.del', function() {
             
             $(this).parent().parent().find('input').val('');   
+     });
+     
+     //赛事信息弹出框
+     $('.event-search').click(function() {
+          
+             $.get('{$eventUrl}',function(data) {
+                  $('#event-modal').find('.modal-body').css('min-height', '80px').html(data);
+             });
+     });
+     
+     //赛事信息选择框
+     $(document).on('click', '.event-choose', function() {
+            var event = $('#event').find('option:selected').text(),
+                teamA = $('#teamA').find('option:selected').text(),
+                teamB = $('#teamB').find('option:selected').text();
+            var text = event + ':' + teamA + ' VS ' + teamB;
+            
+            if (teamA === teamB) {
+                alert('两支队伍不能一样');
+                return false;
+            }
+            
+            $('input[name=event_info]').val(event);
+            $('input[name=teamA]').val(teamA);
+            $('input[name=teamB]').val(teamB);
+            $('.event-text').val(text);
+            $('#event-modal').modal('hide');
      });
      
 JS;
