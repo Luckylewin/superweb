@@ -21,7 +21,12 @@ $this->registerJsFile('/statics/plugins/select2/js/select2_1.js', ['depends' => 
 
 <div class="head">
     <select name="country" class="fastbannerform__country <?= $colClass ?>"  id="select2-country">
-        <option value="ASA" title="AA" >America</option>
+
+        <?php foreach ($country as $val): ?>
+            <option value="<?= $val['code'] ?>" title="<?= $val['code'] ?>" ><?= $val['zh_name'] ?></option>
+        <?php endforeach; ?>
+
+       <!-- <option value="ASA" title="AA" >America</option>
         <option value="AND" title="AD" >Andorra</option>
         <option value="ARE" title="AE" >United Arab Emirates</option>
         <option value="AFG" title="AF" >Afghanistan</option>
@@ -222,6 +227,6 @@ $this->registerJsFile('/statics/plugins/select2/js/select2_1.js', ['depends' => 
         <option value="YEM" title="YE" >Yemen</option>
         <option value="ZAF" title="ZA" >South Africa</option>
         <option value="ZMB" title="ZM" >Zambia</option>
-        <option value="ZWE" title="ZW" >Zimbabwe</option>
+        <option value="ZWE" title="ZW" >Zimbabwe</option>-->
     </select>
 </div>

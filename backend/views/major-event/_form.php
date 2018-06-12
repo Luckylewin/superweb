@@ -40,8 +40,13 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/laydate/laydate.js'
         </div>
 
 
+        <div class="col-md-12">
+            <?= $form->field($model, 'title')->textInput(['maxlength' => true , 'placeholder' => '例:世界杯小组赛A组']) ?>
 
-        <div class="col-md-6">
+        </div>
+
+
+        <div class="col-md-12"  style="margin-bottom: 20px;">
             <label >赛事选择</label>
             <div class="input-group" style="position: relative">
                 <input type="hidden" name="event_info" class="event_info">
@@ -59,9 +64,7 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/laydate/laydate.js'
             </div>
         </div>
 
-        <div class="col-md-6">
-            <?= $form->field($model, 'title')->textInput(['maxlength' => true , 'placeholder' => '例:世界杯小组赛A组']) ?>
-        </div>
+
 
         <div class="col-md-12">
             <table class="table table-bordered">
@@ -280,7 +283,7 @@ $requestJs=<<<JS
             
                 //复制一行
                 $('.channel_table').append(node);
-            
+                
                 //关闭Modal
                 $('#bind-modal').modal('hide');    
             
