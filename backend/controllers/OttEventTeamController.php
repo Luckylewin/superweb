@@ -25,6 +25,9 @@ class OttEventTeamController extends BaseController
     {
         $dataProvider = new ActiveDataProvider([
             'query' => OttEventTeam::find()->where(['event_id' => Yii::$app->request->get('event_id')]),
+            'pagination' => [
+                'pageSize' => 50
+            ]
         ]);
 
         return $this->render('index', [
