@@ -48,10 +48,12 @@ class OttEventTeam extends \yii\db\ActiveRecord
 
     public function check_unique($attribute, $params)
     {
-        $result = self::find()->where(['event_id' => $this->event_id, 'team_name'=>$this->team_name])->exists();
-        if ($result) {
-            $this->addError($attribute, $this->team_name . '已经存在');
-            return false;
+        if ($this->isNewRecord) {
+            $result = self::find()->where(['event_id' => $this->event_id, 'team_name'=>$this->team_name])->exists();
+            if ($result) {
+                $this->addError($attribute, $this->team_name . '已经存在');
+                return false;
+            }
         }
         return true;
     }
