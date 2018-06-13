@@ -35,13 +35,25 @@ class OttEventTeam extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            ['team_name','check_unique'],
             [['event_id', 'team_name'], 'required'],
             [['event_id'], 'integer'],
             [['team_name', 'team_zh_name'], 'string', 'max' => 50],
-            [['team_introduce', 'team_icon', 'team_icon_big', 'team_info', 'team_alias_name'], 'string', 'max' => 255],
+            [[ 'team_icon', 'team_icon_big', 'team_info', 'team_alias_name'], 'string', 'max' => 255],
+            ['team_introduce', 'string', 'max' => 800],
             [['team_country'], 'string', 'max' => 10],
             [['id'], 'unique'],
         ];
+    }
+
+    public function check_unique($attribute, $params)
+    {
+        $result = self::find()->where(['event_id' => $this->event_id, 'team_name'=>$this->team_name])->exists();
+        if ($result) {
+            $this->addError($attribute, $this->team_name . '已经存在');
+            return false;
+        }
+        return true;
     }
 
     /**
