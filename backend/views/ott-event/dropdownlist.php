@@ -10,6 +10,10 @@ $event = OttEvent::getDropdownList();
 /* @var $this yii\web\View */
 $this->title = '赛事信息';
 $this->params['breadcrumbs'][] = $this->title;
+
+$this->registerCssFile('/statics/plugins/select2/css/select2.css');
+$this->registerJsFile('/statics/plugins/select2/js/select2.min.js', ['depends' => 'yii\web\JqueryAsset']);
+
 ?>
     <div class="parade-create">
 
@@ -38,22 +42,22 @@ $teamUrl = Url::to(['ott-event-team/drop-down-list']);
 
 
 $requestJs=<<<JS
+    
+    $(".team").select2({
+         data: []
+    });
+    
     var prompt = '<option value="">请选择</option>';
+
     $(document).on('change', '#event', function() {
          var event_id = $(this).val();
          $.getJSON('{$teamUrl}',{event_id:event_id}, function(data) {
-              var team = $('.team');
-                  team.html('');
-                  team.append(prompt);
-                  team.html(prompt);
-          $.each(data, function(index, value) {
-                  var node = '<option value="'+ index +'">' + value + '</option>';
-                  team.append(node);
-          });
+                 $(".team").select2({
+                    data: data
+                 });
        });  
     });
     
-   
 JS;
 
 $this->registerJs($requestJs);

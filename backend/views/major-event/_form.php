@@ -228,15 +228,18 @@ $requestJs=<<<JS
         $('#language_modal').modal('hide');
             
     });
-        
+   
+   var channel_modal = false;     
     //弹出频道选择
     $(document).on('click', '.bind', function() {
                 indexCounter.channel = $(this).attr('data-index');
-                $.get('{$requestUrl}', {},
-                    function (data) {
-                        $('#bind-modal').find('.modal-body').css('min-height', '70px').html(data);
-             } 
-         )
+                if (channel_modal === false) {
+                    $.get('{$requestUrl}', {}, function (data) {
+                            $('#bind-modal').find('.modal-body').css('min-height', '70px').html(data);
+                          }
+                    );
+                    channel_modal = true;
+                }
     });
         
      //频道选择事件
@@ -333,7 +336,6 @@ $this->registerJs($requestJs);
     laydate.render({
         elem: '.date'
     });
-
 </script>
 <?php Jsblock::end() ?>
 

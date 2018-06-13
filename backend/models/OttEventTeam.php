@@ -79,9 +79,16 @@ class OttEventTeam extends \yii\db\ActiveRecord
 
     static public function getDropDownList($event_id)
     {
-        $data = self::find()->where(['event_id' => $event_id])->all();
+        $data = self::find()->where(['event_id' => $event_id])->asArray()->all();
+        $list = [];
+        foreach ($data as $val) {
+            $list[] = [
+                'id' => $val['id'],
+                'text' => $val['team_zh_name']
+            ];
+        }
         if (!empty($data)) {
-            return ArrayHelper::map($data, 'id', 'team_zh_name');
+            return $list;
         }
 
         return [];
