@@ -25,7 +25,8 @@ class CountryWidget extends Widget
 
     public function run()
     {
-        $country = SysCountry::find()->select('zh_name','code')->all();
+        $country = SysCountry::find()->select(['zh_name','code'])->asArray()->all();
+
         $country = ArrayHelper::map($country, 'code', 'zh_name');
 
         return $this->render('index', [

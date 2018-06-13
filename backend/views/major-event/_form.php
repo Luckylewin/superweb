@@ -333,19 +333,12 @@ $this->registerJs($requestJs);
     laydate.render({
         elem: '.date'
     });
-    laydate.render({
-        elem: '.dates'
-    });
+
     laydate.render({
         elem: '.time'
         ,type: 'time'
-        ,range: true
     });
-    laydate.render({
-        elem: '.times'
-        ,type: 'time'
-        ,range: true
-    });
+
 </script>
 <?php Jsblock::end() ?>
 

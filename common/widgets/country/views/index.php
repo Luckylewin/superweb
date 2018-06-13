@@ -22,8 +22,8 @@ $this->registerJsFile('/statics/plugins/select2/js/select2_1.js', ['depends' => 
 <div class="head">
     <select name="country" class="fastbannerform__country <?= $colClass ?>"  id="select2-country">
 
-        <?php foreach ($country as $val): ?>
-            <option value="<?= $val['code'] ?>" title="<?= $val['code'] ?>" ><?= $val['zh_name'] ?></option>
+        <?php foreach ($country as $code => $val): ?>
+            <option value="<?= $code ?>" title="<?= $code ?>" ><?= $val ?></option>
         <?php endforeach; ?>
 
        <!-- <option value="ASA" title="AA" >America</option>

@@ -39,7 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             //'team_icon_big',
-            //'team_country',
+            'team_country',
             //'team_info',
             //'team_alias_name',
 

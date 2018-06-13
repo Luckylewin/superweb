@@ -10,6 +10,7 @@ use \common\widgets\country\CountryWidget;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
+
 <div class="ott-event-team-form">
 
     <?php $form = ActiveForm::begin(); ?>
@@ -91,5 +92,22 @@ use \common\widgets\country\CountryWidget;
     <?php ActiveForm::end(); ?>
 
 </div>
+
+
+<?php
+
+$js=<<<JS
+    //语言选择框
+    $(".fastbannerform__country").on('select2:select', function (e) {
+        $(this).val('');
+        var data = e.params.data;
+        $('#otteventteam-team_country').val(data.id);
+    });
+JS;
+
+$this->registerJs($js);
+
+?>
+
 
 
