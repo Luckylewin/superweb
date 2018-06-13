@@ -24,12 +24,12 @@ $this->registerJsFile('/statics/plugins/select2/js/select2.min.js', ['depends' =
 
         <div class="form-group">
             <label  for="teamA">队伍一</label>
-            <?= Html::dropDownList('sub-class', null, [], ['class' => 'form-control team', 'id' => 'teamA', 'prompt' => '请选择', 'required' => true]); ?>
+            <?= Html::dropDownList('sub-class', null, [], ['style'=>'width:100%;','class' => 'form-control team', 'id' => 'teamA', 'prompt' => '请选择', 'required' => true]); ?>
         </div>
 
         <div class="form-group">
             <label for="teamB">队伍二</label>
-            <?= Html::dropDownList('channel', null, [], ['class' => 'form-control team', 'id' => 'teamB', 'prompt' => '请选择', 'required' => true]); ?>
+            <?= Html::dropDownList('channel', null, [], ['style'=>'width:100%;','class' => 'form-control team', 'id' => 'teamB', 'prompt' => '请选择', 'required' => true]); ?>
         </div>
 
         <button class="btn btn-info event-choose">选择</button>
