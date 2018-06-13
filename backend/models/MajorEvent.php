@@ -72,8 +72,12 @@ class MajorEvent extends \yii\db\ActiveRecord
     {
 
         $date = $post['MajorEvent']['time'];
-        $this->base_time = strtotime($date . ' ' . trim(strstr($post['MajorEvent']['base_time'], '-', true)));
-
+        if (strpos($post['MajorEvent']['base_time'], '-') !== false) {
+            $this->base_time = strtotime($date . ' ' . trim(strstr($post['MajorEvent']['base_time'], '-', true)));
+        }else {
+            $this->base_time = strtotime($date . ' ' . $post['MajorEvent']['base_time']);
+        }
+        
         $majorEvent = OttEvent::findOne(['event_name_zh' => $post['event_info']]);
         $teamA = OttEventTeam::findOne(['team_zh_name' => $post['teamA']]);
         $teamB = OttEventTeam::findOne(['team_zh_name' => $post['teamB']]);
