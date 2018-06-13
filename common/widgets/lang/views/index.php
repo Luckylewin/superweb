@@ -19,7 +19,7 @@ $this->registerJsFile('/statics/plugins/select2/js/select2_1.js', ['depends' => 
 <div class="head">
     <select name="country" class="fastbannerform__country" style="width: 200px">
         <option >请选择</option>
-        <option value="US" title="AA" >英语</option>
+        <option value="UK" title="UK" >英语</option>
         <option value="CN" title="CN" >中文</option>
         <option value="DE" title="DE" >德语</option>
         <option value="FR" title="FR" >法语</option>
