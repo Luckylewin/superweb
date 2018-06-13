@@ -44,19 +44,23 @@ $teamUrl = Url::to(['ott-event-team/drop-down-list']);
 $requestJs=<<<JS
     
     $(".team").select2({
-         data: []
+         data: [{id:null,text:null}]
     });
     
     var prompt = '<option value="">请选择</option>';
-
+    
+    
     $(document).on('change', '#event', function() {
          var event_id = $(this).val();
          $.getJSON('{$teamUrl}',{event_id:event_id}, function(data) {
-                 $(".team").select2({
+                
+                 $('.team').select2({
                     data: data
                  });
-       });  
+       });
     });
+    
+   
     
 JS;
 

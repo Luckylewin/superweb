@@ -148,6 +148,7 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/laydate/laydate.js'
         'size' => Modal::SIZE_SMALL,
         'header' => '<h4 class="modal-title">选择语言</h4>',
         'footer' => '',
+        'options' => ['tabindex' => 1]
     ]);
     echo "<div class='modal-body'>" . \common\widgets\lang\LangWidget::widget() . "</div>";
     Modal::end();
@@ -185,8 +186,9 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/laydate/laydate.js'
 
 $eventUrl = Url::to(['ott-event/dropdownlist']);
 $requestUrl = Url::to(['parade/bind']);
+
 $requestJs=<<<JS
-    
+    $.fn.modal.Constructor.prototype.enforceFocus = function () {};
     //计数器
     var indexCounter = {
         language:0,
