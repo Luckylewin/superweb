@@ -216,7 +216,7 @@ class Cache
 
             foreach ($class['channels'] as $channel) {
                 $channelDom = $dom->createElement("channel");
-                $channelDom->setAttribute("epg", "1");
+                $channelDom->setAttribute("epg", $channel['alias_name']);
                 $channelDom->setAttribute("id", $channel['channel_number']);
                 $channelDom->setAttribute("name", $this->handleXml($channel['zh_name']));
                 $channelDom->setAttribute("eng_name", $this->handleXml($channel['name']));
