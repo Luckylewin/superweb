@@ -9,6 +9,7 @@
 namespace console\controllers;
 
 
+use backend\models\Parade;
 use console\models\parade\beginsport;
 use console\models\parade\cctv5;
 use console\models\parade\espn;
@@ -24,8 +25,25 @@ use yii\console\Controller;
 class ParadeController extends Controller
 {
 
+    public function actionHelp()
+    {
+        $list = [
+            'sky','tsn','espn','sport','sfr','euro', 'begin', 'cctv5'
+        ];
+        foreach ($list as $action) {
+            $this->stdout($action . PHP_EOL);
+        }
+    }
+
+    public function clearExpire()
+    {
+        $date = date('Y-m-d' ,strtotime('-3 day'));
+        Parade::deleteAll(['<=', 'parade_date', $date]);
+    }
+
     public function actionCollect()
     {
+        $this->clearExpire();
         //$this->actionVn();
         $this->actionSky();
         $this->actionTsn();
@@ -90,13 +108,7 @@ class ParadeController extends Controller
         $begin = new beginsport();
         $begin->start();
     }
-
-    public function actionCctv5()
-    {
-        $cctv5 = new cctv5();
-        $cctv5->start();
-    }
-
+    
     public function actionManmankan()
     {
         $kan = new manmankan();

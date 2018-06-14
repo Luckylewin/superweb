@@ -15,6 +15,7 @@ use Yii;
 use console\components\MySnnopy;
 use Symfony\Component\DomCrawler\Crawler;
 use yii\db\Exception;
+use yii\helpers\ArrayHelper;
 
 class CommonParade
 {
@@ -302,6 +303,12 @@ class CommonParade
     public function getCharset($data)
     {
         return $charset = mb_detect_encoding($data, ['ASCII', 'UTF-8', 'GB2312', 'GBK', 'BIG5']);
+    }
+
+    public function getExistDate($name)
+    {
+        $exist_date = Parade::find()->select('parade_date')->where(['channel_name' => $name])->asArray()->all();
+       return $exist_date = $exist_date ? ArrayHelper::getColumn($exist_date, 'parade_date') : [];
     }
 
 }
