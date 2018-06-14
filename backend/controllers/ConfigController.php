@@ -23,6 +23,7 @@ class ConfigController extends BaseController
             $form = Yii::$app->request->post('form');
             $model->data = json_encode($form);
             $model->save();
+            $this->setFlash('success', '操作成功');
         }
         if(!isset($model->data)) $formParams = [];
         else $formParams = json_decode($model->data, true);
@@ -33,7 +34,8 @@ class ConfigController extends BaseController
         ]);
     }
 
-    public function actionSendMail() {
+    public function actionSendMail()
+    {
         $model = Config::find()->where(['keyid' => 'sendmail'])->one();
         if(Yii::$app->request->isPost) {
             if(empty($model)) {
@@ -43,6 +45,7 @@ class ConfigController extends BaseController
             $form = Yii::$app->request->post('form');
             $model->data = json_encode($form);
             $model->save();
+            $this->setFlash('success', '操作成功');
         }
         if(!isset($model->data)) $formParams = [];
         else $formParams = json_decode($model->data, true);
@@ -56,7 +59,8 @@ class ConfigController extends BaseController
         ]);
     }
 
-    public function actionAttachment() {
+    public function actionAttachment()
+    {
         $model = Config::find()->where(['keyid' => 'attachment'])->one();
         if(Yii::$app->request->isPost) {
             if(empty($model)) {
@@ -65,6 +69,7 @@ class ConfigController extends BaseController
             }
             $form = Yii::$app->request->post('form');
             $model->data = json_encode($form);
+            $this->setFlash('success', '操作成功');
             $model->save();
         }
         if(!isset($model->data)) $formParams = [];

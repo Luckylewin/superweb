@@ -109,7 +109,7 @@ return [
         ],
         'formatter' => [
             'class' => 'yii\i18n\Formatter',
-            'dateFormat' => 'php:Y.m.d',
+            'dateFormat' => 'php:Y/m/d',
             'datetimeFormat' => 'php:Y/m/d H:i',
             'timeFormat' => 'php:H:i:s',
         ]

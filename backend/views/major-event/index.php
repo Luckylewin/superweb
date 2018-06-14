@@ -27,7 +27,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'time:date',
             'title',
 
-            'base_time:datetime',
+            [
+                    'attribute' => 'base_time',
+                    'format' => ['date','php:H:i']
+            ],
 
             [
                 'attribute' => 'live_match',
@@ -38,7 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
                      $teams = $data->teams[0]->team_zh_name . ' ' . Html::img(Func::getAccessUrl($teamObject[0]->team_icon), ['width'=>30]);
                      $teams .= ' - ';
                      $teams .= Html::img(Func::getAccessUrl($teamObject[1]->team_icon), ['width'=>30]) . ' '. $data->teams[1]->team_zh_name;
-                     return $text = date('H:i', $data->event_time) . ' ' . $data->event_info . ' ' . $teams ;
+                     return $text =  $data->event_info . ' ' . $teams ;
 
                 }
             ],
@@ -47,6 +50,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'format' => 'raw',
                     'value' => function($model) {
                         $data = json_decode($model->match_data);
+
                         $text = '';
                         foreach ($data as $channel) {
                             $text .= Html::tag('span', $channel->channel_name, ['class' => 'label label-default']) . ' ';
@@ -60,7 +64,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                     'class' => 'common\grid\MyActionColumn',
                     'size' => 'btn-sm',
-                    'template' => '{view} {delete}'
+                    'template' => '{delete}'
             ],
         ],
     ]); ?>

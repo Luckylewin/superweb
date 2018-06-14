@@ -51,7 +51,7 @@ class MajorEvent extends \yii\db\ActiveRecord
             'time' => '日期',
             'title' => '赛事轮次信息',
             'live_match' => '赛事信息',
-            'base_time' => '比赛时间',
+            'base_time' => '时间',
             'match_data' => '匹配预告列表',
             'sort' => '排序',
         ];
@@ -128,5 +128,6 @@ class MajorEvent extends \yii\db\ActiveRecord
 
         return true;
     }
+
 
 }
