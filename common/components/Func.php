@@ -47,7 +47,7 @@ class Func
      */
     public static function getAccessUrl($path, $expireTime = 300)
     {
-        if (empty($path)) return '';
+        if (empty($path)) return 'null';
 
         if (strpos($path, '/') === false) return $path;
 
