@@ -56,7 +56,7 @@ class eurosport extends CommonParade implements collector
                 $parade = [
                     'parade_name' => $divDom->filter('.tv-program__title')->text(),
                     'parade_time' => $time,
-                    'parade_timestamp' => strtotime($date . ' '. $time)
+                    'parade_timestamp' => $this->convertTimeZone($date . ' '. $time, 'timestamp', 0, 8)
                 ];
                 //判断是节目1还是节目2
                 $key = $divDom->attr('data-ch-id') == '0' ? 0 : 1;

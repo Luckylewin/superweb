@@ -68,7 +68,7 @@ class beginsport extends CommonParade implements collector
                                      'parade_name' => $liDom->filter('.onecontent .title')->text(),
                                      'parade_time' =>  $paradeTime,
                                      'parade_type' => $liDom->filter('.onecontent .format')->text(),
-                                     'parade_timestamp' => strtotime($date . " ". $paradeTime)
+                                     'parade_timestamp' => $this->convertTimeZone($date . " ". $paradeTime, 'timestamp', 0, 8)
                                  ];
                                  $paradeData[] = $parade;
                              }else if ($liDom->filter('.onecontent .title_disable')->count()  && $parent == $className) {
@@ -80,7 +80,7 @@ class beginsport extends CommonParade implements collector
                                      'parade_name' => $liDom->filter('.onecontent .title_disable')->text(),
                                      'parade_time' =>  $paradeTime,
                                      'parade_type' => $liDom->filter('.onecontent .format_disable')->text(),
-                                     'parade_timestamp' => strtotime($date . " ". $paradeTime)
+                                     'parade_timestamp' => $this->convertTimeZone($date . " ". $paradeTime, 'timestamp', 0, 8)
                                  ];
                                  $paradeData[] = $parade;
 
@@ -107,6 +107,8 @@ class beginsport extends CommonParade implements collector
         array_walk($tasks, function(&$v) {
               $v['url'] = str_replace('{DATE}', $v['param'], $this->url);
         });
+
+        $tasks = $this->getFinalTasks($tasks, $this->getClassName(__CLASS__), 'source');
 
         return $tasks;
     }
