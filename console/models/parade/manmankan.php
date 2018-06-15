@@ -38,7 +38,7 @@ class manmankan extends CommonParade implements collector
                 $paradeData[] = [
                     'parade_time' => $node->filter('em')->text(),
                     'parade_name' => $node->filter('span')->text(),
-                    'parade_timestamp' => strtotime($date . ' '. $node->filter('em')->text())
+                    'parade_timestamp' => $this->convertTimeZone($date . ' '. $node->filter('em')->text(), 'timestamp', 0, 8)
                 ];
             }
         });

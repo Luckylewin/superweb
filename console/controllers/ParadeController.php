@@ -109,10 +109,16 @@ class ParadeController extends Controller
         $begin->start();
     }
     
-    public function actionManmankan()
+    public function actionCctv5()
     {
         $kan = new manmankan();
         $kan->start();
+    }
+
+    public function actionTest()
+    {
+        $kan = new manmankan();
+        echo $kan->convertTimeZone('2018-06-15 10:38', 'timestamp', 9, 8);
     }
 
 }

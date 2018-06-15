@@ -8,9 +8,6 @@
 
 namespace console\models\parade;
 
-
-use backend\models\Parade;
-use common\models\OttChannel;
 use console\components\MySnnopy;
 use yii\helpers\Json;
 
@@ -30,6 +27,11 @@ class tsn extends CommonParade implements collector
     public function getTsn()
     {
         $tasks = $this->_getUrlGroup();
+
+        if (empty($tasks)) {
+            echo "SKIP: 数据库中存在所有来源为" . $this->getClassName(__CLASS__) . "的节目" , PHP_EOL;
+            return;
+        }
 
         foreach ($tasks as $task) {
             $url = $task['url'];
@@ -53,10 +55,12 @@ class tsn extends CommonParade implements collector
             foreach ($data as $value) {
                 preg_match('/(?<=T)[^-]+/', $value['StartTime'], $preg);
                 if (empty($preg)) continue;
+
+                $parade_timestamp = $currentDay . ' ' . $preg[0];
                 $paradeData[] = [
                     'parade_name' => $value['Desc'],
                     'parade_time' => $preg[0],
-                    'parade_timestamp' => strtotime($currentDay . ' ' . $preg[0])
+                    'parade_timestamp' => $this->convertTimeZone($parade_timestamp, 'timestamp',0, 8)
                 ];
             }
 
@@ -71,6 +75,7 @@ class tsn extends CommonParade implements collector
         $programs = ['tsn1', 'tsn2', 'tsn3', 'tsn4', 'tsn5'];
         $week = $this->getWeekTime();
         $tasks = [];
+
         foreach ($programs as $program) {
             if (!empty($week)) {
                 array_walk($week, function(&$v) use($program, &$tasks) {
@@ -80,6 +85,8 @@ class tsn extends CommonParade implements collector
                 });
             }
         }
+
+        $tasks = $this->getFinalTasks($tasks, $this->getClassName(__CLASS__), 'source');
 
         return $tasks;
     }

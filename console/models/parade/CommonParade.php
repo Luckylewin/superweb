@@ -190,8 +190,8 @@ class CommonParade
     {
         $futureTime = [];
         //获取今天的时间
-        $startTime = strtotime(date('Y-m-d'));
-        for($start = 0; $start <= $day; $start++) {
+        $startTime = strtotime(date('Y-m-d')) - 86400;
+        for($start = 0; $start <= $day + 1; $start++) {
             $dateTime = $startTime + 86400 * $start;
             $futureTime[] = [
                 'timestamp' => $dateTime,
@@ -305,10 +305,73 @@ class CommonParade
         return $charset = mb_detect_encoding($data, ['ASCII', 'UTF-8', 'GB2312', 'GBK', 'BIG5']);
     }
 
-    public function getExistDate($name)
+    /**
+     * 获取数据库已经存在的天数
+     * @param $name string 频道名称|来源名称
+     * @param $type string 类型
+     * @return array
+     */
+    public function getExistDate($name, $type='channel')
     {
-        $exist_date = Parade::find()->select('parade_date')->where(['channel_name' => $name])->asArray()->all();
-       return $exist_date = $exist_date ? ArrayHelper::getColumn($exist_date, 'parade_date') : [];
+        if ($type == 'channel') {
+            $exist_date = Parade::find()->select('parade_date')->where(['channel_name' => $name])->asArray()->all();
+        } else {
+            $exist_date = Parade::find()->select('parade_date')->where(['source' => $name])->asArray()->all();
+        }
+
+        return $exist_date = $exist_date ? array_values(array_unique(ArrayHelper::getColumn($exist_date, 'parade_date'))) : [];
+    }
+
+    /**
+     * 获取最终需要访问的url数组
+     * @param $tasks
+     * @param $name
+     * @param $type
+     * @return mixed
+     */
+    public function getFinalTasks($tasks, $name, $type)
+    {
+        $paradeDates = $this->getExistDate($name, $type);
+
+        foreach ($tasks as $key => $value) {
+            if (in_array($value['date'], $paradeDates)) {
+                unset($tasks[$key]);
+            }    
+        }
+
+        return $tasks;
+    }
+
+
+    /**
+     * 时间戳转换
+     * @param $datetime string 指定的时间
+     * @param $format string 指定的格式
+     * @param $toTimeZone integer 目标时区
+     * @param $fromTimeZone integer 源时区
+     * @return false|string
+     */
+    public function convertTimeZone($datetime, $format ,$toTimeZone, $fromTimeZone = 8)
+    {
+        $fromTimeZone = -$fromTimeZone;
+        $timeZone = $fromTimeZone > 0 ? "Etc/GMT+{$fromTimeZone}" : "Etc/GMT{$fromTimeZone}";
+
+        date_default_timezone_set($timeZone);
+
+        //求出源时间戳
+        $from_time = strtotime($datetime);
+
+        //求出两者的差值
+        $diff = $fromTimeZone > $toTimeZone ? $fromTimeZone - $toTimeZone : $toTimeZone - $fromTimeZone;
+        $diff = $diff * 3600;
+
+        $toTimeZone = $fromTimeZone > $toTimeZone ? $from_time - $diff : $from_time + $diff;
+
+        if ($format == 'timestamp') {
+            return $from_time;
+        } else {
+            return date($format, $toTimeZone);
+        }
     }
 
 }

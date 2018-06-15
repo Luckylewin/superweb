@@ -108,10 +108,12 @@ class espn extends CommonParade implements collector
                         $timeStart = date('H:i', $timeStart);
                     }
 
+                    $parade_timestamp = $date . " " . $timeStart;
+
                     $parade = [
                         'parade_name' => $liDom->filterXPath('//div[@class="cell-padding"]')->text(),
                         'parade_time' => $timeStart,
-                        'parade_timestamp' => strtotime($date . " " . $timeStart)
+                        'parade_timestamp' => $this->convertTimeZone($parade_timestamp, 'timestamp', '0', '-5')
                     ];
                     $program[$i]['parade'][] = $parade;
                 }

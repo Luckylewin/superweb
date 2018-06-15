@@ -29,14 +29,20 @@ class skysport extends CommonParade implements collector
 
     public function getSkySport()
     {
-        //获取这个星期的排表
-        $tasks= $this->_getUrlGroup();
+        //获取抓取任务时间排表
+        $tasks = $this->_getUrlGroup();
+
+        if (empty($tasks)) {
+            echo "SKIP: 数据库中存在所有来源为" . $this->getClassName(__CLASS__) . "的节目" , PHP_EOL;
+            return false;
+        }
 
         foreach ($tasks as $task) {
             echo "获取" . $task['date'] . "的数据\n";
             $this->_getOneDay($task['date'], $task['url']);
         }
 
+        return true;
     }
 
     /**
@@ -47,13 +53,9 @@ class skysport extends CommonParade implements collector
      */
     private function _getOneDay($currentDay, $url)
     {
-        $data = Yii::$app->cache->get('skysport-mon');
-        if ($this->debug == false && $data == false) {
-            $snnopy = MySnnopy::init();
-            $snnopy->fetch($url);
-            $data = $snnopy->results;
-            Yii::$app->cache->set('skysport-mon', $data);
-        }
+        $snnopy = MySnnopy::init();
+        $snnopy->fetch($url);
+        $data = $snnopy->results;
 
         $dom = new Crawler();
         $dom->addHtmlContent($data, 'UTF-8');
@@ -75,25 +77,39 @@ class skysport extends CommonParade implements collector
 
         //整理数据
         !empty($programMap) && array_walk($programMap ,function (&$v) use ($currentDay) {
-            !empty($v['parade']) && array_walk($v['parade'], function(&$_v) use($currentDay){
+            !empty($v['parade']) && array_walk($v['parade'], function(&$_v, $k) use($currentDay){
                 $_v = preg_split('/\n/', $_v);
+
                 array_walk($_v, function(&$temp_v) {
                     $temp_v = trim($temp_v);
                 });
+
                 $_v = array_values(array_filter($_v));
                 $_v['parade_name'] = $_v[0];
                 $_v[1] = explode(',', $_v[1]);
                 $_v['parade_time'] = date('H:i', strtotime($_v[1][0]));
 
+                //标记跨度从昨天到今天的节目
+                if ($k ==0 && strpos($_v[1][0], 'pm') !== false) {
+                    $_v['is_valid'] = false;
+                } else {
+                    $_v['is_valid'] = true;
+                }
+
                 unset($_v[0], $_v[1]);
             });
         });
 
-
-
         foreach ($programMap as $value) {
             array_walk($value['parade'] ,function(&$v) use($currentDay) {
-                $v['parade_timestamp'] = strtotime($currentDay . ' ' . $v['parade_time']);
+
+                if ($v['is_valid']) {
+                    $v['parade_timestamp'] = $this->convertTimeZone($currentDay . ' ' . $v['parade_time'], 'timestamp', 0, 8);
+                } else {
+                    $v['parade_timestamp'] = $this->convertTimeZone(date('Y-m-d', strtotime($currentDay) - 86400) . ' ' . $v['parade_time'], 'timestamp', 0, 8);
+                }
+
+                unset($v['is_valid']);
             });
 
             $this->createParade($value['name'], $currentDay, $value['parade'], __CLASS__, $url);
@@ -109,12 +125,14 @@ class skysport extends CommonParade implements collector
     private function _getUrlGroup()
     {
         // ① 获得这周周一的时间戳
-        $week = $this->getWeekTime();
+        $week = $this->getFutureTime(6, 'Y-m-d');
         if (!empty($week)) {
            array_walk($week, function(&$v) {
                 $v['url'] = $this->url . date('d-m-Y', $v['timestamp']);
            });
         }
+
+        $week = $this->getFinalTasks($week, $this->getClassName(__CLASS__), 'source');
 
         return $week;
     }

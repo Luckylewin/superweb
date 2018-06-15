@@ -21,6 +21,11 @@ class sfrsport extends CommonParade implements collector
     public function start()
     {
         $tasks = $this->_getUrlGroup();
+        if (empty($tasks)) {
+            echo "SKIP: 数据库中存在所有来源为" . $this->getClassName(__CLASS__) . "的节目" , PHP_EOL;
+            return;
+        }
+
         foreach ($tasks as $task) {
             $this->getOneDay($task['date'], $task['url']);
             $this->_sleep(2,5);
@@ -33,13 +38,9 @@ class sfrsport extends CommonParade implements collector
      */
     public function getOneDay($date, $url)
     {
-        $data = Yii::$app->cache->get('sfr');
-        if ($data == false || $this->debug == false) {
-            $snnopy = MySnnopy::init();
-            $snnopy->fetch($url);
-            $data = $snnopy->results;
-            $data = Yii::$app->cache->set('sfr', $data);
-        }
+        $snnopy = MySnnopy::init();
+        $snnopy->fetch($url);
+        $data = $snnopy->results;
 
         $dom = new Crawler();
         $dom->addHtmlContent($data);
@@ -48,17 +49,29 @@ class sfrsport extends CommonParade implements collector
 
         $dom->filter('.epg_ligne_chaine ')->each(function(Crawler $node, $i) use(&$program, $date) {
 
-            $program[$i]['parade'] = $node->filter('.epg_element_prog')->each(function (Crawler $divDom) use($date) {
+            $program[$i]['parade'] = $node->filter('.epg_element_prog')->each(function (Crawler $divDom, $index) use($date) {
                 $timeStart = $divDom->filter('.heure_prog')->text();
                 $programName = $divDom->filter('.lib_prog')->text();
                 $during = $divDom->filter('.duree_prog')->text();
                 $type = $divDom->filter('.genre_prog')->text();
+                $start_day = strtotime($divDom->filter('.date_deb_prog')->text());
+                $end_day = strtotime($divDom->filter('.date_fin_prog')->text());
+
+                //判断是否包含了下一天的数据
+                if ($start_day == $end_day) {
+                    $parade_date = $date  . ' ' . $timeStart;
+                } elseif ($start_day < $end_day) { //+ 1day
+                    $parade_date = date('Y-m-d', strtotime('+1 day', strtotime($date)))  . ' ' . $timeStart;
+                } else {
+                    $parade_date = date('Y-m-d', strtotime('-1 day', strtotime($date)))  . ' ' . $timeStart;
+                }
+
                 return [
                     'parade_time' => $timeStart,
                     'parade_name' => $programName,
                     'parade_type' => $type,
                     'parade_during' => $during,
-                    'parade_timestamp' => strtotime($date  . ' ' . $timeStart)
+                    'parade_timestamp' => $this->convertTimeZone($parade_date, "timestamp", 0, 8)
                 ];
             });
 
@@ -96,6 +109,8 @@ class sfrsport extends CommonParade implements collector
         array_walk($tasks, function(&$v) {
              $v['url'] = str_replace('{DATE}', $v['param'], $this->url);
         });
+
+        $tasks = $this->getFinalTasks($tasks, $this->getClassName(__CLASS__), 'source');
 
         return $tasks;
     }
