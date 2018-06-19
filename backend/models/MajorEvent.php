@@ -20,6 +20,8 @@ use yii\helpers\Json;
  */
 class MajorEvent extends \yii\db\ActiveRecord
 {
+    public $teams;
+
     /**
      * @inheritdoc
      */
@@ -77,14 +79,16 @@ class MajorEvent extends \yii\db\ActiveRecord
         }else {
             $this->base_time = strtotime($date . ' ' . $post['MajorEvent']['base_time']);
         }
-        
+
         $majorEvent = OttEvent::findOne(['event_name_zh' => $post['event_info']]);
         $teamA = OttEventTeam::findOne(['team_zh_name' => $post['teamA']]);
         $teamB = OttEventTeam::findOne(['team_zh_name' => $post['teamB']]);
+        $title = (new BaiduTranslator())->translate($post['MajorEvent']['title'], 'zh', 'en');
+        $title = $title ? $title : 'translate error';
 
         //赛事信息
         $event_data = [
-            'title' => (new BaiduTranslator())->translate($post['MajorEvent']['title'], 'zh', 'en'),
+            'title' => $title,
             'title_zh' => $post['MajorEvent']['title'],
             'event_time' => $this->base_time,
             'event_info' => $majorEvent->event_name,
@@ -129,5 +133,22 @@ class MajorEvent extends \yii\db\ActiveRecord
         return true;
     }
 
+    public function beforeUpdate($model)
+    {
+        $model->time = date('Y-m-d', $model->time);
+        $model->base_time = date('H:i', $model->base_time);
+        $model->live_match = json_decode($model->live_match);
+
+        $teamInfo = $model->live_match->teams;
+        $teams = [];
+        foreach ($teamInfo as $team) {
+            if ($team = OttEventTeam::findOne(['team_name' => $team->team_name])) {
+                $teams[] = $team;
+            }
+        }
+        $model->match_data = Json::decode($model->match_data);
+        $model->teams = $teams;
+
+    }
 
 }

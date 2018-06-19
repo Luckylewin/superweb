@@ -31,6 +31,10 @@ class BaiduTranslator
         $ret = $this->call(URL, $args);
         $ret = json_decode($ret, true);
 
+        if (isset($ret['error_code'])) {
+            return false;
+        }
+
         return $ret['trans_result'][0]['dst'];
     }
 

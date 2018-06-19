@@ -2,10 +2,13 @@
 
 namespace backend\controllers;
 
+use backend\models\OttEvent;
+use backend\models\OttEventTeam;
 use common\models\OttChannel;
 use Yii;
 use backend\models\MajorEvent;
 use yii\data\ActiveDataProvider;
+use yii\helpers\Json;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -83,12 +86,20 @@ class MajorEventController extends BaseController
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        //初始化日期
+        if (Yii::$app->request->isGet) {
+            $model->beforeUpdate($model);
+        } else if (Yii::$app->request->isPost) {
+            $post = Yii::$app->request->post();
+            if ($model->load($post) && $model->initData($post) && $model->save()) {
+                $this->setFlash('success', '操作成功');
+                return $this->redirect(['index']);
+            }
         }
 
         return $this->render('update', [
             'model' => $model,
+            'teams' => $model->teams
         ]);
     }
 

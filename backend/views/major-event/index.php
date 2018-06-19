@@ -64,7 +64,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                     'class' => 'common\grid\MyActionColumn',
                     'size' => 'btn-sm',
-                    'template' => '{delete}'
+                    'template' => ' {update} {delete}'
             ],
         ],
     ]); ?>

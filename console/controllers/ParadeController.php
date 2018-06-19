@@ -11,7 +11,6 @@ namespace console\controllers;
 
 use backend\models\Parade;
 use console\models\parade\beginsport;
-use console\models\parade\cctv5;
 use console\models\parade\espn;
 use console\models\parade\eurosport;
 use console\models\parade\manmankan;
