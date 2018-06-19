@@ -56,20 +56,26 @@ class ParadeController extends Controller
 
     public function actionVn()
     {
-        $vn = new vn();
-        $vn->start();
+       try {
+           $vn = new vn();
+           $vn->start();
+       } catch (\Exception $e) {}
     }
 
     public function actionSky()
     {
-        $sky = new skysport();
-        $sky->start();
+        try {
+            $sky = new skysport();
+            $sky->start();
+        } catch (\Exception $e) {}
     }
 
     public function actionTsn()
     {
-        $tsn = new tsn();
-        $tsn->start();
+       try {
+           $tsn = new tsn();
+           $tsn->start();
+       } catch (\Exception $e) {}
     }
 
     /**
@@ -77,8 +83,10 @@ class ParadeController extends Controller
      */
     public function actionEspn()
     {
-        $espn = new espn();
-        $espn->start();
+        try {
+            $espn = new espn();
+            $espn->start();
+        } catch (\Exception $e) {}
     }
 
     /**
@@ -86,32 +94,42 @@ class ParadeController extends Controller
      */
     public function actionSport()
     {
-        $sport = new sportnet();
-        $sport->start();
+       try {
+           $sport = new sportnet();
+           $sport->start();
+       }catch (\Exception $e) {}
     }
 
     public function actionSfr()
     {
-        $sfr = new sfrsport();
-        $sfr->start();
+       try {
+           $sfr = new sfrsport();
+           $sfr->start();
+       } catch (\Exception $e) {}
     }
 
     public function actionEuro()
     {
-        $euro = new eurosport();
-        $euro->start();
+       try {
+           $euro = new eurosport();
+           $euro->start();
+       } catch (\Exception $e) {}
     }
 
     public function actionBegin()
     {
-        $begin = new beginsport();
-        $begin->start();
+        try {
+            $begin = new beginsport();
+            $begin->start();
+        } catch (\Exception $e) {}
     }
     
     public function actionCctv5()
     {
-        $kan = new manmankan();
-        $kan->start();
+        try {
+            $kan = new manmankan();
+            $kan->start();
+        } catch (\Exception $e) {}
     }
 
     public function actionTest()
