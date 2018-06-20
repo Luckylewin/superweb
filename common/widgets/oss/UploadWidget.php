@@ -6,14 +6,14 @@
  * Time: 14:55
  */
 
-namespace common\widgets;
+namespace common\widgets\oss;
 
 use yii\bootstrap\Widget;
 use yii\helpers\Url;
 
 /**
  *
- * <?= \common\widgets\OssUploader::widget([
+ * <?= \common\widgets\oss\UploadWidget::widget([
         'model' => $model,
         'form' => $form,
         'field' => 'title',
@@ -26,7 +26,7 @@ use yii\helpers\Url;
  * Class OssUploader
  * @package common\widgets
  */
-class OssUploader extends Widget
+class UploadWidget extends Widget
 {
     //字段
     public $field;
@@ -89,7 +89,7 @@ class OssUploader extends Widget
     {
         $serverUrl = Url::to(['api/oss-upload','dir' => $this->dir]);
 
-        return $this->render('oss_uploader',[
+        return $this->render('upload-form',[
             'serverUrl' => $serverUrl,
             'maxSize' => $this->maxSize,
             'mime_types' => $this->allowExtension,

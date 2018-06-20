@@ -5,18 +5,19 @@ use common\widgets\Cssblock;
 use yii\web\AssetBundle as AppAsset;
 ?>
 <?php AppAsset::register($this); ?>
-
-<?php $this->registerJsFile('/statics/components/layer/layer-v3.1.1.js',['depends'=>'yii\web\YiiAsset']);?>
 <?php $this->registerJsFile('/statics/js/oss/lib/plupload-2.1.2/js/plupload.full.min.js');?>
 <?php $this->registerJsFile('/statics/js/oss/upload.js?v=' . date('Ymd'));?>
 <?php JsBlock::begin(['pos' => \yii\web\View::POS_BEGIN]) ?>
-var mime_types = <?= $mime_types ?>;
-var serverUrl  = '<?= $serverUrl ?>';
-var max_file_size = '<?= $maxSize ?>';
-var field_input_id = '<?= strtolower($model->formName()) . '-'. strtolower($field) ?>';
+<script>
+    var mime_types = <?= $mime_types ?>;
+    var serverUrl  = '<?= $serverUrl ?>';
+    var max_file_size = '<?= $maxSize ?>';
+    var field_input_id = '<?= strtolower($model->formName()) . '-'. strtolower($field) ?>';
+</script>
 <?php JsBlock::end() ?>
 
 <?php Cssblock::begin() ?>
+<style>
     .btn-info:hover{
         background-color: #3366b7;
     }
@@ -56,6 +57,7 @@ var field_input_id = '<?= strtolower($model->formName()) . '-'. strtolower($fiel
         box-shadow:inset 0 1px 1px rgba(0, 0, 0, .075);
         padding: 10px;
     }
+</style>
 <?php Cssblock::end() ?>
 
 <body>
