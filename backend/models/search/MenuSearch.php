@@ -7,6 +7,8 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use backend\models\Menu;
 use common\libs\Tree;
+use yii\helpers\ArrayHelper;
+use yii\data\ArrayDataProvider;
 
 /**
  * MenuSearch represents the model behind the search form about `backend\models\Menu`.
@@ -38,7 +40,7 @@ class MenuSearch extends Menu
      *
      * @param array $params
      *
-     * @return ActiveDataProvider
+     * @return ActiveDataProvider | ArrayDataProvider
      */
     public function search($params)
     {
@@ -71,15 +73,16 @@ class MenuSearch extends Menu
 
         $query->orderBy(['sort' => SORT_ASC]);
 
-
         $arr = $query->asArray()->all();
-        $treeObj = new Tree(\yii\helpers\ArrayHelper::toArray($arr));
+        $treeObj = new Tree(ArrayHelper::toArray($arr));
+
         $treeObj->icon = ['&nbsp;&nbsp;&nbsp;│ ', '&nbsp;&nbsp;&nbsp;├─ ', '&nbsp;&nbsp;&nbsp;└─ '];
         $treeObj->nbsp = '&nbsp;&nbsp;&nbsp;';
-        $dataProvider = new \yii\data\ArrayDataProvider([
+
+        $dataProvider = new ArrayDataProvider([
             'allModels' => $treeObj->getGridTree(),
             'pagination' => [
-                'pageSize' => 50,
+                'pageSize' => 200,
             ],
         ]);
 

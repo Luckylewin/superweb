@@ -5,7 +5,8 @@
  */
 namespace common\libs;
 
-class Tree {
+class Tree
+{
 
     /**
      * 生成树型结构所需的多维数组
@@ -26,7 +27,8 @@ class Tree {
      */
     public $treeArr = [];
 
-    public function __construct(array $arr) {
+    public function __construct(array $arr)
+    {
         $this->arr = $arr;
     }
 
@@ -34,14 +36,14 @@ class Tree {
      * 获取生成的树型结构数组(select使用)
      * @param  integer $pid           [父类id]
      * @param  string  $pk            [主键字段名]
-     * @param  string  $pidFeldName   [父类id字段名]
+     * @param  string  $pidFieldName   [父类id字段名]
      * @param  string  $cateFieldName [分类字段名]
      * @param  string  $adds
      * @return array
      */
-    public function getTree($pid = 0, $pk = 'id', $pidFeldName = 'pid', $cateFieldName = 'name', $adds = '') {
+    public function getTree($pid = 0, $pk = 'id', $pidFieldName = 'pid', $cateFieldName = 'name', $adds = '') {
         $num = 1;
-        $child = $this->getChild($pid, $pidFeldName);
+        $child = $this->getChild($pid, $pidFieldName);
         if(empty($child)) return $this->treeArr;
         $total = count($child);
         foreach ($child as $id => $value) {
@@ -50,7 +52,7 @@ class Tree {
             if($num == $total) $j = $this->icon[2];
             $spacer = $adds ? $adds . $j : '';
             $this->treeArr[$value[$pk]] = $spacer.' '.$value[$cateFieldName];
-            $this->getTree($value[$pk], $pk, $pidFeldName, $cateFieldName, $adds.$k.$this->nbsp);
+            $this->getTree($value[$pk], $pk, $pidFieldName, $cateFieldName, $adds.$k.$this->nbsp);
             $num++;
         }
         return $this->treeArr;
@@ -60,15 +62,17 @@ class Tree {
      * 获取生成的树型结构数组(gridView使用)
      * @param  integer $pid           [父类id]
      * @param  string  $pk            [主键字段名]
-     * @param  string  $pidFeldName   [父类id字段名]
+     * @param  string  $pidFieldName   [父类id字段名]
      * @param  string  $cateFieldName [分类字段名]
      * @param  string  $adds
      * @return array
      */
-    public function getGridTree($pid = 0, $pk = 'id', $pidFeldName = 'pid', $cateFieldName = 'name', $adds = '') {
+    public function getGridTree($pid = 0, $pk = 'id', $pidFieldName = 'pid', $cateFieldName = 'name', $adds = '')
+    {
         $num = 1;
-        $child = $this->getChild(intval($pid), $pidFeldName);
+        $child = $this->getChild(intval($pid), $pidFieldName);
         if(empty($child)) return $this->treeArr;
+
         $total = count($child);
         foreach ($child as $id => $value) {
             $j = $this->icon[1];
@@ -77,7 +81,7 @@ class Tree {
             $spacer = $adds ? $adds . $j : '';
             $value[$cateFieldName] = $spacer.' '.$value[$cateFieldName];
             $this->treeArr[$value[$pk]] = $value;
-            $this->getGridTree($value[$pk], $pk, $pidFeldName, $cateFieldName, $adds.$k.$this->nbsp);
+            $this->getGridTree($value[$pk], $pk, $pidFieldName, $cateFieldName, $adds.$k.$this->nbsp);
             $num++;
         }
         return $this->treeArr;
@@ -86,18 +90,20 @@ class Tree {
     /**
      * 获取生成的树型结构数组(auth[授权]使用)
      * @param  string  $pk          [主键字段名]
-     * @param  string  $pidFeldName [父类id字段名]
-     * @param  string  $child       [description]
-     * @param  integer $root        [description]
+     * @param  string  $pidFieldName [父类id字段名]
+     * @param string $child
+     * @param int $root
+     * @return array
      */
-    public function getTreeArray($pk = 'id', $pidFeldName = 'pid', $child = '_child', $root = 0) {
+    public function getTreeArray($pk = 'id', $pidFieldName = 'pid', $child = '_child', $root = 0)
+    {
         //基于主键的数组引用
         $refer = [];
         foreach ($this->arr as $key => $value) {
             $refer[$value[$pk]] = &$this->arr[$key];
         }
         foreach ($this->arr as $key => $value) {
-            $parentId = $value[$pidFeldName];
+            $parentId = $value[$pidFieldName];
             if($root == $parentId) {
                 $this->treeArr[] = &$this->arr[$key];
             } else {
@@ -113,14 +119,15 @@ class Tree {
     /**
      * 获取子级
      * @param  [int] $pid 父级id
-     * @param [string] $pidFeldName 父级字段名
+     * @param [string] $pidFieldName 父级字段名
      * @return array
      */
-    public function getChild($pid, $pidFeldName) {
+    public function getChild($pid, $pidFieldName)
+    {
         $child = [];
         if(!empty($this->arr)) {
             foreach ($this->arr as $id => $value) {
-                if($value[$pidFeldName] == $pid) $child[$id] = $value;
+                if($value[$pidFieldName] == $pid) $child[$id] = $value;
             }
         }
         return $child;

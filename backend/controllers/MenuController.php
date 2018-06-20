@@ -63,6 +63,7 @@ class MenuController extends BaseController
         $model = new Menu();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            Yii::$app->session->setFlash('info', '操作成功');
             return $this->redirect(['index']);
         } else {
             $model->pid = Yii::$app->request->get('pid', 0);
@@ -86,6 +87,7 @@ class MenuController extends BaseController
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            Yii::$app->session->setFlash('info', '操作成功');
             return $this->redirect(['index']);
         } else {
             $arr = Menu::find()->asArray()->all();
