@@ -48,6 +48,7 @@ class LogController extends Controller
             $log = explode('|', $log);
             list($time, $ip, $json, $error) = $log;
             $data = json_decode($json, true);
+            $program = isset($data['class']) ? $data['class'] : false;
             $uid = $data['uid'];
             $header = $data['header'];
             $requestData = $data['data'];
@@ -81,6 +82,18 @@ class LogController extends Controller
                 $redis->expire($key, 86400 * 2);
             } else {
                 $redis->hincrby($key, $header, 1);
+            }
+
+            // 按节目进行统计
+            if ($program) {
+                $key = date('m/d:program');
+                $isExist = (boolean)$redis->exists($key);
+                if ($isExist === false) {
+                    $redis->hmset($key, $program, 1);
+                    $redis->expire($key, 86400 * 2);
+                } else {
+                    $redis->hincrby($key, $program, 1);
+                }
             }
 
         }
