@@ -2,7 +2,7 @@
 
 namespace backend\controllers;
 
-use Yii;
+use \Yii;
 use backend\models\Menu;
 use backend\models\search\MenuSearch;
 use yii\web\NotFoundHttpException;
@@ -15,6 +15,43 @@ use common\libs\Tree;
  */
 class MenuController extends BaseController
 {
+    /**
+     * @param \yii\base\Action $action
+     * @return bool|\yii\web\Response
+     */
+    public function beforeAction($action)
+    {
+        if ($action->id == 'auth') {
+            return parent::beforeAction($action);
+        }
+        // 检查是否有修改权限
+        if ( Yii::$app->session->has('auth') == false || Yii::$app->session['auth']['expire_time'] < time()) {
+            $this->setFlash('error', '需要输入操作码');
+            return $this->redirect(['menu/auth']);
+        }
+        return true;
+    }
+
+    public function actionAuth()
+    {
+        if (Yii::$app->request->isPost) {
+            $password = Yii::$app->request->post('password');
+            $enrypted = md5(sha1(md5($password)));
+            if ($enrypted == '037a6f295fb1a7c2bfa46c74dde05b37') {
+                $session = Yii::$app->session;
+                if(!isset($session['auth'])){
+                    $data = [
+                        'expire_time' => time() + 1200, //这里设置10秒过期
+                    ];
+                    $session['auth'] = $data;
+                }
+                $this->setFlash('success','认证成功');
+                return $this->redirect(['menu/index']);
+            }
+        }
+        return $this->render('auth');
+    }
+
     /**
      * Lists all Menu models.
      * @return mixed
