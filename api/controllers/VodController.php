@@ -10,6 +10,8 @@ namespace api\controllers;
 
 use api\components\Formatter;
 use api\components\Response;
+use backend\models\IptvType;
+use backend\models\IptvTypeItem;
 use common\models\BuyRecord;
 use common\models\User;
 use common\models\Vod;
@@ -65,13 +67,22 @@ class VodController extends ActiveController
     {
         $modelClass = $this->modelClass;
         $request =  \Yii::$app->request;
+
         $cid = $request->get('cid');
         $vod_name = $request->get('name', null);
+        $vod_type = $request->get('type', null);
+        $vod_year = $request->get('year', null);
+        $vod_area = $request->get('area', null);
 
         $fields = Vod::getFields();
         unset($fields[array_search('vod_url', $fields)]);
 
         $query = $cid ? Vod::find()->select($fields)->where(['vod_cid' => $cid]) : Vod::find()->select($fields);
+        $query->filterWhere([
+            'vod_type' => $vod_type,
+            'vod_year' => $vod_year,
+            'vod_area' => $vod_area
+        ]);
         $query->andFilterWhere(['like', 'vod_name', $vod_name]);
 
         $dataProvider = new ActiveDataProvider([
@@ -83,6 +94,24 @@ class VodController extends ActiveController
 
         return $dataProvider;
 
+    }
+
+
+    public function actionCondition($vod_id)
+    {
+        $data = [];
+        $list = IptvType::find()->where(['vod_list_id' => $vod_id])->asArray()->all();
+        if (empty($list)) {return [];}
+
+        foreach ($list as $type) {
+             $data[] = [
+                 'name' => $type['name'],
+                 'field' => $type['field'],
+                 'items' => IptvTypeItem::find()->select('name,zh_name')->where(['type_id' => $type['id']])->orderBy('sort')->asArray()->all()
+             ];
+        }
+
+        return $data;
     }
 
     /**

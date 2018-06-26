@@ -31,7 +31,7 @@ class OttController extends ActiveController
 
         $redis = MyRedis::init(MyRedis::REDIS_PROTOCOL);
 
-        if ($list = $redis->get(self::getKey($class, $scheme, $format,true))) {
+        if ($list = $redis->get(self::getKey($class, $scheme, $format, true))) {
             return $list;
         }
 

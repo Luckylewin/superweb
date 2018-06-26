@@ -11,6 +11,7 @@ namespace api\controllers;
 
 use api\components\Formatter;
 use backend\models\ApkList;
+use common\components\Func;
 use common\oss\Aliyunoss;
 use yii\rest\ActiveController;
 
@@ -27,7 +28,7 @@ class ApkController extends  ActiveController
                 foreach ($apk['newest'] as $field => $value) {
                     $apk[$field] = $value;
                 }
-                $apk['url'] = Aliyunoss::getDownloadUrl($apk['url']);
+                $apk['url'] = Func::getAccessUrl($apk['url'], 3600);
         }
 
         if ($apk['newest']) {

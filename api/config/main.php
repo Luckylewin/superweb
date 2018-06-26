@@ -121,7 +121,8 @@ return [
                    'controller' => ['type', 'banner', 'user', 'vod', 'recommend','vod-link'],
                    'except' => ['delete','update','create'],
                    'extraPatterns' => [
-                       'GET home' => 'home'
+                       'GET home' => 'home',
+                       'GET condition' => 'condition'
                    ]
                ],
 
@@ -179,7 +180,7 @@ return [
                     ]
                 ],
 
-               [
+                [
                    'class' => 'yii\rest\UrlRule',
                    'controller' => 'pay',
                    'pluralize' => false,
@@ -189,7 +190,7 @@ return [
                        'POST pay' => 'pay',
                        'POST vip' => 'vip'
                    ]
-               ]
+                ]
            ],
         ],
 
