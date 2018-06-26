@@ -41,13 +41,7 @@ class ParadeController extends Controller
         Parade::deleteAll(['<=', 'parade_date', $date]);
     }
 
-    public function actionEvent()
-    {
-        try {
-            $live = new liveso();
-            $live->start();
-        } catch (\Exception $e) {}
-    }
+
 
     public function actionZhiboba()
     {

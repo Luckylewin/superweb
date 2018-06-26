@@ -134,7 +134,7 @@ class zhiboba extends CommonParade implements collector
 
         $live_match = [
             'title' => (new BaiduTranslator())->translate($raceName, 'zh', 'en'),
-            'title_zh_name' => $raceName,
+            'title_zh' => $raceName,
             'event_time' => $time,
             'event_info' => $event->event_name,
             'event_zh_info' => $event->event_name_zh,
