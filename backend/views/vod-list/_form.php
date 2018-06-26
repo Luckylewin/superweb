@@ -33,32 +33,21 @@ $this->registerJsFile('/statics/js/pinyin.js');
     <div class="col-md-4"><?= $form->field($model, 'list_trysee')->textInput([ 'placeholder' => 5]) ?></div>
     <div class="col-md-12">
         <?= $form->field($model, 'list_icon')->textInput() ?>
+
         <?=  \dosamigos\fileupload\FileUploadUI::widget([
-            'model' => $model,
-            'attribute' => 'icon',
-            'url' => ['media/image-upload', 'attr' => 'icon', 'dir' => 'vod-type'],
+            'model' => new \backend\models\UploadForm(),
+            'attribute' => 'image',
+            'url' => ['upload/image-upload',],
             'gallery' => false,
-            'fieldOptions' => [
-                'accept' => 'image/*'
-            ],
-            'clientOptions' => [
-                'maxFileSize' => 2000000,
-                'style'=>'width:200px;'
-            ],
+            'fieldOptions' => ['accept' => 'image/*'],
+            'clientOptions' => ['maxFileSize' => 2000000],
             // ...
             'clientEvents' => [
-                'filedeletedone' => 'function(e, data) {
-                                console.log(e);
-                                console.log(data);
-                                
-                             
-                               alert();
-                            }',
                 'fileuploaddone' => 'function(e, data) {
                                 console.log(e);
                                 console.log(data);
                                 var files = data.result.files[0];
-                             
+                                
                                 $("#vodlist-list_icon").val(files.url);
                             }',
                 'fileuploadfail' => 'function(e, data) {

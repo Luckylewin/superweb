@@ -179,7 +179,7 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/laydate/laydate.js'
         </div>
         <?php ActiveForm::end(); ?>
     </div>
-    
+
     <!-- 选择语言 -->
     <div>
         <?php

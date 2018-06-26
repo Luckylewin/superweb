@@ -32,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
             //'list_sid',
             [
                     'attribute' => 'list_icon',
-                    'format' => ['image',['width'=>70]],
+                    'format' => ['image',['width'=>40]],
                     'options' => ['style' => 'width:100px;'],
                     'value' => 'list_icon'
             ],
