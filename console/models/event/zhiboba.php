@@ -166,7 +166,7 @@ class zhiboba extends CommonParade implements collector
         $majorEvent->base_time = $time;
 
         // 查找比赛是否存在
-        if (MajorEvent::find()->where(['title' => $raceName, 'time' => $time])->exists() == false) {
+        if (MajorEvent::find()->where(['title' => $raceName, 'time' => $time])->exists()) {
             echo "比赛 " . $raceName .' 已经存在' . PHP_EOL;
             return false;
         }
