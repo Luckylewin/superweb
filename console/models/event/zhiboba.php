@@ -37,18 +37,7 @@ class zhiboba extends CommonParade implements collector
 
     public function getPage()
     {
-        if (Yii::$app->cache->exists('zhiboba') == false) {
-            $snnopy = MySnnopy::init();
-            $snnopy->fetch($this->url);
-            Yii::$app->cache->set('zhiboba', $snnopy->results);
-            $data = $snnopy->results;
-        } else {
-            $data = Yii::$app->cache->get('zhiboba');
-        }
-
-        $dom = new Crawler();
-        $dom->addHtmlContent($data);
-
+        $dom = $this->getDom($this->url);
         $events = [];
         $dom->filter(".schedule_container .box")->each(function(Crawler $box) use(&$events) {
             // 获取时间
