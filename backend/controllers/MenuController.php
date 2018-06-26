@@ -6,8 +6,6 @@ use \Yii;
 use backend\models\Menu;
 use backend\models\search\MenuSearch;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
-use yii\helpers\ArrayHelper;
 use common\libs\Tree;
 
 /**

@@ -8,8 +8,9 @@
 
 namespace console\controllers;
 
-
 use backend\models\Parade;
+use console\models\event\liveso;
+use console\models\event\zhiboba;
 use console\models\parade\beginsport;
 use console\models\parade\espn;
 use console\models\parade\eurosport;
@@ -38,6 +39,22 @@ class ParadeController extends Controller
     {
         $date = date('Y-m-d' ,strtotime('-3 day'));
         Parade::deleteAll(['<=', 'parade_date', $date]);
+    }
+
+    public function actionEvent()
+    {
+        try {
+            $live = new liveso();
+            $live->start();
+        } catch (\Exception $e) {}
+    }
+
+    public function actionZhiboba()
+    {
+        try {
+            $live = new zhiboba();
+            $live->start();
+        } catch (\Exception $e) {}
     }
 
     public function actionCollect()

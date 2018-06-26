@@ -76,7 +76,7 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/laydate/laydate.js'
                 </tr>
                 </thead>
                 <tbody class="channel_table">
-
+                <?php if(!empty($model->match_data)): ?>
                 <?php foreach ($model->match_data as $match): ?>
                 <tr>
                     <td>
@@ -117,7 +117,48 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/laydate/laydate.js'
                         <button class="btn btn-info add"> + </button>
                     </td>
                 </tr>
-                <?php endforeach; ?>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <tr>
+                        <td>
+                            <div class="input-group" style="position: relative">
+                                <input type="hidden" name="main_class[]" class="main_class">
+                                <input type="hidden" name="channel_id[]" class="channel_id">
+                                <input type="hidden" name="language[]" class="language">
+                                <input type="text" name="channel_name[]" class="form-control channel" placeholder="选择频道" readonly="readonly">
+                                <span class="input-group-btn">
+                                        <?= Html::button('查找', [
+                                            'class' => 'btn btn-info btn-search bind',
+                                            'data-toggle' => 'modal',
+                                            'data-target' => '#bind-modal',
+                                            'data-index' => 0
+                                        ]) ?>
+
+                                    </span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group" style="position: relative">
+
+                                <input type="text" name="language_name[]" class="form-control  language-input" placeholder="选择语言" readonly="readonly">
+                                <span class="input-group-btn">
+                                        <?= Html::button('选择', [
+                                            'class' => 'btn btn-default language-button',
+                                            'data-toggle' => 'modal',
+                                            'data-target' => '#language_modal',
+                                            'data-index' => 0
+                                        ]) ?>
+
+                                    </span>
+                            </div>
+
+                        </td>
+                        <td>
+                            <?= Html::button('重置', ['class' => 'btn btn-warning del']) ?>
+                            <button class="btn btn-info add"> + </button>
+                        </td>
+                    </tr>
+                <?php endif; ?>
 
 
                 </tbody>
@@ -134,15 +175,11 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/laydate/laydate.js'
             </div>
         </div>
 
-
         <div class="col-md-12">
-
         </div>
         <?php ActiveForm::end(); ?>
     </div>
-
-
-
+    
     <!-- 选择语言 -->
     <div>
         <?php

@@ -52,8 +52,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         $data = json_decode($model->match_data);
 
                         $text = '';
-                        foreach ($data as $channel) {
-                            $text .= Html::tag('span', $channel->channel_name, ['class' => 'label label-default']) . ' ';
+                        if (is_array($data)) {
+                            foreach ($data as $channel) {
+                                $text .= Html::tag('span', $channel->channel_name, ['class' => 'label label-default']) . ' ';
+                            }
                         }
                         return $text;
                      }
