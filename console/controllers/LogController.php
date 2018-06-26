@@ -56,10 +56,10 @@ class LogController extends Controller
         if ($log) {
             $log = explode('|', $log);
 
-            $time = isset($log['time']) ? $log['time'] : false;
-            $ip = isset($log['ip']) ? $log['ip'] : false;
-            $json = isset($log['json']) ? $log['json'] : '';
-            $error = isset($log['error'])? $log['error'] : false;
+            $time = isset($log[0]) ? $log[0] : false;
+            $ip = isset($log[1]) ? $log[1] : false;
+            $json = isset($log[2]) ? $log[2] : '';
+            $error = isset($log[3])? $log[3] : false;
 
             $data = json_decode($json, true);
             $program = isset($data['class']) ? $data['class'] : false;
@@ -67,9 +67,7 @@ class LogController extends Controller
             $header = $data['header'];
             $requestData = $data['data'];
 
-            if (empty($header)) {
-                return false;
-            }
+            if (empty($header)) return false;
 
             // 按用户进行统计
             if ($uid) {
