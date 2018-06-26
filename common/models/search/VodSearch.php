@@ -68,7 +68,7 @@ class VodSearch extends Vod
         if ($this->vod_cid) {
             $list = VodList::findOne($this->vod_cid);
 
-            if ($list->list_dir == 'shouye') {
+            if (in_array(strtolower($list->list_dir),['shouye', 'index', 'recommend'])) {
                 $query->andFilterWhere(['vod_home' => 1]);
                 unset($this->vod_cid);
             }

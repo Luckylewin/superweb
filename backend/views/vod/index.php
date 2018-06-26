@@ -20,7 +20,19 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?= Html::a('发布片源', \yii\helpers\Url::to(['create','vod_cid' => Yii::$app->request->get('VodSearch')['vod_cid']]), ['class' => 'btn btn-success']) ?>
-        <?= Html::a('返回', ['vod-list/index'], ['class' => 'btn btn-default']) ?>
+
+        <?php if(strpos(Yii::$app->request->referrer, 'vod-list') !== false): ?>
+            <?= Html::a('返回', null, [
+                    'class' => 'btn btn-default',
+                    'onclick' => 'history.go(-1)'
+            ]) ?>
+        <?php else: ?>
+            <?= Html::a('返回', ['vod-list/index'], [
+                'class' => 'btn btn-default',
+                'onclick' => 'history.go(-1)'
+            ]) ?>
+        <?php endif; ?>
+
     </p>
 
 
