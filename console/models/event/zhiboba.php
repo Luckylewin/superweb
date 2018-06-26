@@ -108,7 +108,13 @@ class zhiboba extends CommonParade implements collector
 
     }
 
-
+    /**
+     * @param $eventName
+     * @param $raceName
+     * @param $time
+     * @param $teams
+     * @return bool
+     */
     public function createMajorEvent($eventName, $raceName, $time, $teams)
     {
         // 查找赛事类别
@@ -158,8 +164,14 @@ class zhiboba extends CommonParade implements collector
         $majorEvent->title = $raceName;
         $majorEvent->time = $time;
         $majorEvent->base_time = $time;
-        $majorEvent->save(false);
 
+        // 查找比赛是否存在
+        if (MajorEvent::find()->where(['title' => $raceName, 'time' => $time])->exists() == false) {
+            echo "比赛 " . $raceName .' 已经存在' . PHP_EOL;
+            return false;
+        }
+
+        $majorEvent->save(false);
     }
 
     /**
