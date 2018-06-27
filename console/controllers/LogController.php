@@ -63,11 +63,11 @@ class LogController extends Controller
 
             $data = json_decode($json, true);
             $program = isset($data['class']) ? $data['class'] : false;
-            $uid = $data['uid'];
-            $header = $data['header'];
+            $uid = isset($data['uid']) ? $data['uid'] : false;
+            $header = isset($data['header']) ? $data['header'] : false;
             $requestData = $data['data'];
 
-            if (empty($header)) return false;
+            if ($header) return false;
 
             // 按用户进行统计
             if ($uid) {
