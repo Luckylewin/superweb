@@ -152,8 +152,12 @@ class LogController extends BaseController
         //节目收看排行
         $key = date('m-d:') . 'program-list';
         $program_rank = $this->hgetallMap($this->redis->hgetall($key));
-        $program['key'] = array_keys($program_rank);
-        $program['value'] = array_values($program_rank);
+        if ($program_rank) {
+            $program['key'] = array_keys($program_rank);
+            $program['value'] = array_values($program_rank);
+        } else {
+            $program['key'] = $program['value'] = [];
+        }
 
         return $this->render('now', [
             'data' => $data,
