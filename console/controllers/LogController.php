@@ -65,7 +65,7 @@ class LogController extends Controller
             $program = isset($data['class']) ? $data['class'] : false;
             $uid = isset($data['uid']) ? $data['uid'] : false;
             $header = isset($data['header']) ? $data['header'] : false;
-            $requestData = $data['data'];
+            $requestData = isset($data['data']) ? $data['data'] : false;
 
             if ($header) return false;
 
@@ -75,17 +75,19 @@ class LogController extends Controller
                 //$this->hincyby($key, $header);
             }
 
-            // 接口按小时进行统计
-            $key = date('m-d:H');
-            $this->hincyby($key, $header);
-
             // 按小时进行统计(全部)
             $key = date('m-d:') . 'all';
             $this->hincyby($key, date('H'));
+            
+            if ($header) {
+                // 接口按小时进行统计
+                $key = date('m-d:H');
+                $this->hincyby($key, $header);
 
-            // 接口按天数进行统计
-            $key = date('m-d');
-            $this->hincyby($key, $header);
+                // 接口按天数进行统计
+                $key = date('m-d');
+                $this->hincyby($key, $header);
+            }
 
             // 按节目进行统计
             if ($program) {
