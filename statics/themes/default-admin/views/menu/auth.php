@@ -23,13 +23,14 @@ use \yii\bootstrap\Modal;
         'options' => ['tabindex' => 1]
     ]);
 
-    \yii\widgets\ActiveForm::begin();
+    \yii\widgets\ActiveForm::begin([
+            'method' => 'POST'
+    ]);
     echo "<div class='form-group'>";
     echo \yii\helpers\Html::label('操作码','password');
     echo \yii\helpers\Html::input('password','password',null, [
         'class' => 'form-control',
         'id' => 'password',
-        'autocomplete' =>"off"
     ]);
     echo "</div>";
 

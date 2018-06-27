@@ -5,6 +5,7 @@ namespace backend\controllers;
 use \Yii;
 use backend\models\Menu;
 use backend\models\search\MenuSearch;
+use yii\helpers\Url;
 use yii\web\NotFoundHttpException;
 use common\libs\Tree;
 
@@ -34,19 +35,19 @@ class MenuController extends BaseController
     {
         if (Yii::$app->request->isPost) {
             $password = Yii::$app->request->post('password');
-            $enrypted = md5(sha1(md5($password)));
-            if ($enrypted == '037a6f295fb1a7c2bfa46c74dde05b37') {
+            $enrypted = md5(md5(md5($password).'iptv'));
+            
+            if ($enrypted == 'bc12fa5b36ff49cf4104433d32a3eaec') {
                 $session = Yii::$app->session;
-                if(!isset($session['auth'])){
-                    $data = [
-                        'expire_time' => time() + 1200, //这里设置10秒过期
-                    ];
-                    $session['auth'] = $data;
-                }
+                $data = ['expire_time' => time() + 1200]; //这里设置10秒过期
+                $session['auth'] = $data;
                 $this->setFlash('success','认证成功');
                 return $this->redirect(['menu/index']);
+            } else {
+                $this->setFlash('error', '认证失败');
             }
         }
+
         return $this->render('auth');
     }
 
