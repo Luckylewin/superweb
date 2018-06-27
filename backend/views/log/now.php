@@ -2,7 +2,7 @@
 $this->registerJsFile('/statics/themes/default-admin/plugins/laydate/laydate.js', ['depends'=>'yii\web\JqueryAsset', 'position'=>\yii\web\View::POS_HEAD] );
 $this->registerJsFile('/statics/themes/default-admin/plugins/echarts/echarts.js', ['depends'=>'yii\web\JqueryAsset', 'position'=>\yii\web\View::POS_HEAD]);
 
-$this->title = '日志统计';
+$this->title = '实时接口统计';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 

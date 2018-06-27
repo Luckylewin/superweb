@@ -2,8 +2,11 @@
     <div class="jumbotron">
         <h1>欢迎登陆！</h1>
         <p id="localtime"></p>
-        <p><a class="btn btn-primary btn-lg" role="button">
-                更多</a>
+        <p>
+
+            <?= \yii\helpers\Html::a('接口统计', \yii\helpers\Url::to(['log/now']), [
+                    'class' => 'btn btn-primary btn-lg'
+            ]) ?>
         </p>
     </div>
 </div>
