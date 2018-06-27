@@ -67,7 +67,6 @@ class CrontabController extends Controller
         $startExectime = $this->getCurrentTime();
 
         foreach ($tasks as $task) {
-
             $pool[] = proc_open("php yii $task->route", [], $pipe);
         }
 
@@ -75,7 +74,7 @@ class CrontabController extends Controller
         while (count($pool)) {
             foreach ($pool as $i => $result) {
                 $processInfo = proc_get_status($result);
-                if($processInfo['running'] == FALSE) {
+                if($processInfo['running'] == false) {
                     proc_close($result);
                     unset($pool[$i]);
                     # 记录任务状态
