@@ -86,19 +86,18 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/laydate/laydate.js'
                             <input type="hidden" name="language[]" class="language" value="<?= $match['channel_language'] ?>">
                             <input type="text" name="channel_name[]" class="form-control channel" placeholder="选择频道" readonly="readonly" value="<?= $match['channel_name'] ?>">
                             <span class="input-group-btn">
-                                        <?= Html::button('查找', [
-                                            'class' => 'btn btn-info btn-search bind',
-                                            'data-toggle' => 'modal',
-                                            'data-target' => '#bind-modal',
-                                            'data-index' => 0
-                                        ]) ?>
-
-                                    </span>
+                                    <?= Html::button('查找', [
+                                        'class' => 'btn btn-info btn-search bind',
+                                        'data-toggle' => 'modal',
+                                        'data-target' => '#bind-modal',
+                                        'data-index' => 0
+                                    ]) ?>
+                            </span>
                         </div>
                     </td>
+
                     <td>
                         <div class="input-group" style="position: relative">
-
                             <input type="text" name="language_name[]" class="form-control  language-input" placeholder="选择语言" readonly="readonly" value="<?= $match['channel_language'] ?>">
                             <span class="input-group-btn">
                                         <?= Html::button('选择', [
@@ -283,10 +282,21 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/laydate/laydate.js'
                     channel_modal = true;
                 }
     });
-        
+    
+    
+    $(document).on('click', '.language-button', function() {
+         indexCounter.language  = $(this).index() + $('.language-button').length - 1;
+    })
+    
+    $(document).on('click', '.btn-search', function() {
+         
+         indexCounter.language =  indexCounter.channel = $(this).index() + $('.btn-search').length - 2;
+    })
+      
      //频道选择事件
      $(document).on('click', '.choose', function() {
                 var index = indexCounter.channel;
+    
                 var main_class = $('#main-class').find('option:selected').text();
                 
                 var channel = $('#channel').find('option:selected');
@@ -305,6 +315,7 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/laydate/laydate.js'
      
       //复制一行
      $(document).on('click', '.add', function() {
+            // 复制之前判断 tr
            
             var index = indexCounter.channel;
             
@@ -325,7 +336,7 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/laydate/laydate.js'
                 
                 indexCounter.plus('channel');
                 indexCounter.plus('lang');
-            
+              
                 //复制一行
                 $('.channel_table').append(node);
                 

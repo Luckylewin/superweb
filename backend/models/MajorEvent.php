@@ -113,15 +113,19 @@ class MajorEvent extends \yii\db\ActiveRecord
 
         //频道
         $match_data = [];
+
         foreach ($post['channel_id'] as $key => $channel_id) {
-            $channelObject = OttChannel::findOne($channel_id);
-            $match_data[] = [
-                'channel_language' => $post['language'][$key],
-                'main_class' => $post['main_class'][$key],
-                'channel_name' => $channelObject->name,
-                'channel_id' => $channelObject->channel_number,
-                'channel_icon' => $channelObject->image
-            ];
+            $channelObject = OttChannel::find()->where(['id' => $channel_id])->one();
+
+            if ($channelObject) {
+                $match_data[] = [
+                    'channel_language' => $post['language'][$key],
+                    'main_class' => $post['main_class'][$key],
+                    'channel_name' => $channelObject->name,
+                    'channel_id' => $channelObject->channel_number,
+                    'channel_icon' => $channelObject->image
+                ];
+            }
         }
 
         if (empty($match_data)) {

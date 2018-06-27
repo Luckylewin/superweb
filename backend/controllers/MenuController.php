@@ -36,7 +36,7 @@ class MenuController extends BaseController
         if (Yii::$app->request->isPost) {
             $password = Yii::$app->request->post('password');
             $enrypted = md5(md5(md5($password).'iptv'));
-            
+
             if ($enrypted == 'bc12fa5b36ff49cf4104433d32a3eaec') {
                 $session = Yii::$app->session;
                 $data = ['expire_time' => time() + 1200]; //这里设置10秒过期
