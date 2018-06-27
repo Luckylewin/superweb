@@ -6,9 +6,17 @@ use backend\models\AppLog;
 use backend\models\ProgramLog;
 use backend\models\TimelineLog;
 use yii\helpers\ArrayHelper;
+use \Yii;
+use yii\redis\Connection;
 
 class LogController extends BaseController
 {
+
+    /**
+     * @var Connection
+     */
+    public $redis;
+
     public function actionIndex()
     {
         $type = \Yii::$app->request->get('type');
@@ -70,36 +78,7 @@ class LogController extends BaseController
             $programLog['all_program_sum'] = $program->all_program_sum;
         }
 
-        //具体数值统计
-        $sumFields = 'count(id) as total,
-                      sum(total_request) as total_request,
-                      sum(token_request) as token_request,
-                      sum(token_success) as token_success,
-                      sum(iptv_request) as iptv_request,
-                      sum(ott_request) as ott_request,
-                      sum(app_request) as app_request,
-                      sum(firmware_request) as firmware_request,
-                      sum(active_hour) as active_hour,
-                      sum(parade_request) as parade_request,
-                      sum(renew_request) as renew_request,
-                      sum(auth_request) as auth_request,
-                      sum(time_request) as time_request,
-                      sum(register_request) as register_request,
-                      sum(market_request) as market_request,
-                      sum(karaokelist_request) as karaokeList_request,
-                      sum(karaoke_request) as karaoke_request';
-
-        $validSumFields = 'count(id) as valid_total,
-                           sum(total_request) as valid_total_request';
-
-        $validAppLog = AppLog::find()->select($validSumFields)->where(['is_valid' => 1])->andWhere($where)->asArray()->one();
-        $allAppLog   = AppLog::find()->select($sumFields)->andWhere($where)->asArray()->one();
-
-        if ($allAppLog) {
-            $appLog = ArrayHelper::merge($validAppLog, $allAppLog);
-        }
-
-        $fields = ['log', 'programLog', 'appLog'];
+        $fields = ['log', 'programLog'];
         foreach ($fields as $field) {
             array_walk($$field, function(&$v, $k) use ($unit){
                 if (is_numeric($v)) {
@@ -108,13 +87,101 @@ class LogController extends BaseController
             });
         }
 
-
         //昨日活跃用户
         return $this->render('index', [
             'log' => $log,
-            'programLog' => $programLog,
-            'appLog' => $appLog,
+            'programLog' => $programLog
         ]);
     }
+
+    /**
+     *  实时统计接口调用情况
+     */
+    public function actionNow()
+    {
+        $this->redis = Yii::$app->redis;
+        $this->redis->select(14);
+
+        $data = [];
+
+        //全部接口的调用情况
+        $key = date('m-d:') . 'all';
+        $data['all'] = $this->hgetallMap($this->redis->hgetall($key));
+
+        $keys = $this->generateHour();
+        foreach ($keys as $key => &$val) {
+            if ($val['flag']) {
+                $result = $this->redis->hgetall($val['key']);
+                $val['val'] = $this->hgetallMap($result);
+                if (!isset($data['all'][$key])) {
+                    $data['all'][$key] = 0;
+                }
+            } else {
+                $val['val'] = [];
+                $data['all'][$key] = 0;
+            }
+        }
+
+        ksort($data['all']);
+
+        // 重要接口的调用情况
+        $interfaces = ['getClientToken', 'getOttNewList', 'getCountryList'];
+        foreach ($interfaces as $interface) {
+            $interfaceData = [];
+            foreach ($keys as $key => $val) {
+                if (isset($val['val'][$interface])) {
+                     $interfaceData[$key] = $val['val'][$interface];
+                } else {
+                     $interfaceData[$key] = 0;
+                }
+            }
+            $data[$interface] = $interfaceData;
+        }
+
+        return $this->render('now', [
+            'data' => $data,
+            'programLog' => ['all_program' => []],
+
+        ]);
+    }
+
+    private function hgetallMap($data)
+    {
+        $return = [];
+
+        if ($data) {
+            $len = count($data);
+            for ($i = 0; $i < $len; $i+=2) {
+                $return[$data[$i]] = $data[$i+1];
+            }
+        } else {
+            $return = false;
+        }
+
+        return $return;
+    }
+
+    /**
+     * 小时数组
+     * @return array
+     */
+    public function generateHour()
+    {
+        $currentDay = date('m-d:');
+        $currentHour = date('H');
+
+        $keys = [];
+
+        for ($h = 0; $h <= 23; $h++) {
+            $h = sprintf('%02d', $h);
+            $keys[] = [
+                'key' => $currentDay . $h,
+                'flag' => $h <= $currentHour ? true : false
+            ];
+        }
+
+        return $keys;
+    }
+    
 
 }

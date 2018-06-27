@@ -42,272 +42,20 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
             </div>
 
-            <div class="col-md-11 center" style="margin: 0 50px auto;margin-bottom: 30px;">
-                <div id="server_program" style="height: 400px;border:1px dashed #ccc;">
-
-                </div>
-            </div>
-
-            <div class="col-md-11 center" style="margin: 0 50px auto">
-                <div id="local_program" style="height: 400px;border:1px dashed #ccc;">
-
-                </div>
-            </div>
-
-
-            <div class="col-md-12" style="margin-top: 50px;">
-                <div class="col-md-2">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">
-                                活动用户
-                            </h3>
-                        </div>
-                        <div class="panel-body">
-                            <h1><?= $appLog['total'] ?></h1>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-2">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">
-                                有效用户
-                            </h3>
-                        </div>
-                        <div class="panel-body">
-                            <h1><?= isset($appLog['valid_total'])?$appLog['valid_total']:0; ?></h1>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-2">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">
-                                请求总数
-                            </h3>
-                        </div>
-                        <div class="panel-body">
-                            <h1><?= isset($appLog['total_request'])?$appLog['total_request']:0; ?></h1>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-2">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">
-                                用户有效请求总数
-                            </h3>
-                        </div>
-                        <div class="panel-body">
-                            <h1><?= isset($appLog['valid_total_request'])?$appLog['valid_total_request']:0; ?></h1>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-2">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">
-                                token请求
-                            </h3>
-                        </div>
-                        <div class="panel-body">
-                            <h1><?= isset($appLog['token_request'])?$appLog['token_request']:0; ?></h1>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-2">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">
-                                token认证成功
-                            </h3>
-                        </div>
-                        <div class="panel-body">
-                            <h1><?= isset($appLog['token_success'])?$appLog['token_success']:0; ?></h1>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-            <div class="col-md-12">
-
-                <div class="col-md-2">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">
-                                节目请求总数
-                            </h3>
-                        </div>
-                        <div class="panel-body">
-                            <h1><?= isset($programLog['all_program_sum'])?$programLog['all_program_sum']:0 ?></h1>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-2">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">
-                                app市场
-                            </h3>
-                        </div>
-                        <div class="panel-body">
-                            <h1><?= isset($appLog['register_request'])?$appLog['register_request']:0 ?></h1>
-                        </div>
-                    </div>
-                </div>
-
-
-                <div class="col-md-2">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">
-                                ott列表下载
-                            </h3>
-                        </div>
-                        <div class="panel-body">
-                            <h1><?= isset($appLog['ott_request'])?$appLog['ott_request']:0 ?></h1>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-2">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">
-                                预告列表
-                            </h3>
-                        </div>
-                        <div class="panel-body">
-                            <h1><?= isset($appLog['parade_request'])?$appLog['parade_request']:0 ?></h1>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-2">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">
-                                服务器时间
-                            </h3>
-                        </div>
-                        <div class="panel-body">
-                            <h1><?= isset($appLog['time_request'])?$appLog['time_request']:0 ?></h1>
-                        </div>
-                    </div>
-                </div>
-
-
-
-                <div class="col-md-2">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">
-                                app升级
-                            </h3>
-                        </div>
-                        <div class="panel-body">
-                            <h1><?= isset($appLog['iptv_request'])?$appLog['iptv_request']:0 ?></h1>
-                        </div>
-                    </div>
-                </div>
-
-
-            </div>
-            <div class="col-md-12">
-                <div class="col-md-2">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">
-                                auth请求
-                            </h3>
-                        </div>
-                        <div class="panel-body">
-                            <h1><?= isset($appLog['auth_request'])?$appLog['auth_request']:0 ?></h1>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-2">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">
-                                续费请求
-                            </h3>
-                        </div>
-                        <div class="panel-body">
-                            <h1><?= isset($appLog['renew_request'])?$appLog['renew_request']:0 ?></h1>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-2">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">
-                                dvb注册请求
-                            </h3>
-                        </div>
-                        <div class="panel-body">
-                            <h1><?= isset($appLog['register_request'])?$appLog['register_request']:0; ?></h1>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-2">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">
-                                固件升级
-                            </h3>
-                        </div>
-                        <div class="panel-body">
-                            <h1><?= isset($appLog['firmware_request'])?$appLog['firmware_request']:0; ?></h1>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-2">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">
-                                卡拉OK列表
-                            </h3>
-                        </div>
-                        <div class="panel-body">
-                            <h1><?= isset($appLog['karaokeList_request'])?$appLog['karaokeList_request']:0; ?></h1>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-2">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">
-                                卡拉OK播放
-                            </h3>
-                        </div>
-                        <div class="panel-body">
-                            <h1><?= isset($appLog['karaoke_request'])?$appLog['karaoke_request']:0; ?></h1>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
         </div>
 
+<?php
 
-<script>
-    var total_request = [<?= implode(",", isset($log['total_line'])?$log['total_line']:$log['default'])?>];
-    var watch_request = [<?= implode(",", isset($log['watch_line'])?$log['watch_line']:$log['default'])?>];
-    var token_request = [<?= implode(",", isset($log['token_line'])?$log['token_line']:$log['default'])?>];
-    var local_request = [<?= implode(",", isset($log['local_watch_line'])?$log['local_watch_line']:$log['default'])?>];
-    var server_request = [<?= implode(",",isset($log['server_watch_line'])?$log['server_watch_line']:$log['default'])?>];
+$total = implode(",", isset($log['total_line'])?$log['total_line']:$log['default']);
+$watch = implode(",", isset($log['watch_line'])?$log['watch_line']:$log['default']);
+$token = implode(",", isset($log['token_line'])?$log['token_line']:$log['default']);
+$program = "'" . implode(" ','", array_keys($programLog['all_program']?$programLog['all_program']:[])) . "'";
+$program_value = implode(",", array_values($programLog['all_program']?$programLog['all_program']:[]));
+
+$js =<<<JS
+    var total_request = [$total];
+    var watch_request = [$watch];
+    var token_request = [$token];
 
     option = {
         title: {
@@ -317,7 +65,7 @@ $this->params['breadcrumbs'][] = $this->title;
             trigger: 'axis'
         },
         legend: {
-            data:['请求总数','节目接口','token接口','本地解析','服务器解析']
+            data:['请求总数','节目接口','token接口']
         },
         grid: {
             left: '3%',
@@ -357,25 +105,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 type:'line',
                 stack: 'token',
                 data : token_request
-            },
-            {
-                name:'本地解析',
-                type:'line',
-                stack: 'local',
-                data : local_request
-            },
-            {
-                name:'服务器解析',
-                type:'line',
-                stack: 'server',
-                data : server_request
             }
         ]
     };
 
     var myChart = echarts.init(document.getElementById('main'));
     myChart.setOption(option);
-
 
     function setOption(title,subtitle,data,value)
     {
@@ -472,37 +207,19 @@ $this->params['breadcrumbs'][] = $this->title;
         return option;
     }
 
-    var all_program =       [<?= "'" . implode(" ','", array_keys($programLog['all_program']?$programLog['all_program']:[])) . "'" ?>];
-    var all_program_value = [<?= implode(",", array_values($programLog['all_program']?$programLog['all_program']:[])) ?>];
-
-    var local_program = [<?= "'" . implode(" ','", array_keys($programLog['local_program']?$programLog['local_program']:[])) . "'" ?>];
-    var local_program_value = [<?= implode(",", array_values($programLog['local_program']?$programLog['local_program']:[])) ?>];
-
-    var server_program = [<?= "'" . implode(" ','", array_keys($programLog['server_program']?$programLog['server_program']:[])) . "'" ?>];
-    var server_program_value = [<?= implode(",", array_values($programLog['server_program']?$programLog['server_program']:[])) ?>];
+    var all_program =       [$program];
+    var all_program_value = [$program_value];
 
     var program = echarts.init(document.getElementById('program'));
     var option = setOption('节目收看排行','服务器+本地解析',all_program,all_program_value);
     program .setOption(option);
+JS;
 
-    var local_program_char = echarts.init(document.getElementById('local_program'));
-    var local_option = setOption('本地解析收看排行','本地解析',local_program,local_program_value);
-    local_program_char.setOption(local_option);
+$this->registerJs($js);
 
-    var server_program_char = echarts.init(document.getElementById('server_program'));
-    var server_option = setOption('服务器解析收看排行','服务器解析',server_program,server_program_value);
-    server_program_char.setOption(server_option);
-
-</script>
+?>
 
 <script>
-
-</script>
-
-
-
-<script>
-
     laydate.render({
         elem: '#test12'
         ,format: 'yyyy/MM/dd'

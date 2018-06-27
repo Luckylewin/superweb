@@ -71,21 +71,25 @@ class LogController extends Controller
 
             // 按用户进行统计
             if ($uid) {
-                $key = date('m/d:') . $uid;
-                $this->hincyby($key, $header);
+                $key = date('m-d:') . $uid;
+                //$this->hincyby($key, $header);
             }
 
-            // 按小时进行统计
-            $key = date('m/d:H');
+            // 接口按小时进行统计
+            $key = date('m-d:H');
             $this->hincyby($key, $header);
 
-            // 按天数进行统计
-            $key = date('m/d');
+            // 按小时进行统计(全部)
+            $key = date('m-d:') . 'all';
+            $this->hincyby($key, date('H'));
+
+            // 接口按天数进行统计
+            $key = date('m-d');
             $this->hincyby($key, $header);
 
             // 按节目进行统计
             if ($program) {
-                $key = date('m/d:program');
+                $key = date('m-d:program');
                 $this->hincyby($key, $program);
             }
 
