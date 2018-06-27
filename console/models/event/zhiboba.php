@@ -79,7 +79,6 @@ class zhiboba extends CommonParade implements collector
      */
     public function FIFA($data)
     {
-
         foreach ($data as $val) {
             if (in_array('世界杯', $val['label'])) {
                 $raceName = $val['info'][1];
@@ -88,7 +87,7 @@ class zhiboba extends CommonParade implements collector
                            'teamB' => $val['info'][3]
                          ];
                 $date = $val['date'] . ' ' . $val['info'][0] . ":00";
-                $time = $this->convertTimeZone($date, 'timestamp', '8','8');
+                $time = $this->convertTimeZone($date, 'timestamp', '0','8');
 
                 $this->createMajorEvent("国际足联世界杯",$raceName, $time, $teams);
 
@@ -155,8 +154,9 @@ class zhiboba extends CommonParade implements collector
         $majorEvent->base_time = $time;
 
         // 查找比赛是否存在
-        if (MajorEvent::find()->where(['title' => $raceName, 'time' => $time])->exists()) {
-            echo "比赛 " . $raceName .' 已经存在' . PHP_EOL;
+        $exist = MajorEvent::find()->where(['title' => $raceName, 'time' => $time])->andFilterWhere(['like', 'live_match', $teamA->team_name])->exists();
+        if ($exist) {
+            echo "比赛 " . $raceName ." ". $teamA->team_zh_name . '-' . $teamB->team_zh_name.' 已经存在' . PHP_EOL;
             return false;
         }
 
