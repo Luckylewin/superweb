@@ -66,15 +66,26 @@ class LogController extends Controller
             $program = isset($data['class']) ? $data['class'] : false;
             $uid = isset($data['uid']) ? $data['uid'] : false;
             $header = isset($data['header']) ? $data['header'] : false;
+            $name = isset($data['name']) ? $data['name'] : false;
             $requestData = isset($data['data']) ? $data['data'] : false;
 
             if (empty($header)) return false;
+            
+            if ($program == false) {
+                if (in_array($header, ['tvnet','viettel','sohatv','thvl','hoabinhtv','v4live','migu','sohulive','hplus','newmigu','haoqu','tencent','vtv','ott','local'])) {
+                    $program = $header;
+                    $header = false;
+                }
+            }
 
             // 按小时进行统计(全部)
             $key = date('m-d:') . 'all';
             $this->hincyby($key, date('H'));
 
-            if ($header) {
+            if (
+                $header &&
+                in_array($header, ['getClientToken', 'getOttNewList', 'getServerTime', 'getNewApp', 'register', 'getAppMarket', 'getFirmware', 'renew'])
+            ) {
                 // 接口按小时进行统计
                 $key = date('m-d:H');
                 $this->hincyby($key, $header);
@@ -86,8 +97,14 @@ class LogController extends Controller
 
             // 按节目进行统计
             if ($program) {
-                $key = date('m-d:program');
-                $this->hincyby($key, $program);
+
+                if ($name) {
+                    $key = date('m-d:') . 'program-list' ;
+                    $this->hincyby($key, $name);
+                }
+
+                $key = date('m-d:') . 'program-time';
+                $this->hincyby($key, date('H'));
             }
 
         }

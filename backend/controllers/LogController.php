@@ -108,7 +108,12 @@ class LogController extends BaseController
         $key = date('m-d:') . 'all';
         $data['all'] = $this->hgetallMap($this->redis->hgetall($key));
 
+        //节目播放接口的调用情况
+        $key = date('m-d:') . 'program-time';
+        $data['program'] = $this->hgetallMap($this->redis->hgetall($key));
+
         $keys = $this->generateHour();
+
         foreach ($keys as $key => &$val) {
             if ($val['flag']) {
                 $result = $this->redis->hgetall($val['key']);
@@ -116,13 +121,18 @@ class LogController extends BaseController
                 if (!isset($data['all'][$key])) {
                     $data['all'][$key] = 0;
                 }
+                if (!isset($data['program'][$key])) {
+                    $data['program'][$key] = 0;
+                }
             } else {
                 $val['val'] = [];
                 $data['all'][$key] = 0;
+                $data['program'][$key] = 0;
             }
         }
 
         ksort($data['all']);
+        ksort($data['program']);
 
         // 重要接口的调用情况
         $interfaces = ['getClientToken', 'getOttNewList', 'getCountryList'];
@@ -138,13 +148,27 @@ class LogController extends BaseController
             $data[$interface] = $interfaceData;
         }
 
+
+        //节目收看排行
+        $key = date('m-d:') . 'program-list';
+        $program_rank = $this->hgetallMap($this->redis->hgetall($key));
+        $program['key'] = array_keys($program_rank);
+        $program['value'] = array_values($program_rank);
+
         return $this->render('now', [
             'data' => $data,
+            'axisX' => $this->getCurrentX(),
             'programLog' => ['all_program' => []],
+            'program' => $program
 
         ]);
     }
 
+    /**
+     * hgetall 关联数组
+     * @param $data
+     * @return array|bool
+     */
     private function hgetallMap($data)
     {
         $return = [];
@@ -152,7 +176,12 @@ class LogController extends BaseController
         if ($data) {
             $len = count($data);
             for ($i = 0; $i < $len; $i+=2) {
-                $return[$data[$i]] = $data[$i+1];
+                if (is_numeric($data[$i])) {
+                    $index = (integer)($data[$i]);
+                    $return[$index] = $data[$i+1];
+                } else {
+                    $return[$data[$i]] = $data[$i+1];
+                }
             }
         } else {
             $return = false;
@@ -183,5 +212,19 @@ class LogController extends BaseController
         return $keys;
     }
 
+    /**
+     * 实时x轴
+     * @return array
+     */
+    public function getCurrentX()
+    {
+        $currentHour = date('H');
+        $x = [];
+        for ($h = 0; $h <= $currentHour; $h++) {
+            $x[] = sprintf('%02d', $h) . 'h';
+        }
+
+        return $x;
+    }
 
 }

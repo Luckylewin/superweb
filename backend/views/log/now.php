@@ -22,12 +22,16 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <?php
 
-$total = implode(",", $data['all']);
-$watch = implode(",", $data['getClientToken']);
-$token = implode(",", $data['getOttNewList']);
+// x轴
+$axisX = "'" . implode("','", $axisX) . "'";
 
-$program = "'" . implode(" ','", array_keys($programLog['all_program']?$programLog['all_program']:[])) . "'";
-$program_value = implode(",", array_values($programLog['all_program']?$programLog['all_program']:[]));
+$total = implode(",", $data['all']);
+$watch = implode(",", $data['program']);
+$token = implode(",", $data['getClientToken']);
+
+
+$program_key = "'" . implode(" ','", $program['key']) . "'";
+$program_value = implode(",", $program['value']);
 
 $js =<<<JS
     var total_request = [$total];
@@ -58,7 +62,8 @@ $js =<<<JS
         xAxis: {
             type: 'category',
             boundaryGap: true,
-            data: ['00h','01h','02h','03h','04h','05h','06h','07h','08h','09h','10h','11h','12h','13h','14h','15h','16h','17h','18h','19h','20h','21h','22h','23h']
+            //['00h','01h','02h','03h','04h','05h','06h','07h','08h','09h','10h','11h','12h','13h','14h','15h','16h','17h','18h','19h','20h','21h','22h','23h']
+            data: [$axisX]
         },
         yAxis: {
             type: 'value'
@@ -184,7 +189,7 @@ $js =<<<JS
         return option;
     }
 
-    var all_program =       [$program];
+    var all_program =       [$program_key];
     var all_program_value = [$program_value];
 
     var program = echarts.init(document.getElementById('program'));
