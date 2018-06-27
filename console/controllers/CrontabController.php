@@ -35,8 +35,7 @@ class CrontabController extends Controller
 
             // 第一次运行,先计算下次运行时间
             if (!$task->next_rundate) {
-                $task->next_rundate = $task->getNextRunDate();
-                $task->save(false);
+                $this->updateNextTime($task);
                 continue;
             }
 
@@ -49,6 +48,12 @@ class CrontabController extends Controller
         $this->executeTask($tasks);
 
         return ExitCode::OK;
+    }
+
+    private function updateNextTime(Crontab $task)
+    {
+        $task->next_rundate = $task->getNextRunDate();
+        $task->save(false);
     }
 
     /**

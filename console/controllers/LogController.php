@@ -62,23 +62,18 @@ class LogController extends Controller
             $error = isset($log[3])? $log[3] : false;
 
             $data = json_decode($json, true);
+
             $program = isset($data['class']) ? $data['class'] : false;
             $uid = isset($data['uid']) ? $data['uid'] : false;
             $header = isset($data['header']) ? $data['header'] : false;
             $requestData = isset($data['data']) ? $data['data'] : false;
 
-            if ($header) return false;
-
-            // 按用户进行统计
-            if ($uid) {
-                $key = date('m-d:') . $uid;
-                //$this->hincyby($key, $header);
-            }
+            if (empty($header)) return false;
 
             // 按小时进行统计(全部)
             $key = date('m-d:') . 'all';
             $this->hincyby($key, date('H'));
-            
+
             if ($header) {
                 // 接口按小时进行统计
                 $key = date('m-d:H');
