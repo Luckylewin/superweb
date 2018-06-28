@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\query\AlbumNameKaraokeQuery */
+/* @var $searchModel backend\models\search\KaraokeSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = '卡拉OK视频';
@@ -47,7 +47,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                     'attribute' => 'hit_count',
-                    'label' => '热度'
+                    'label' => '热度',
+                    'options' => [
+                            'style' => 'width:90px;'
+                    ]
             ],
 
             [
@@ -64,7 +67,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
             ],
 
-            'utime:date',
+            [
+                    'attribute' => 'utime',
+                    'format' => 'date',
+                    'options' => [
+                        'style' => 'width:100px;'
+                    ]
+            ],
 
             [
                 'class' => 'common\grid\MyActionColumn',
