@@ -27,8 +27,18 @@ $this->params['breadcrumbs'][] = $this->title;
             'crontab_str',
             'switchText',
             'statusText',
-            'last_rundate',
-            'next_rundate',
+            [
+                    'attribute' => 'last_rundate',
+                    'value' => function($model) {
+                        return Yii::$app->formatter->asRelativeTime(strtotime($model->last_rundate));
+                    }
+            ],
+            [
+                    'attribute' => 'next_rundate',
+                    'value' => function($model) {
+                        return Yii::$app->formatter->asRelativeTime(strtotime($model->next_rundate));
+                    }
+            ],
             'execmemory',
             'exectime',
 
