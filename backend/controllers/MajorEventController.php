@@ -32,6 +32,9 @@ class MajorEventController extends BaseController
                     'time' => SORT_ASC,
                     'sort' => SORT_ASC
                 ]
+            ],
+            'pagination' => [
+                'pageSize' => 50
             ]
         ]);
 

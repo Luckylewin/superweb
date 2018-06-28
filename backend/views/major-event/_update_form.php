@@ -87,7 +87,7 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/laydate/laydate.js'
                             <input type="text" name="channel_name[]" class="form-control channel" placeholder="选择频道" readonly="readonly" value="<?= $match['channel_name'] ?>">
                             <span class="input-group-btn">
                                     <?= Html::button('查找', [
-                                        'class' => 'btn btn-info btn-search bind',
+                                        'class' => 'btn btn-info btn-search bind event-bind',
                                         'data-toggle' => 'modal',
                                         'data-target' => '#bind-modal',
                                         'data-index' => 0
@@ -283,14 +283,9 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/laydate/laydate.js'
                 }
     });
     
-    
-    $(document).on('click', '.language-button', function() {
-         indexCounter.language  = $(this).index() + $('.language-button').length - 1;
-    })
-    
-    $(document).on('click', '.btn-search', function() {
-         
-         indexCounter.language =  indexCounter.channel = $(this).index() + $('.btn-search').length - 2;
+   
+    $(document).on('click', 'tr', function() {
+        indexCounter.language = indexCounter.channel = $(this).index();
     })
       
      //频道选择事件

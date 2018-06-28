@@ -24,13 +24,22 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             //'id',
-            'time:date',
-            'title',
+            [
+
+                'attribute' => 'time',
+                'format' => 'datetime',
+                'options' => [
+                        'style' => 'width:130px;'
+                ]
+            ],
 
             [
-                    'attribute' => 'base_time',
-                    'format' => ['date','php:H:i']
+                    'attribute' => 'title',
+                    'options' => [
+                        'style' => 'width:150px;'
+                    ]
             ],
+
 
             [
                 'attribute' => 'live_match',
@@ -42,8 +51,10 @@ $this->params['breadcrumbs'][] = $this->title;
                      $teams .= ' - ';
                      $teams .= Html::img(Func::getAccessUrl($teamObject[1]->team_icon), ['width'=>30]) . ' '. $data->teams[1]->team_zh_name;
                      return $text =  $data->event_info . ' ' . $teams ;
-
-                }
+                },
+                'options' => [
+                    'style' => 'width:350px;'
+                ]
             ],
             [
                     'attribute' => 'match_data',
