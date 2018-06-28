@@ -123,13 +123,12 @@ class MajorEvent extends \yii\db\ActiveRecord
                     'main_class' => $post['main_class'][$key],
                     'channel_name' => $channelObject->name,
                     'channel_id' => $channelObject->channel_number,
+                    'channel_true_id' => $channelObject->id,
                     'channel_icon' => $channelObject->image
                 ];
             }
-        }
 
-        if (empty($match_data)) {
-            return false;
+
         }
 
         $this->match_data = Json::encode($match_data);

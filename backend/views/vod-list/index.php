@@ -58,7 +58,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'list_trysee',
                 'value' => function($model) {
                     return $model->list_trysee . ' 分钟';
-                }
+                },
+                'options' => [
+                        'style' => 'width:140px;'
+                ]
             ],
 
             //'list_extend:ntext',

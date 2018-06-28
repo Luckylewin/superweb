@@ -10,6 +10,10 @@ use common\components\Func;
 $this->title = 'Major Events';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<style>
+    .today td:nth-child(2){background: #23c6c8!important;color: white}
+
+</style>
 <div class="major-event-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
@@ -20,6 +24,15 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
+
+        'rowOptions' => function ($model, $key, $index, $grid){
+
+            $today_start = strtotime(date('Y-m-d'));
+            $today_end = $today_start + 86400;
+            if ($model->base_time >= $today_start && $model->base_time <= $today_end) {
+                return ['class' => 'today'];
+            }
+        },
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -36,7 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                     'attribute' => 'title',
                     'options' => [
-                        'style' => 'width:150px;'
+                        'style' => 'width:130px;'
                     ]
             ],
 
@@ -52,20 +65,25 @@ $this->params['breadcrumbs'][] = $this->title;
                      $teams .= Html::img(Func::getAccessUrl($teamObject[1]->team_icon), ['width'=>30]) . ' '. $data->teams[1]->team_zh_name;
                      return $text =  $data->event_info . ' ' . $teams ;
                 },
-                'options' => [
-                    'style' => 'width:350px;'
-                ]
+                'options' => ['style' => 'width:320px;']
+
+
             ],
             [
                     'attribute' => 'match_data',
                     'format' => 'raw',
+                    'options' => ['style' => 'width:330px;'],
                     'value' => function($model) {
                         $data = json_decode($model->match_data);
 
                         $text = '';
                         if (is_array($data)) {
                             foreach ($data as $channel) {
-                                $text .= Html::tag('span', $channel->channel_name, ['class' => 'label label-default']) . ' ';
+                                $text .= Html::a($channel->channel_name, null, [
+                                        'class' => 'btn btn-default btn-xs',
+                                        'style'=>"margin-bottom:5px;width:100px;"
+                                    ]) . '&nbsp';
+
                             }
                         }
                         return $text;

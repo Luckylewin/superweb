@@ -82,7 +82,7 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/laydate/laydate.js'
                     <td>
                         <div class="input-group" style="position: relative">
                             <input type="hidden" name="main_class[]" class="main_class" value="<?= $match['main_class'] ?>">
-                            <input type="hidden" name="channel_id[]" class="channel_id" value="<?= $match['channel_id'] ?>">
+                            <input type="hidden" name="channel_id[]" class="channel_id" value="<?= isset($match['channel_true_id'])? $match['channel_true_id'] :'' ?>">
                             <input type="hidden" name="language[]" class="language" value="<?= $match['channel_language'] ?>">
                             <input type="text" name="channel_name[]" class="form-control channel" placeholder="选择频道" readonly="readonly" value="<?= $match['channel_name'] ?>">
                             <span class="input-group-btn">
@@ -301,7 +301,7 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/laydate/laydate.js'
                 $('.channel').eq(index).val(text);
                 $('.main_class').eq(index).val(main_class);
                 $('.channel_id').eq(index).val(channel_id);
-                
+                console.log(channel_id);
                 //隐藏
                 $('#bind-modal').modal('hide');
                 $('.channel_table tr').eq(index).find('.language-button').eq(0).click();

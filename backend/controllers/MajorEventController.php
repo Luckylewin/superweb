@@ -98,6 +98,8 @@ class MajorEventController extends BaseController
                 $this->setFlash('success', '操作成功');
                 return $this->redirect(['index']);
             }
+
+            return $this->redirect(Yii::$app->request->referrer);
         }
 
         return $this->render('update', [
