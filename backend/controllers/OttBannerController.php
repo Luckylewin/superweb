@@ -129,7 +129,7 @@ class OttBannerController extends BaseController
     public function actionCreateCache()
     {
         $banners = [];
-        $bannerData = OttBanner::find()->with('channel')->all();
+        $bannerData = OttBanner::find()->orderBy('sort')->with('channel')->all();
 
         foreach ($bannerData as $banner) {
             try {

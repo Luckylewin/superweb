@@ -108,8 +108,17 @@ class MacController extends BaseController
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-        Yii::$app->session->setFlash('success', "删除成功");
+        // 删除关联数据
+        $model = $this->findModel($id);
+
+        try {
+            $model->detail->delete();
+            $model->delete();
+            Yii::$app->session->setFlash('success', "删除成功");
+        } catch (\Exception $e) {
+            Yii::$app->session->setFlash('success', "删除失败");
+        }
+
         return $this->redirect(['index']);
     }
 
