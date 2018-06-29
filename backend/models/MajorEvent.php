@@ -89,27 +89,31 @@ class MajorEvent extends \yii\db\ActiveRecord
         $title = $title ? $title : 'translate error';
 
         //赛事信息
-        $event_data = [
-            'title' => $title,
-            'title_zh' => $post['MajorEvent']['title'],
-            'event_time' => $this->base_time,
-            'event_info' => $majorEvent->event_name,
-            'event_zh_info' => $majorEvent->event_name_zh,
-            'event_icon' => $majorEvent->event_icon,
-            'teams' => [
-                [
-                    'team_name' => $teamA->team_name,
-                    'team_zh_name' => $teamA->team_zh_name,
-                    'team_icon' => $teamA->team_icon
+        if ($majorEvent) {
+            $event_data = [
+                'title' => $title,
+                'title_zh' => $post['MajorEvent']['title'],
+                'event_time' => $this->base_time,
+                'event_info' => $majorEvent->event_name,
+                'event_zh_info' => $majorEvent->event_name_zh,
+                'event_icon' => $majorEvent->event_icon,
+                'teams' => [
+                    [
+                        'team_name' => $teamA->team_name,
+                        'team_zh_name' => $teamA->team_zh_name,
+                        'team_icon' => $teamA->team_icon
+                    ],
+                    [
+                        'team_name' => $teamB->team_name,
+                        'team_zh_name' => $teamB->team_zh_name,
+                        'team_icon' => $teamB->team_icon
+                    ]
                 ],
-                [
-                    'team_name' => $teamB->team_name,
-                    'team_zh_name' => $teamB->team_zh_name,
-                    'team_icon' => $teamB->team_icon
-                ]
-            ],
 
-        ];
+            ];
+        } else {
+            $event_data = [];
+        }
 
         $this->live_match = Json::encode($event_data);
 
