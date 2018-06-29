@@ -91,7 +91,7 @@ class MacController extends BaseController
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $this->setFlash('info', '操作成功');
-            return $this->redirect(['view', 'id' => $model->MAC]);
+            return $this->redirect(['mac/index']);
         }
 
         return $this->render('update', [

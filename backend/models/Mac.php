@@ -48,19 +48,29 @@ class Mac extends \yii\db\ActiveRecord implements IdentityInterface
     {
         return [
             [['MAC','SN', 'contract_time'], 'required'],
-            [['MAC', 'SN'], 'unique'],
+
+            [['MAC', 'SN'], 'unique', 'when' => function($model) {
+
+                return ($model->MAC != $this->MAC);
+            }],
+
+            [['MAC', 'SN'], 'unique', 'targetAttribute' => ['MAC', 'SN'],  'when' => function($model) {
+
+                return ($model->MAC != $this->MAC);
+            }],
+
             [['contract_time'],'integer','min' => 1],
             [['use_flag', 'type'], 'integer'],
             [['regtime', 'logintime', 'duetime', 'unit', 'client_name'], 'safe'],
             [['MAC', 'SN'], 'string', 'max' => 64],
             [['contract_time'], 'string', 'max' => 8],
-            [['MAC', 'SN'], 'unique', 'targetAttribute' => ['MAC', 'SN']],
-            [['MAC'], 'unique'],
+
             [['ver'], 'default', 'value'=>'0'],
             [['regtime'], 'default', 'value' => date('Y-m-d H:i:s', time())],
             [['logintime'], 'default', 'value' => '']
         ];
     }
+
 
     /**
      * @inheritdoc

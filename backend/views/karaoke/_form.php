@@ -30,8 +30,6 @@ use yii\widgets\ActiveForm;
         <?= $form->field($model, 'area')->dropDownList(\backend\models\Karaoke::getLang()) ?>
     </div>
 
-
-
     <div class="col-md-3">
         <?= $form->field($model, 'keywords')->textInput(['maxlength' => true]) ?>
     </div>
@@ -50,7 +48,7 @@ use yii\widgets\ActiveForm;
 
     <div class="col-md-12">
 
-        <?= $form->field($model, 'source')->dropDownList(['youtube' => 'Youtube', 'upload' => '自定义上传']); ?>
+        <?= $form->field($model, 'source')->dropDownList(['Youtube' => 'Youtube', 'upload' => '自定义上传']); ?>
 
         <?= $form->field($model, 'url')->textInput(['maxlength' => true]) ?>
         <div id="upload-video" style="display: none">
