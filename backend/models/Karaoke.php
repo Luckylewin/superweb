@@ -36,6 +36,7 @@ use yii\db\ActiveRecord;
  * @property string $is_del 是否软删除
  * @property string $sort 排序
  * @property int $download_flag 是否下载
+ * @property int $source 来源
  */
 class Karaoke extends \yii\db\ActiveRecord
 {
@@ -59,7 +60,7 @@ class Karaoke extends \yii\db\ActiveRecord
             [['albumName', 'albumImage', 'info', 'year', 'url'], 'required'],
             [['albumName', 'albumImage', 'info'], 'string'],
             [['tid', 'year', 'flag', 'hit_count', 'voole_id', 'price', 'is_finish', 'yesterday_viewed', 'download_flag'], 'integer'],
-            [['updatetime', 'utime', 'is_del'], 'safe'],
+            [['updatetime', 'utime', 'is_del', 'source'], 'safe'],
             [['mainActor', 'directors', 'tags', 'area', 'keywords', 'wflag', 'mod_version', 'totalDuration'], 'string', 'max' => 255],
             [['url', 'act_img'], 'string', 'max' => 200],
             [['wflag','tid','flag','tid','mod_version','totalDuration','flag','voole_id','price','is_finish','yesterday_viewed'], 'default' , 'value' => 1],
@@ -101,6 +102,7 @@ class Karaoke extends \yii\db\ActiveRecord
             'download_flag' => '是否下载',
             'is_del' => '是否有效',
             'sort' => '排序',
+            'source' => '视频来源',
         ];
     }
 

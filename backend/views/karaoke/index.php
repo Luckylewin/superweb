@@ -12,13 +12,12 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="album-name-karaoke-index">
 
-
-
     <?php //$this->render('_search', ['model' => $searchModel]); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'tableOptions' => ['class' => 'table table-bordered'],
         'pager' => [
             'class' => 'common\widgets\goPager',
             'go' => true,
@@ -39,9 +38,15 @@ $this->params['breadcrumbs'][] = $this->title;
                     'attribute' => 'url',
                     'format' => 'raw',
                     'value' => function($model) {
-                        return Html::a($model->url, "https://www.youtube.com/watch?v=" . $model->url, [
+                        if ($model->source == 'Youtube') {
+                            return Html::a($model->url, "https://www.youtube.com/watch?v=" . $model->url, [
                                 'target' => '_blank'
-                        ]);
+                            ]);
+                        } else {
+                            return Html::a($model->url, \common\components\Func::getAccessUrl($model->url), [
+                                'target' => '_blank'
+                            ]);
+                        }
                     }
             ],
 

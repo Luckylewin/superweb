@@ -21,7 +21,17 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'ID',
             'albumName:ntext',
-            'albumImage:url',
+            [
+                'attribute' => 'albumImage',
+                'format' => ['image', ['width' => 100]],
+                'value' => function($model) {
+                    if ($model->source == 'Youtube') {
+                        return $model->albumImage;
+                    } else {
+                        return \common\components\Func::getAccessUrl($model->albumImage);
+                    }
+                }
+            ],
             //'tid',
             'mainActor',
             'directors',
@@ -32,7 +42,6 @@ $this->params['breadcrumbs'][] = $this->title;
             //'wflag',
             'year',
             //'mod_version',
-            'updatetime',
             //'totalDuration',
             //'flag',
             'hit_count',
@@ -40,18 +49,34 @@ $this->params['breadcrumbs'][] = $this->title;
             //'price',
             //'is_finish',
             //'yesterday_viewed',
-            'utime',
+            'source',
             [
                     'attribute' => 'url',
                     'format' => 'raw',
                     'value' => function($model) {
-                        return Html::a($model->url, "https://www.youtube.com/watch?v=" . $model->url, [
-                            'target' => '_blank'
-                        ]);
+                        if ($model->source == 'Youtube') {
+                            return Html::a($model->url, "https://www.youtube.com/watch?v=" . $model->url, [
+                                'target' => '_blank'
+                            ]);
+                        } else {
+                            return Html::a($model->url, \common\components\Func::getAccessUrl($model->url), [
+                                'target' => '_blank'
+                            ]);
+                        }
                     }
             ],
-            'act_img',
+            [
+                    'attribute' => 'act_img',
+                    'value' => function($model) {
+                        if ($model->source == 'upload') {
+                            return $model->albumImage;
+                        }
+                        return '';
+                    }
+            ],
             'download_flag',
+            //'utime',
+            'updatetime',
         ],
     ]) ?>
 

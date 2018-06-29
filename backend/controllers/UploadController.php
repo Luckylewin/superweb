@@ -134,6 +134,16 @@ class UploadController extends BaseController
         return Json::encode($this->upload($imageFile, $directory, $thumb));
     }
 
+    public function actionKaraokeUpload()
+    {
+        $model = new UploadForm();
+        $imageFile = UploadedFile::getInstance($model, 'media');
+        $directory = $this->setPath('karaoke') ;
+        $thumb = Yii::$app->request->hostInfo . '/statics/images/karaoke.png';
+
+        return Json::encode($this->upload($imageFile, $directory, $thumb));
+    }
+
     /**
      * @param UploadedFile $FileInstance
      * @param string $directory

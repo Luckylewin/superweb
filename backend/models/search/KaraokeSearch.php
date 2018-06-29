@@ -71,7 +71,7 @@ class KaraokeSearch extends Karaoke
             'is_del' => $this->is_del,
         ]);
 
-        $query->andFilterWhere(['like', 'albumName', $this->tags])
+        $query->andFilterWhere(['like', 'albumName', $this->albumName])
                 ->andFilterWhere(['like', 'tags', $this->tags])
                 ->andFilterWhere(['like', 'info', $this->info])
                 ->andFilterWhere(['like', 'area', $this->area])
