@@ -59,11 +59,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'value' => function ($model) {
                      $data = json_decode($model->live_match);
-                     $teamObject = $data->teams;
-                     $teams = $data->teams[0]->team_zh_name . ' ' . Html::img(Func::getAccessUrl($teamObject[0]->team_icon), ['width'=>30]);
-                     $teams .= ' - ';
-                     $teams .= Html::img(Func::getAccessUrl($teamObject[1]->team_icon), ['width'=>30]) . ' '. $data->teams[1]->team_zh_name;
-                     return $text =  $data->event_info . ' ' . $teams ;
+                     if (isset($data->teams)) {
+                         $teamObject = $data->teams;
+                         $teams = $data->teams[0]->team_zh_name . ' ' . Html::img(Func::getAccessUrl($teamObject[0]->team_icon), ['width'=>30]);
+                         $teams .= ' - ';
+                         $teams .= Html::img(Func::getAccessUrl($teamObject[1]->team_icon), ['width'=>30]) . ' '. $data->teams[1]->team_zh_name;
+                         return $text =  $data->event_info . ' ' . $teams ;
+                     }
+                     return null;
                 },
                 'options' => ['style' => 'width:320px;']
 

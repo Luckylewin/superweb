@@ -111,11 +111,8 @@ class MajorEvent extends \yii\db\ActiveRecord
                 ],
 
             ];
-        } else {
-            $event_data = [];
+            $this->live_match = Json::encode($event_data);
         }
-
-        $this->live_match = Json::encode($event_data);
 
         // 唯一值
         $this->unique = md5( $this->base_time . $teamA->team_name . $teamB->team_name);
