@@ -8,27 +8,34 @@
 
 namespace common\components;
 
-define("CURL_TIMEOUT",   10);
-define("URL",            "http://api.fanyi.baidu.com/api/trans/vip/translate");
-define("APP_ID",         "20151216000007878"); //替换为您的APPID
-define("SEC_KEY",        "9z2bTRXr7V7B4UrP3ozc");//替换为您的密钥
+use Yii;
 
 class BaiduTranslator
 {
+    const URL = 'http://api.fanyi.baidu.com/api/trans/vip/translate';
+    const CURL_TIMEOUT = 10;
+    private $APP_ID;
+    private $SEC_KEY;
 
-//翻译入口
+    public function __construct()
+    {
+        $this->APP_ID = Yii::$app->params['BAIDU_TRANSLATE']['APP_ID'];
+        $this->SEC_KEY = Yii::$app->params['BAIDU_TRANSLATE']['SEC_KEY'];
+    }
+
+    //翻译入口
    public function translate($query, $from, $to)
     {
         $args = array(
             'q' => $query,
-            'appid' => APP_ID,
+            'appid' => $this->APP_ID,
             'salt' => rand(10000,99999),
             'from' => $from,
             'to' => $to,
 
         );
-        $args['sign'] = $this->buildSign($query, APP_ID, $args['salt'], SEC_KEY);
-        $ret = $this->call(URL, $args);
+        $args['sign'] = $this->buildSign($query,  $this->APP_ID, $args['salt'], $this->SEC_KEY);
+        $ret = $this->call(self::URL, $args);
         $ret = json_decode($ret, true);
 
         if (isset($ret['error_code'])) {
@@ -47,7 +54,7 @@ class BaiduTranslator
     }/*}}}*/
 
 //发起网络请求
-    public function call($url, $args=null, $method="post", $testflag = 0, $timeout = CURL_TIMEOUT, $headers=array())
+    public function call($url, $args=null, $method="post", $testflag = 0, $timeout = self::CURL_TIMEOUT, $headers=array())
     {/*{{{*/
         $ret = false;
         $i = 0;
@@ -65,7 +72,7 @@ class BaiduTranslator
         return $ret;
     }/*}}}*/
 
-    public function callOnce($url, $args=null, $method="post", $withCookie = false, $timeout = CURL_TIMEOUT, $headers=array())
+    public function callOnce($url, $args=null, $method="post", $withCookie = false, $timeout = self::CURL_TIMEOUT, $headers=array())
     {/*{{{*/
         $ch = curl_init();
         if($method == "post")

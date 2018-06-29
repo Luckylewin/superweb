@@ -16,5 +16,11 @@ return [
         'ACCESS_KEY' => '', // KEY
         'ENDPOINT'=>'oss-cn-shenzhen.aliyuncs.com',//指定区域
         'BUCKET'=>'yii2shop',//bucket
+    ],
+
+    // 百度翻译配置
+    'BAIDU_TRANSLATE' => [
+        'APP_ID' => '',//appID
+        'SEC_KEY' => '' //密钥
     ]
 ];
