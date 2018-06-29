@@ -17,6 +17,7 @@ use yii\helpers\Json;
  * @property int $base_time 比赛时间
  * @property string $match_data 匹配预告列表
  * @property string $sort 排序
+ * @property string $unique 唯一标识
  */
 class MajorEvent extends \yii\db\ActiveRecord
 {
@@ -37,7 +38,7 @@ class MajorEvent extends \yii\db\ActiveRecord
     {
         return [
             [['time', 'title', 'time', 'base_time'], 'required'],
-            [['match_data', 'live_match'], 'safe'],
+            [['match_data', 'live_match', 'unique'], 'safe'],
             [['title'], 'string'],
             ['sort', 'default' , 'value' => 0]
         ];
@@ -56,6 +57,7 @@ class MajorEvent extends \yii\db\ActiveRecord
             'base_time' => '时间',
             'match_data' => '匹配预告列表',
             'sort' => '排序',
+            'unique' => '唯一标识'
         ];
     }
 
@@ -110,6 +112,9 @@ class MajorEvent extends \yii\db\ActiveRecord
         ];
 
         $this->live_match = Json::encode($event_data);
+
+        // 唯一值
+        $this->unique = md5( $this->base_time . $teamA->team_name . $teamB->team_name);
 
         //频道
         $match_data = [];

@@ -152,9 +152,10 @@ class zhiboba extends CommonParade implements collector
         $majorEvent->title = $raceName;
         $majorEvent->time = $time;
         $majorEvent->base_time = $time;
+        $majorEvent->unique = md5( $majorEvent->base_time  . $teamA->team_name . $teamB->team_name);
 
         // 查找比赛是否存在
-        $exist = MajorEvent::find()->where(['title' => $raceName, 'time' => $time])->andFilterWhere(['like', 'live_match', $teamA->team_name])->exists();
+        $exist = MajorEvent::find()->where(['unique' => $majorEvent->unique])->exists();
         if ($exist) {
             echo "比赛 " . $raceName ." ". $teamA->team_zh_name . '-' . $teamB->team_zh_name.' 已经存在' . PHP_EOL;
             return false;
