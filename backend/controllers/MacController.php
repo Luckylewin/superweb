@@ -112,7 +112,10 @@ class MacController extends BaseController
         $model = $this->findModel($id);
 
         try {
-            $model->detail->delete();
+            $detail = $model->detail;
+            if ($detail) {
+                $detail->delete();
+            }
             $model->delete();
             Yii::$app->session->setFlash('success', "删除成功");
         } catch (\Exception $e) {

@@ -97,7 +97,8 @@ class Mac extends \yii\db\ActiveRecord implements IdentityInterface
         if (MacDetail::find()->where(['MAC' => $this->MAC])->exists() == false) {
             $macDetail = new MacDetail();
             $macDetail->MAC = $this->MAC;
-            $macDetail->client_id = !is_null($this->client_name) ? $this->client_name : '-1';
+
+            $macDetail->client_id = !empty($this->client_name) ? $this->client_name : '-1';
 
             $macDetail->save(false);
         };
