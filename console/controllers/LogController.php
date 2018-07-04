@@ -39,11 +39,14 @@ class LogController extends Controller
 
         //每次获取长度
         $length = $this->redis->llen('log');
-
+        $start = time();
         while ($length) {
             $this->deal();
             $length--;
         }
+        $end = time();
+
+        echo $end - $start;
     }
 
     /**
@@ -52,6 +55,11 @@ class LogController extends Controller
     public function deal()
     {
         $log = $this->redis->lpop('log');
+
+        if (class_exists('SeasLog', false)) {
+            \SeasLog::setLogger("app/" . date('Y/m'));
+            \SeasLog::info($log);
+        }
 
         if ($log) {
             $log = explode('|', $log);

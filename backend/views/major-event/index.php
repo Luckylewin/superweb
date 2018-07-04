@@ -39,7 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
             //'id',
             [
 
-                'attribute' => 'time',
+                'attribute' => 'base_time',
                 'format' => 'datetime',
                 'options' => [
                         'style' => 'width:130px;'
