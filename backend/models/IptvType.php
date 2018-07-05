@@ -4,6 +4,7 @@ namespace backend\models;
 
 use common\models\VodList;
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "iptv_type".
@@ -65,4 +66,19 @@ class IptvType extends \yii\db\ActiveRecord
     {
         return $this->hasOne(VodList::className(), ['list_id' => 'vod_list_id']);
     }
+
+    public static function getVodType($list_id)
+    {
+       $type = self::find()->where(['field' => 'vod_type', 'vod_list_id' => $list_id])
+                    ->with('items')
+                    ->one();
+
+       if ($type) {
+          $items = $type->items;
+          return ArrayHelper::map($items, 'name','name');
+       }
+
+       return [];
+    }
+
 }

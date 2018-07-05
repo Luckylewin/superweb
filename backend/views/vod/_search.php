@@ -18,15 +18,15 @@ use yii\widgets\ActiveForm;
         ],
     ]); ?>
 
-    <?= $form->field($model, 'vod_id') ?>
+    <?php $form->field($model, 'vod_id') ?>
 
-    <?= $form->field($model, 'vod_cid') ?>
+    <?php $form->field($model, 'vod_cid') ?>
 
-    <?= $form->field($model, 'vod_name') ?>
+    <?php $form->field($model, 'vod_name') ?>
 
-    <?= $form->field($model, 'vod_ename') ?>
+    <?php $form->field($model, 'vod_ename') ?>
 
-    <?= $form->field($model, 'vod_title') ?>
+    <?php $form->field($model, 'vod_title') ?>
 
     <?php // echo $form->field($model, 'vod_keywords') ?>
 

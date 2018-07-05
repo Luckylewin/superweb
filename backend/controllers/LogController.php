@@ -22,71 +22,8 @@ class LogController extends BaseController
         $type = \Yii::$app->request->get('type');
         $value = \Yii::$app->request->get('value');
 
-        $unit = 1;
-
-        switch ($type)
-        {
-            case 'date':
-                $unit = 1;
-                $month = str_replace('/','-', $value);
-                $where = ['like', 'date', ["$month"]];
-                $timeLineLog = TimelineLog::find()->andWhere($where)->one();
-                $program = ProgramLog::find()->andWhere($where)->one();
-                break;
-            case 'month':
-                $unit = 30;
-                $month = str_replace('/','-', $value);
-                $where = ['like', 'date', ["$month"]];
-                $timeLineLog = TimelineLog::find()->andWhere($where)->one();
-                $program = ProgramLog::find()->andWhere($where)->one();
-                break;
-            default:
-                $where = ['date' => date('Y-m-d',strtotime('yesterday'))];
-                $timeLineLog = TimelineLog::findOne($where);
-                $program = ProgramLog::findOne($where);
-                break;
-        }
-
-        $programLog = ['all_program'=>[], 'local_program'=>[], 'server_program'=>[], 'all_program_sum'=>0];
-        $log = ['default' => [0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0]];
-
-
-        //接口时段调用统计
-        if ($timeLineLog) {
-            $log['total_line'] = json_decode($timeLineLog->total_line, true);
-            $log['watch_line'] = json_decode($timeLineLog->watch_line, true);
-            $log['token_line'] = json_decode($timeLineLog->token_line, true);
-            $log['local_watch_line'] = json_decode($timeLineLog->local_watch_line, true);
-            $log['server_watch_line'] = json_decode($timeLineLog->server_watch_line, true);
-        }
-
-
-        array_walk($log, function(&$v, $k) use ($unit) {
-             if (is_array($v)) {
-                 array_walk($v, function(&$_v, $k) use ($unit) {
-                     $_v = ceil($_v / $unit);
-                 });
-             }
-        });
-
-        //节目观看统计
-
-        if ($program) {
-            $programLog['all_program'] = current(array_chunk(json_decode($program->all_program, true), 12,true));
-            $programLog['local_program'] = current(array_chunk(json_decode($program->local_program, true), 12,true));
-            $programLog['server_program'] = current(array_chunk(json_decode($program->server_program, true), 12,true));
-            $programLog['all_program_sum'] = $program->all_program_sum;
-        }
-
-        $fields = ['log', 'programLog'];
-        foreach ($fields as $field) {
-            array_walk($$field, function(&$v, $k) use ($unit){
-                if (is_numeric($v)) {
-                    $v = ceil($v / $unit);
-                }
-            });
-        }
-
+        $log['default'] = [];
+        $programLog['all_program'] = [];
         //昨日活跃用户
         return $this->render('index', [
             'log' => $log,

@@ -14,28 +14,27 @@ class BaiduTranslator
 {
     const URL = 'http://api.fanyi.baidu.com/api/trans/vip/translate';
     const CURL_TIMEOUT = 10;
-    private $APP_ID;
-    private $SEC_KEY;
+    private static $APP_ID;
+    private static $SEC_KEY;
 
-    public function __construct()
-    {
-        $this->APP_ID = Yii::$app->params['BAIDU_TRANSLATE']['APP_ID'];
-        $this->SEC_KEY = Yii::$app->params['BAIDU_TRANSLATE']['SEC_KEY'];
-    }
 
     //翻译入口
-   public function translate($query, $from, $to)
-    {
+    static public function translate($query, $from, $to)
+   {
+        self::$APP_ID = Yii::$app->params['BAIDU_TRANSLATE']['APP_ID'];
+        self::$SEC_KEY = Yii::$app->params['BAIDU_TRANSLATE']['SEC_KEY'];
+
         $args = array(
             'q' => $query,
-            'appid' => $this->APP_ID,
+            'appid' => self::$APP_ID,
             'salt' => rand(10000,99999),
             'from' => $from,
             'to' => $to,
 
         );
-        $args['sign'] = $this->buildSign($query,  $this->APP_ID, $args['salt'], $this->SEC_KEY);
-        $ret = $this->call(self::URL, $args);
+
+        $args['sign'] = self::buildSign($query,  self::$APP_ID, $args['salt'], self::$SEC_KEY);
+        $ret = self::call(self::URL, $args);
         $ret = json_decode($ret, true);
 
         if (isset($ret['error_code'])) {
@@ -46,7 +45,7 @@ class BaiduTranslator
     }
 
 //加密
-    public function buildSign($query, $appID, $salt, $secKey)
+    static public function buildSign($query, $appID, $salt, $secKey)
     {/*{{{*/
         $str = $appID . $query . $salt . $secKey;
         $ret = md5($str);
@@ -54,7 +53,7 @@ class BaiduTranslator
     }/*}}}*/
 
 //发起网络请求
-    public function call($url, $args=null, $method="post", $testflag = 0, $timeout = self::CURL_TIMEOUT, $headers=array())
+    static public function call($url, $args=null, $method="post", $testflag = 0, $timeout = self::CURL_TIMEOUT, $headers=array())
     {/*{{{*/
         $ret = false;
         $i = 0;
@@ -66,24 +65,24 @@ class BaiduTranslator
             {
                 sleep(1);
             }
-            $ret = $this->callOnce($url, $args, $method, false, $timeout, $headers);
+            $ret = self::callOnce($url, $args, $method, false, $timeout, $headers);
             $i++;
         }
         return $ret;
     }/*}}}*/
 
-    public function callOnce($url, $args=null, $method="post", $withCookie = false, $timeout = self::CURL_TIMEOUT, $headers=array())
+    static public function callOnce($url, $args=null, $method="post", $withCookie = false, $timeout = self::CURL_TIMEOUT, $headers=array())
     {/*{{{*/
         $ch = curl_init();
         if($method == "post")
         {
-            $data = $this->convert($args);
+            $data = self::convert($args);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
             curl_setopt($ch, CURLOPT_POST, 1);
         }
         else
         {
-            $data = $this->convert($args);
+            $data = self::convert($args);
             if($data)
             {
                 if(stripos($url, "?") > 0)
@@ -112,7 +111,7 @@ class BaiduTranslator
         return $r;
     }/*}}}*/
 
-    public function convert(&$args)
+    public static function convert(&$args)
     {/*{{{*/
         $data = '';
         if (is_array($args))

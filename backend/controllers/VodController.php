@@ -109,7 +109,26 @@ class VodController extends BaseController
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
+        $this->setFlash('success', '操作成功');
 
+        return $this->redirect(['index']);
+    }
+
+    /**
+     *
+     */
+    public function actionBatchDelete()
+    {
+        $id = Yii::$app->request->get('id');
+        $id = explode(',', $id);
+        $data = Vod::find()->andFilterWhere(['in', 'vod_id', $id])->all();
+        if ($data) {
+            foreach ($data as $vod) {
+                ($vod instanceof Vod ) && $vod->delete();
+            }
+        }
+
+        $this->setFlash('info', '操作成功');
         return $this->redirect(['index']);
     }
 

@@ -85,7 +85,7 @@ class MajorEvent extends \yii\db\ActiveRecord
         $majorEvent = OttEvent::findOne(['event_name_zh' => $post['event_info']]);
         $teamA = OttEventTeam::findOne(['team_zh_name' => $post['teamA']]);
         $teamB = OttEventTeam::findOne(['team_zh_name' => $post['teamB']]);
-        $title = (new BaiduTranslator())->translate($post['MajorEvent']['title'], 'zh', 'en');
+        $title = BaiduTranslator::translate($post['MajorEvent']['title'], 'zh', 'en');
         $title = $title ? $title : 'translate error';
 
         //赛事信息

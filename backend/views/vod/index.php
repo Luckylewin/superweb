@@ -36,25 +36,53 @@ $this->params['breadcrumbs'][] = $this->title;
     </p>
 
 
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?php // $this->render('_search', ['model' => $searchModel]); ?>
+
+    <?php $search = Yii::$app->request->get('VodSearch'); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
-        'pager' => [
-                'class' => 'common\widgets\goPager',
-                'go' => true
-        ],
+        "options" => ["class" => "grid-view","style"=>"overflow:auto", "id" => "grid"],
+        'pager' => ['class' => 'common\widgets\goPager', 'go' => true],
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-            'vod_name',
-            //'vod_id',
+
             [
+                'class' => 'yii\grid\SerialColumn'
+            ],
+
+            [
+                "class" => "yii\grid\CheckboxColumn",
+                "name" => "id",
+            ],
+
+            [
+                  'attribute' => 'vod_name',
+                  'filterInputOptions' => [
+                    'placeholder' => '输入影片名称',
+                    'class' => 'form-control'
+                  ]
+
+            ],
+            //'vod_id',
+
+            [
+                    'attribute' => 'vod_type',
+                    'filter' => \backend\models\IptvType::getVodType($search['vod_cid']),
+                    'filterInputOptions' => [
+                            'prompt' => '请选择',
+                            'class' => 'form-control'
+                    ]
+            ],
+
+            /* [
                     'attribute' => 'vod_cid',
                     'filter' => ArrayHelper::map(VodList::getAllList(),  'list_id', 'list_name'),
                     'value' => 'list.list_name'
-            ],
-            [
+            ],*/
+
+
+          /*  [
                     'attribute' => 'vod_ispay',
                     'filter' => Vod::$chargeStatus,
                     'value' => function($model) {
@@ -64,24 +92,24 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                     'attribute' => 'vod_price',
                     'options' => ['style' => 'width:60px;']
-            ],
+            ],*/
             [
                 'attribute' => 'vod_hits',
                 'options' => ['style' => 'width:100px;']
             ],
-            [
+            /*[
                 'attribute' => 'vod_gold',
                 'options' => ['style' => 'width:100px;']
-            ],
+            ],*/
 
-            [
+            /*[
                     'attribute' => 'vod_stars',
                     'filter' => Vod::$starStatus,
                     'format' => 'raw',
                     'value' => function($model) {
                         return $model->star;
                     }
-            ],
+            ],*/
             'vod_addtime:date',
             [
                     'class' => 'common\grid\MyActionColumn',
@@ -160,4 +188,26 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
 
+
 </div>
+
+
+
+<?php
+
+echo Html::button("批量删除",[
+    'class' => 'gridview btn btn-danger',
+]);
+
+$batchDelete = \yii\helpers\Url::to(['vod/batch-delete']);
+
+$requestJs=<<<JS
+    $(document).on("click", ".gridview", function () {
+                var keys = $("#grid").yiiGridView("getSelectedRows");
+                var url = '{$batchDelete}' + '&id=' + keys.join(',');
+                window.location.href = url;
+            });
+JS;
+
+$this->registerJs($requestJs);
+?>

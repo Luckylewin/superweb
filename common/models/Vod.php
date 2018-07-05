@@ -124,6 +124,23 @@ class Vod extends \yii\db\ActiveRecord implements Linkable
         ];
     }
 
+
+    public function beforeDelete()
+    {
+        $data = $this->getVodLinks();
+
+        if ($data) {
+            $links = $data->all();
+            if ($links) {
+                foreach ($links as $link) {
+                    $link->delete();
+                }
+            }
+        }
+
+        return true;
+    }
+
     public function beforeSave($insert)
     {
         parent::beforeSave($insert);

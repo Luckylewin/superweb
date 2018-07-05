@@ -30,7 +30,7 @@ class LogController extends Controller
         echo "php yii log/analyse : 统计收集日志数据 " , PHP_EOL;
     }
 
-    //日志分析
+    //日志实时统计
     public function actionAnalyse()
     {
         //读取redis
@@ -47,6 +47,12 @@ class LogController extends Controller
         $end = time();
 
         echo $end - $start;
+    }
+
+    // 日志每天统计
+    public function actionStatic()
+    {
+        
     }
 
     /**
