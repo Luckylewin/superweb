@@ -15,6 +15,8 @@ use common\components\BaiduTranslator;
 use common\models\Vod;
 use common\models\Vodlink;
 use common\models\VodList;
+use console\models\common;
+use console\models\profile;
 use yii\console\Controller;
 use Yii;
 use yii\helpers\ArrayHelper;
@@ -98,12 +100,24 @@ class ClientController extends Controller
                         $vod->vod_type = $val['group-title'];
                         $vod->vod_keywords = $val['group-title'];
                         $vod->vod_pic = $val['tvg-logo'];
+                        $vod->vod_letter = common::getFirstCharter($val['tvg-name']);
 
                         if ($vod->save(false)) {
                             $link = new Vodlink();
                             $link->url = $val['ts'];
                             $vod->link('vodLinks', $link);
                         }
+
+                        if ($data = profile::search($vod->vod_name)) {
+                            foreach ($data as $field => $value) {
+                                if ($field != 'vod_pic') {
+                                    $vod->$field = $value;
+                                }
+                            }
+                            $vod->save(false);
+                            mt_rand(0,1) && sleep(1);
+                        }
+
                         $this->stdout("新增{$val['tvg-name']}" . PHP_EOL, Console::FG_GREEN, Console::UNDERLINE);
                     } else {
                         $this->stdout("存在{$val['tvg-name']}" . PHP_EOL, Console::FG_RED, Console::UNDERLINE);

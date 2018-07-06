@@ -11,28 +11,38 @@ namespace console\controllers;
 
 use common\models\Vod;
 use console\components\MySnnopy;
+use console\models\common;
+use console\models\profile;
 use Symfony\Component\DomCrawler\Crawler;
 use yii\console\Controller;
+use yii\helpers\Console;
 
 class ProfileController extends Controller
 {
     private $url;
     private $profileItems;
 
+    public function actionTest()
+    {
+        echo common::getFirstCharter('12');
+    }
+
     public function actionVod()
     {
         foreach (Vod::find()->where(['vod_cid' => '1'])->each(10) as $vod) {
             //判断是否已经抓取过
-            if ($vod->vod_douban_id ) {
+            if ($vod->vod_douban_id == 0) {
                 $this->stdout("当前抓取：{$vod->vod_name}" . PHP_EOL);
                 try{
-                    $this->_getUrl("厉害了我的国");
+                    $this->_getUrl($vod->vod_name);
                     $this->_crawlData($this->url);
                     $this->_updateVod($vod);
                     $this->_sleep();
                 } catch (\Exception $e) {
                     $this->stdout($e->getMessage() . PHP_EOL);
                 }
+            } else {
+                $this->stdout($vod->vod_name . "已经抓取" . PHP_EOL, Console::BG_GREY, Console::FG_BLUE);
             }
 
         }
