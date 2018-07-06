@@ -70,9 +70,9 @@ class VodController extends ActiveController
 
         $cid = $request->get('cid');
         $vod_name = $request->get('name', null);
-        $vod_type = $request->get('type', null);
-        $vod_year = $request->get('year', null);
-        $vod_area = $request->get('area', null);
+        $vod_type = $request->get('vod_type', null);
+        $vod_year = $request->get('vod_year', null);
+        $vod_area = $request->get('vod_area', null);
 
         $fields = Vod::getFields();
         unset($fields[array_search('vod_url', $fields)]);
