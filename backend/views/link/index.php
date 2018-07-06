@@ -54,6 +54,8 @@ $this->params['breadcrumbs'][] = $this->title;
     'class' => 'gridview btn btn-danger',
 ])?>
 
+<?= Html::a('返回', Yii::$app->request->referrer, ['class' => 'btn btn-default']) ?>
+
 <?php
 
 $batchDelete = Url::to(['link/batch-delete']);

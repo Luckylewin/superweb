@@ -7,7 +7,7 @@ use yii\widgets\DetailView;
 /* @var $model common\models\Vod */
 
 $this->title = $model->vod_id;
-$this->params['breadcrumbs'][] = ['label' => 'Vods', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Vods', 'url' => Yii::$app->request->referrer];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="vod-view">

@@ -96,7 +96,8 @@ class LinkController extends BaseController
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            $this->setFlash('success', '操作成功');
+            return $this->redirect(['index', 'vod_id' => $model->video_id]);
         }
 
         return $this->render('update', [

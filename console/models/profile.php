@@ -18,13 +18,6 @@ class profile
     private static $api_key = '64c1188ae2bd62ac5620b429037adaf8';
     private static $url;
 
-    static private function setUrl($query, $lang="en-US")
-    {
-        $query = urlencode($query);
-        $api_key = self::$api_key;
-        self::$url = "https://api.themoviedb.org/3/search/movie?api_key={$api_key}&language={$lang}&query={$query}&page=1&include_adult=false";
-    }
-
     /**
      * @param $name
      * @param string $lang
@@ -32,7 +25,10 @@ class profile
      */
     static public function search($name, $lang='en-US')
     {
-        self::setUrl($name, $lang);
+        $query = urlencode($name);
+        $api_key = self::$api_key;
+        self::$url = "https://api.themoviedb.org/3/search/movie?api_key={$api_key}&language={$lang}&query={$query}&page=1&include_adult=false";
+
         try {
             $data = file_get_contents(self::$url);
             if (!empty($data)) {
@@ -43,6 +39,7 @@ class profile
                     $profile['vod_title'] = $data['original_title'];
                     $profile['vod_ename'] = $data['original_title'];
                     $profile['vod_gold'] = $data['vote_average'];
+                    $profile['vod_douban_score'] = $data['vote_average'];
                     $profile['vod_pic'] = "https://image.tmdb.org/t/p/w370_and_h556_bestv2/" . $data['poster_path'];
                     $profile['vod_pic_bg'] = "https://image.tmdb.org/t/p/w370_and_h556_bestv2/" . $data['backdrop_path'];
                     $profile['vod_scenario'] = $data['overview'];
@@ -61,9 +58,6 @@ class profile
             echo "接口访问失败";
             return false;
         }
-
-
     }
-
 
 }

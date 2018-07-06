@@ -93,10 +93,14 @@ $this->params['breadcrumbs'][] = $this->title;
                     'attribute' => 'vod_price',
                     'options' => ['style' => 'width:60px;']
             ],*/
-            [
+             [
+                  'attribute' => 'vod_gold',
+                  'options' => ['style' => 'width:100px;']
+              ],
+            /*[
                 'attribute' => 'vod_hits',
                 'options' => ['style' => 'width:100px;']
-            ],
+            ],*/
             /*[
                 'attribute' => 'vod_gold',
                 'options' => ['style' => 'width:100px;']

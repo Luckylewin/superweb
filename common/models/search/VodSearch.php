@@ -50,6 +50,9 @@ class VodSearch extends Vod
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => [
+                'pageSize' => 30
+            ],
             'sort' => [
                 'defaultOrder' => [
                     'vod_id' => SORT_DESC

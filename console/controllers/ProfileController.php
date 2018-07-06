@@ -22,10 +22,7 @@ class ProfileController extends Controller
     private $url;
     private $profileItems;
 
-    public function actionTest()
-    {
-        echo common::getFirstCharter('12');
-    }
+
 
     public function actionVod()
     {
@@ -60,6 +57,11 @@ class ProfileController extends Controller
         }
 
         $queryData = json_decode($snnopy->results, true);
+
+        if (!empty($queryData)) {
+            throw new \Exception("查询错误");
+        }
+
         $queryData = current($queryData);
 
         if (!isset($queryData['url'])) {
@@ -165,7 +167,7 @@ class ProfileController extends Controller
     {
         //更新赋值
         foreach ($this->profileItems as $field => $value) {
-            if (empty($vod->$field) && !empty($value)) {
+            if ( ($vod->$field == 0 || empty($vod->$field)) && !empty($value)) {
                 $vod->$field = $value;
             }
         }
