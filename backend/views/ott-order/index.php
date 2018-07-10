@@ -15,29 +15,45 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <p>
-        <?= Html::a('Create Ott Order', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+    <?php
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-            'uid',
-            'genre',
-            'order_num',
-            'mainOrder.order_money',
-            'mainOrder.order_addtime',
-            'mainOrder.order_ispay',
-            'mainOrder.order_info',
-            'expire_time:datetime',
-            //'is_valid',
+    try {
+        echo GridView::widget([
+            'dataProvider' => $dataProvider,
+            'filterModel' => $searchModel,
+            'columns' => [
+                [
+                    'class' => 'yii\grid\SerialColumn'],
+                    'uid',
+                    'genre',
+                    'order_num',
+                    'mainOrder.order_money',
+                    'mainOrder.order_addtime:datetime',
+                    [
+                        'attribute' => 'mainOrder.order_ispay',
+                        'value' => function($model) {
+                            $payText = ['未支付', '已支付'];
+                            return $payText[$model->mainOrder->order_ispay];
+                        }
+                    ],
+                    'mainOrder.order_info',
+                    [
+                            'attribute' => 'expire_time',
+                            'format' => 'datetime',
+                            'filter' => false
+                    ],
+                    //'is_valid',
 
-            [
-                'class' => 'common\grid\MyActionColumn',
-                'template' => '{delete}'
+                    [
+                        'class' => 'common\grid\MyActionColumn',
+                        'template' => '{delete}'
+                    ],
             ],
-        ],
-    ]); ?>
+        ]);
+    }
+    catch(\Exception $e) {
+        echo $e->getMessage();
+    }
+
+    ?>
 </div>

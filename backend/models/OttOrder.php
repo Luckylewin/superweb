@@ -55,4 +55,13 @@ class OttOrder extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Order::className(), ['order_sign' => 'order_num']);
     }
+
+    public function beforeDelete()
+    {
+        $order = Order::findOne(['order_sign' => $this->order_num]);
+        if ($order) {
+            $order->delete();
+        }
+        return true;
+    }
 }

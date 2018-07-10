@@ -39,7 +39,7 @@ class OttOrderController extends BaseController
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
-
+        $this->setFlash('success', '操作成功');
         return $this->redirect(['index']);
     }
 

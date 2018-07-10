@@ -43,11 +43,15 @@ class OttOrderSearch extends OttOrder
     {
         $query = OttOrder::find();
 
-        $query->joinWith(['mainOrder']);
+        $query->joinWith(['mainOrder'])
+              ->orderBy('order_addtime desc,order_ispay desc');
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => [
+                'pageSize' => 25
+            ]
         ]);
 
         $this->load($params);

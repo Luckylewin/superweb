@@ -100,7 +100,7 @@ class OrderController extends ActiveController
         $order->order_total = 1;
         $order->order_money = $price;
         $order->order_info = "升级会员";
-        $order->order_paytype = 'paypal';
+        $order->order_paytype = 'dokypay';
         $order->order_type = 'vip';
         $order->order_uid = $uid;
         $order->save(false);
