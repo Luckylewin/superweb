@@ -29,9 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'order_num',
             'mainOrder.order_money',
             'mainOrder.order_addtime',
-            [
-                    'attribute' => ''
-            ],
+            'mainOrder.order_ispay',
             'mainOrder.order_info',
             'expire_time:datetime',
             //'is_valid',
