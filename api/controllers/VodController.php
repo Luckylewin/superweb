@@ -17,6 +17,7 @@ use common\models\User;
 use common\models\Vod;
 use common\models\Vodlink;
 use yii\data\ActiveDataProvider;
+use yii\filters\auth\HttpBasicAuth;
 use yii\filters\auth\QueryParamAuth;
 use yii\helpers\Url;
 use yii\rest\ActiveController;
@@ -30,6 +31,15 @@ class VodController extends ActiveController
         'class' => 'yii\rest\Serializer',
         'collectionEnvelope' => 'items',
     ];
+
+    public function behaviors()
+    {
+        $behaviors = parent::behaviors();
+        $behaviors['authenticator'] = [
+            'class' => QueryParamAuth::className()
+        ];
+        return $behaviors;
+    }
 
     public function actions()
     {
