@@ -18,6 +18,8 @@ use yii\helpers\ArrayHelper;
  * @property string $icon_bg 大图标
  * @property string $icon_bg_hover 大图表非高亮
  * @property string $sort 排序
+ * @property string $is_charge 是否收费
+ * @property string $price 价格
  */
 class MainClass extends \yii\db\ActiveRecord
 {
@@ -38,6 +40,8 @@ class MainClass extends \yii\db\ActiveRecord
             [['name', 'zh_name'], 'required'],
             [['name', 'zh_name', 'description', 'icon', 'icon_bg','icon_hover', 'icon_bg', 'icon_bg_hover'], 'string', 'max' => 255],
             [['sort'], 'string', 'max' => 3],
+            ['price', 'number', 'integerOnly' => false, 'min' => 0],
+            ['is_charge', 'boolean']
         ];
     }
 
@@ -56,6 +60,8 @@ class MainClass extends \yii\db\ActiveRecord
             'icon_bg' => '大图标',
             'icon_bg_hover' => '大图标(高亮)',
             'sort' => '排序',
+            'is_charge' => '是否收费',
+            'price' => '价格'
         ];
     }
 

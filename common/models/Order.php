@@ -26,7 +26,8 @@ class Order extends \yii\db\ActiveRecord
     public static $payType = [
         'alipay' => '支付宝',
         'wxpay' => '微信',
-        'paypal' => '贝宝'
+        'paypal' => '贝宝',
+        'dokypay'=> 'DokyPay'
     ];
 
     public static $payStatus = [

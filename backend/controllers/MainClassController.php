@@ -90,7 +90,8 @@ class MainClassController extends BaseController
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            $this->setFlash('success', '操作成功');
+            return $this->redirect(['index', 'id' => $model->id]);
         }
 
         return $this->render('update', [

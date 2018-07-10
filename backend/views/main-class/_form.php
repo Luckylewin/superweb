@@ -23,6 +23,22 @@ use yii\widgets\ActiveForm;
         <?= $form->field($model, 'zh_name')->textInput(['maxlength' => true]) ?>
     </div>
 
+    <div class="col-md-6">
+        <?= $form->field($model, 'is_charge')->dropDownList(['免费','收费']) ?>
+    </div>
+
+    <div class="col-md-6">
+        <?= $form->field($model, 'price'); ?>
+    </div>
+
+    <div class="col-md-12">
+
+
+
+        <?= $form->field($model, 'sort')->textInput(['maxlength' => true]) ?>
+
+        <?= $form->field($model, 'description')->textarea(['rows' => 6]) ?>
+    </div>
 
 
     <div class="col-md-6">
@@ -162,8 +178,7 @@ use yii\widgets\ActiveForm;
     </div>
 
     <div class="col-md-12">
-        <?= $form->field($model, 'description')->textarea(['rows' => 6]) ?>
-        <?= $form->field($model, 'sort')->textInput(['maxlength' => true]) ?>
+
         <div class="form-group">
             <?= Html::submitButton('保存', ['class' => 'btn btn-success']) ?>
             <?= Html::a('返回', ['index'], ['class' => 'btn btn-default']) ?>
