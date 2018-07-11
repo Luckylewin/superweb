@@ -54,7 +54,7 @@ class ApiLoginForm extends Model
         {
             $this->_user = $this->getUser();
             $this->_user->access_token = $this->_user->generateAccessToken();
-            $this->_user->access_token_expire = time() + 86400 * 30;
+            $this->_user->access_token_expire = time() + 86400 * 7;
             //判断是否过期
             if ($this->_user->is_vip && time() > $this->_user->vip_expire_time) {
                 $this->_user->is_vip = 0;
