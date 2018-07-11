@@ -11,18 +11,35 @@ namespace api\controllers;
 
 use common\models\Vodlink;
 use yii\data\ActiveDataProvider;
+use yii\filters\auth\QueryParamAuth;
 use yii\rest\ActiveController;
 
 class VodLinkController extends ActiveController
 {
     public $modelClass = 'common\models\Vodlink';
-    public  $serializer = 'yii\rest\Serializer';
+    public $serializer = [
+        'class' => 'yii\rest\Serializer',
+        'collectionEnvelope' => 'items',
+    ];
 
     public function actions()
     {
         $actions = parent::actions();
         unset($actions['index']);
+        unset($actions['view']);
+        unset($actions['update']);
+        unset($actions['create']);
         return $actions;
+    }
+
+    public function behaviors()
+    {
+        $behaviors = parent::behaviors();
+        $behaviors['authenticator'] = [
+            'class' => QueryParamAuth::className(),
+            'only' => ['index']
+        ];
+        return $behaviors;
     }
 
     public function actionIndex()

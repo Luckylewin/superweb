@@ -31,16 +31,7 @@ class VodController extends ActiveController
         'class' => 'yii\rest\Serializer',
         'collectionEnvelope' => 'items',
     ];
-
-    public function behaviors()
-    {
-        $behaviors = parent::behaviors();
-        $behaviors['authenticator'] = [
-            'class' => QueryParamAuth::className()
-        ];
-        return $behaviors;
-    }
-
+    
     public function actions()
     {
         $actions = parent::actions();
