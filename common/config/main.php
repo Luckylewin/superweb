@@ -9,6 +9,13 @@ return [
     'runtimePath'  => dirname(dirname(__DIR__)) . '/storage/runtime',
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'components' => [
+
+        'session' => [
+            'class' => 'yii\web\DbSession',
+            // 'db' => 'mydb',
+            'sessionTable' => 'yii2_session',
+        ],
+
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
