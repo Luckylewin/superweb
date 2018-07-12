@@ -33,6 +33,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             'contract_time',
+            'access_token',
+            'access_token_expire:datetime'
         ],
     ]) ?>
 
