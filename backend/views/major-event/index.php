@@ -11,7 +11,7 @@ $this->title = 'Major Events';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <style>
-    .today td:nth-child(2){background: #23c6c8!important;color: white}
+    .today td:nth-child(3){background: #23c6c8!important;color: white}
 
 </style>
 <div class="major-event-index">
@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-
+        "options" => ["class" => "grid-view","style"=>"overflow:auto", "id" => "grid"],
         'rowOptions' => function ($model, $key, $index, $grid){
 
             $today_start = strtotime(date('Y-m-d'));
@@ -34,7 +34,13 @@ $this->params['breadcrumbs'][] = $this->title;
             }
         },
         'columns' => [
+            [
+                "class" => "yii\grid\CheckboxColumn",
+                "name" => "id",
+            ],
             ['class' => 'yii\grid\SerialColumn'],
+
+
 
             //'id',
             [
@@ -103,3 +109,22 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
 </div>
+
+<?php
+  echo Html::button("批量删除",[
+      'class' => 'gridview btn btn-danger',
+  ]);
+
+  $batchDelete = \yii\helpers\Url::to(['major-event/batch-delete', 'ids' => '']);
+  $js =<<<JS
+    $(document).on('click', '.gridview', function () {
+    var keys = $("#grid").yiiGridView("getSelectedRows");
+    var url = '{$batchDelete}' + keys;
+    
+    window.location.href = url;
+})
+JS;
+
+$this->registerJs($js);
+
+?>

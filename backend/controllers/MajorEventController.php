@@ -137,4 +137,19 @@ class MajorEventController extends BaseController
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+    public function actionBatchDelete()
+    {
+        $ids = Yii::$app->request->get('ids');
+
+        if (!empty($ids)) {
+            $ids = explode(',', $ids);
+            MajorEvent::deleteAll(['in', 'id', $ids]);
+            $this->setFlash('success', '操作成功');
+            return $this->redirect(['major-event/index']);
+        }
+        $this->setFlash('error', '操作失败');
+        return $this->redirect(['major-event/index']);
+    }
+
 }
