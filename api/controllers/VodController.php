@@ -93,7 +93,7 @@ class VodController extends ActiveController
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
-                'pageSize' => $request->get('per_page', 12)
+                'pageSize' => $request->get('per-page', 12)
             ],
         ]);
 
