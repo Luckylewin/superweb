@@ -10,6 +10,7 @@ namespace console\controllers;
 
 use backend\models\Parade;
 use console\models\event\liveso;
+use console\models\event\sportsmediawatch;
 use console\models\event\zhiboba;
 use console\models\parade\beginsport;
 use console\models\parade\espn;
@@ -41,7 +42,15 @@ class ParadeController extends Controller
         Parade::deleteAll(['<=', 'parade_date', $date]);
     }
 
+    public function actionNba()
+    {
+        try {
 
+            $live = new sportsmediawatch();
+            $live->start();
+
+        } catch (\Exception $e) {}
+    }
 
     public function actionZhiboba()
     {
