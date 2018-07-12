@@ -160,4 +160,31 @@ class MajorEvent extends \yii\db\ActiveRecord
 
     }
 
+    public function bindChannel($channelName)
+    {
+        //判断是否存在频道
+        $channel = OttChannel::find()->where(['name' => $channelName])->one();
+
+        if (!is_null($channel)) {
+            $class = $channel->getSubClass()->one();
+            if (!is_null($class)) {
+                $match_data[] = [
+                    'channel_language' => 'UK',
+                    'main_class' => $class->name,
+                    'channel_name' => $channel->name,
+                    'channel_id' => $channel->channel_number,
+                    'channel_true_id' => $channel->id,
+                    'channel_icon' => $channel->image
+                ];
+
+                $this->match_data = json_encode($match_data);
+                $this->save(false);
+                return true;
+            }
+            return false;
+        }
+
+        return false;
+    }
+
 }
