@@ -9,7 +9,6 @@ require __DIR__ . '/../../common/config/bootstrap.php';
 $config = yii\helpers\ArrayHelper::merge(
     require __DIR__ . '/../../common/config/main-local.php',
     require __DIR__ . '/../config/main-iptv.php'
-
 );
 
 (new yii\web\Application($config))->run();

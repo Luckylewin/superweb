@@ -2,6 +2,7 @@
 namespace api\models;
 
 use api\components\Formatter;
+use backend\models\OttOrder;
 use yii\base\Model;
 use common\models\User;
 
@@ -46,6 +47,7 @@ class ApiSignupForm extends Model
         ];
     }
 
+
     /**
      *  Signs user up.
      * @return array|User|null
@@ -65,6 +67,7 @@ class ApiSignupForm extends Model
         $user->access_token_expire = time() + 86400 * 30;
 
         $user->save();
+        $this->addFreeUse($user);
 
         return [
             'id' => $user->id,
@@ -78,5 +81,15 @@ class ApiSignupForm extends Model
             'vip_expire_time' => 0,
         ];
 
+    }
+
+    public function addFreeUse(User $user)
+    {
+        $order = new OttOrder();
+        $order->uid = $user->id;
+        $order->expire_time = time() + 86400 * 7;
+        $order->order_num = 'probation';
+        $order->is_valid = 1;
+        $order->save(false);
     }
 }

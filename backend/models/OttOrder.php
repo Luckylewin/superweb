@@ -13,6 +13,7 @@ use Yii;
  * @property string $genre 类别
  * @property string $order_num 订单id
  * @property int $expire_time 过期时间
+ * @property int $is_valid 是否有效
  */
 class OttOrder extends \yii\db\ActiveRecord
 {
@@ -35,6 +36,7 @@ class OttOrder extends \yii\db\ActiveRecord
             [['uid', 'order_num'], 'string', 'max' => 32],
             [['genre'], 'string', 'max' => 30],
             [['uid'], 'unique'],
+            ['is_valid', 'safe']
         ];
     }
 
