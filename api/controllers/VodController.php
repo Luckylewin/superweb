@@ -84,11 +84,12 @@ class VodController extends ActiveController
 
         $query = $cid ? Vod::find()->select($fields)->where(['vod_cid' => $cid]) : Vod::find()->select($fields);
         $query->filterWhere([
-            'vod_type' => $vod_type,
             'vod_year' => $vod_year,
             'vod_area' => $vod_area
         ]);
-        $query->andFilterWhere(['like', 'vod_name', $vod_name]);
+        
+        $query->andFilterWhere(['like', 'vod_name', $vod_name])
+              ->andFilterWhere(['like', 'vod_type', $vod_type]);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
