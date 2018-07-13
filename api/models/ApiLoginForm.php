@@ -2,6 +2,7 @@
 namespace api\models;
 
 use api\components\Formatter;
+use backend\models\OttOrder;
 use common\models\User;
 use yii\base\Model;
 
@@ -60,6 +61,16 @@ class ApiLoginForm extends Model
                 $this->_user->is_vip = 0;
             }
 
+            //查询ott order
+            $ottOrder = OttOrder::find()->where(['uid'=>$this->_user->username,'is_valid'=>'1'])->one();
+            if ($ottOrder) {
+                $is_vip = true;
+                $vip_expire_time = $ottOrder->expire_time;
+            } else {
+                $is_vip = false;
+                $vip_expire_time = '';
+            }
+
             if ($this->_user->save(false)) {
                 return [
                     'id' => $this->_user->id,
@@ -68,8 +79,10 @@ class ApiLoginForm extends Model
                     'access_token_expire' => $this->_user->access_token_expire,
                     'created_at' => $this->_user->created_at,
                     'updated_at' => $this->_user->updated_at,
-                    'is_vip' => $this->_user->is_vip,
-                    'vip_expire_time' => $this->_user->vip_expire_time
+                    //'is_vip' => $this->_user->is_vip,
+                    'is_vip' => $is_vip,
+                    'vip_expire_time' => $vip_expire_time
+                    //'vip_expire_time' => $this->_user->vip_expire_time
                 ];
             }
 
