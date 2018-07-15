@@ -76,6 +76,15 @@ class BaseController extends Controller
     {
         \Yii::$app->session->setFlash($status, $message);
     }
-    
+
+    public function success($status = 'success')
+    {
+        $this->setFlash($status, '操作成功');
+    }
+
+    public function error($status = 'error')
+    {
+        $this->setFlash($status, '操作失败');
+    }
 
 }
