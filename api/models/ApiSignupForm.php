@@ -26,7 +26,7 @@ class ApiSignupForm extends Model
             ['username', 'required', 'message' => Formatter::EMPTY_SIGNUP_ERROR],
             ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => Formatter::USERNAME_EXIST_ERROR],
             ['username', 'string', 'min' => 2, 'max' => 255],
-
+            ['email', 'email', 'skipOnEmpty' => true],
            /* ['email', 'trim'],
             ['email', 'required'],
             ['email', 'email'],
@@ -67,7 +67,7 @@ class ApiSignupForm extends Model
         $user->access_token_expire = time() + 86400 * 30;
 
         $user->save();
-        $this->addFreeUse($user);
+        $probation_order = $this->addFreeUse($user);
 
         return [
             'id' => $user->id,
@@ -77,8 +77,8 @@ class ApiSignupForm extends Model
             'access_token_expire' => $user->access_token_expire,
             'created_at' => $user->created_at,
             'updated_at' => $user->updated_at,
-            'is_vip' => 0,
-            'vip_expire_time' => 0,
+            'is_vip' => 1,
+            'vip_expire_time' => $probation_order->expire_time,
         ];
 
     }
@@ -86,10 +86,12 @@ class ApiSignupForm extends Model
     public function addFreeUse(User $user)
     {
         $order = new OttOrder();
-        $order->uid = $user->id;
+        $order->uid = $user->username;
         $order->expire_time = time() + 86400 * 7;
-        $order->order_num = 'probation';
+        $order->genre = 'probation';
         $order->is_valid = 1;
         $order->save(false);
+
+        return $order;
     }
 }

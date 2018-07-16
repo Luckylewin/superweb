@@ -44,6 +44,7 @@ class OttOrderSearch extends OttOrder
         $query = OttOrder::find();
 
         $query->joinWith(['mainOrder'])
+              ->where(['!=', 'genre', 'probation'])
               ->orderBy('order_addtime desc,order_ispay desc');
         // add conditions that should always apply here
 
