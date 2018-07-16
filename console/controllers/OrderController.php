@@ -15,6 +15,13 @@ use yii\console\Controller;
 
 class OrderController extends Controller
 {
+
+    public function actionUpdate()
+    {
+        $this->run('clear-order');
+        $this->run('update-order');
+    }
+
     /**
      * 删除过期没支付的订单
      * @return bool
@@ -35,4 +42,23 @@ class OrderController extends Controller
 
         return true;
     }
+
+    /**
+     * 更新会员订单的状态 过期的订单 is_valid 置-1
+     */
+    public function actionUpdateOrder()
+    {
+        $orders = OttOrder::find()->where(['<', 'expire_time', time()])->all();
+
+        if ($orders) {
+            foreach ($orders as $order) {
+                if ($order instanceof OttOrder) {
+                    $order->is_valid = '-1';
+                    $order->update(false);
+                }
+            }
+        }
+
+    }
+
 }

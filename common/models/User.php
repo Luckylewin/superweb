@@ -1,6 +1,7 @@
 <?php
 namespace common\models;
 
+use backend\models\OttOrder;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
@@ -270,7 +271,4 @@ class User extends ActiveRecord implements IdentityInterface
             'vip_expire_time' => '过期时间'
             ];
     }
-
-
-
 }

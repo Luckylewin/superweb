@@ -41,7 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                     'attribute' => 'is_vip',
                     'value' => function($model) {
-                        return \common\models\User::$vipType[$model->is_vip];
+                        return \backend\models\OttOrder::isVip($model->username);
                     }
             ],
 
