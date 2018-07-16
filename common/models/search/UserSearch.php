@@ -19,7 +19,7 @@ class UserSearch extends User
     {
         return [
             [['id', 'status', 'created_at', 'updated_at', 'access_token_expire', 'allowance', 'allowance_updated_at', 'vip_expire_time'], 'integer'],
-            [['username', 'auth_key', 'password_hash', 'password_reset_token', 'email', 'access_token', 'is_vip'], 'safe'],
+            [['username', 'auth_key', 'password_hash', 'password_reset_token', 'email', 'access_token', 'is_vip', 'identity_type'], 'safe'],
         ];
     }
 
@@ -61,21 +61,12 @@ class UserSearch extends User
         $query->andFilterWhere([
             'id' => $this->id,
             'status' => $this->status,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
             'access_token_expire' => $this->access_token_expire,
-            'allowance' => $this->allowance,
-            'allowance_updated_at' => $this->allowance_updated_at,
             'vip_expire_time' => $this->vip_expire_time,
+            'identity_type' => $this->identity_type,
         ]);
 
-        $query->andFilterWhere(['like', 'username', $this->username])
-            ->andFilterWhere(['like', 'auth_key', $this->auth_key])
-            ->andFilterWhere(['like', 'password_hash', $this->password_hash])
-            ->andFilterWhere(['like', 'password_reset_token', $this->password_reset_token])
-            ->andFilterWhere(['like', 'email', $this->email])
-            ->andFilterWhere(['like', 'access_token', $this->access_token])
-            ->andFilterWhere(['like', 'is_vip', $this->is_vip]);
+        $query->andFilterWhere(['like', 'username', $this->username]);
 
         return $dataProvider;
     }

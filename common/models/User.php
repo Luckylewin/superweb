@@ -28,6 +28,7 @@ use yii\web\Linkable;
  * @property int $allowance_updated_at 最后一次请求更新时间
  * @property string $is_vip
  * @property int $vip_expire_time
+ * @property int $identity_type 会员类型
  */
 class User extends ActiveRecord implements IdentityInterface
 {
@@ -35,7 +36,7 @@ class User extends ActiveRecord implements IdentityInterface
     const STATUS_ACTIVE = 10;
 
     public static $vipType = [
-        '普通游客',
+        '试用会员',
         '付费会员'
     ];
 
@@ -65,7 +66,8 @@ class User extends ActiveRecord implements IdentityInterface
         return [
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
-            ['email', 'default', 'value' => '']
+            ['email', 'default', 'value' => ''],
+            ['identity_type', 'default', 'value' => '0']
         ];
     }
 
@@ -268,7 +270,23 @@ class User extends ActiveRecord implements IdentityInterface
             'status' => '状态',
             'created_at' => '创建时间',
             'is_vip' => '会员',
-            'vip_expire_time' => '过期时间'
+            'vip_expire_time' => '过期时间',
+            'identity_type' => '会员类型'
             ];
     }
+
+    public function beforeDelete()
+    {
+        // 删除用户相关的数据
+        Order::deleteAll(['order_uid' => $this->username]);
+        OttOrder::deleteAll(['uid' => $this->username]);
+
+        return true;
+    }
+
+    public function getOttOrder()
+    {
+        return $this->hasMany(OttOrder::className(), ['uid' => 'username']);
+    }
+
 }

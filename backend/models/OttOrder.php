@@ -67,18 +67,4 @@ class OttOrder extends \yii\db\ActiveRecord
         return true;
     }
 
-    /**
-     * @param $uid
-     * @return string
-     */
-    public static function isVip($uid)
-    {
-        $chargeMember = OttOrder::find()->where(['uid' => $uid, 'is_valid' => 1, 'genre' => 'all'])
-            ->orderBy('oid desc')
-            ->one();
-
-        if ($chargeMember) return '会员';
-
-        return '试用期会员';
-    }
 }

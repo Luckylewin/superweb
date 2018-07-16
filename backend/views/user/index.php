@@ -30,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
             //'auth_key',
             //'password_hash',
             //'password_reset_token',
-            'email:email',
+            //'email:email',
             //'status',
             'created_at:date',
             //'updated_at',
@@ -39,14 +39,21 @@ $this->params['breadcrumbs'][] = $this->title;
             //'allowance',
             //'allowance_updated_at',
             [
-                    'attribute' => 'is_vip',
+                    'attribute' => 'identity_type',
+                    'filter' => \common\models\User::$vipType,
+                    'filterInputOptions' => [
+                            'prompt' => '全部',
+                            'class' => 'form-control'
+                    ],
                     'value' => function($model) {
-                        return \backend\models\OttOrder::isVip($model->username);
+                        return \common\models\User::$vipType[$model->identity_type];
                     }
             ],
 
             [
                'class' => 'common\grid\MyActionColumn',
+                'size' => 'btn-sm',
+                'template' => '{view} {delete}'
             ],
         ],
     ]); ?>
