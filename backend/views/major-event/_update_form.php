@@ -49,10 +49,16 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/laydate/laydate.js'
         <div class="col-md-12"  style="margin-bottom: 20px;">
             <label >赛事选择</label>
             <div class="input-group" style="position: relative">
-                <input type="hidden" name="event_info" class="event_info" value="<?php echo $model->live_match->event_zh_info  ?>">
-                <input type="hidden" name="teamA" class="teamA" value="<?= $teams[0]->team_zh_name ?>">
-                <input type="hidden" name="teamB" class="teamB" value="<?= $teams[1]->team_zh_name ?>">
-                <input type="text" class="form-control event-text" placeholder="选择赛事" readonly="readonly" value="<?php echo $model->live_match->event_zh_info . ':' . $teams[0]->team_zh_name .' VS ' .$teams[1]->team_zh_name ?>">
+                <input type="hidden" name="event_info" class="event_info" value="<?php echo isset($model->live_match->event_zh_info) ? $model->live_match->event_zh_info : ''?>">
+                <input type="hidden" name="teamA" class="teamA" value="<?= isset($teams[0]->team_zh_name) ? $teams[0]->team_zh_name : '' ?>">
+                <input type="hidden" name="teamB" class="teamB" value="<?= isset($teams[1]->team_zh_name) ? $teams[1]->team_zh_name : '' ?>">
+
+                <?php if(isset($teams[0]) && isset($teams[1])): ?>
+                    <input type="text" class="form-control event-text" placeholder="选择赛事" readonly="readonly" value="<?php echo $model->live_match->event_zh_info . ':' . $teams[0]->team_zh_name .' VS ' .$teams[1]->team_zh_name ?>">
+                <?php else: ?>
+                    <input type="text" class="form-control event-text" placeholder="选择赛事" readonly="readonly" value="<?php echo $model->live_match->event_zh_info . ':' . "队伍待定" ?>">
+                <?php endif; ?>
+
                 <span class="input-group-btn">
                                 <?= Html::button('选择赛事', [
                                     'class' => 'btn btn-info btn-search event-search',

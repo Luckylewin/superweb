@@ -90,32 +90,51 @@ class MajorEvent extends \yii\db\ActiveRecord
 
         //赛事信息
         if ($majorEvent) {
-            $event_data = [
-                'title' => $title,
-                'title_zh' => $post['MajorEvent']['title'],
-                'event_time' => $this->base_time,
-                'event_info' => $majorEvent->event_name,
-                'event_zh_info' => $majorEvent->event_name_zh,
-                'event_icon' => $majorEvent->event_icon,
-                'teams' => [
-                    [
-                        'team_name' => $teamA->team_name,
-                        'team_zh_name' => $teamA->team_zh_name,
-                        'team_icon' => $teamA->team_icon
+            if ($teamA && $teamB) {
+                $event_data = [
+                    'title' => $title,
+                    'title_zh' => $post['MajorEvent']['title'],
+                    'event_time' => $this->base_time,
+                    'event_info' => $majorEvent->event_name,
+                    'event_zh_info' => $majorEvent->event_name_zh,
+                    'event_icon' => $majorEvent->event_icon,
+                    'teams' => [
+                        [
+                            'team_name' => $teamA->team_name,
+                            'team_zh_name' => $teamA->team_zh_name,
+                            'team_icon' => $teamA->team_icon
+                        ],
+                        [
+                            'team_name' => $teamB->team_name,
+                            'team_zh_name' => $teamB->team_zh_name,
+                            'team_icon' => $teamB->team_icon
+                        ]
                     ],
-                    [
-                        'team_name' => $teamB->team_name,
-                        'team_zh_name' => $teamB->team_zh_name,
-                        'team_icon' => $teamB->team_icon
-                    ]
-                ],
 
-            ];
+                ];
+            } else {
+                $event_data = [
+                    'title' => $title,
+                    'title_zh' => $post['MajorEvent']['title'],
+                    'event_time' => $this->base_time,
+                    'event_info' => $majorEvent->event_name,
+                    'event_zh_info' => $majorEvent->event_name_zh,
+                    'event_icon' => $majorEvent->event_icon,
+                    'teams' => [
+
+                    ],
+
+                ];
+            }
             $this->live_match = Json::encode($event_data);
         }
 
-        // 唯一值
-        $this->unique = md5( $this->base_time . $teamA->team_name . $teamB->team_name);
+        if ($teamA && $teamB) {
+            // 唯一值
+            $this->unique = md5( $this->base_time . $teamA->team_name . $teamB->team_name);
+        } else {
+            $this->unique = md5( $this->base_time . $post['MajorEvent']['title']);
+        }
 
         //频道
         $match_data = [];
@@ -148,13 +167,18 @@ class MajorEvent extends \yii\db\ActiveRecord
         $model->base_time = date('H:i', $model->base_time);
         $model->live_match = json_decode($model->live_match);
 
-        $teamInfo = $model->live_match->teams;
-        $teams = [];
-        foreach ($teamInfo as $team) {
-            if ($team = OttEventTeam::findOne(['team_name' => $team->team_name])) {
-                $teams[] = $team;
+        if (isset($model->live_match->teams)) {
+            $teamInfo = $model->live_match->teams;
+            $teams = [];
+            foreach ($teamInfo as $team) {
+                if ($team = OttEventTeam::findOne(['team_name' => $team->team_name])) {
+                    $teams[] = $team;
+                }
             }
+        } else {
+            $teams = [];
         }
+
         $model->match_data = Json::decode($model->match_data);
         $model->teams = $teams;
 

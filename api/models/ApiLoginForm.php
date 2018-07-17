@@ -61,14 +61,13 @@ class ApiLoginForm extends Model
                 $this->_user->is_vip = 0;
             }
 
-            //查询ott order
-            $ottOrder = OttOrder::find()->where(['uid'=>$this->_user->username,'is_valid'=>'1'])->one();
-            if ($ottOrder) {
-                $is_vip = true;
-                $vip_expire_time = $ottOrder->expire_time;
-            } else {
-                $is_vip = false;
-                $vip_expire_time = '';
+            // 判断用户状态是否需要更新
+            $ottOrder = OttOrder::find()->where(['uid' => $this->_user->username, 'is_valid' => 1])
+                                ->orderBy('oid')
+                                ->one();
+
+            if ($ottOrder && ($ottOrder['expire_time'] != $this->_user->vip_expire_time) ) {
+                $this->_user->vip_expire_time = $ottOrder['expire_time'];
             }
 
             if ($this->_user->save(false)) {
@@ -79,10 +78,8 @@ class ApiLoginForm extends Model
                     'access_token_expire' => $this->_user->access_token_expire,
                     'created_at' => $this->_user->created_at,
                     'updated_at' => $this->_user->updated_at,
-                    //'is_vip' => $this->_user->is_vip,
-                    'is_vip' => $is_vip,
-                    'vip_expire_time' => $vip_expire_time
-                    //'vip_expire_time' => $this->_user->vip_expire_time
+                    'is_vip' => $this->_user->is_vip,
+                    'vip_expire_time' => $this->_user->vip_expire_time
                 ];
             }
 

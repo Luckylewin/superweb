@@ -315,9 +315,14 @@ $requestJs=<<<JS
                 teamB = $('#teamB').find('option:selected').text();
             var text = event + ':' + teamA + ' VS ' + teamB;
             
-            if (teamA === teamB) {
+            
+            if ((teamA === teamB) && teamA !== '请选择') {
+             
                 alert('两支队伍不能一样');
                 return false;
+            } else if (teamA === '请选择') {
+                 teamA = teamB = ''
+                 text =  event + ':' +'队伍待定'
             }
             
             $('input[name=event_info]').val(event);

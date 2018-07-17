@@ -58,6 +58,8 @@ class ApiSignupForm extends Model
             return null;
         }
 
+        $probation_expire = $this->_getProbationExpireTime();
+
         $user = new User();
         $user->username = $this->username;
         $user->email = $this->email;
@@ -65,9 +67,11 @@ class ApiSignupForm extends Model
         $user->generateAuthKey();
         $user->generateAccessToken();
         $user->access_token_expire = time() + 86400 * 30;
+        $user->is_vip = 1;
+        $user->vip_expire_time = $probation_expire;
 
         $user->save();
-        $probation_order = $this->addFreeUse($user);
+        $probation_order = $this->addFreeUse($user, $probation_expire);
 
         return [
             'id' => $user->id,
@@ -83,15 +87,20 @@ class ApiSignupForm extends Model
 
     }
 
-    public function addFreeUse(User $user)
+    public function addFreeUse(User $user, $expire_time)
     {
         $order = new OttOrder();
         $order->uid = $user->username;
-        $order->expire_time = time() + 86400 * 7;
+        $order->expire_time = $expire_time;
         $order->genre = 'probation';
         $order->is_valid = 1;
         $order->save(false);
 
         return $order;
+    }
+
+    private function _getProbationExpireTime()
+    {
+        return time() + 86400 * 7;
     }
 }

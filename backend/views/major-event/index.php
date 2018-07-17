@@ -67,9 +67,14 @@ $this->params['breadcrumbs'][] = $this->title;
                      $data = json_decode($model->live_match);
                      if (isset($data->teams)) {
                          $teamObject = $data->teams;
-                         $teams = $data->teams[0]->team_zh_name . ' ' . Html::img(Func::getAccessUrl($teamObject[0]->team_icon), ['width'=>30]);
-                         $teams .= ' - ';
-                         $teams .= Html::img(Func::getAccessUrl($teamObject[1]->team_icon), ['width'=>30]) . ' '. $data->teams[1]->team_zh_name;
+                         if (!empty($data->teams) && isset($data->teams[0]) && isset($data->teams[1])) {
+                             $teams = $data->teams[0]->team_zh_name . ' ' . Html::img(Func::getAccessUrl($teamObject[0]->team_icon), ['width'=>30]);
+                             $teams .= ' - ';
+                             $teams .= Html::img(Func::getAccessUrl($teamObject[1]->team_icon), ['width'=>30]) . ' '. $data->teams[1]->team_zh_name;
+                         } else {
+                             $teams = "比赛队伍待定";
+                         }
+
                          return $text =  $data->event_info . ' ' . $teams ;
                      }
                      return null;
