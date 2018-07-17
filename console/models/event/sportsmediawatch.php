@@ -7,6 +7,7 @@
  */
 
 namespace console\models\event;
+use common\components\BaiduTranslator;
 use console\models\parade\collector;
 use Symfony\Component\DomCrawler\Crawler;
 
@@ -57,6 +58,7 @@ class sportsmediawatch extends common implements collector
 
                             $channel_name = $td->eq(2)->text();
 
+
                             if (strpos($teams, '-') !== false) {
                                 $teams = explode('-', $teams);
                                 $teams = [
@@ -69,6 +71,13 @@ class sportsmediawatch extends common implements collector
                                     'teams' => $teams,
                                     'channel' => $channel_name
                                 ];
+                            } else if(!empty($teams)) {
+                                $data[] = [
+                                    'time' => $time,
+                                    'teams' => [],
+                                    'channel' => $channel_name,
+                                    'event_name' => $teams
+                                ];
                             }
                         }
                     }
@@ -79,7 +88,12 @@ class sportsmediawatch extends common implements collector
             if (!empty($data)) {
                 foreach ($data as $val) {
                     try {
-                        $majorEvent = $this->createMajorEvent("NBA夏季联赛", 'NBA夏季联赛' , $val['time'], $val['teams']);
+                        if (isset($val['event_name'])) {
+                            $majorEvent = $this->createMajorEvent("NBA夏季联赛", 'NBA夏季联赛' , $val['time'], $val['teams']);
+                        } else {
+                            $majorEvent = $this->createMajorEvent("NBA夏季联赛", BaiduTranslator::translate($val['event_name'], 'en', 'zh') , $val['time'], $val['teams']);
+                        }
+                        
                         if ($majorEvent) {
                             $majorEvent->bindChannel($val['channel']);
                         }
