@@ -133,7 +133,7 @@ class MajorEvent extends \yii\db\ActiveRecord
             // 唯一值
             $this->unique = md5( $this->base_time . $teamA->team_name . $teamB->team_name);
         } else {
-            $this->unique = md5( $this->base_time . $post['MajorEvent']['title']);
+            $this->unique = md5( $this->base_time . $majorEvent->event_name_zh);
         }
 
         //频道

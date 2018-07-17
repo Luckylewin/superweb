@@ -76,7 +76,7 @@ class sportsmediawatch extends common implements collector
                                     'time' => $time,
                                     'teams' => [],
                                     'channel' => $channel_name,
-                                    'event_name' => $teams
+                                    'event_name' => $teams,
                                 ];
                             }
                         }
@@ -85,15 +85,16 @@ class sportsmediawatch extends common implements collector
             }
 
 
+
             if (!empty($data)) {
                 foreach ($data as $val) {
                     try {
                         if (isset($val['event_name'])) {
-                            $majorEvent = $this->createMajorEvent("NBA夏季联赛", 'NBA夏季联赛' , $val['time'], $val['teams']);
-                        } else {
                             $majorEvent = $this->createMajorEvent("NBA夏季联赛", BaiduTranslator::translate($val['event_name'], 'en', 'zh') , $val['time'], $val['teams']);
+                        } else {
+                            $majorEvent = $this->createMajorEvent("NBA夏季联赛", 'NBA夏季联赛' , $val['time'], $val['teams']);
                         }
-                        
+
                         if ($majorEvent) {
                             $majorEvent->bindChannel($val['channel']);
                         }
