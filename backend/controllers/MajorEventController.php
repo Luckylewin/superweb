@@ -29,7 +29,7 @@ class MajorEventController extends BaseController
             'query' => MajorEvent::find(),
             'sort' => [
                 'defaultOrder' => [
-                    'time' => SORT_ASC,
+                    'time' => SORT_DESC,
                     'sort' => SORT_ASC
                 ]
             ],
