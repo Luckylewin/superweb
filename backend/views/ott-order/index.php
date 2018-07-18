@@ -44,7 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'attribute' => 'expire_time',
                             'value' => function($model)
                             {
-                                return floor($model->expire_time / 30);
+                                return floor($model->expire_time / (30 * 86400)) . '个月';
                             },
                             'filter' => false
                     ],
