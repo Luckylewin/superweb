@@ -42,3 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
 </div>
+
+<p>
+    <?= Html::a('直播收费设定', ['config/ott-setting'], ['class' => 'btn btn-primary']) ?>
+</p>

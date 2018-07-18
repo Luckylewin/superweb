@@ -9,7 +9,9 @@ use Yii;
  *
  * @property integer $id
  * @property string $name
+ * @property string $keyid
  * @property string $info
+ * @property string $data
  * @property integer $groupid
  * @property string $value
  */

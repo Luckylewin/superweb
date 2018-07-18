@@ -60,16 +60,7 @@ class ApiLoginForm extends Model
             if ($this->_user->is_vip && time() > $this->_user->vip_expire_time) {
                 $this->_user->is_vip = 0;
             }
-
-            // 判断用户状态是否需要更新
-            $ottOrder = OttOrder::find()->where(['uid' => $this->_user->username, 'is_valid' => 1])
-                                ->orderBy('oid')
-                                ->one();
-
-            if ($ottOrder && ($ottOrder['expire_time'] != $this->_user->vip_expire_time) ) {
-                $this->_user->vip_expire_time = $ottOrder['expire_time'];
-            }
-
+            
             if ($this->_user->save(false)) {
                 return [
                     'id' => $this->_user->id,
