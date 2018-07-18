@@ -17,6 +17,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= $form->field($model, 'data')->dropDownList($mode)->label($this->title) ?>
 
+    <?= $form->field($model, 'data')->dropDownList($mode)->label($this->title) ?>
+
     <div class="form-group">
         <?= Html::submitButton('设定', ['class' => 'btn btn-primary']) ?>
         <?= Html::a('返回', ['ott-price-list/index'], ['class' => 'btn btn-default']) ?>

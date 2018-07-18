@@ -89,7 +89,6 @@ class ConfigController extends BaseController
 
     public function actionOttSetting()
     {
-
         $mode_array = [
             '1' => '模式一:按会员开通可观看所有直播分类',
             '2' => '模式二:按分类进行收费观看对应的直播分类'

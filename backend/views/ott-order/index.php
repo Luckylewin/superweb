@@ -42,8 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'mainOrder.order_info',
                     [
                             'attribute' => 'expire_time',
-                            'value' => function($model)
-                            {
+                            'value' => function($model) {
                                 return floor($model->expire_time / (30 * 86400)) . '个月';
                             },
                             'filter' => false
