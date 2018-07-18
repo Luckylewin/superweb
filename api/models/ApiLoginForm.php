@@ -60,7 +60,7 @@ class ApiLoginForm extends Model
             if ($this->_user->is_vip && time() > $this->_user->vip_expire_time) {
                 $this->_user->is_vip = 0;
             }
-            
+
             if ($this->_user->save(false)) {
                 return [
                     'id' => $this->_user->id,
@@ -70,7 +70,8 @@ class ApiLoginForm extends Model
                     'created_at' => $this->_user->created_at,
                     'updated_at' => $this->_user->updated_at,
                     'is_vip' => $this->_user->is_vip,
-                    'vip_expire_time' => $this->_user->vip_expire_time
+                    'vip_expire_time' => $this->_user->vip_expire_time,
+                    'identity_type' => $this->_user->identity_type
                 ];
             }
 

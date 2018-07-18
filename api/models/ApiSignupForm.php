@@ -82,9 +82,9 @@ class ApiSignupForm extends Model
             'created_at' => $user->created_at,
             'updated_at' => $user->updated_at,
             'is_vip' => 1,
-            'vip_expire_time' => $probation_order->expire_time,
+            'identity_type' => 0,
+            'vip_expire_time' => $probation_order->expire_time
         ];
-
     }
 
     public function addFreeUse(User $user, $expire_time)
