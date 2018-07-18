@@ -269,9 +269,11 @@ class User extends ActiveRecord implements IdentityInterface
             'email' => '邮箱',
             'status' => '状态',
             'created_at' => '创建时间',
+            'updated_at' => '更新时间',
             'is_vip' => '会员',
             'vip_expire_time' => '过期时间',
-            'identity_type' => '会员类型'
+            'identity_type' => '会员类型',
+            'access_token_expire' => 'Token 过期时间'
             ];
     }
 

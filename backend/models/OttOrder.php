@@ -49,7 +49,7 @@ class OttOrder extends \yii\db\ActiveRecord
             'uid' => '用户帐号',
             'genre' => '类别',
             'order_num' => '订单id',
-            'expire_time' => '过期时间',
+            'expire_time' => '时长',
         ];
     }
 

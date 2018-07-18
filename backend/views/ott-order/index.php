@@ -25,28 +25,50 @@ $this->params['breadcrumbs'][] = $this->title;
                 [
                     'class' => 'yii\grid\SerialColumn'],
                     'uid',
-                    'genre',
-                    'order_num',
+
+                    [
+                        'attribute' => 'order_num',
+                        'options' => ['style'=>'width:100px;'],
+                    ],
+                    [
+                        'attribute' => 'genre',
+                        'filter' => false,
+                        'options' => ['style'=>'width:60px;'],
+                    ],
                     'mainOrder.order_money',
                     'mainOrder.order_addtime:datetime',
-                    [
-                        'attribute' => 'mainOrder.order_ispay',
-                        'value' => function($model) {
-                            $payText = ['未支付', '已支付'];
-                            return $payText[$model->mainOrder->order_ispay];
-                        }
-                    ],
+                    'mainOrder.order_paytime:datetime',
+
                     'mainOrder.order_info',
                     [
                             'attribute' => 'expire_time',
-                            'format' => 'datetime',
+                            'value' => function($model)
+                            {
+                                return floor($model->expire_time / 30);
+                            },
                             'filter' => false
                     ],
-                    //'is_valid',
 
                     [
+                        'attribute' => 'mainOrder.order_ispay',
+                        'format' => 'raw',
+                        'value' => function($model) {
+                            $payText = ['未支付', '已支付'];
+                            $payText = $payText[$model->mainOrder->order_ispay];
+
+                            if ($model->mainOrder->order_ispay) {
+                                return Html::button($payText,['class' => 'btn btn-sm btn-success']);
+                            } else {
+                                return Html::button($payText,['class' => 'btn btn-sm btn-default']);
+                            }
+                        }
+                    ],
+
+                    //'is_valid',
+                    [
                         'class' => 'common\grid\MyActionColumn',
-                        'template' => '{delete}'
+                        'template' => '{delete}',
+                        'size' => 'btn btn-sm'
                     ],
             ],
         ]);
