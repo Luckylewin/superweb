@@ -22,7 +22,7 @@ class SiteController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['login', 'error'],
+                        'actions' => ['login', 'error', 'captcha'],
                         'allow' => true,
                     ],
                     [
@@ -50,6 +50,17 @@ class SiteController extends Controller
             'error' => [
                 'class' => 'yii\web\ErrorAction',
             ],
+            'captcha' => [
+                'class' => 'yii\captcha\CaptchaAction',
+                'height'    => 39,
+                'width'     => 90,
+                 'offset' => 5,        //设置字符偏移量 有效果
+                'minLength' => 4,
+                'maxLength' => 4,
+                'foreColor' => 0xffffff,     //字体颜色
+                'backColor' => 0x6BC5A4, //背景颜色
+
+            ]
         ];
     }
 
@@ -78,9 +89,11 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+            Yii::$app->session->setFlash('info', '登录成功');
+            return $this->redirect(['index/frame']);
         } else {
             $model->password = '';
+            Yii::$app->session->setFlash('error', $model->getErrorSummary(false));
 
             return $this->render('@statics/themes/default-admin/views/index/login', [
                 'model' => $model,

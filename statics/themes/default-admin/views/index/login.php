@@ -19,7 +19,9 @@ $this->title = '管理员登录';
     <?php $this->head() ?>
     <link href="/statics/themes/default-admin/css/login.css?v=1" rel="stylesheet">
 </head>
-
+<style>
+    #captcha{border-radius: 3px;}
+</style>
 <body class="login-body">
 <?php $this->beginBody() ?>
 
@@ -37,6 +39,21 @@ $this->title = '管理员登录';
     <div class="login-wrap">
         <?= $form->field($model, 'username', ['template' => '<div class="form-group field-loginform-password required">{input}{hint}{error}</div>'])->textInput(['autofocus' => true, 'placeholder' => '用户名']) ?>
         <?= $form->field($model, 'password', ['template' => '<div class="form-group field-loginform-password required">{input}{hint}{error}</div>'])->passwordInput(['placeholder' => '密码']) ?>
+
+        <?= \yii\captcha\Captcha::widget([
+            'model'         => $model,
+            'attribute'     => 'verifyCode',
+            'captchaAction' => 'site/captcha',
+            'options'       => [
+                    'placeholder'=>'验证码',
+                    'class' => 'form-control',
+                    'style' => 'width:130px;display:inline'
+            ],
+            'imageOptions'  => ['id'=>'captcha'],
+            'template'      => '{image}{input}',
+            'id' => 'captcha',
+        ]);?>
+
         <?= Html::submitButton('<i class="fa fa-check"></i>', ['class' => 'btn btn-lg btn-login btn-block', 'name' => 'login-button']) ?>
 
         <label class="checkbox"><?= $form->field($model, 'rememberMe')->checkbox() ?></label>
@@ -48,3 +65,14 @@ $this->title = '管理员登录';
 </body>
 </html>
 <?php $this->endPage() ?>
+
+<script>
+  $("#captcha").click(function(){
+    var url = "<?= \yii\helpers\Url::to(['site/captcha']);?>";
+    $.get(url,{refresh:1},function(data){
+      var object = eval(data);
+      $('#captcha').attr('src',object.url);
+    })
+  });
+</script>
+

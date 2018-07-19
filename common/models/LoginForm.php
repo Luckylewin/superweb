@@ -13,6 +13,7 @@ class LoginForm extends Model
     public $username;
     public $password;
     public $rememberMe = true;
+    public $verifyCode;
 
     private $_user;
 
@@ -29,6 +30,7 @@ class LoginForm extends Model
             ['rememberMe', 'boolean'],
             // password is validated by validatePassword()
             ['password', 'validatePassword'],
+            ['verifyCode','captcha', 'message' => '验证码错误', 'captchaAction'=>'site/captcha',]
         ];
     }
 
@@ -57,7 +59,7 @@ class LoginForm extends Model
     public function login()
     {
         if ($this->validate()) {
-            return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 3600 * 24 * 3 : 0);
+            return Yii::$app->user->login($this->getUser(), $this->rememberMe ? 86400 : 0);
         }
         
         return false;
