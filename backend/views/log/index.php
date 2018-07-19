@@ -1,4 +1,8 @@
 <?php
+
+/**
+ * @var $model \backend\models\LogInterface
+ */
 $this->registerJsFile('/statics/themes/default-admin/plugins/laydate/laydate.js', ['depends'=>'yii\web\JqueryAsset', 'position'=>\yii\web\View::POS_HEAD] );
 $this->registerJsFile('/statics/themes/default-admin/plugins/echarts/echarts.js', ['depends'=>'yii\web\JqueryAsset', 'position'=>\yii\web\View::POS_HEAD]);
 
@@ -22,96 +26,32 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
                     <?php if(!Yii::$app->request->get('ym')): ?>
-                        <div class="col-md-2" style="margin-bottom: 30px;">
-                            <a class="btn btn-default" href="">查看详细</a>
+    <div class="col-md-2" style="margin-bottom: 30px;">
+        <a class="btn btn-default" href="">查看详细</a>
 
-                        </div>
-                    <?php endif; ?>
+    </div>
+<?php endif; ?>
 
-                </div>
+</div>
 
-            </div>
+</div>
 
-            <div class="col-md-11" style="margin: 0 50px auto">
-                <div id="main" style="height:400px;border:1px dashed #ccc;margin: 0 auto;margin-bottom: 30px;"></div>
-            </div>
+<div class="col-md-11" style="margin: 0 50px auto">
+    <div id="main" style="height:400px;border:1px dashed #ccc;margin: 0 auto;margin-bottom: 30px;"></div>
+</div>
 
-            <div class="col-md-11 center" style="margin: 0 50px auto;margin-bottom: 30px;">
-                <div id="program" style="height: 400px;border:1px dashed #ccc;">
+<div class="col-md-11 center" style="margin: 0 50px auto;margin-bottom: 30px;">
+    <div id="program" style="height: 400px;border:1px dashed #ccc;">
 
-                </div>
-            </div>
+    </div>
+</div>
 
-        </div>
+</div>
+
 
 <?php
 
-$total = implode(",", isset($log['total_line'])?$log['total_line']:$log['default']);
-$watch = implode(",", isset($log['watch_line'])?$log['watch_line']:$log['default']);
-$token = implode(",", isset($log['token_line'])?$log['token_line']:$log['default']);
-$program = "'" . implode(" ','", array_keys($programLog['all_program']?$programLog['all_program']:[])) . "'";
-$program_value = implode(",", array_values($programLog['all_program']?$programLog['all_program']:[]));
-
-$js =<<<JS
-    var total_request = [$total];
-    var watch_request = [$watch];
-    var token_request = [$token];
-
-    option = {
-        title: {
-            text: '接口调用统计'
-        },
-        tooltip: {
-            trigger: 'axis'
-        },
-        legend: {
-            data:['请求总数','节目接口','token接口']
-        },
-        grid: {
-            left: '3%',
-            right: '4%',
-            bottom: '3%',
-            containLabel: true
-        },
-        toolbox: {
-            feature: {
-                saveAsImage: {}
-            }
-        },
-        xAxis: {
-            type: 'category',
-            boundaryGap: true,
-            data: ['00h','01h','02h','03h','04h','05h','06h','07h','08h','09h','10h','11h','12h','13h','14h','15h','16h','17h','18h','19h','20h','21h','22h','23h']
-        },
-        yAxis: {
-            type: 'value'
-        },
-        series: [
-            // data:[234,21,45,232, 256,562,452,213,2345, 3453,5646,5634,6363, 534,632,4523,4356,234,21,45,232, 256,562,452,213,2345, 3453,5646,5634,6363, 534,632,4523,4356]
-            {
-                name:'请求总数',
-                type:'line',
-                stack: 'All',
-                data : total_request
-            },
-            {
-                name:'节目接口',
-                type:'line',
-                stack: 'Ott',
-                data : watch_request
-            },
-            {
-                name:'token接口',
-                type:'line',
-                stack: 'token',
-                data : token_request
-            }
-        ]
-    };
-
-    var myChart = echarts.init(document.getElementById('main'));
-    myChart.setOption(option);
-
+$js=<<<JS
     function setOption(title,subtitle,data,value)
     {
         option = {
@@ -206,7 +146,123 @@ $js =<<<JS
 
         return option;
     }
+JS;
 
+$this->registerJs($js);
+
+?>
+
+<?php
+
+try {
+    $total = $model->total;
+    $watch = $model->watch;
+    $token = $model->getClientToken;
+    $ottlist = $model->getOttNewList;
+    $app = $model->getNewApp;
+    $order = $model->ottCharge;
+    $ott_genre = $model->getCountryList;
+
+    $js =<<<JS
+    var total_request = [$total];
+    var watch_request = [$watch];
+    var token_request = [$token];
+    var ottlist_request = [$ottlist];
+    var app_request = [$app];
+    var order_request = [$order];
+    var ottgenre_request = [$ott_genre];
+    
+    option = {
+        title: {
+            text: '接口调用统计'
+        },
+        tooltip: {
+            trigger: 'axis'
+        },
+        legend: {
+            data:['请求总数','节目观看','token接口','ott列表','app更新', 'ott分类列表']
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        toolbox: {
+            feature: {
+                saveAsImage: {}
+            }
+        },
+        xAxis: {
+            type: 'category',
+            boundaryGap: true,
+            data: ['00h','01h','02h','03h','04h','05h','06h','07h','08h','09h','10h','11h','12h','13h','14h','15h','16h','17h','18h','19h','20h','21h','22h','23h']
+        },
+        yAxis: {
+            type: 'value'
+        },
+        series: [
+            // data:[234,21,45,232, 256,562,452,213,2345, 3453,5646,5634,6363, 534,632,4523,4356,234,21,45,232, 256,562,452,213,2345, 3453,5646,5634,6363, 534,632,4523,4356]
+            {
+                name:'请求总数',
+                type:'line',
+                stack: 'All',
+                data : total_request
+            },
+            {
+                name:'节目观看',
+                type:'line',
+                stack: 'watch',
+                data : watch_request
+            },
+            {
+                name:'token接口',
+                type:'line',
+                stack: 'token',
+                data : token_request
+            },
+            {
+                name:'ott列表',
+                type:'line',
+                stack: 'ott',
+                data : ottlist_request
+            },
+            {
+                name:'app更新',
+                type:'line',
+                stack: 'app',
+                data : app_request
+            },
+            {
+                name:'ott分类列表',
+                type:'line',
+                stack: 'ottgenre',
+                data : ottgenre_request
+            }
+           
+        ]
+    };
+
+    var myChart = echarts.init(document.getElementById('main'));
+    myChart.setOption(option);
+JS;
+
+    $this->registerJs($js);
+
+}catch(\Exception $e) {
+
+}
+
+
+?>
+
+<?php
+
+try {
+    $program = "'" . implode(" ','", array_keys($programLog->server_program ? $programLog->server_program : [])) . "'";
+    $program_value = implode(",", array_values($programLog->server_program ? $programLog->server_program : []));
+
+    $js =<<<JS
     var all_program =       [$program];
     var all_program_value = [$program_value];
 
@@ -215,7 +271,10 @@ $js =<<<JS
     program .setOption(option);
 JS;
 
-$this->registerJs($js);
+    $this->registerJs($js);
+}catch(\Exception $e) {
+
+}
 
 ?>
 
@@ -223,7 +282,7 @@ $this->registerJs($js);
     laydate.render({
         elem: '#test12'
         ,format: 'yyyy/MM/dd'
-        ,max:'<?= date("Y-m-d",strtotime("yesterday"));?>',
+        ,max:'<?= date("Y-m-d");?>',
         done: function(value, date){
             var url = '<?= \yii\helpers\Url::to(['log/index','type'=>'date', 'value' => '']) ?>';
             url = url + value;

@@ -49,4 +49,17 @@ class ProgramLog extends \yii\db\ActiveRecord
             'all_program_sum' => 'All Program Sum',
         ];
     }
+
+    static public function findByDate($date)
+    {
+        $model = self::find()->where(['date' => $date])->one();
+
+        if ($model) {
+            $model->all_program = json_decode($model->all_program, true);
+            $model->server_program = json_decode($model->server_program, true);
+        }
+
+        return $model;
+    }
+
 }

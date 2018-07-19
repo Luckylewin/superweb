@@ -3,6 +3,7 @@
 namespace backend\controllers;
 
 use backend\models\AppLog;
+use backend\models\LogInterface;
 use backend\models\ProgramLog;
 use backend\models\TimelineLog;
 use yii\helpers\ArrayHelper;
@@ -22,12 +23,17 @@ class LogController extends BaseController
         $type = \Yii::$app->request->get('type');
         $value = \Yii::$app->request->get('value');
 
-        $log['default'] = [];
-        $programLog['all_program'] = [];
-        //昨日活跃用户
+        // 查询
+        $model = LogInterface::findByDate($value);
+        $programLog = ProgramLog::findByDate($value);
+
+        if (empty($model)) {
+            $this->setFlash('warning', '没有查询到日志 :(');
+        }
+
         return $this->render('index', [
-            'log' => $log,
-            'programLog' => $programLog
+            'programLog' => $programLog,
+            'model' => $model
         ]);
     }
 
@@ -42,18 +48,20 @@ class LogController extends BaseController
         $data = [];
 
         //全部接口的调用情况
-        $key = date('m-d:') . 'all';
+        $key = "interface:" . date('m-d:') . 'hour';
         $data['all'] = $this->hgetallMap($this->redis->hgetall($key));
 
+
         //节目播放接口的调用情况
-        $key = date('m-d:') . 'program-time';
+        $key = 'program:' . date('m-d:') . 'hour';
         $data['program'] = $this->hgetallMap($this->redis->hgetall($key));
 
         $keys = $this->generateHour();
 
         foreach ($keys as $key => &$val) {
             if ($val['flag']) {
-                $result = $this->redis->hgetall($val['key']);
+
+                $result = $this->redis->hgetall("interface:" . $val['key']);
                 $val['val'] = $this->hgetallMap($result);
                 if (!isset($data['all'][$key])) {
                     $data['all'][$key] = 0;
@@ -87,7 +95,7 @@ class LogController extends BaseController
 
 
         //节目收看排行
-        $key = date('m-d:') . 'program-list';
+        $key = "program:" . date('m-d:') . 'set';
         $program_rank = $this->hgetallMap($this->redis->hgetall($key));
         if ($program_rank) {
             $program['key'] = array_keys($program_rank);
