@@ -15,7 +15,7 @@ use yii\db\ActiveRecord;
  * @property string $during 时间范围
  * @property string $status 状态(0无效1有效)
  * @property string $sort 排序
- * @property int $created_time 创建日期
+ * @property int $created_at 创建日期
  */
 class AppBootPicture extends \yii\db\ActiveRecord
 {
@@ -34,7 +34,7 @@ class AppBootPicture extends \yii\db\ActiveRecord
     {
         return [
             [['boot_pic'], 'required'],
-            [['created_time'], 'integer'],
+            [['created_at'], 'integer'],
             [['boot_pic', 'link', 'during', 'status', 'sort'], 'string', 'max' => 255],
         ];
     }
@@ -51,7 +51,7 @@ class AppBootPicture extends \yii\db\ActiveRecord
             'during' => '时间范围',
             'status' => '状态', //(0无效1有效)
             'sort' => '排序',
-            'created_time' => '创建日期',
+            'created_at' => '创建日期',
         ];
     }
 
