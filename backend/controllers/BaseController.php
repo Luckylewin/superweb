@@ -29,7 +29,7 @@ class BaseController extends Controller
                     ],*/
                     [
                         //表示只允许认证过的用户执行 其roles用@表示 游客用?表示
-                        'actions' => ['logout','frame','auth'],
+                        'actions' => ['logout','frame','auth', 'reset-password'],
                         'allow' => true,
                         'roles' => ['@'],
                     ]

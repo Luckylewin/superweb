@@ -51,7 +51,7 @@ $username = Yii::$app->user->isGuest == false ? Yii::$app->user->identity->usern
             <ul class="nav" id="side-menu">
                 <li class="nav-header">
                     <div class="dropdown profile-element">
-                        <!--<span><img alt="image" class="img-circle" src="/statics/themes/default-admin/img/profile_small.jpg" /></span>-->
+                        <!--<span><img alt="image" class="img-circle" src="/statics/images/admin.png" /></span>-->
                         <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                                 <span class="clear">
                                <span class="block m-t-xs"><strong class="font-bold"><?= $username ?></strong></span>
@@ -63,7 +63,7 @@ $username = Yii::$app->user->isGuest == false ? Yii::$app->user->identity->usern
                                 <a class="J_menuItem" href="form_avatar.html">修改头像</a>
                              </li>-->
                              <li>
-                                 <a class="J_menuItem" href="#">修改密码</a>
+                                 <a class="J_menuItem" href="<?= Url::to(['admin/reset-password']) ?>">修改密码</a>
                              </li>
 
                             <li class="divider"></li>
@@ -416,7 +416,7 @@ $username = Yii::$app->user->isGuest == false ? Yii::$app->user->identity->usern
         <div class="row border-bottom">
             <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
                 <div class="navbar-header"><a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
-                    <form role="search" class="navbar-form-custom" method="post" action="search_results.html">
+                    <form role="search" class="navbar-form-custom" >
                         <div class="form-group">
                             <input type="text" placeholder="请输入您需要查找的内容 …" class="form-control" name="top-search" id="top-search">
                         </div>

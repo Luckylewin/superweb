@@ -75,6 +75,15 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]
             ],
 
+            [
+                'attribute' => 'vod_language',
+                'filter' => \backend\models\IptvType::getTypeItem($search['vod_cid'], 'vod_language'),
+                'filterInputOptions' => [
+                    'prompt' => '请选择',
+                    'class' => 'form-control'
+                ]
+            ],
+
             /* [
                     'attribute' => 'vod_cid',
                     'filter' => ArrayHelper::map(VodList::getAllList(),  'list_id', 'list_name'),
