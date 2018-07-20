@@ -316,7 +316,11 @@ class ClientController extends Controller
             $preg['ts'] = iconv("ASCII", "UTF-8", self::get($ts));
             $preg['other'] = self::get($other);
             $preg['type'] = strpos($preg['ts'], 'ts') !== false ? 'ott' : "iptv";
-
+            
+            if (in_array($preg['group-title'], ['Portuguese Movies', 'Espanol Movies'])) {
+                $preg['group-title'] = 'OTHER';
+            }
+            
             if (!$preg['ts']) continue;
 
             $array[] = $preg;
