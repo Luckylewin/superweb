@@ -59,7 +59,8 @@ class AdminController extends BaseController
         $model->scenario = 'create';
         $model->status = Admin::STATUS_ACTIVE;
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
+            $this->setFlash('info', '请给帐号分配一个角色，否则无法正常使用');
+            return $this->redirect(['admin/auth', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -116,16 +117,18 @@ class AdminController extends BaseController
             $authManager->assign($authManager->getRole($roleName), $id);
             Yii::$app->session->setFlash('success', '操作成功');
         }
+
         $searchModel = new AuthItemSearch();
         $searchModel->type = $this->type;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         //获取当前用户的所有用户组
         $adminGroups = array_keys($authManager->getAssignments($id));
-        //var_dump($dataProvider);exit();
+
         return $this->render('auth', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'adminGroups' => $adminGroups,
+            'user' => $adminModel
         ]);
     }
 

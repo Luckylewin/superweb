@@ -37,7 +37,15 @@ $this->params['breadcrumbs'][] = $this->title;
                     return long2ip($data->last_login_ip);
                 }
             ],
-            'last_login_time:datetime',
+            [
+                    'attribute' => 'last_login_time',
+                    'value' => function($model) {
+                        if (empty($model->last_login_time)) {
+                            return '未登录过';
+                        }
+                        return Yii::$app->formatter->asRelativeTime($model->last_login_time);
+                    }
+            ],
             [
                 'attribute' => 'user_role',
                 'format' => 'raw',

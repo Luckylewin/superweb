@@ -14,6 +14,8 @@ use yii\web\IdentityInterface;
  * @property string $username
  * @property string $password
  * @property string $email
+ * @property integer $last_login_time
+ * @property integer $last_login_ip
  */
 class Admin extends ActiveRecord implements IdentityInterface
 {
