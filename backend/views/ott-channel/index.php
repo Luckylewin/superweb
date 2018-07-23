@@ -204,14 +204,14 @@ $requestJs=<<<JS
         $('.create-link').attr('data-id', $(this).attr('data-id'));
         
         $.getJSON('{$requestUrl}', {channel_id:$(this).attr('data-id')}, function(data) {
-            var table = '<table class="table table-bordered"><thead><tr><th>方案</th><th style="width:50px;">来源</th><th width="120px">链接</th><th width="50px">算法</th><th width="50px">解码</th><th width="60px">清晰度</th><th width="70px">状态</th><th style="width:250px;">操作</th></tr></thead><tbody>';
+            var table = '<table class="table table-bordered"><thead><tr><th style="width:32%;">方案</th><th style="width:50px;">来源</th><th style="width:100px;">链接</th><th width="50px"><i class="fa fa-key"></th><th width="50px"><i class="fa fa-tv"></i></th><th width="60px"><i class="fa fa-photo"></th><th width="70px"><i class="fa fa-flag"></i></th><th style="width:250px;"><i class="fa fa-cog fa-fw"></th></tr></thead><tbody>';
             var tr = '';
             
             $.each(data,function(){
                     var schemeText = $(this).attr('schemeText').split(',')
                     var schemeString = ''
                     schemeText.forEach(function(v, k) {
-                        schemeString += '<span style="width:120px;margin:1px 1px;" class="btn btn-xs btn-default">' + v + "</span>"
+                        schemeString += '<span style="width:110px;font-size:1px;margin:1px 1px;" class="btn btn-xs btn-default">' + v + "</span>"
                         if ((k+1) % 3 === 0 ) {
                           schemeString += '<br/>'
                         }
@@ -219,7 +219,7 @@ $requestJs=<<<JS
                     tr += '<tr link-id="' +  $(this).attr('id')  + '">';
                     tr += '<td style="font-size:1px;">' +schemeString + '</td>';
                     tr += '<td>' + $(this).attr('source') + '</td>';
-                    tr += '<td>' + $(this).attr('link') + '</td>';
+                    tr += '<td style="word-wrap:break-word;max-width:150px;">' + $(this).attr('link') + '</td>';
                     tr += '<td>' + $(this).attr('method') + '</td>';
                     tr += '<td>' + ($(this).attr('decode') === '0' ? '软解':'硬解') + '</td>';
                     tr += '<td>' + $(this).attr('definition') + '</td>';
