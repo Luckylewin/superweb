@@ -208,8 +208,16 @@ $requestJs=<<<JS
             var tr = '';
             
             $.each(data,function(){
+                    var schemeText = $(this).attr('schemeText').split(',')
+                    var schemeString = ''
+                    schemeText.forEach(function(v, k) {
+                        schemeString += '<span style="width:120px;margin:1px 1px;" class="btn btn-xs btn-default">' + v + "</span>"
+                        if ((k+1) % 3 === 0 ) {
+                          schemeString += '<br/>'
+                        }
+                    })
                     tr += '<tr link-id="' +  $(this).attr('id')  + '">';
-                    tr += '<td style="font-size:1px;">' + $(this).attr('schemeText') + '</td>';
+                    tr += '<td style="font-size:1px;">' +schemeString + '</td>';
                     tr += '<td>' + $(this).attr('source') + '</td>';
                     tr += '<td>' + $(this).attr('link') + '</td>';
                     tr += '<td>' + $(this).attr('method') + '</td>';
