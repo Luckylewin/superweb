@@ -204,12 +204,12 @@ $requestJs=<<<JS
         $('.create-link').attr('data-id', $(this).attr('data-id'));
         
         $.getJSON('{$requestUrl}', {channel_id:$(this).attr('data-id')}, function(data) {
-            var table = '<table class="table table-bordered"><thead><tr><th>方案</th><th>来源</th><th width="120px">链接</th><th>算法</th><th width="50px">解码</th><th width="60px">清晰度</th><th width="70px">状态</th><th style="width:250px;">操作</th></tr></thead><tbody>';
+            var table = '<table class="table table-bordered"><thead><tr><th>方案</th><th style="width:50px;">来源</th><th width="120px">链接</th><th width="50px">算法</th><th width="50px">解码</th><th width="60px">清晰度</th><th width="70px">状态</th><th style="width:250px;">操作</th></tr></thead><tbody>';
             var tr = '';
             
             $.each(data,function(){
                     tr += '<tr link-id="' +  $(this).attr('id')  + '">';
-                    tr += '<td>' + $(this).attr('schemeText') + '</td>';
+                    tr += '<td style="font-size:1px;">' + $(this).attr('schemeText') + '</td>';
                     tr += '<td>' + $(this).attr('source') + '</td>';
                     tr += '<td>' + $(this).attr('link') + '</td>';
                     tr += '<td>' + $(this).attr('method') + '</td>';
