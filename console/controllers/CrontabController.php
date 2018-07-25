@@ -63,10 +63,11 @@ class CrontabController extends Controller
 
         $pool = [];
         $startExectime = $this->getCurrentTime();
+        $php = isset(Yii::$app->params['php']) ? Yii::$app->params['php'] : 'php';
 
         foreach ($tasks as $task) {
-            $pool[] = proc_open("php yii $task->route", [], $pipe);
-            $task->status = 1;
+            $pool[] = proc_open("$php yii $task->route", [], $pipe);
+            $task->status = Crontab::RUNNING;
             $task->save(false);
         }
 
@@ -81,11 +82,11 @@ class CrontabController extends Controller
                     $tasks[$i]->exectime     = round($this->getCurrentTime() - $startExectime, 2);
                     $tasks[$i]->last_rundate = date('Y-m-d H:i');
                     $tasks[$i]->next_rundate = $tasks[$i]->getNextRunDate();
-                    $tasks[$i]->status       = 0;
+                    $tasks[$i]->status       = Crontab::NORMAL;
 
                     // 任务出错
                     if ($processInfo['exitcode'] !== ExitCode::OK) {
-                        $tasks[$i]->status = 2;
+                        $tasks[$i]->status = Crontab::ERROR;
                     }
 
                     $tasks[$i]->save(false);

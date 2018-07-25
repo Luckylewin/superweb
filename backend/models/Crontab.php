@@ -28,6 +28,9 @@ use console\components\CronParser;
  */
 class Crontab extends \yii\db\ActiveRecord
 {
+    const SWITCH_ON = 1;
+    const SWITCH_OFF = 0;
+
     const NORMAL = 0;
     const READY = 1;
     const RUNNING = 2;
@@ -67,8 +70,8 @@ class Crontab extends \yii\db\ActiveRecord
             'crontab_str' => 'crontab格式',
             'switch' => '任务开关 0关闭 1开启',
             'status' => '任务运行状态 0正常 1任务报错',
-            'last_rundate' => '上次运行时间',
-            'next_rundate' => '下次运行时间',
+            'last_rundate' => '上次运行',
+            'next_rundate' => '下次运行',
             'execmemory' => '内存消耗(b)',
             'exectime' => '耗时',
             'switchText' => '开关',
