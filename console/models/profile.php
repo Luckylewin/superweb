@@ -93,7 +93,7 @@ class profile
                     $profile['vod_language'] = $data['original_language'];
                     $profile['vod_year'] = substr($data['release_date'], 0 ,4);
                     $profile['vod_filmtime'] = $data['release_date'];
-
+                    $profile['vod_total'] = 1;
                     // 获取演员
                     $actorInfo = self::getActorInfo($data['id']);
 
