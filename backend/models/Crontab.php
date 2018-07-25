@@ -29,8 +29,9 @@ use console\components\CronParser;
 class Crontab extends \yii\db\ActiveRecord
 {
     const NORMAL = 0;
-    const RUNNING = 1;
-    const ERROR = 2;
+    const READY = 1;
+    const RUNNING = 2;
+    const ERROR = 3;
 
     /**
      * @inheritdoc
@@ -90,8 +91,9 @@ class Crontab extends \yii\db\ActiveRecord
      */
     private $statusTextMap = [
         self::NORMAL => '正常',
+        self::READY => '任务就绪',
         self::RUNNING => '正在运行',
-        self::ERROR => '任务保存',
+        self::ERROR => '任务保存'
     ];
 
     public function getSwitchItems()

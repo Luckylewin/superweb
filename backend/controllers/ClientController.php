@@ -154,17 +154,14 @@ class ClientController extends BaseController
             return $this->redirect(Yii::$app->request->referrer);
         }
 
-        if ($task->status == Crontab::RUNNING || $task->status = Crontab::ERROR) {
+        if ($task->status == Crontab::RUNNING || $task->status == Crontab::READY) {
             $this->setFlash('info', '任务正在运行, 更新数据需要时间');
             return $this->redirect(Yii::$app->request->referrer);
         }
 
-        if (strtotime($task->next_rundate) < time()) {
-            $task->crontab_str = date('i H d m ', strtotime('+2 minute')) . '*';
-            $task->next_rundate = date('Y-m-d H:i:s',strtotime('+2 minute'));
-            $task->status = Crontab::ERROR;
-            $task->save(false);
-        }
+        $task->next_rundate = date('Y-m-d H:i:s');
+        $task->status = Crontab::READY;
+        $task->save(false);
 
         $this->setFlash('success', '开始更新数据');
         return $this->redirect(Yii::$app->request->referrer);
