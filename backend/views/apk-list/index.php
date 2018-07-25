@@ -43,12 +43,16 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'attribute' => 'img',
-                'format' => 'raw',
+                'format' => ['image',['height'=>'30']],
                 'value' => function($data) {
                     if (!empty($data->img)) {
-                        return Html::img(Aliyunoss::getDownloadUrl($data->img),[
-                            'height' => '30px'
-                        ]);
+                        if (strpos($data->img, '/') === 0) {
+                            return \common\components\Func::getAccessUrl($data->img, 300);
+                        } else if (strpos($data->img, 'http') !== false) {
+                            return $data->img;
+                        } else {
+                            return Aliyunoss::getDownloadUrl($data->img);
+                        }
                     }
                     return '<i class="fa fa-android" style="font-size: 20px;color:green;text-align: center;text-indent: 7px;"><i>';
                 },
@@ -118,13 +122,14 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                     'class' => 'common\grid\MyActionColumn',
                     'header' => '操作',
-                'template' => '{child} {view} {update} {delete}',
-                'buttons' => [
-                    'child' => function($url,$model, $key) {
-                        return Html::a("发布版本", \yii\helpers\Url::to(['apk-detail/create','id' => $model->ID]), [
-                            'class' => 'btn btn-default btn-xs'
-                        ]);
-                    }
+                    'size' => 'btn-sm',
+                    'template' => '{child} {view} {update} {delete}',
+                    'buttons' => [
+                        'child' => function($url,$model, $key) {
+                            return Html::a("发布版本", \yii\helpers\Url::to(['apk-detail/create','id' => $model->ID]), [
+                                'class' => 'btn btn-default btn-sm'
+                            ]);
+                        }
                 ],
             ],
         ],

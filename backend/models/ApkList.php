@@ -39,6 +39,7 @@ class ApkList extends \yii\db\ActiveRecord implements Linkable
             [['typeName', 'type', 'class','scheme_id'], 'required'],
             [['img'], 'string'],
             [['sort'], 'integer'],
+            ['sort', 'default', 'value' => 0],
             [['typeName', 'type', 'class'], 'string', 'max' => 255],
         ];
     }
