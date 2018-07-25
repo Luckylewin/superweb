@@ -3,15 +3,14 @@
 namespace backend\controllers;
 
 use backend\models\Admin;
+use backend\models\Crontab;
 use Yii;
 use backend\models\SysClient;
 use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * ClientController implements the CRUD actions for SysClient model.
@@ -144,4 +143,31 @@ class ClientController extends BaseController
             'admin' => $admin
         ]);
     }
+
+    public function actionAnnaIptv()
+    {
+        // 查找点播
+        $task = Crontab::find()->where(['route' => 'client/anna-iptv'])->one();
+
+        if (is_null($task)) {
+            $this->setFlash('error', '请添加该任务到定时任务');
+            return $this->redirect(Yii::$app->request->referrer);
+        }
+
+        if ($task->status == Crontab::RUNNING || $task->status = Crontab::ERROR) {
+            $this->setFlash('info', '任务正在运行, 更新数据需要时间');
+            return $this->redirect(Yii::$app->request->referrer);
+        }
+
+        if (strtotime($task->next_rundate) < time()) {
+            $task->crontab_str = date('i H d m ', strtotime('+2 minute')) . '*';
+            $task->next_rundate = date('Y-m-d H:i:s',strtotime('+2 minute'));
+            $task->status = Crontab::ERROR;
+            $task->save(false);
+        }
+
+        $this->setFlash('success', '开始更新数据');
+        return $this->redirect(Yii::$app->request->referrer);
+    }
+
 }

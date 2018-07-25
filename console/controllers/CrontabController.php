@@ -15,7 +15,6 @@ use backend\models\Crontab;
 
 /**
  * 定时任务调度控制器
- * @author jlb
  */
 class CrontabController extends Controller
 {
@@ -58,7 +57,6 @@ class CrontabController extends Controller
 
     /**
      * @param  array $tasks 任务列表
-     * @author jlb
      */
     public function executeTask(array $tasks)
     {
@@ -68,6 +66,8 @@ class CrontabController extends Controller
 
         foreach ($tasks as $task) {
             $pool[] = proc_open("php yii $task->route", [], $pipe);
+            $task->status = 1;
+            $task->save(false);
         }
 
         // 回收子进程
@@ -82,9 +82,10 @@ class CrontabController extends Controller
                     $tasks[$i]->last_rundate = date('Y-m-d H:i');
                     $tasks[$i]->next_rundate = $tasks[$i]->getNextRunDate();
                     $tasks[$i]->status       = 0;
+
                     // 任务出错
                     if ($processInfo['exitcode'] !== ExitCode::OK) {
-                        $tasks[$i]->status = 1;
+                        $tasks[$i]->status = 2;
                     }
 
                     $tasks[$i]->save(false);

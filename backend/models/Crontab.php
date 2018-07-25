@@ -28,6 +28,10 @@ use console\components\CronParser;
  */
 class Crontab extends \yii\db\ActiveRecord
 {
+    const NORMAL = 0;
+    const RUNNING = 1;
+    const ERROR = 2;
+
     /**
      * @inheritdoc
      */
@@ -85,8 +89,9 @@ class Crontab extends \yii\db\ActiveRecord
      * @var array
      */
     private $statusTextMap = [
-        0 => '正常',
-        1 => '任务保存',
+        self::NORMAL => '正常',
+        self::RUNNING => '正在运行',
+        self::ERROR => '任务保存',
     ];
 
     public function getSwitchItems()
@@ -99,10 +104,10 @@ class Crontab extends \yii\db\ActiveRecord
          #注意!!!替换成自己的数据库配置组件名称
          return Yii::$app->tfbmall;
      }*/
+
     /**
      * 获取switch字段对应的文字
-     * @author jlb
-     * @return ''|string
+     * @return string
      */
     public function getSwitchText()
     {
@@ -114,8 +119,7 @@ class Crontab extends \yii\db\ActiveRecord
 
     /**
      * 获取status字段对应的文字
-     * @author jlb
-     * @return ''|string
+     * @return string
      */
     public function getStatusText()
     {
@@ -127,7 +131,6 @@ class Crontab extends \yii\db\ActiveRecord
 
     /**
      * 计算下次运行时间
-     * @author jlb
      */
     public function getNextRunDate()
     {
