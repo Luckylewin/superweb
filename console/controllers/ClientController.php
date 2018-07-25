@@ -23,6 +23,8 @@ use console\models\profile;
 
 class ClientController extends Controller
 {
+    public $program = [];
+
     public $accounts = [
         '287994000050' =>  ['en' => 'English', 'zh' =>'英语'],
         '287994000051' =>  ['en' => 'Portuguese', 'zh' =>'葡萄牙语'],
@@ -32,7 +34,7 @@ class ClientController extends Controller
 
     public function actionAnnaIptv()
     {
-        $this->clearOldData();
+        //$this->clearOldData();
 
         $originData = [];
         foreach ($this->accounts as $account => $lang) {
@@ -54,10 +56,10 @@ class ClientController extends Controller
                 $this->saveNewProgramData($data, $file['lang']['en']);
                 $this->saveNewType($data);
             }
-
         }
 
         $this->saveNewLang();
+        $this->clearDeleteData();
 
         if ($originData) {
             // 更新电影的资料
@@ -67,6 +69,21 @@ class ClientController extends Controller
             }
         }
 
+    }
+
+    /**
+     * 清除远程服务器文件没有的数据
+     */
+    public function clearDeleteData()
+    {
+        $tvg_arr = array_unique($this->program);
+        if (!empty($tvg_arr)) {
+            $vodList = Vod::find()->where(['NOT IN', 'vod_name', $tvg_arr])->all();
+            foreach ($vodList as $vod) {
+                $this->stdout("删除远程文件没有的数据{$vod->vod_name}" . PHP_EOL, Console::FG_GREY);
+                $vod->delete();
+            }
+        }
     }
 
     // 清除旧数据
@@ -140,7 +157,7 @@ class ClientController extends Controller
     public function saveNewType($data)
     {
        if (empty($data)) {
-            return $this->stdout("没有数据", Console::FG_CYAN);
+            return $this->stdout("没有数据" . PHP_EOL, Console::FG_CYAN);
        }
 
         $iptvTypes = ['电影', '电视剧'];
@@ -162,7 +179,6 @@ class ClientController extends Controller
                 }
             }
         }
-
     }
 
     //新增电视剧数据
@@ -206,8 +222,10 @@ class ClientController extends Controller
             return $this->stdout("没有电影数据" . PHP_EOL, Console::BG_RED);
         }
 
-        foreach ($data as $val) {
+        foreach ($data as $key => $val) {
             $vod = $this->getVod($vodList->list_id,  $val['tvg-name'],  $val['group-title'], $val['tvg-logo'], $lang);
+            $vod->sort = $key;
+            $vod->save(false);
             //$this->fillWithMovieProfile($vod);
             $this->attachLink($vod, $val['ts']);
         }
@@ -293,6 +311,7 @@ class ClientController extends Controller
             }
 
             $preg['tvg-name'] = strpos( self::get($tvg_name), '|') ? strstr(self::get($tvg_name), '|', true) : self::get($tvg_name) ;
+            $this->program[] = $preg['tvg-name'];
 
             if ($mode == 'program') {
                 // 重新处理名称
@@ -351,7 +370,7 @@ class ClientController extends Controller
      * @param $picture
      * @param $language
      * @param $type
-     * @return array|Vod|null|\yii\db\ActiveRecord
+     * @return Vod
      */
     private function getVod($cid, $name, $keyword, $picture, $language, $type = '电影')
     {
@@ -395,17 +414,28 @@ class ClientController extends Controller
 
     private function fillWithMovieProfile(Vod $vod)
     {
+        //the movie db
+        if ($vod->vod_fill_flag) {
+            $this->stdout("影片{$vod->vod_name}数据已完善，跳过" . PHP_EOL, Console::FG_YELLOW);
+            return false;
+        }
+
         if ($data = profile::search($vod->vod_name)) {
             foreach ($data as $field => $value) {
-                if (!in_array($field, ['vod_pic', 'vod_language'])) {
-                    $vod->$field = $value;
+                if (!in_array($field, ['vod_pic', 'vod_language', 'vod_keyword', 'vod_type'])) {
+                    if ($vod->hasAttribute($field)) {
+                        $vod->$field = $value;
+                    }
                 }
             }
 
+            $vod->vod_fill_flag = 1;
             $vod->save(false);
-            $this->stdout("更新影片{$vod->vod_name}数据" . PHP_EOL, Console::FG_BLUE);
-            mt_rand(0,1) && sleep(1);
+            $this->stdout("更新影片{$vod->vod_name}数据" . PHP_EOL, Console::FG_GREEN);
+            sleep(1);
         }
+
+        return true;
     }
 
     private function getType($cid)

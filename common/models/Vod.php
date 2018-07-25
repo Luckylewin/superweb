@@ -66,6 +66,8 @@ use yii\web\Linkable;
  * @property string $vod_scenario 影片剧情
  * @property string $vod_home 是否推荐到首页
  * @property string $vod_multiple 是否有多集
+ * @property string $vod_fill_flag 是否完善数据(爬虫爬过)
+ * @property string $sort 排序
  */
 class Vod extends \yii\db\ActiveRecord implements Linkable
 {
@@ -119,7 +121,7 @@ class Vod extends \yii\db\ActiveRecord implements Linkable
             [['vod_letter'], 'string', 'max' => 2],
             [['vod_weekday'], 'string', 'max' => 60],
             [['vod_series'], 'string', 'max' => 120],
-            [['vod_home', 'pic', 'vod_stars', 'vod_ispay'], 'safe'],
+            [['vod_home', 'pic', 'vod_stars', 'vod_ispay', 'vod_fill_flag', 'sort'], 'safe'],
             [['vod_up', 'vod_down', 'vod_hits', 'vod_hits_day', 'vod_hits_month', 'vod_hits_week', 'vod_multiple'],'default', 'value' => 0],
             ['vod_total', 'default', 'value' => '1']
         ];

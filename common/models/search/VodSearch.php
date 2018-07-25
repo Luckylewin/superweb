@@ -55,7 +55,7 @@ class VodSearch extends Vod
             ],
             'sort' => [
                 'defaultOrder' => [
-                    'vod_id' => SORT_DESC
+                    'sort' => SORT_ASC
                 ]
             ]
         ]);

@@ -15,7 +15,6 @@ use yii\web\NotFoundHttpException;
 class VodController extends BaseController
 {
 
-
     /**
      * Lists all Vod models.
      * @return mixed

@@ -14,6 +14,8 @@ use common\models\Vod;
 use common\models\Vodlink;
 use common\models\VodList;
 use console\components\MySnnopy;
+use console\models\movie\IMDB;
+use console\models\profile;
 use Symfony\Component\DomCrawler\Crawler;
 use yii\console\Controller;
 use yii\console\ExitCode;
@@ -39,6 +41,8 @@ class HelloController extends Controller
      */
     public function actionIndex($message = 'hello world')
     {
+        $data = IMDB::search('Duckweed');
+        print_r($data);
         return ExitCode::OK;
     }
 
