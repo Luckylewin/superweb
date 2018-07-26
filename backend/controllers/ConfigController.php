@@ -1,6 +1,7 @@
 <?php
 namespace backend\controllers;
 
+use backend\models\form\OttSettingForm;
 use Yii;
 use backend\models\Config;
 use backend\models\search\ConfigSearch;
@@ -89,41 +90,14 @@ class ConfigController extends BaseController
 
     public function actionOttSetting()
     {
-        $mode_array = [
-            '1' => '模式一:按会员开通可观看所有直播分类',
-            '2' => '模式二:按分类进行收费观看对应的直播分类'
-        ];
+        $model = new OttSettingForm();
 
-        $config = Config::findOne(['keyid' => 'ottcharge']);
-        if (is_null($config)) {
-            $config = new Config();
-            $config->keyid = 'ottcharge';
-            $config->data = [
-                'mode' => '1',
-                'mode_desc' => '模式一:会员开通后可观看所有直播分类'
-            ];
-            $config->data = Json::encode($config->data);
-            $config->save(false);
-        } else {
-            $config->data = Json::decode($config->data, false);
-            $config->data = $config->data->mode;
-        }
-
-        if (Yii::$app->request->isPost) {
-            $config->load(Yii::$app->request->post());
-            $config->data = [
-                'mode' => $config->data,
-                'mode_desc' => $mode_array[$config->data]
-            ];
-            $config->data = Json::encode($config->data);
-            $config->save(false);
-
-            $this->redirect(['config/ott-setting']);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $this->success();
         }
 
         return $this->render('ottcharge', [
-             'model' => $config,
-             'mode' => $mode_array
+             'model' => $model,
         ]);
 
     }

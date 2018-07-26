@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 
 /* @var $this yii\web\View */
+/* @var $model \backend\models\form\OttSettingForm  */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = '直播收费模式设定';
@@ -15,9 +16,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'data')->dropDownList($mode)->label($this->title) ?>
+    <?= $form->field($model, 'mode')->dropDownList($model->mode_select); ?>
 
-    <?= $form->field($model, 'data')->dropDownList($mode)->label($this->title) ?>
+    <?= $form->field($model, 'free_day')->textInput(); ?>
 
     <div class="form-group">
         <?= Html::submitButton('设定', ['class' => 'btn btn-primary']) ?>
