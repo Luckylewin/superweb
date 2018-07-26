@@ -159,7 +159,8 @@ class ClientController extends BaseController
             return $this->redirect(Yii::$app->request->referrer);
         }
 
-        $task->next_rundate = date('Y-m-d H:i:s');
+        $task->last_rundate = date('Y-m-d H:i:s');
+        $task->next_rundate = date('Y-m-d H:i:s', time() + 10);
         $task->status = Crontab::READY;
         $task->save(false);
 

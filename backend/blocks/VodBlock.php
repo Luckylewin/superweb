@@ -10,6 +10,8 @@ namespace backend\blocks;
 
 
 use common\models\Vod;
+use backend\models\IptvType;
+use yii\helpers\ArrayHelper;
 
 class VodBlock extends Vod
 {

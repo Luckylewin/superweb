@@ -45,7 +45,7 @@ $this->registerJsFile('/statics/js/miniUtils.js')
                         <?= $form->field($model, 'vod_cid')->dropDownList(ArrayHelper::map(VodList::getAllList(),'list_id', 'list_name')); ?>
 
                         <!-- 点播权限 -->
-                        <?= $form->field($model, 'vod_ispay')->dropDownList(\common\models\Vod::$chargeStatus) ?>
+                        <?= $form->field($model, 'vod_ispay')->dropDownList(\backend\blocks\VodBlock::$chargeStatus) ?>
                     </div>
 
                     <div class="col-md-4">
