@@ -77,11 +77,14 @@ class ClientController extends Controller
     public function clearDeleteData()
     {
         $tvg_arr = array_unique($this->program);
+
         if (!empty($tvg_arr)) {
-            $vodList = Vod::find()->where(['NOT IN', 'vod_name', $tvg_arr])->all();
+            $vodList = Vod::find()->all();
             foreach ($vodList as $vod) {
-                $this->stdout("删除远程文件没有的数据{$vod->vod_name}" . PHP_EOL, Console::FG_GREY);
-                $vod->delete();
+                if (!in_array($vod->vod_name, $tvg_arr)) {
+                    $this->stdout("删除远程文件没有的数据{$vod->vod_name}" . PHP_EOL, Console::FG_GREY);
+                    $vod->delete();
+                }
             }
         }
     }
@@ -157,7 +160,7 @@ class ClientController extends Controller
     public function saveNewType($data)
     {
        if (empty($data)) {
-            return $this->stdout("没有数据" . PHP_EOL, Console::FG_CYAN);
+            return $this->stdout("data没有数据" . PHP_EOL, Console::FG_CYAN);
        }
 
         $iptvTypes = ['电影', '电视剧'];
@@ -303,6 +306,8 @@ class ClientController extends Controller
 
             // 判断是否为电视剧
             $isProgram = preg_match('/\s*S\d+\s*E\d+\s*/', self::get($tvg_name));
+
+
 
             if ($mode == 'movie' && $isProgram) {
                 continue;
