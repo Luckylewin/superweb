@@ -279,7 +279,7 @@ class ClientController extends Controller
             return $data;
 
         } catch (\Exception $e) {
-            $this->stdout("帐号{$username}下载失败".PHP_EOL ,Console::BG_RED);
+            $this->stdout("帐号{$username}下载失败".PHP_EOL ,Console::FG_RED);
             return false;
         }
 
@@ -331,6 +331,16 @@ class ClientController extends Controller
                     $episode = self::get($episode);
                     if ($episode) {
                         $preg['episode'] = (int) $episode;
+                    }
+
+                    // 匹配季节 S E
+                } else {
+                    preg_match('/(S\d+)\s+(E\d+)/', self::get($tvg_name), $match);
+                    if (isset($match[1]) && isset($match[2])) {
+                        $season = $match[1];
+                        $episode = $match[2];
+                        $preg['tvg-name'] = trim(str_replace($episode, '', $preg['tvg-name']));
+                        $preg['episode'] = (int) (str_replace('E', '', $episode));
                     }
                 }
             }

@@ -42,13 +42,19 @@ class HelloController extends Controller
      */
     public function actionIndex($message = 'hello world')
     {
-        //$data = IMDB::search('Condorito La pelicula');
-        //$data = OMDB::findByTitle('Adam Patel Real Magic');
+        // $data = IMDB::search('Condorito La pelicula');
+        // $data = OMDB::findByTitle('Adam Patel Real Magic');
         // $data = OMDB::findByIMDbID('tt4794544');
         // $data = profile::like('Cobras');
 
-        $data = profile::search('Orgullo y Prejuicio y Zombis');
-        var_dump($data);
+        /*
+            $data = profile::search('Orgullo y Prejuicio y Zombis');
+          var_dump($data);
+        */
+
+        $a = preg_match('/(S\d+)\s+(E\d+)/', 'Segundo Sol S01 E04', $match);
+        print_r($match);
+        echo $a = (int) $a[2];
         return ExitCode::OK;
     }
 
