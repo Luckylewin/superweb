@@ -10,7 +10,9 @@ $this->title = '定时任务';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <style>
-    .status{margin: 0 auto;width: 20px;height: 20px;border-radius: 20px;}
+    .inline {display: inline-block}
+    .middle{margin: 0 auto;}
+    .status{width: 20px;height: 20px;border-radius: 20px;}
     .switch_on, .status_normal {background: #396;}
     .switch_off{background: #c0c0c0;}
     .status_ready{background-color: #a6e1ec}
@@ -40,9 +42,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     'label' => '任务开关',
                     'value' => function ($model) {
                         if ($model->switch == Crontab::SWITCH_ON) {
-                            return '<div class="switch_on status"></div>';
+                            return '<div class="switch_on status middle"></div>';
                         } else {
-                            return '<div class="switch_off status"></div>';
+                            return '<div class="switch_off status middle"></div>';
                         }
                     }
             ],
@@ -53,10 +55,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => '任务状态',
                 'value' => function ($model) {
                     if ($model->switch == Crontab::SWITCH_OFF) {
-                        return "<div class='status switch_off'></div>";
+                        return "<div class='status switch_off middle'></div>";
                     }
-                    $map = [Crontab::NORMAL => 'status_normal',Crontab::READY => 'status_ready', Crontab::RUNNING => 'status_ready', Crontab::ERROR => 'status_error'];
-                    return "<div class='status {$map[$model->status]}'></div>";
+                    $map = [Crontab::NORMAL => 'status_normal',Crontab::READY => 'status_ready', Crontab::RUNNING => 'status_running', Crontab::ERROR => 'status_error'];
+                    return "<div class='status middle {$map[$model->status]}'></div>";
                 }
             ],
 
@@ -85,5 +87,13 @@ $this->params['breadcrumbs'][] = $this->title;
 
     ]); ?>
 
+    <div>
+        <div style="float: right">
+            <div class="status status_normal inline"></div> <span>正常</span>&nbsp;
+            <div class="status status_ready inline"></div> <span>就绪</span>&nbsp;
+            <div class="status status_running inline"></div> <span>正在运行</span>&nbsp;
+            <div class="status status_error inline"></div> <span>错误</span>&nbsp;
+        </div>
+    </div>
 
 </div>
