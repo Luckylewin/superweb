@@ -430,7 +430,7 @@ class ClientController extends Controller
 
         if ($data = self::search($vod->vod_name)) {
             foreach ($data as $field => $value) {
-                if (!in_array($field, ['vod_pic', 'vod_language', 'vod_keyword', 'vod_type'])) {
+                if (!in_array($field, ['vod_name','vod_pic', 'vod_language', 'vod_keyword', 'vod_type'])) {
                     if ($vod->hasAttribute($field)) {
                         $vod->$field = $value;
                     }
@@ -448,29 +448,61 @@ class ClientController extends Controller
 
     private function search($name)
     {
+        $this->stdout("正在查询:{$name}" . PHP_EOL,Console::FG_GREY);
+
         if (($data = profile::search($name)) || ($data = OMDB::findByTitle($name))) {
             return $data;
-        } else {
-           // 尝试处理名字
-           if ($pos = strpos($name, '(')) {
-               $name = substr($name, 0, $pos);
-               $name = trim($name);
-               return OMDB::findByTitle($name);
-           } else if(preg_match('/\d{4}/', $name, $year)) {
-                $name = preg_replace('/\d{4}/', '', $name);
-                $year = current($year);
-                if ($data = OMDB::findByTitle($name, $year)) {
-                    return $data;
-                } elseif ($name = profile::like($name)) {
-                    return profile::search($name);
-                }
-
-           } else if (strpos($name, '.') !== false) {
-                $name = strstr($name, '.', true);
-                return OMDB::findByTitle($name);
-           }
         }
 
+        // 尝试处理名字
+        if ($pos = strpos($name, '(')) {
+            $name = substr($name, 0, $pos);
+            $name = trim($name);
+            if ($data = OMDB::findByTitle($name)) {
+                return $data;
+            } elseif ($data = profile::likeSearch($name)) {
+                return $data;
+            }
+        }
+
+        //　包含年份
+        if(preg_match('/\d{4}/', $name, $year)) {
+            $name = preg_replace('/\d{4}/', '', $name);
+            $name = trim($name);
+            $year = current($year);
+
+            if ($data = OMDB::findByTitle($name, $year)) {
+                return $data;
+            } elseif ($data = profile::likeSearch($name)) {
+                return $data;
+            }
+
+        }
+
+        // 包含点
+        if (strpos($name, '.') !== false) {
+            $name = strstr($name, '.', true);
+            return OMDB::findByTitle($name);
+        }
+
+        // 包含3D 4K
+        if (preg_match('/[3D|4K|3d|4k]/', $name)) {
+            $name = preg_replace('/[3D|4K|3d|4k]/', '', $name);
+            $name = trim($name);
+
+            if ($data = OMDB::findByTitle($name)) {
+                return $data;
+            } elseif ($data = profile::likeSearch($name)) {
+                return $data;
+            }
+        }
+
+        // 模糊搜索
+        if ($data = profile::likeSearch($name)) {
+            return $data;
+        }
+
+        sleep(1);
         $this->stdout("找不到数据{$name}", Console::FG_RED);
         return false;
     }

@@ -45,8 +45,10 @@ class HelloController extends Controller
         //$data = IMDB::search('Condorito La pelicula');
         //$data = OMDB::findByTitle('Adam Patel Real Magic');
         // $data = OMDB::findByIMDbID('tt4794544');
-        $data = profile::like('Clube dos Cafajestes');
-        print_r($data);
+        // $data = profile::like('Cobras');
+
+        $data = profile::search('Orgullo y Prejuicio y Zombis');
+        var_dump($data);
         return ExitCode::OK;
     }
 

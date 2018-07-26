@@ -76,24 +76,27 @@ class profile
 
         try {
             $data = file_get_contents(self::$url);
+
             if (!empty($data)) {
                 $data = json_decode($data, true);
+
                 if (isset($data['results']) && !empty($data['results'])) {
+
                     $data = current($data['results']);
 
                     $profile = [];
-                    $profile['vod_title'] = $data['original_title'];
-                    $profile['vod_ename'] = $data['original_title'];
-                    $profile['vod_gold'] = $data['vote_average'];
-                    $profile['vod_douban_score'] = $data['vote_average'];
-                    $profile['vod_pic'] = "https://image.tmdb.org/t/p/w370_and_h556_bestv2/" . $data['poster_path'];
-                    $profile['vod_pic_bg'] = "https://image.tmdb.org/t/p/w370_and_h556_bestv2/" . $data['backdrop_path'];
-                    $profile['vod_scenario'] = $data['overview'];
-                    $profile['vod_content'] = $data['overview'];
-                    $profile['vod_language'] = $data['original_language'];
-                    $profile['vod_year'] = substr($data['release_date'], 0 ,4);
-                    $profile['vod_filmtime'] = $data['release_date'];
-                    $profile['vod_imdb_id'] = $data['imdb_id'];
+                    if (isset($data['original_title'])) $profile['vod_title'] = $data['original_title'];
+                    if (isset($data['original_title'])) $profile['vod_ename'] = $data['original_title'];
+                    if (isset($data['vote_average'])) $profile['vod_gold'] = $data['vote_average'];
+                    if (isset($data['vote_average'])) $profile['vod_douban_score'] = $data['vote_average'];
+                    if (isset($data['poster_path'])) $profile['vod_pic'] = "https://image.tmdb.org/t/p/w370_and_h556_bestv2/" . $data['poster_path'];
+                    if (isset($data['backdrop_path'])) $profile['vod_pic_bg'] = "https://image.tmdb.org/t/p/w370_and_h556_bestv2/" . $data['backdrop_path'];
+                    if (isset($data['release_date'])) $profile['vod_scenario'] = $data['overview'];
+                    if (isset($data['overview'])) $profile['vod_content'] = $data['overview'];
+                    if (isset($data['overview'])) $profile['vod_language'] = $data['original_language'];
+                    if (isset($data['release_date'])) $profile['vod_year'] = substr($data['release_date'], 0 ,4);
+                    if (isset($data['release_date'])) $profile['vod_filmtime'] = $data['release_date'];
+                    if (isset($data['imdb_id'])) $profile['vod_imdb_id'] = $data['imdb_id'];
                     $profile['vod_total'] = 1;
                     // 获取演员
                     $actorInfo = self::getActorInfo($data['id']);
@@ -103,23 +106,28 @@ class profile
                         $profile['vod_director'] = $actorInfo['vod_director'];
                     }
 
+                    sleep(1);
+
                     // 获取语言 地区 分类
                     $detailInfo = self::getDetailInfo($data['id'], $lang);
+
                     if ($detailInfo) {
-                        $profile['vod_language'] = $detailInfo['vod_language'];
-                        $profile['vod_area'] = $detailInfo['vod_area'];
-                        $profile['vod_type'] = $detailInfo['vod_type'];
-                        $profile['vod_keyword'] = $detailInfo['vod_keyword'];
+                        if (isset($detailInfo['vod_language'])) $profile['vod_language'] = $detailInfo['vod_language'];
+                        if (isset($detailInfo['vod_area'])) $profile['vod_area'] = $detailInfo['vod_area'];
+                        if (isset($detailInfo['vod_type'])) $profile['vod_type'] = $detailInfo['vod_type'];
+                        if (isset($detailInfo['vod_keyword'])) $profile['vod_keyword'] = $detailInfo['vod_keyword'];
                     }
 
                     return $profile;
                 }
-            } else {
-                echo "themoviedb 接口访问失败" . PHP_EOL;
-                return false;
             }
+
+                echo "the movie db 接口返回数据异常/没有返回" . PHP_EOL;
+                return false;
+
         } catch (\Exception $e) {
-            echo "themoviedb接口访问失败" . PHP_EOL;
+            echo $e->getMessage();
+            echo "the movie db接口访问失败2" . PHP_EOL;
             return false;
         }
     }
@@ -156,7 +164,17 @@ class profile
         }
     }
 
-    static public function like($name, $lang = 'en-US')
+    static public function likeSearch($name, $lang = 'en-US')
+    {
+        $name = self::like($name, $lang);
+        if ($name) {
+            return self::search($name, $lang);
+        }
+
+        return false;
+    }
+
+    static private function like($name, $lang = 'en-US')
     {
         $url = 'https://www.themoviedb.org/search/multi?language=en-US&query=' . urlencode($name);
         $data = file_get_contents($url);
