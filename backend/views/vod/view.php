@@ -18,6 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= DetailView::widget([
         'model' => $model,
+
         'attributes' => [
             'vod_id',
             'list.list_name',
@@ -67,7 +68,7 @@ $this->params['breadcrumbs'][] = $this->title;
              [
                  'attribute' => 'vod_ispay',
                  'value' => function($model) {
-                    return \common\models\Vod::$chargeStatus[$model->vod_ispay];
+                    return $model->getChargeText();
                  }
              ],
             'vod_price',
@@ -97,7 +98,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     'value' => function($model) {
                         return $model->vod_home ? '是':"否";
                     }
-            ]
+            ],
+            'vod_imdb_id',
+            'vod_imdb_score',
+            'vod_fill_flag'
         ],
     ]) ?>
 

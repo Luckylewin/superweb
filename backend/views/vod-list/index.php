@@ -45,7 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                     'attribute' => 'list_ispay',
                     'value' => function($model) {
-                        return Vod::$chargeStatus[$model->list_ispay];
+                        return \backend\blocks\VodBlock::$chargeStatus[$model->list_ispay];
                     }
             ],
             [
@@ -89,7 +89,7 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 
 
-<?php if(strpos(Yii::$app->request->hostInfo, '207.38.90.29') !== false): ?>
+<?php if(1||strpos(Yii::$app->request->hostInfo, '207.38.90.29') !== false): ?>
 <p>
     <?= Html::a('拉取数据', \yii\helpers\Url::to(['client/anna-iptv']), ['class' => 'btn btn-info']) ?>
 </p>

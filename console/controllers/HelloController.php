@@ -15,6 +15,7 @@ use common\models\Vodlink;
 use common\models\VodList;
 use console\components\MySnnopy;
 use console\models\movie\IMDB;
+use console\models\movie\OMDB;
 use console\models\profile;
 use Symfony\Component\DomCrawler\Crawler;
 use yii\console\Controller;
@@ -41,7 +42,10 @@ class HelloController extends Controller
      */
     public function actionIndex($message = 'hello world')
     {
-        $data = IMDB::search('Duckweed');
+        //$data = IMDB::search('Condorito La pelicula');
+        //$data = OMDB::findByTitle('Adam Patel Real Magic');
+        // $data = OMDB::findByIMDbID('tt4794544');
+        $data = profile::like('Clube dos Cafajestes');
         print_r($data);
         return ExitCode::OK;
     }

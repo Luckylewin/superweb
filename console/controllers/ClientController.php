@@ -8,6 +8,7 @@
 
 namespace console\controllers;
 
+use console\models\movie\OMDB;
 use Yii;
 use yii\console\Controller;
 use yii\helpers\ArrayHelper;
@@ -316,7 +317,6 @@ class ClientController extends Controller
             }
 
             $preg['tvg-name'] = strpos( self::get($tvg_name), '|') ? strstr(self::get($tvg_name), '|', true) : self::get($tvg_name) ;
-            $this->program[] = $preg['tvg-name'];
 
             if ($mode == 'program') {
                 // 重新处理名称
@@ -325,6 +325,7 @@ class ClientController extends Controller
                     $season = self::get($season);
                     if ($season) {
                         $preg['tvg-name'] = strstr(self::get($tvg_name), '|', true) . " ". $season;
+
                     }
                     preg_match('/(?<=E)\d+/', self::get($tvg_name), $episode);
                     $episode = self::get($episode);
@@ -333,6 +334,8 @@ class ClientController extends Controller
                     }
                 }
             }
+
+            $this->program[] = $preg['tvg-name'];
 
             $preg['tvg-id'] = self::get($tvg_id);
             $preg['tvg-logo'] = self::get($tvg_logo);
@@ -425,7 +428,7 @@ class ClientController extends Controller
             return false;
         }
 
-        if ($data = profile::search($vod->vod_name)) {
+        if ($data = self::search($vod->vod_name)) {
             foreach ($data as $field => $value) {
                 if (!in_array($field, ['vod_pic', 'vod_language', 'vod_keyword', 'vod_type'])) {
                     if ($vod->hasAttribute($field)) {
@@ -441,6 +444,35 @@ class ClientController extends Controller
         }
 
         return true;
+    }
+
+    private function search($name)
+    {
+        if (($data = profile::search($name)) || ($data = OMDB::findByTitle($name))) {
+            return $data;
+        } else {
+           // 尝试处理名字
+           if ($pos = strpos($name, '(')) {
+               $name = substr($name, 0, $pos);
+               $name = trim($name);
+               return OMDB::findByTitle($name);
+           } else if(preg_match('/\d{4}/', $name, $year)) {
+                $name = preg_replace('/\d{4}/', '', $name);
+                $year = current($year);
+                if ($data = OMDB::findByTitle($name, $year)) {
+                    return $data;
+                } elseif ($name = profile::like($name)) {
+                    return profile::search($name);
+                }
+
+           } else if (strpos($name, '.') !== false) {
+                $name = strstr($name, '.', true);
+                return OMDB::findByTitle($name);
+           }
+        }
+
+        $this->stdout("找不到数据{$name}", Console::FG_RED);
+        return false;
     }
 
     private function getType($cid)

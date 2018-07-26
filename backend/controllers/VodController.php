@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\blocks\VodBlock;
 use common\models\VodList;
 use Yii;
 use common\models\Vod;
@@ -140,7 +141,7 @@ class VodController extends BaseController
      */
     protected function findModel($id)
     {
-        if (($model = Vod::findOne($id)) !== null) {
+        if (($model = VodBlock::findOne($id)) !== null) {
             return $model;
         }
 

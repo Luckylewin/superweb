@@ -95,6 +95,11 @@ class VodController extends ActiveController
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' => [
+                'defaultOrder' => [
+                    'sort' => SORT_ASC
+                ]
+            ],
             'pagination' => [
                 'pageSize' => $request->get('per-page', 12)
             ],

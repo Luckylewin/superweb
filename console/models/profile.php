@@ -93,6 +93,7 @@ class profile
                     $profile['vod_language'] = $data['original_language'];
                     $profile['vod_year'] = substr($data['release_date'], 0 ,4);
                     $profile['vod_filmtime'] = $data['release_date'];
+                    $profile['vod_imdb_id'] = $data['imdb_id'];
                     $profile['vod_total'] = 1;
                     // 获取演员
                     $actorInfo = self::getActorInfo($data['id']);
@@ -114,11 +115,11 @@ class profile
                     return $profile;
                 }
             } else {
-                echo "接口访问失败";
+                echo "themoviedb 接口访问失败" . PHP_EOL;
                 return false;
             }
         } catch (\Exception $e) {
-            echo "接口访问失败";
+            echo "themoviedb接口访问失败" . PHP_EOL;
             return false;
         }
     }
@@ -153,6 +154,21 @@ class profile
         }catch (\Exception $e) {
 
         }
+    }
+
+    static public function like($name, $lang = 'en-US')
+    {
+        $url = 'https://www.themoviedb.org/search/multi?language=en-US&query=' . urlencode($name);
+        $data = file_get_contents($url);
+        if (empty($data)) {
+            return false;
+        }
+
+        $data = json_decode($data, true);
+        if (!empty($data['results']) && isset($data['results'][0]['title'])) {
+            return $data['results'][0]['title'];
+        }
+        return false;
     }
 
     /**
