@@ -302,7 +302,7 @@ $this->registerJsFile('/statics/js/miniUtils.js')
                     <!-- 豆瓣评分  -->
                     <?= $form->field($model, 'vod_douban_score')->textInput(['maxlength' => true]) ?>
 
-                    <?= $form->field($model, 'vod_stars')->dropDownList(\common\models\Vod::$starStatus) ?>
+                    <?= $form->field($model, 'vod_stars')->dropDownList(\backend\blocks\VodBlock::$starStatus) ?>
 
                     <?= $form->field($model, 'vod_hits')->textInput() ?>
 
