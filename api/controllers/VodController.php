@@ -83,13 +83,25 @@ class VodController extends ActiveController
         $fields = Vod::getFields();
         unset($fields[array_search('vod_url', $fields)]);
 
-        $query = $cid ? Vod::find()->select($fields)->where(['vod_cid' => $cid]) : Vod::find()->select($fields);
-        $query->filterWhere([
-            'vod_year' => $vod_year,
-            'vod_area' => $vod_area,
-            'vod_language' => $vod_language
-        ]);
-        
+
+
+        if ($cid) {
+            $query = Vod::find()->select($fields)->filterWhere([
+                    'vod_cid' => $cid,
+                    'vod_year' => $vod_year,
+                    'vod_area' => $vod_area,
+                    'vod_language' => $vod_language
+                ]
+            );
+        } else {
+            $query = Vod::find()->select($fields)->filterWhere([
+                    'vod_year' => $vod_year,
+                    'vod_area' => $vod_area,
+                    'vod_language' => $vod_language
+                ]
+            );;
+        }
+
         $query->andFilterWhere(['like', 'vod_name', $vod_name])
               ->andFilterWhere(['like', 'vod_type', $vod_type]);
 

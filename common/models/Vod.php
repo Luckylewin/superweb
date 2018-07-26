@@ -252,7 +252,9 @@ class Vod extends \yii\db\ActiveRecord implements Linkable
             'vod_multiple',
             'is_buy' => function($model) {
                 return $model->is_buy;
-            }
+            },
+            'vod_language',
+            'vod_area'
         ];
     }
 
@@ -284,7 +286,9 @@ class Vod extends \yii\db\ActiveRecord implements Linkable
             'vod_url',
             'vod_gold',
             'vod_length',
-            'vod_multiple'
+            'vod_multiple',
+            'vod_language',
+            'vod_area'
         ];
     }
 
