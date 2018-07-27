@@ -55,4 +55,12 @@ class VodLinkController extends ActiveController
 
         return $dataProvider;
     }
+
+    public function actionView($id)
+    {
+
+        $link = Vodlink::findOne(['video_id' => $id]);
+
+        return $link;
+    }
 }

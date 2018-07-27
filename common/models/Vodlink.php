@@ -16,6 +16,7 @@ use yii\web\Linkable;
  * @property string $hd_url 高清
  * @property int $episode 剧集
  * @property string $plot 剧情
+ * @property string $season 第几季
  */
 class Vodlink extends \yii\db\ActiveRecord
 {

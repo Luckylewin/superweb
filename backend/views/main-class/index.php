@@ -38,7 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                     'attribute' => 'icon',
                     'options' => ['style' => 'width:100px;'],
-                    'format' => ['image',['width'=>'60']],
+                    'format' => ['image',['height'=>'45']],
                     'value' => function($model) {
                         if (strpos($model->icon, '/') !== false) {
                             return Func::getAccessUrl($model->icon,600);
