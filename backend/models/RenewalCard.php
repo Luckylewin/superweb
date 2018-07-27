@@ -3,6 +3,8 @@
 namespace backend\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "sys_renewal_card".
@@ -60,4 +62,21 @@ class RenewalCard extends \yii\db\ActiveRecord
             'who_use' => '使用的人',
         ];
     }
+
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'created_time',
+                'updatedAtAttribute' => 'updated_time',
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => ['created_time', 'updated_time'],
+                    ActiveRecord::EVENT_BEFORE_UPDATE => 'updated_time',
+                ],
+                'value' => time()
+            ]
+        ];
+    }
+
 }

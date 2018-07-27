@@ -41,12 +41,22 @@ class RenewalCardSearch extends RenewalCard
      */
     public function search($params)
     {
-        $query = RenewalCard::find();
+        if ($batch_id = Yii::$app->request->get('batch_id')) {
+            $query = RenewalCard::find()->where(['batch' => $batch_id]);
+        } else {
+            $query = RenewalCard::find()->groupBy('batch');
+        }
+
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' => [
+                'defaultOrder' => [
+                    'card_num' => SORT_ASC
+                ]
+            ]
         ]);
 
         $this->load($params);
