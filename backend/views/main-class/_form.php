@@ -178,7 +178,9 @@ use yii\widgets\ActiveForm;
     </div>
 
     <div class="col-md-12">
-
+        <div class="form-group">
+            <?= $form->field($model, 'use_flag')->dropDownList(['关', '开']); ?>
+        </div>
         <div class="form-group">
             <?= Html::submitButton('保存', ['class' => 'btn btn-success']) ?>
             <?= Html::a('返回', ['index'], ['class' => 'btn btn-default']) ?>

@@ -20,6 +20,7 @@ use yii\helpers\ArrayHelper;
  * @property string $sort 排序
  * @property string $is_charge 是否收费
  * @property string $price 价格
+ * @property string $use_flag 开关
  */
 class MainClass extends \yii\db\ActiveRecord
 {
@@ -41,7 +42,9 @@ class MainClass extends \yii\db\ActiveRecord
             [['name', 'zh_name', 'description', 'icon', 'icon_bg','icon_hover', 'icon_bg', 'icon_bg_hover'], 'string', 'max' => 255],
             [['sort'], 'string', 'max' => 3],
             ['price', 'number', 'integerOnly' => false, 'min' => 0],
-            ['is_charge', 'boolean']
+            ['is_charge', 'boolean'],
+            ['use_flag', 'safe'],
+            ['use_flag', 'default', 'value' => '1']
         ];
     }
 
@@ -61,7 +64,8 @@ class MainClass extends \yii\db\ActiveRecord
             'icon_bg_hover' => '大图标(高亮)',
             'sort' => '排序',
             'is_charge' => '是否收费',
-            'price' => '价格'
+            'price' => '价格',
+            'use_flag' => '可用开关'
         ];
     }
 

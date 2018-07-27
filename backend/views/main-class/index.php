@@ -18,6 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
         text-align: center;
         vertical-align: middle !important;
     }
+    .label-red td:nth-child(3){background-color: #cccccc!important;color: white}
 </style>
 
 <div class="main-class-index">
@@ -28,9 +29,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'tableOptions' => [
-            'class' => 'table table-hover table-bordered'
-        ],
+        'tableOptions' => ['class' => 'table table-hover table-bordered'],
+        'rowOptions' => function($model, $key, $index, $grid) {
+            return $model->use_flag == 0 ? ['class' => 'label-red'] : ['class' => 'label-green'];
+        },
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             [

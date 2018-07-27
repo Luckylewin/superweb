@@ -28,7 +28,7 @@ $this->registerJsFile('/statics/js/pinyin.js');
     <div class="col-md-4"><?= $form->field($model, 'list_keywords')->textInput(['maxlength' => true]) ?></div>
     <div class="col-md-4"><?= $form->field($model, 'list_title')->textInput(['maxlength' => true]) ?></div>
     <div class="col-md-4"><?= $form->field($model, 'list_description')->textInput(['maxlength' => true]) ?></div>
-    <div class="col-md-4"><?= $form->field($model, 'list_ispay')->dropDownList(Vod::$chargeStatus) ?></div>
+    <div class="col-md-4"><?= $form->field($model, 'list_ispay')->dropDownList(\backend\blocks\VodBlock::$chargeStatus) ?></div>
     <div class="col-md-4"><?= $form->field($model, 'list_price')->textInput() ?></div>
     <div class="col-md-4"><?= $form->field($model, 'list_trysee')->textInput([ 'placeholder' => 5]) ?></div>
     <div class="col-md-12">
