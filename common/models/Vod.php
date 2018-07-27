@@ -27,7 +27,7 @@ use yii\web\Linkable;
  * @property string $vod_pic_bg 背景图片
  * @property string $vod_pic_slide 轮播图片
  * @property string $vod_area 发行地区
- * @property string $vod_language 影片对白
+ * @property string $vod_language 语言
  * @property int $vod_year 发行年份
  * @property string $vod_continu 连载信息
  * @property int $vod_total 总共集数
@@ -167,7 +167,7 @@ class Vod extends \yii\db\ActiveRecord implements Linkable
             'vod_pic_bg' => '背景图片',
             'vod_pic_slide' => '轮播图片',
             'vod_area' => '发行地区', //内地 美国 香港 台湾 韩国 日本 法国 英国 德国 泰国 印度 欧洲 东南亚 其他
-            'vod_language' => '影片对白',// 国语 英语 粤语 闽南语 韩语 日语 其它
+            'vod_language' => '语言',// 国语 英语 粤语 闽南语 韩语 日语 其它
             'vod_year' => '发行年份',
             'vod_continu' => '连载信息',
             'vod_total' => '总共集数',

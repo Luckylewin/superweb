@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model common\models\Vod */
 
-$this->title = $model->vod_id;
+$this->title = $model->vod_name;
 $this->params['breadcrumbs'][] = ['label' => 'Vods', 'url' => Yii::$app->request->referrer];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -18,7 +18,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= DetailView::widget([
         'model' => $model,
-
+        'template' => "<tr><th style='width: 200px;'>{label}</th><td>{value}</td></tr>",
+        'options' => ['class' => 'table table-striped table-bordered detail-view'],
         'attributes' => [
             'vod_id',
             'list.list_name',
@@ -106,14 +107,8 @@ $this->params['breadcrumbs'][] = $this->title;
     ]) ?>
 
     <p>
-        <?= Html::a('更新', ['update', 'id' => $model->vod_id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('删除', ['delete', 'id' => $model->vod_id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
+        <?= Html::a('修改', ['update', 'id' => $model->vod_id], ['class' => 'btn btn-primary']) ?>
+
         <?=  Html::a('返回', ['vod/index', 'VodSearch[vod_cid]'=>$model->vod_cid], [
             'class' => 'btn btn-default'
         ]); ?>

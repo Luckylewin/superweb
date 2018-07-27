@@ -11,7 +11,7 @@ use \common\models\VodList;
 /* @var $searchModel common\models\search\VodSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Vods';
+$this->title = '点播列表';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="vod-index">
@@ -40,6 +40,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php $search = Yii::$app->request->get('VodSearch'); ?>
 
+
+    <?php \yii\widgets\Pjax::begin() ;?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -61,7 +63,8 @@ $this->params['breadcrumbs'][] = $this->title;
                   'filterInputOptions' => [
                     'placeholder' => '输入影片名称',
                     'class' => 'form-control'
-                  ]
+                  ],
+                'options' => ['style' => 'width:385px;']
 
             ],
             //'vod_id',
@@ -72,7 +75,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     'filterInputOptions' => [
                             'prompt' => '请选择',
                             'class' => 'form-control'
-                    ]
+                    ],
+                    'options' => ['style' => 'width:110px;']
             ],
 
             [
@@ -81,7 +85,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filterInputOptions' => [
                     'prompt' => '请选择',
                     'class' => 'form-control'
-                ]
+                ],
+                'options' => ['style' => 'width:110px;']
             ],
 
             /* [
@@ -104,7 +109,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],*/
              [
                   'attribute' => 'vod_gold',
-                  'options' => ['style' => 'width:100px;']
+                  'options' => ['style' => 'width:60px;']
               ],
             /*[
                 'attribute' => 'vod_hits',
@@ -123,29 +128,47 @@ $this->params['breadcrumbs'][] = $this->title;
                         return $model->star;
                     }
             ],*/
-            'vod_addtime:date',
+            [
+                    'attribute' => 'vod_addtime',
+                    'format' => 'date',
+                    'value' => function($model) {
+                        return $model->vod_addtime;
+                    },
+                    'options' => ['style' => 'width:100px;']
+            ],
             [
                     'class' => 'common\grid\MyActionColumn',
-                    'template' => '{push-home} {banner-create}&nbsp;&nbsp;&nbsp;&nbsp;{link-create} {view} {update} {delete}',
+                    'template' => '{push-home} {banner-create}&nbsp;',
                     'buttons' => [
-                            'banner-create' => function($url, $model, $key) {
-                                return Html::a('发布banner', ['banner/create','vod_id' => $model->vod_id], [
-                                    'class' => 'btn btn-default btn-xs'
-                                ]);
-                            },
-                            'link-create' => function($url, $model) {
-                                return Html::a('链接列表', ['link/index', 'vod_id' => $model->vod_id], [
-                                    'class' => 'btn btn-success btn-xs'
-                                ]);
-                            },
-                            'push-home' => function($url, $model, $key) {
-                            $text = $model->vod_home ? '取消推荐' : '首页推荐';
+                        'banner-create' => function($url, $model, $key) {
+                            return Html::a('banner', ['banner/create','vod_id' => $model->vod_id], [
+                                'class' => 'btn btn-default btn-sm'
+                            ]);
+                        },
+                        'push-home' => function($url, $model, $key) {
+                            $text = $model->vod_home ? '取消推荐' : '推荐';
                             return Html::a($text, ['vod/push-home','id' => $model->vod_id,'action' => $model->vod_home ? '0' : '1' ], [
-                                'class' => 'btn btn-xs ' . ($model->vod_home? 'btn-success' : 'btn-default')
+                                'class' => 'btn btn-sm ' . ($model->vod_home? 'btn-success' : 'btn-default')
                             ]);
                         },
                     ],
-                    'options' => ['style' => 'width:350px;'],
+                    'header' => '推送'
+            ],
+
+            [
+                    'class' => 'common\grid\MyActionColumn',
+                    'size' => 'btn-sm',
+                    'template' => '{link-index} {view} {update} {delete}',
+                    'buttons' => [
+
+                            'link-index' => function($url, $model) {
+                                return Html::a('<i class="glyphicon glyphicon-link"></i> 链接 ', ['link/index', 'vod_id' => $model->vod_id], [
+                                    'class' => 'btn btn-success btn-sm'
+                                ]);
+                            }
+
+                    ],
+                    'options' => ['style' => 'width:280px;'],
                     'header' => '操作'
             ],
             //'vod_title',
@@ -200,7 +223,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
         ],
     ]); ?>
-
+    <?php \yii\widgets\Pjax::end() ;?>
 
 </div>
 

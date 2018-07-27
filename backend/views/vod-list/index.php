@@ -22,6 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('创建分类', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
+
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
