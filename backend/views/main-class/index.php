@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
         text-align: center;
         vertical-align: middle !important;
     }
-    .label-red td:nth-child(3){background-color: #cccccc!important;color: white}
+    .label-red td:nth-child(3){background-color: #dca7a7!important;color: white}
 </style>
 
 <div class="main-class-index">
