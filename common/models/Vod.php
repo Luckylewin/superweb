@@ -264,11 +264,16 @@ class Vod extends \yii\db\ActiveRecord implements Linkable
         return [
             'vodLinks' => function() {
 
+                $items = Vodlink::find()->where(['video_id' => $this->vod_id])->select(['id', 'episode', 'plot' ])->asArray()->all();
+
+                array_walk($items, function(&$v, $k) {
+                    $v['_links']['self']['href'] = Url::to(["vod-links/{$v['id']}", 'access-token' => '' ], true);
+                });
+
                 return [
                     'total' => Vodlink::find()->where(['video_id' => $this->vod_id])->count(),
-                    'items' => Vodlink::find()->where(['video_id' => $this->vod_id])->select(['id', 'episode', 'plot'])->asArray()->all()
-
-                ] ;
+                    'items' => $items
+                ];
             }
         ];
     }
@@ -308,9 +313,8 @@ class Vod extends \yii\db\ActiveRecord implements Linkable
     public function getLinks()
     {
        return [
-           Link::REL_SELF => Url::to(['vod/view', 'id' => $this->vod_id], true),
-           'recommend' => Url::to(['recommend/view', 'id' => $this->vod_id], true),
-           'links' => Url::to(['vod-link/index', 'vod_id' => $this->vod_id], true)
+           Link::REL_SELF => Url::to(['vod/view', 'id' => $this->vod_id, 'expand' => 'vodLinks'], true),
+           'recommend' => Url::to(['recommend/view', 'id' => $this->vod_id], true)
        ];
     }
 

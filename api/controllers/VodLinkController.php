@@ -37,7 +37,7 @@ class VodLinkController extends ActiveController
         $behaviors = parent::behaviors();
         $behaviors['authenticator'] = [
             'class' => QueryParamAuth::className(),
-            'only' => ['index']
+            'only' => ['index', 'view']
         ];
         return $behaviors;
     }
@@ -59,6 +59,7 @@ class VodLinkController extends ActiveController
     public function actionView($id)
     {
         $link = Vodlink::findOne($id);
+
         return $link;
     }
 }
