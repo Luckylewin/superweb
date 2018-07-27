@@ -260,9 +260,15 @@ class Vod extends \yii\db\ActiveRecord implements Linkable
 
     public function extraFields()
     {
+
         return [
             'vodLinks' => function() {
-                return Vodlink::find()->where(['video_id' => $this->vod_id])->select(['id', 'episode', 'plot'])->all();
+
+                return [
+                    'total' => Vodlink::find()->where(['video_id' => $this->vod_id])->count(),
+                    'items' => Vodlink::find()->where(['video_id' => $this->vod_id])->select(['id', 'episode', 'plot'])->asArray()->all()
+
+                ] ;
             }
         ];
     }
