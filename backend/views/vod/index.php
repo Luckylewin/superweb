@@ -64,8 +64,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     'placeholder' => '输入影片名称',
                     'class' => 'form-control'
                   ],
-                'options' => ['style' => 'width:385px;']
-
             ],
             //'vod_id',
 
@@ -138,7 +136,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                     'class' => 'common\grid\MyActionColumn',
-                    'template' => '{push-home} {banner-create}&nbsp;',
+                    'template' => '{push-home}&nbsp;{banner-create}',
                     'buttons' => [
                         'banner-create' => function($url, $model, $key) {
                             return Html::a('banner', ['banner/create','vod_id' => $model->vod_id], [
@@ -152,6 +150,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]);
                         },
                     ],
+                    'options' => ['style' => 'width:140px;'],
                     'header' => '推送'
             ],
 
