@@ -30,6 +30,11 @@ class TypeItemController extends BaseController
 
         $dataProvider = new ActiveDataProvider([
             'query' => IptvTypeItem::find()->where(['type_id' => $type_id]),
+            'sort' => [
+                'defaultOrder' => [
+                    'sort' => SORT_ASC
+                ]
+            ]
         ]);
 
         $type = IptvType::findOne($type_id);

@@ -14,6 +14,55 @@ use \common\models\VodList;
 $this->title = '点播列表';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<style>
+    .current_up
+    {
+        border-color:transparent transparent #00AA88 !important; /*透明 透明  黄*/
+    }
+
+    .current_down
+    {
+        border-color: #00AA88 transparent transparent !important; /*透明 透明  黄*/
+    }
+
+    .triangle_border_up{
+        width:0;
+        height:0;
+        border-width:0 7px 10px;
+        border-style:solid;
+        border-color:transparent transparent #d2d2d2;/*透明 透明  黄*/
+        position:absolute;
+        top:0;
+        left:64px;
+        cursor: pointer;
+    }
+
+    /*下箭头*/
+    .triangle_border_down{
+        display:block;
+        width:0;
+        height:0;
+        border-width:10px 7px 0;
+        border-style:solid;
+        border-color:#d2d2d2 transparent transparent;/*黄 透明 透明 */
+        position:absolute;
+        bottom:0;
+        left:64px;
+        cursor: pointer;
+    }
+
+    .triangle_border_up:hover
+    {
+        border-color:transparent transparent #23527c;/*透明 透明  黄*/
+
+    }
+
+    .triangle_border_down:hover
+    {
+        border-color:#23527c transparent transparent;/*黄 透明 透明 */
+
+    }
+</style>
 <div class="vod-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
@@ -126,6 +175,26 @@ $this->params['breadcrumbs'][] = $this->title;
                         return $model->star;
                     }
             ],*/
+
+            [
+                'attribute' => 'sort',
+                'format' => 'raw',
+                'options' => ['style' => 'width:98px'],
+
+                'value' => function($model) {
+                    return
+                        '<div style="position: relative">' .
+                        Html::input('text', 'sort', $model->sort, [
+                            'class' => 'form-control sort',
+                            'style' => 'width:62px;'
+                    ])
+                        .
+                        "<div class='triangle_border_up' ></div>"   .
+                        "<div class='triangle_border_down' ></div>" .
+                        '</div>';
+                 }
+            ],
+
             [
                     'attribute' => 'vod_addtime',
                     'format' => 'date',
@@ -144,7 +213,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]);
                         },
                         'push-home' => function($url, $model, $key) {
-                            $text = $model->vod_home ? '取消推荐' : '推荐';
+                            $text = $model->vod_home ? '取消' : '推荐';
                             return Html::a($text, ['vod/push-home','id' => $model->vod_id,'action' => $model->vod_home ? '0' : '1' ], [
                                 'class' => 'btn btn-sm ' . ($model->vod_home? 'btn-success' : 'btn-default')
                             ]);
@@ -226,13 +295,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
 </div>
 
-
+<?= Html::a("重置排序", \yii\helpers\Url::to(['vod/sort-all', 'vod_cid' => Yii::$app->request->get('VodSearch')['vod_cid']]) ,['class' => 'gridview btn btn-primary']); ?> &nbsp;
+<?= Html::button("批量删除",['class' => 'gridview btn btn-danger']); ?>
 
 <?php
 
-echo Html::button("批量删除",[
-    'class' => 'gridview btn btn-danger',
-]);
+
 
 $batchDelete = \yii\helpers\Url::to(['vod/batch-delete']);
 
@@ -246,3 +314,71 @@ JS;
 
 $this->registerJs($requestJs);
 ?>
+
+<?php
+
+$sortUrl = \yii\helpers\Url::to(['vod/sort','vod_cid' => Yii::$app->request->get('VodSearch')['vod_cid']]);
+$sortJs=<<<JS
+
+    $('.sort').change(function() {
+        var tr = $(this).parent().parent().parent(),
+            sort = $(this).val(),
+            id = tr.attr('data-key');
+        
+        $.getJSON('{$sortUrl}', {id:id,sort:sort,action:'appoint',compare_id:null}, function(e) {
+          if(e.status === 'success') {
+             window.location.reload();
+          }
+        }
+      );
+    });
+
+    $('.triangle_border_up').click(function() {
+     var tr = $(this).parent().parent().parent(),
+         id = tr.attr('data-key'),
+         index = tr.index() + 1,
+         pre = index - 1,
+         _this = $(this);
+     
+     var preTr = $("#grid tbody tr:nth-child(" + pre + ")"),
+         preId = preTr.attr('data-key');
+     
+     $(this).addClass('current_up');
+      
+     preTr.insertAfter($("#grid tbody tr:nth-child(" + index + ")"));
+     $.getJSON('{$sortUrl}', {id:id,action:'up',compare_id:preId}, function(e) {
+          if (e.status === 'success') {
+              _this.parent().find('input').val(e.data.sort)
+          }
+        }
+     );
+     });
+    
+    $('.triangle_border_down').click(function() {
+         var tr = $(this).parent().parent().parent(),
+             id = tr.attr('data-key'),
+             index = tr.index() + 1,
+             next = index + 1,
+             _this = $(this);
+         
+         var nextTr = $("#grid tbody tr:nth-child(" + next + ")"),
+             nextId = nextTr.attr('data-key');
+         
+         $(this).addClass('current_down');
+          
+         $("#grid tbody tr:nth-child(" + index + ")").insertAfter($("#grid tbody tr:nth-child(" + next + ")"));
+         $.getJSON('{$sortUrl}', {id:id,action:'down',compare_id:nextId}, function(e) {
+              if(e.status === 'success') {
+                  _this.parent().find('input').val(e.data.sort)
+              }
+           }
+         );
+    });
+    
+    
+JS;
+
+$this->registerJs($sortJs, \yii\web\View::POS_END)
+
+?>
+<?php  ?>

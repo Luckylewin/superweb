@@ -83,6 +83,7 @@ class BatchCreateCardForm extends Model
                 $_model->card_secret = $card_secret;
                 $_model->card_contracttime = $type;
                 $_model->batch = $batch;
+                $_model->is_valid = '1';
                 $_model->save(false);
             } else {
                 $i -= 1;

@@ -21,7 +21,8 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'sort')->textInput() ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('保存', ['class' => 'btn btn-success']) ?>
+        <?= Html::a('返回', Yii::$app->request->referrer, ['class' => 'btn btn-default']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

@@ -47,7 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'template' => '{sub} {view} {update} {delete}',
                     'buttons' => [
                             'sub' => function($url, $model, $key) {
-                                return Html::a("条件列表", \yii\helpers\Url::to(['type-item/index', 'type_id' => $model->id]),[
+                                return Html::a("条件列表", \yii\helpers\Url::to(['type-item/index', 'type_id' => $model->id, 'list_id' => Yii::$app->request->get('list_id')]),[
                                         'class' => 'btn btn-sm btn-info'
                                 ]);
                             }

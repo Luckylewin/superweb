@@ -178,4 +178,77 @@ class VodBlock extends Vod
         return $tags;
     }
 
+    /**
+     * 排序
+     * @param $cid
+     * @return bool
+     */
+    static public function sortAll($cid)
+    {
+        $items = self::find()->where(['vod_cid' => $cid])->all();
+
+        $start = 0;
+
+        if (!empty($items)) {
+            foreach ($items as $item) {
+                $item->sort = $start += 2;
+                $item->save(false);
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @param $action
+     * @param $vod_cid
+     * @param $id
+     * @return bool|int|string
+     */
+    static public function sortUpDown($action, $vod_cid, $id, $compare_id)
+    {
+        $model = self::findOne($id);
+        if ($model) {
+
+            if ($action == 'up') {
+                $smallOne = VodBlock::findOne($compare_id);
+                if ($smallOne && $smallOne->sort > 1) {
+                    $model->sort = $smallOne->sort - 1;
+                } else if ($model->sort > 1){
+                    $model->sort -= 1;
+                } else {
+                    $model->sort = 0;
+                }
+
+            } else {
+                // 找一个比他大的
+                $bigOne = VodBlock::findOne($compare_id);
+
+                if ($bigOne) {
+                    $model->sort = $bigOne->sort + 1;
+                } else {
+                    $model->sort += 1;
+                }
+
+            }
+            $model->save(false);
+            return $model->sort;
+
+        }
+
+        return false;
+    }
+
+    static public function setSort($id, $sort)
+    {
+        $model = self::findOne($id);
+        if ($model) {
+            $model->sort = $sort;
+            $model->save(false);
+            return $model->sort ;
+        }
+
+        return false;
+    }
+
 }

@@ -8,6 +8,7 @@ use Yii;
 use common\models\Vod;
 use common\models\search\VodSearch;
 use yii\web\NotFoundHttpException;
+use yii\web\Response;
 
 
 /**
@@ -146,5 +147,29 @@ class VodController extends BaseController
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionSortAll($vod_cid)
+    {
+        VodBlock::sortAll($vod_cid);
+        $this->success();
+
+        return $this->redirect(Yii::$app->request->referrer);
+    }
+
+    public function actionSort($id, $vod_cid, $action, $compare_id)
+    {
+        \Yii::$app->response->format = Response::FORMAT_JSON;
+
+        if (in_array($action, ['up', 'down'])) {
+           $sort = VodBlock::sortUpDown($action, $vod_cid, $id, $compare_id);
+        } else {
+            $sort = Yii::$app->request->get('sort');
+            VodBlock::setSort($id, $sort);
+        }
+
+        return ['status' => 'success', 'data' => [
+            'sort' => $sort
+        ]];
     }
 }
