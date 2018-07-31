@@ -2,10 +2,13 @@
 
 namespace backend\models\search;
 
+use backend\models\Admin;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use backend\models\ApkList;
+use yii\db\ActiveQuery;
+use yii\helpers\ArrayHelper;
 
 /**
  * ApkListQuery represents the model behind the search form of `app\models\ApkList`.
@@ -40,8 +43,25 @@ class ApkListSearch extends ApkList
      * @return ActiveDataProvider
      */
     public function search($params)
-    {
-        $query = ApkList::find();
+    {   
+        // 判断身份
+        if (Yii::$app->user->getIdentity()->username != Admin::SUPER_ADMIN) {
+            $user = Admin::findOne(Yii::$app->user->getId());
+            $scheme_id = ArrayHelper::getColumn($user->getScheme('id'), 'id');
+
+            $query = ApkList::find()->joinWith([
+                'schemes' => function($query) use ($scheme_id) {
+                    /**
+                     * @var $query ActiveQuery
+                     */
+                    $query->andWhere(['IN', 'sys_scheme.id', $scheme_id]);
+                }
+            ]);
+
+        } else {
+            $query = ApkList::find();
+        }
+        
 
         // add conditions that should always apply here
 

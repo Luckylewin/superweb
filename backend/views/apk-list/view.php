@@ -15,6 +15,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
 
+<p>
+   <?= Html::a('发布版本', ['apk-detail/create', 'id' => $model->ID], ['class' => 'btn btn-info']) ?>
+</p>
 
     <?= DetailView::widget([
         'model' => $model,
@@ -49,12 +52,5 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <p>
     <?= Html::a('编辑', ['update', 'id' => $model->ID], ['class' => 'btn btn-primary']) ?>
-    <?= Html::a('删除', ['delete', 'id' => $model->ID], [
-        'class' => 'btn btn-danger',
-        'data' => [
-            'confirm' => 'Are you sure you want to delete this item?',
-            'method' => 'post',
-        ],
-    ]) ?>
     <?= Html::a('返回', \yii\helpers\Url::to(['apk-list/index']), ['class' => 'btn btn-default']) ?>
 </p>

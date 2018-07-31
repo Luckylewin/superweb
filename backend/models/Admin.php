@@ -19,6 +19,7 @@ use yii\web\IdentityInterface;
  */
 class Admin extends ActiveRecord implements IdentityInterface
 {
+    const SUPER_ADMIN = 'admin';
 
     public $password;
 
@@ -200,6 +201,22 @@ class Admin extends ActiveRecord implements IdentityInterface
         }
         if(!empty($this->password)) $this->setPassword($this->password);
         return parent::beforeSave($insert);
+    }
+
+    public function getScheme($field = null)
+    {
+        return $this->hasMany(Scheme::className(), ['id' => 'scheme_id'])
+                    ->via('schemeItems')
+                    ->asArray()
+                    ->select($field == null ? '*' : $field)
+                    ->all();
+    }
+
+    public function getSchemeItems()
+    {
+        return $this->hasMany(AdminToScheme::className(), [
+           'admin_id' => 'id'
+        ]);
     }
 
 }

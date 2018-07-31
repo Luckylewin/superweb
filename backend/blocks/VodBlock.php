@@ -132,13 +132,13 @@ class VodBlock extends Vod
         if (!is_null($type)) {
             $item = $type->items;
             if (!is_null($item)) {
-                $tags = ArrayHelper::getColumn($item, 'zh_name');
+                $tags = ArrayHelper::getColumn($item, 'name');
             }
         }
 
         $str = '';
         foreach ($tags as $tag) {
-            $str .= '<a href="javascript:;" class="select" data-id="vod-'. $field .'">'. $tag .'</a>&nbsp;&nbsp;';
+            $str .= '<a href="javascript:;" class="select" data-id="vodblock-'. $field .'">'. $tag .'</a>&nbsp;&nbsp;';
         }
         return $str;
     }

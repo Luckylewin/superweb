@@ -208,7 +208,8 @@ class Vod extends \yii\db\ActiveRecord implements Linkable
             'vod_multiple' => '是否有多集',
             'vod_imdb_id' => 'IMDb ID',
             'vod_imdb_score' => 'IMDb 评分',
-            'vod_fill_flag' => '资料填充标志'
+            'vod_fill_flag' => '资料填充标志',
+            'sort' => '排序'
         ];
     }
 

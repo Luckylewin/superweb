@@ -2,42 +2,17 @@
 
 namespace backend\controllers;
 
-
-use backend\models\search\ApkListSearch;
 use Yii;
 use backend\models\ApkList;
-use backend\models\search\Apk;
 use yii\helpers\ArrayHelper;
 use yii\web\NotFoundHttpException;
-
+use backend\models\search\ApkListSearch;
 
 /**
  * ApkListController implements the CRUD actions for ApkList model.
  */
 class ApkListController extends BaseController
 {
-
-   /* public function actions()
-    {
-        return ArrayHelper::merge(parent::actions(), [
-            'editsort' => [                                       // identifier for your editable column action
-                'class' => EditableColumnAction::className(),     // 动作类
-                'modelClass' => ApkList::className(),   // 要被编辑的模型
-                'outputValue' => function ($model, $attribute, $key, $index) {
-                    return (int) $model->$attribute; //返回任意你想要的内容
-                },
-                'outputMessage' => function($model, $attribute, $key, $index) {
-                    return '';                                  // any custom error to return after model save
-                },
-                'showModelErrors' => true,                        // show model validation errors after save
-                'errorOptions' => ['header' => ''],           // error summary HTML options
-                'postOnly' => true,
-                // 'ajaxOnly' => true,
-                // 'findModel' => function($id, $action) {},
-                // 'checkAccess' => function($action, $model) {}
-            ]
-        ]);
-    }*/
 
     /**
      * Lists all ApkList models.
@@ -93,6 +68,7 @@ class ApkListController extends BaseController
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $this->success();
             return $this->redirect(['view', 'id' => $model->ID]);
         }
         if (!empty($model->scheme_id)) {

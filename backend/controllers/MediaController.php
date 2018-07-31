@@ -8,9 +8,9 @@
 
 namespace backend\controllers;
 
+use backend\blocks\VodBlock;
 use common\models\VodList;
 use Yii;
-use common\models\Vod;
 use yii\helpers\FileHelper;
 use yii\helpers\Json;
 use yii\helpers\Url;
@@ -31,7 +31,7 @@ class MediaController extends BaseController
             case 'pic':
             case 'pic_bg':
             case 'pic_slide':
-                $model = new Vod();
+                $model = new VodBlock();
                 break;
             default:
                 return Json::encode(['error' => '上传失败']);
@@ -62,6 +62,8 @@ class MediaController extends BaseController
                         ],
                     ],
                 ]);
+            } else {
+                return Json::encode(['error' => '保存失败']);
             }
         }
 

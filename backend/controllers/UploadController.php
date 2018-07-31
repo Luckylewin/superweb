@@ -86,6 +86,9 @@ class UploadController extends BaseController
         $basicPath = "storage/uploads/vod-movie/" . $fileName;
         //绝对路径
         $fileSavePath = Yii::getAlias('@' . $basicPath);
+        if (!is_dir(dirname($fileSavePath))) {
+            FileHelper::createDirectory(dirname($fileSavePath));
+        }
 
         if ($_FILES['theFile']['error'] > 0) {
             $status = 500;

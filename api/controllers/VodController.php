@@ -125,7 +125,11 @@ class VodController extends ActiveController
     public function actionCondition($vod_id)
     {
         $data = [];
-        $list = IptvType::find()->where(['vod_list_id' => $vod_id])->asArray()->all();
+        $list = IptvType::find()->where(['vod_list_id' => $vod_id])
+                                ->orderBy('sort asc')
+                                ->asArray()
+                                ->all();
+
         if (empty($list)) {return [];}
 
         foreach ($list as $type) {

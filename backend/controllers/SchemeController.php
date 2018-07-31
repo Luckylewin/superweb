@@ -2,6 +2,8 @@
 
 namespace backend\controllers;
 
+use backend\models\Admin;
+use backend\models\form\BindSchemeForm;
 use Yii;
 use backend\models\Scheme;
 use yii\data\ActiveDataProvider;
@@ -113,4 +115,25 @@ class SchemeController extends BaseController
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+    public function actionBindUser($id)
+    {
+        $currentScheme = $this->findModel($id);
+
+        $model = new BindSchemeForm();
+        $model->scheme_id = $id;
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $this->success();
+            return $this->redirect(['scheme/index']);
+        }
+
+        $model->init();
+        return $this->render('bind-user', [
+            'model' => $model,
+            'scheme' => $currentScheme
+        ]);
+
+    }
+
 }

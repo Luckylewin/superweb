@@ -52,7 +52,7 @@ class VodController extends BaseController
      */
     public function actionCreate()
     {
-        $model = new Vod();
+        $model = new VodBlock();
         if ($cid = Yii::$app->request->get('vod_cid')) {
             $model->vod_cid = $cid;
             $vodList = VodList::findOne($cid);

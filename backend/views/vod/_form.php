@@ -91,7 +91,7 @@ $this->registerJsFile('/statics/js/miniUtils.js')
                                 console.log(data);
                                 var files = data.result.files[0];
                               
-                                $("#vod-vod_pic").val(files.url);
+                                $("#vodblock-vod_pic").val(files.url);
                             }',
                                 'fileuploadfail' => 'function(e, data) {
                                 console.log(e);
@@ -171,7 +171,7 @@ $this->registerJsFile('/statics/js/miniUtils.js')
                                 console.log(e);
                                 console.log(data);
                                 var files = data.result.files[0];
-                                $("#vod-vod_pic_bg").val(files.url);
+                                $("#vodblock-vod_pic_bg").val(files.url);
                             }',
                                 'fileuploadfail' => 'function(e, data) {
                                 console.log(e);
@@ -205,7 +205,7 @@ $this->registerJsFile('/statics/js/miniUtils.js')
                                 console.log(data);
                                 var files = data.result.files[0];
                                
-                                $("#vod-vod_pic_slide").val(files.url);
+                                $("#vodblock-vod_pic_slide").val(files.url);
                             }',
                                 'fileuploadfail' => 'function(e, data) {
                                 console.log(e);
@@ -366,9 +366,11 @@ $this->registerJsFile('/statics/js/miniUtils.js')
         });
 
         $('.multi-select .select').click(function() {
+
            var item = $(this).text();
            var data_id = $(this).attr('data-id');
            var dist = $('#' + data_id);
+
            var curItems = dist.val().split(',').filter(function(item){
                if (item) return item;
            });

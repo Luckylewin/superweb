@@ -31,7 +31,14 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                     'class' => 'common\grid\MyActionColumn',
                     'size' => 'btn-sm',
-                    'template' => '{update} {delete}'
+                    'template' => '{bind-admin} {update} {delete}',
+                    'buttons' => [
+                            'bind-admin' => function($url, $model) {
+                                 return Html::a('关联用户', \yii\helpers\Url::to(['scheme/bind-user', 'id'=>$model->id]), [
+                                         'class' => 'btn btn-success'
+                                 ]);
+                            }
+                    ]
             ],
         ],
     ]); ?>
