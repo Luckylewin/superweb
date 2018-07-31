@@ -80,7 +80,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ]); ?>
 
-        <?= Html::a('返回', ['renewal-card/index'], ['class' => 'btn btn-default']) ?>
+        <?= Html::a(Yii::t('backend','Go Back'), ['renewal-card/index'], ['class' => 'btn btn-default']) ?>
 
 
     <?php endif; ?>

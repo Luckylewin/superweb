@@ -61,5 +61,5 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <p>
     <?= Html::a('新增版本', \yii\helpers\Url::to(['apk-detail/create','apk_ID' => $id]), ['class' => 'btn btn-success']) ?>
-    <?= Html::a('返回', \yii\helpers\Url::to(['apk-list/index']), ['class' => 'btn btn-default']) ?>
+    <?= Html::a(Yii::t('backend','Go Back'), \yii\helpers\Url::to(['apk-list/index']), ['class' => 'btn btn-default']) ?>
 </p>

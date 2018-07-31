@@ -71,12 +71,12 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('发布片源', \yii\helpers\Url::to(['create','vod_cid' => Yii::$app->request->get('VodSearch')['vod_cid']]), ['class' => 'btn btn-success']) ?>
 
         <?php if(strpos(Yii::$app->request->referrer, 'vod-list') !== false): ?>
-            <?= Html::a('返回', null, [
+            <?= Html::a(Yii::t('backend','Go Back'), null, [
                     'class' => 'btn btn-default',
                     'onclick' => 'history.go(-1)'
             ]) ?>
         <?php else: ?>
-            <?= Html::a('返回', ['vod-list/index'], [
+            <?= Html::a(Yii::t('backend','Go Back'), ['vod-list/index'], [
                 'class' => 'btn btn-default',
                 'onclick' => 'history.go(-1)'
             ]) ?>
@@ -213,7 +213,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]);
                         },
                         'push-home' => function($url, $model, $key) {
-                            $text = $model->vod_home ? '取消' : '推荐';
+                            $text = $model->vod_home ? Yii::t('backend', 'Cancel') : Yii::t('backend', 'Recommend');
                             return Html::a($text, ['vod/push-home','id' => $model->vod_id,'action' => $model->vod_home ? '0' : '1' ], [
                                 'class' => 'btn btn-sm ' . ($model->vod_home? 'btn-success' : 'btn-default')
                             ]);

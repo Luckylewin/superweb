@@ -57,4 +57,4 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); ?>
 </div>
 
-<?= Html::a('返回', ['vod-list/index'], ['class' => 'btn btn-default']) ?>
+<?= Html::a(Yii::t('backend','Go Back'), ['vod-list/index'], ['class' => 'btn btn-default']) ?>

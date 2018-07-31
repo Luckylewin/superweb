@@ -9,8 +9,8 @@ use yii\widgets\ActiveForm;
 /* @var $searchModel backend\models\search\MenuSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = '后台菜单管理';
-$this->params['breadcrumbs'][] = '系统设置';
+$this->title = Yii::t('backend', 'Menu Management');
+$this->params['breadcrumbs'][] = Yii::t('backend', 'System Setting');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -40,7 +40,6 @@ $this->params['breadcrumbs'][] = $this->title;
             //['class' => 'yii\grid\SerialColumn'],
             [
                 'attribute' => 'sort',
-                'label' => '排序',
                 'format' => 'raw',
                 'value' => function($data) {
                     return Html::textInput('sort['.$data['id'].']', $data['sort'], ['class' => 'wd35 form-control','style'=>'width:50px;']);
@@ -51,7 +50,6 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'icon_style',
                 'format' => 'raw',
-                'label' => '图标',
                 'options' => ['style'=>'width:50px;'],
                 'value' => function($data) {
                     if (isset($data['icon_style'])) {
@@ -70,16 +68,14 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'name',
                 'format' => 'raw',
-                'label' => '菜单名称',
             ],
             'url:url',
 
             [
                 'attribute' => 'display',
                 'format' => 'raw',
-                'label' => '是否显示',
                 'value' => function($data) {
-                    return Html::tag('span', Menu::getDisplayText($data['display']), ['class' => 'label label-sm '.Menu::getDisplayStyle($data['display'])]);
+                    return Html::tag('span', Yii::t('backend', Menu::getDisplayText($data['display'])), ['class' => 'label label-sm '.Menu::getDisplayStyle($data['display'])]);
                 }
             ],
 
@@ -89,8 +85,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template' => '{create} {update} {delete}',
                 'buttons' => [
                     'create' => function ($url, $model, $key) {
-                        return Html::a('<span class="fa fa-plus"></span> 添加子菜单', ['create', 'pid' => $key], [
-                            'title' => '添加子菜单',
+                        return Html::a('<span class="fa fa-plus"></span> ' . Yii::t('backend', 'Create submenu') , ['create', 'pid' => $key], [
+                            'title' => Yii::t('backend', 'Create submenu'),
                             'class' => 'btn btn-success btn-xs'
                         ]);
                     },

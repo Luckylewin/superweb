@@ -16,6 +16,6 @@ use yii\helpers\Html;
     <?= $form->field($model, 'type')->dropDownList(RenewCardBlock::$typeSelect) ?>
     <?= $form->field($model, 'num'); ?>
     <?= Html::submitButton('生成', ['class' => 'btn btn-primary']) ?>
-    <?= Html::a('返回', ['index'], ['class' => 'btn btn-default']) ?>
+    <?= Html::a(Yii::t('backend','Go Back'), ['index'], ['class' => 'btn btn-default']) ?>
 <?php ActiveForm::end(); ?>
 

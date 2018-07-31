@@ -24,8 +24,8 @@ class Menu extends \yii\db\ActiveRecord
     const HIDE = 0;
 
     public static $displays = [
-        self::DISPLAY => '显示',
-        self::HIDE => '隐藏',
+        self::DISPLAY => 'show',
+        self::HIDE => 'hidden',
     ];
 
     public static $displayStyles = [
@@ -67,12 +67,12 @@ class Menu extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'pid' => '上级菜单',
-            'name' => '菜单名称',
-            'url' => '路由',
-            'icon_style' => '图标样式',
-            'display' => '是否显示',
-            'sort' => '排序',
+            'pid' => Yii::t('backend', 'Superior menu'),
+            'name' => Yii::t('backend', 'Name'),
+            'url' => Yii::t('backend', 'Route'),
+            'icon_style' => Yii::t('backend', 'Icon'),
+            'display' => Yii::t('backend', 'Display Switch'),
+            'sort' => Yii::t('backend', 'Sort'),
         ];
     }
 

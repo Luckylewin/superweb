@@ -48,7 +48,7 @@ class Scheme extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'schemeName' => '方案名称',
+            'schemeName' => Yii::t('backend', 'Name'),
             'cpu' => 'CPU',
             'flash' => 'Flash',
             'ddr' => 'DDR',

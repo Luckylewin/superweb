@@ -109,7 +109,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a('修改', ['update', 'id' => $model->vod_id], ['class' => 'btn btn-primary']) ?>
 
-        <?=  Html::a('返回', ['vod/index', 'VodSearch[vod_cid]'=>$model->vod_cid], [
+        <?=  Html::a(Yii::t('backend','Go Back'), ['vod/index', 'VodSearch[vod_cid]'=>$model->vod_cid], [
             'class' => 'btn btn-default'
         ]); ?>
     </p>

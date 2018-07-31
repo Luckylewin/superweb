@@ -39,7 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ]) ?>
             <div class="form-group">
                 <?= Html::submitButton('提交', ['class' => 'btn btn-success']) ?>
-                <?= Html::a('返回', ['main-class/index'], ['class' => 'btn btn-default']) ?>
+                <?= Html::a(Yii::t('backend','Go Back'), ['main-class/index'], ['class' => 'btn btn-default']) ?>
             </div>
         </div>
 

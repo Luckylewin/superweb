@@ -6,8 +6,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model backend\models\Menu */
 
-$this->title = '添加菜单';
-$this->params['breadcrumbs'][] = '系统设置';
+$this->title = Yii::t('backend', 'Create Menu');
+$this->params['breadcrumbs'][] = Yii::t('backend', 'Sytem Setting');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="menu-create">

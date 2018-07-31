@@ -58,7 +58,7 @@ $this->registerJsFile('/statics/js/pinyin.js');
         ]); ?>
         <div class="form-group">
             <?= Html::submitButton('保存', ['class' => 'btn btn-success']) ?>
-            <?= Html::a('返回', ['vod-list/index'], ['class' => 'btn btn-default']) ?>
+            <?= Html::a(Yii::t('backend','Go Back'), ['vod-list/index'], ['class' => 'btn btn-default']) ?>
         </div>
     </div>
 

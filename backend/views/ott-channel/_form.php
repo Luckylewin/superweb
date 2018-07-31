@@ -83,7 +83,7 @@ use yii\widgets\ActiveForm;
 
         <div class="form-group">
             <?= Html::submitButton('保存', ['class' => 'btn btn-success']) ?>
-            <?= Html::a('返回', Yii::$app->request->referrer, ['class' => 'btn btn-default']) ?>
+            <?= Html::a(Yii::t('backend','Go Back'), Yii::$app->request->referrer, ['class' => 'btn btn-default']) ?>
         </div>
     </div>
 

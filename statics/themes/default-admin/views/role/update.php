@@ -6,7 +6,7 @@ use yii\helpers\Html;
 /* @var $model backend\models\Admin */
 
 $this->title = '更新角色';
-$this->params['breadcrumbs'][] = ['label' => '管理员设置', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => \Yii::t('backend','Admin Setting'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="admin-update">

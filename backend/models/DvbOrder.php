@@ -61,11 +61,11 @@ class DvbOrder extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'product_name' => '产品名称',
-            'order_num' => '订单号',
-            'order_date' => '订单日期',
-            'order_count' => '订单数量',
-            'client_id' => '客户ID',
+            'product_name' => Yii::t('backend', 'Product Name'),
+            'order_num' => Yii::t('backend', 'Order Number'),
+            'order_date' => Yii::t('backend', 'Order Date'),
+            'order_count' => Yii::t('backend', 'Order Quantity'),
+            'client_id' => Yii::t('backend', 'Customer ID'),
         ];
     }
 

@@ -4,11 +4,11 @@ use yii\bootstrap\Nav;
 echo Nav::widget([
     'items' => [
         [
-            'label' => '菜单管理',
+            'label' => Yii::t('backend', 'Menu List'),
             'url' => ['menu/index'],
         ],
         [
-            'label' => '添加菜单',
+            'label' => Yii::t('backend', 'Create Menu'),
             'url' => ['menu/create'],
         ],
     ],

@@ -34,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'template' => '{bind-admin} {update} {delete}',
                     'buttons' => [
                             'bind-admin' => function($url, $model) {
-                                 return Html::a('关联用户', \yii\helpers\Url::to(['scheme/bind-user', 'id'=>$model->id]), [
+                                 return Html::a(Yii::t('backend', 'Associated user'), \yii\helpers\Url::to(['scheme/bind-user', 'id'=>$model->id]), [
                                          'class' => 'btn btn-success'
                                  ]);
                             }

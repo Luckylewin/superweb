@@ -79,7 +79,7 @@ $username = Yii::$app->user->isGuest == false ? Yii::$app->user->identity->usern
                 foreach ($allMenus as $menus) {
                     ?>
                     <li >
-                        <a href="#"><i class="fa <?=$menus['icon_style'];?>"></i><span><?=$menus['name'];?></span><span class="fa arrow"></span></a>
+                        <a href="#"><i class="fa <?=$menus['icon_style'];?>"></i><span><?= Yii::t('backend', $menus['name']);?></span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <?php
                             if(!isset($menus['_child'])) break;
@@ -87,7 +87,7 @@ $username = Yii::$app->user->isGuest == false ? Yii::$app->user->identity->usern
                                 $menuArr = explode('/', $menu['url']);
                                 ?>
 
-                                <li><a class="J_menuItem" href="<?=Url::to([$menu['url']]);?>"><?=$menu['name'];?></a></li>
+                                <li><a class="J_menuItem" href="<?=Url::to([$menu['url']]);?>"><?= Yii::t('backend', $menu['name']);?></a></li>
 
                             <?php }?>
                         </ul>
@@ -514,7 +514,7 @@ $username = Yii::$app->user->isGuest == false ? Yii::$app->user->identity->usern
             </button>
             <nav class="page-tabs J_menuTabs">
                 <div class="page-tabs-content">
-                    <a href="javascript:void(0);" class="active J_menuTab" data-id="<?=Url::to([isset($allMenus[0]['url'])?$allMenus[0]['url']:'']);?>">首页</a>
+                    <a href="javascript:void(0);" class="active J_menuTab" data-id="<?=Url::to([isset($allMenus[0]['url'])?$allMenus[0]['url']:'']);?>"><?= Yii::t('backend', 'Home') ?></a>
                 </div>
             </nav>
             <button class="roll-nav roll-right J_tabRight"><i class="fa fa-forward"></i>

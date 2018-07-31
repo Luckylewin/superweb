@@ -176,7 +176,7 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/laydate/laydate.js'
 
             <div class="form-group">
                 <?= Html::submitButton('保存', ['class' => 'btn btn-info']) ?>
-                <?= Html::a('返回', ['major-event/index'], ['class' => 'btn btn-default']) ?>
+                <?= Html::a(Yii::t('backend','Go Back'), ['major-event/index'], ['class' => 'btn btn-default']) ?>
             </div>
         </div>
 

@@ -4,7 +4,7 @@ use yii\grid\GridView;
 use yii\widgets\ActiveForm;
 
 $this->title = '分配角色';
-$this->params['breadcrumbs'][] = ['label' => '管理员设置', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => \Yii::t('backend','Admin Setting'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="role-index">

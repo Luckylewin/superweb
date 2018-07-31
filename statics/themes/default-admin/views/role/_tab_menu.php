@@ -4,11 +4,11 @@ use yii\bootstrap\Nav;
 echo Nav::widget([
     'items' => [
         [
-            'label' => '角色管理',
+            'label' => \Yii::t('backend','Role'),
             'url' => ['role/index'],
         ],
         [
-            'label' => '添加角色',
+            'label' => \Yii::t('backend','Create Role'),
             'url' => ['role/create'],
         ],
     ],

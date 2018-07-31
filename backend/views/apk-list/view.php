@@ -52,5 +52,5 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <p>
     <?= Html::a('编辑', ['update', 'id' => $model->ID], ['class' => 'btn btn-primary']) ?>
-    <?= Html::a('返回', \yii\helpers\Url::to(['apk-list/index']), ['class' => 'btn btn-default']) ?>
+    <?= Html::a(Yii::t('backend','Go Back'), \yii\helpers\Url::to(['apk-list/index']), ['class' => 'btn btn-default']) ?>
 </p>

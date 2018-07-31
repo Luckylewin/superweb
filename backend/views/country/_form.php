@@ -65,7 +65,7 @@ use backend\models\UploadForm;
 
     <div class="form-group">
         <?= Html::submitButton('保存', ['class' => 'btn btn-success']) ?>
-        <?= Html::a('返回', ['index'], ['class' => 'btn btn-default']) ?>
+        <?= Html::a(Yii::t('backend','Go Back'), ['index'], ['class' => 'btn btn-default']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

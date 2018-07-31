@@ -37,7 +37,7 @@ use yii\helpers\Url;
         <?= $form->field($model, 'main_class_id')->hiddenInput()->label(false) ?>
         <div class="form-group">
             <?= Html::submitButton('保存', ['class' => 'btn btn-success']) ?>
-            <?= Html::a('返回', Url::to(['sub-class/index', 'main-id'=>$model->mainClass->id]), ['class' => 'btn btn-default']) ?>
+            <?= Html::a(Yii::t('backend','Go Back'), Url::to(['sub-class/index', 'main-id'=>$model->mainClass->id]), ['class' => 'btn btn-default']) ?>
 
         </div>
     </div>

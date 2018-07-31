@@ -3,7 +3,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 $this->title = '角色授权';
-$this->params['breadcrumbs'][] = '管理员设置';
+$this->params['breadcrumbs'][] = \Yii::t('backend','Admin Setting');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="role-index">

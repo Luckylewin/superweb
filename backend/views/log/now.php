@@ -2,7 +2,7 @@
 $this->registerJsFile('/statics/themes/default-admin/plugins/laydate/laydate.js', ['depends'=>'yii\web\JqueryAsset', 'position'=>\yii\web\View::POS_HEAD] );
 $this->registerJsFile('/statics/themes/default-admin/plugins/echarts/echarts.js', ['depends'=>'yii\web\JqueryAsset', 'position'=>\yii\web\View::POS_HEAD]);
 
-$this->title = '实时接口统计';
+$this->title = Yii::t('backend', 'Real-time statistics');;
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -33,6 +33,15 @@ $token = implode(",", $data['getClientToken']);
 $program_key = "'" . implode(" ','", $program['key']) . "'";
 $program_value = implode(",", $program['value']);
 
+$title = Yii::t('backend', 'Interface call statistics');
+
+$total_text = Yii::t('backend', 'Total');
+$watch_text = Yii::t('backend', 'Watch');
+$token_text = Yii::t('backend', 'Token');
+
+$titleRanking = Yii::t('backend', 'Program viewing ranking');
+$desc = Yii::t('backend', 'Server + local resolution');
+
 $js =<<<JS
     var total_request = [$total];
     var watch_request = [$watch];
@@ -40,13 +49,13 @@ $js =<<<JS
 
     option = {
         title: {
-            text: '接口调用统计'
+            text: '{$title}'
         },
         tooltip: {
             trigger: 'axis'
         },
         legend: {
-            data:['请求总数','节目接口','token接口']
+            data:['{$total_text}','{$watch_text}','{$token_text}']
         },
         grid: {
             left: '3%',
@@ -71,19 +80,19 @@ $js =<<<JS
         series: [
             // data:[234,21,45,232, 256,562,452,213,2345, 3453,5646,5634,6363, 534,632,4523,4356,234,21,45,232, 256,562,452,213,2345, 3453,5646,5634,6363, 534,632,4523,4356]
             {
-                name:'请求总数',
+                name:'{$total_text}',
                 type:'line',
                 stack: 'All',
                 data : total_request
             },
             {
-                name:'节目接口',
+                name:'{$watch_text}',
                 type:'line',
                 stack: 'Ott',
                 data : watch_request
             },
             {
-                name:'token接口',
+                name:'{$token_text}',
                 type:'line',
                 stack: 'token',
                 data : token_request
@@ -135,7 +144,7 @@ $js =<<<JS
             ],
             series: [
                 {
-                    name: '节目收看排行',
+                    name: '{$titleRanking}',
                     type: 'bar',
                     itemStyle: {
                         normal: {
@@ -193,7 +202,7 @@ $js =<<<JS
     var all_program_value = [$program_value];
 
     var program = echarts.init(document.getElementById('program'));
-    var option = setOption('节目收看排行','服务器+本地解析',all_program,all_program_value);
+    var option = setOption('{$titleRanking}','{$desc}',all_program,all_program_value);
     program .setOption(option);
 JS;
 

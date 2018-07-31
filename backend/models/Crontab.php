@@ -65,17 +65,17 @@ class Crontab extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => '定时任务名称',
-            'route' => '任务路由',
-            'crontab_str' => 'crontab格式',
-            'switch' => '任务开关 0关闭 1开启',
-            'status' => '任务运行状态 0正常 1任务报错',
-            'last_rundate' => '上次运行',
-            'next_rundate' => '下次运行',
-            'execmemory' => '内存消耗(b)',
-            'exectime' => '耗时',
-            'switchText' => '开关',
-            'statusText' => '运行状态'
+            'name' => Yii::t('backend', 'Name'),
+            'route' => Yii::t('backend', 'Route'),
+            'crontab_str' => Yii::t('backend', 'Crontab Format'),
+            'switch' => Yii::t('backend', 'Switch'),//'0关闭 1开启',
+            'status' => Yii::t('backend', 'Status'),//'任务运行状态 0正常 1任务报错',
+            'last_rundate' => Yii::t('backend', 'Last Run'),//'上次运行',
+            'next_rundate' => Yii::t('backend', 'Next Run'),//'下次运行',
+            'execmemory' => Yii::t('backend', 'Memory consumption'), //'内存消耗(b)',
+            'exectime' => Yii::t('backend', 'Time Consuming'),
+            'switchText' => Yii::t('backend', 'Switch'),
+            'statusText' => Yii::t('backend', 'Operating status')
         ];
     }
 

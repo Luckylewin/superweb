@@ -25,7 +25,7 @@ use \backend\models\FirmwareClass;
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? '新增' : '保存', ['class' => 'btn btn-success']) ?>
-        <?= Html::a('返回', ['firmware-class/index'], ['class' => 'btn btn-default']) ?>
+        <?= Html::a(Yii::t('backend','Go Back'), ['firmware-class/index'], ['class' => 'btn btn-default']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

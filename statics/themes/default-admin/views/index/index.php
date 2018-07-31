@@ -4,7 +4,7 @@
         <p id="localtime"></p>
         <p>
 
-            <?= \yii\helpers\Html::a('接口统计', \yii\helpers\Url::to(['log/now']), [
+            <?= \yii\helpers\Html::a(Yii::t('backend', 'Interface statics'), \yii\helpers\Url::to(['log/now']), [
                     'class' => 'btn btn-primary btn-lg'
             ]) ?>
         </p>
@@ -34,13 +34,13 @@
         if  ( weekDay === 0 )  colorhead="";
         if  ( weekDay > 0 && weekDay < 6 )  colorhead="";
         if  ( weekDay === 6 )  colorhead="";
-        if  (weekDay === 0)  weekDay="星期日";
-        if  (weekDay === 1)  weekDay="星期一";
-        if  (weekDay === 2)  weekDay="星期二";
-        if  (weekDay === 3)  weekDay="星期三";
-        if  (weekDay === 4)  weekDay="星期四";
-        if  (weekDay === 5)  weekDay="星期五";
-        if  (weekDay === 6)  weekDay="星期六";
+        if  (weekDay === 0)  weekDay="Sunday";
+        if  (weekDay === 1)  weekDay="Monday";
+        if  (weekDay === 2)  weekDay="Tuesday";
+        if  (weekDay === 3)  weekDay="Wednesday";
+        if  (weekDay === 4)  weekDay="Thurday";
+        if  (weekDay === 5)  weekDay="Friday";
+        if  (weekDay === 6)  weekDay="Saturday ";
         colorfoot="";
         str = colorhead + year + "/" + month + "/" + day + " " + hour + ":" + min + ":" + second + "  " + weekDay + colorfoot;
         return(str);
@@ -49,7 +49,7 @@
     function tick(){
         var today;
         today = new Date();
-        document.getElementById("localtime").innerHTML =  "今天是 " + showLocale(today);
+        document.getElementById("localtime").innerHTML =  "Today is " + showLocale(today);
         window.setTimeout("tick()", 1000);
     }
     tick();

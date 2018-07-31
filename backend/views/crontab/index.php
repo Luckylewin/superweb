@@ -6,7 +6,7 @@ use backend\models\Crontab;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = '定时任务';
+$this->title = Yii::t('backend', 'Timed task');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <style>
@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('创建定时任务', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('backend', 'Create'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -39,7 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                     'attribute' => 'switch',
                     'format' => 'raw',
-                    'label' => '任务开关',
+
                     'value' => function ($model) {
                         if ($model->switch == Crontab::SWITCH_ON) {
                             return '<div class="switch_on status middle"></div>';
@@ -52,7 +52,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'status',
                 'format' => 'raw',
-                'label' => '任务状态',
+
                 'value' => function ($model) {
                     if ($model->switch == Crontab::SWITCH_OFF) {
                         return "<div class='status switch_off middle'></div>";
@@ -89,10 +89,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div>
         <div style="float: right">
-            <div class="status status_normal inline"></div> <span>正常</span>&nbsp;
-            <div class="status status_ready inline"></div> <span>就绪</span>&nbsp;
-            <div class="status status_running inline"></div> <span>正在运行</span>&nbsp;
-            <div class="status status_error inline"></div> <span>错误</span>&nbsp;
+            <div class="status status_normal inline"></div> <span><?= Yii::t('backend', 'Normal') ?></span>&nbsp;
+            <div class="status status_ready inline"></div> <span><?= Yii::t('backend', 'Ready') ?></span>&nbsp;
+            <div class="status status_running inline"></div> <span><?= Yii::t('backend', 'Running') ?></span>&nbsp;
+            <div class="status status_error inline"></div> <span><?= Yii::t('backend', 'Error') ?></span>&nbsp;
         </div>
     </div>
 

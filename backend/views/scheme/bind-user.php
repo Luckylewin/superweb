@@ -19,7 +19,7 @@ use yii\bootstrap\Html;
 
     <div class="col-md-12">
         <?= Html::submitButton('保存', ['class' => 'btn btn-success']) ?>
-        <?= Html::a('返回', ['scheme/index'], ['class' => 'btn btn-default']) ?>
+        <?= Html::a(Yii::t('backend','Go Back'), ['scheme/index'], ['class' => 'btn btn-default']) ?>
     </div>
 
 <?php \yii\widgets\ActiveForm::end(); ?>

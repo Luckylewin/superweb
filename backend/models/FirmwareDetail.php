@@ -49,13 +49,13 @@ class FirmwareDetail extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'firmware_id' => 'Firmware ID',
-            'ver' => '版本',
+            'ver' => Yii::t('backend', 'Version'),
             'md5' => 'md5',
-            'url' => '资源',
-            'content' => '发布内容',
-            'sort' => '排序',
-            'force_update' => '是否强制更新',
-            'is_use' => '是否可用',
+            'url' => Yii::t('backend', 'Resource'),
+            'content' => Yii::t('backend', 'Post Content'),
+            'sort' => Yii::t('backend', 'Sort'),
+            'force_update' => Yii::t('backend', 'Whether to force an update'),
+            'is_use' => Yii::t('backend', 'Is Available'),
         ];
     }
 

@@ -102,7 +102,7 @@ use yii\widgets\ActiveForm;
         <?= $form->field($model, 'info')->textarea(['rows' => 6]) ?>
         <div class="form-group">
             <?= Html::submitButton('保存', ['class' => 'btn btn-success']) ?>
-            <?= Html::a('返回', ['karaoke/index'], ['class' => 'btn btn-default']) ?>
+            <?= Html::a(Yii::t('backend','Go Back'), ['karaoke/index'], ['class' => 'btn btn-default']) ?>
         </div>
     </div>
 

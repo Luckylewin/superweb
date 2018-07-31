@@ -18,7 +18,7 @@ use \yii\bootstrap\Modal;
     Modal::begin([
         'id' => 'auth',
         'size' => Modal::SIZE_SMALL,
-        'header' => '<h4 class="modal-title">输入操作码</h4>',
+        'header' => '<h4 class="modal-title">'. Yii::t('backend', 'Please Input Operate Code').'</h4>',
         'footer' => '',
         'options' => ['tabindex' => 1]
     ]);
@@ -27,7 +27,7 @@ use \yii\bootstrap\Modal;
             'method' => 'POST'
     ]);
     echo "<div class='form-group'>";
-    echo \yii\helpers\Html::label('操作码','password');
+    echo \yii\helpers\Html::label(Yii::t('backend', 'Operate Code'),'password');
     echo \yii\helpers\Html::input('password','password',null, [
         'class' => 'form-control',
         'id' => 'password',
@@ -35,7 +35,7 @@ use \yii\bootstrap\Modal;
     echo "</div>";
 
     echo "<div class='form-group'>";
-    echo \yii\helpers\Html::submitButton('提交', ['class' => 'btn-primary btn']);
+    echo \yii\helpers\Html::submitButton(\Yii::t('backend','Submit'), ['class' => 'btn-primary btn']);
     echo "</div>";
     \yii\widgets\ActiveForm::end();
 

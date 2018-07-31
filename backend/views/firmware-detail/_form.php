@@ -66,7 +66,7 @@ use common\widgets\md5\HashWidget;
     <div class="col-md-12">
         <div class="form-group">
             <?= Html::submitButton('新增', ['class' => 'btn btn-success']) ?>
-            <?= Html::a('返回', ['firmware-class/index'], ['class' => 'btn btn-default']) ?>
+            <?= Html::a(Yii::t('backend','Go Back'), ['firmware-class/index'], ['class' => 'btn btn-default']) ?>
         </div>
     </div>
 

@@ -40,13 +40,13 @@ class MyActionColumn extends \yii\grid\ActionColumn
             $this->buttons[$name] = function ($url, $model, $key) use ($name, $additionalOptions) {
                 switch ($name) {
                     case 'view':
-                        $title = Yii::t('yii', '查看');
+                        $title = Yii::t('backend', 'View');
                         break;
                     case 'update':
-                        $title = Yii::t('yii', '编辑');
+                        $title = Yii::t('backend', 'Edit');
                         break;
                     case 'delete':
-                        $title = Yii::t('yii', '删除');
+                        $title = Yii::t('backend', 'Delete');
                         break;
                     default:
                         $title = ucfirst($name);

@@ -57,7 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?= Html::a('修改', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('返回', ['user/index'], ['class' => 'btn btn-default']) ?>
+        <?= Html::a(Yii::t('backend','Go Back'), ['user/index'], ['class' => 'btn btn-default']) ?>
     </p>
 
 </div>

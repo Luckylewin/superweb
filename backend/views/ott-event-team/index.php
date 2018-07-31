@@ -52,6 +52,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?= Html::a('添加队伍', Url::to(['ott-event-team/create', 'event_id' => Yii::$app->request->get('event_id')]), ['class' => 'btn btn-success']) ?>
-        <?= Html::a('返回', Url::to(['ott-event/index']), ['class' => 'btn btn-default']) ?>
+        <?= Html::a(Yii::t('backend','Go Back'), Url::to(['ott-event/index']), ['class' => 'btn btn-default']) ?>
     </p>
 </div>

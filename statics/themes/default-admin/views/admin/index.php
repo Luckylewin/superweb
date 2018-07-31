@@ -6,8 +6,8 @@ use yii\widgets\Pjax;
 /* @var $searchModel backend\models\search\AdminSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = '管理员管理';
-$this->params['breadcrumbs'][] = ['label' => '管理员设置', 'url' => ['index']];
+$this->title = \Yii::t('backend','Admin Management');
+$this->params['breadcrumbs'][] = ['label' => \Yii::t('backend','Admin Setting'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="admin-index">
@@ -41,7 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'attribute' => 'last_login_time',
                     'value' => function($model) {
                         if (empty($model->last_login_time)) {
-                            return '未登录过';
+                            return \Yii::t('backend', 'Not Logged In');
                         }
                         return Yii::$app->formatter->asRelativeTime($model->last_login_time);
                     }
@@ -57,7 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'status',
                 'format' => 'raw',
                 'value' => function ($data) {
-                    return Html::tag('span', $data->getStatus(), ['class' => 'label label-sm '.$data->getStatusStyle()]);
+                    return Html::tag('span', Yii::t('backend', $data->getStatus()), ['class' => 'label label-sm '.$data->getStatusStyle()]);
                 }
             ],
 

@@ -40,7 +40,7 @@ use yii\widgets\ActiveForm;
         <?= $form->field($model, 'client_address')->textInput(['maxlength' => true]) ?>
         <div class="form-group">
             <?= Html::submitButton('保存', ['class' => 'btn btn-success']) ?>
-            <?= Html::a('返回', ['client/index'], ['class' => 'btn btn-default']) ?>
+            <?= Html::a(Yii::t('backend','Go Back'), ['client/index'], ['class' => 'btn btn-default']) ?>
         </div>
     </div>
 

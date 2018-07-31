@@ -27,8 +27,8 @@ class Admin extends ActiveRecord implements IdentityInterface
     const STATUS_ACTIVE = 1;
 
     public static $statusTexts = [
-        self::STATUS_DELETE => '禁用',
-        self::STATUS_ACTIVE => '启用',
+        self::STATUS_DELETE => 'off',
+        self::STATUS_ACTIVE => 'on',
     ];
 
     public static $statusStyles = [
@@ -72,19 +72,19 @@ class Admin extends ActiveRecord implements IdentityInterface
     public function attributeLabels() {
         return [
             'id' => 'ID',
-            'username' => '用户名',
+            'username' => Yii::t('backend', 'username'),
             'auth_key' => 'Auth Key',
-            'password' => '密码',
+            'password' => Yii::t('backend', 'password'),
             'password_hash' => 'Password Hash',
-            'email' => '邮箱',
-            'reg_ip' => '注册IP',
-            'last_login_time' => '最后登录时间',
-            'last_login_ip' => '最后登录IP',
-            'status' => '状态',
-            'created_at' => '创建时间',
-            'updated_at' => '更新时间',
-            'user_role' => '所属角色',
-            'role' => '所属角色组'
+            'email' => Yii::t('backend', 'mail'),
+            'reg_ip' => Yii::t('backend', 'register ip'),
+            'last_login_time' => Yii::t('backend', 'Last Logging Time'),
+            'last_login_ip' => Yii::t('backend', 'Last Logging IP'),
+            'status' => Yii::t('backend', 'Status'),
+            'created_at' => Yii::t('backend', 'Created Time'),
+            'updated_at' => Yii::t('backend', 'Updated Time'),
+            'user_role' => Yii::t('backend', 'Role'),
+            'role' => Yii::t('backend', 'Group')
         ];
     }
 

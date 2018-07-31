@@ -128,11 +128,11 @@ $this->registerJs($uploadJS, $this::POS_END);
             <?= Html::submitButton('保存', ['class' => 'btn btn-success']) ?>
 
             <?php if($model->isNewRecord): ?>
-                <?= Html::a('返回', Yii::$app->request->referrer, [
+                <?= Html::a(Yii::t('backend','Go Back'), Yii::$app->request->referrer, [
                         'class' => 'btn btn-default'
                 ]) ?>
             <?php else: ?>
-                <?= Html::a('返回', \yii\helpers\Url::to(['link/index', 'vod_id' => $model->vodInfo->vod_id]), [
+                <?= Html::a(Yii::t('backend','Go Back'), \yii\helpers\Url::to(['link/index', 'vod_id' => $model->vodInfo->vod_id]), [
                     'class' => 'btn btn-default'
                 ]) ?>
             <?php endif; ?>

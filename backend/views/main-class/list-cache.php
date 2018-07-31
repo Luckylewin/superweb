@@ -35,4 +35,4 @@ $this->params['breadcrumbs'][] = $this->title;
 
 </div>
 
-<?= Html::a('返回', ['index'], ['class' => 'btn btn-default']) ?>
+<?= Html::a(Yii::t('backend','Go Back'), ['index'], ['class' => 'btn btn-default']) ?>

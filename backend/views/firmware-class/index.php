@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                     'attribute' => 'is_use',
                     'value' => function($model) {
-                        $status = ['可用', '不可用'];
+                        $status = [Yii::t('backend', 'Available'), Yii::t('backend', 'Unavailable')];
                         return $status[$model->is_use];
                     }
             ],
@@ -46,7 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'buttons' => [
                             'firmware-list' => function($url, $model) {
 
-                                return Html::a('文件列表',['firmware-detail/index', 'firmware_id' => $model->id], [
+                                return Html::a(Yii::t('backend', 'File List'),['firmware-detail/index', 'firmware_id' => $model->id], [
                                         'class' => 'btn btn-info btn-sm'
                                 ]);
                             }

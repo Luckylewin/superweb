@@ -50,13 +50,13 @@ class AuthItem extends Model
 
     public function attributeLabels() {
         return [
-            'name' => '角色名称',
-            'description' => '描述',
-            'created_at' => '添加时间',
-            'updated_at' => '更新时间',
-            'type' => 'Type',
-            'ruleName' => 'Rule Name',
-            'data' => 'Data',
+            'name' => Yii::t('backend', 'Role Name'),
+            'description' => Yii::t('backend', 'desc'),
+            'created_at' => Yii::t('backend', 'Created At'),
+            'updated_at' => Yii::t('backend', 'Updated At'),
+            'type' => Yii::t('backend', 'Type'),
+            'ruleName' => Yii::t('backend', 'Rule Name'),
+            'data' => Yii::t('backend', 'Data')
         ];
     }
 

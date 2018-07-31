@@ -6,7 +6,7 @@
 $this->registerJsFile('/statics/themes/default-admin/plugins/laydate/laydate.js', ['depends'=>'yii\web\JqueryAsset', 'position'=>\yii\web\View::POS_HEAD] );
 $this->registerJsFile('/statics/themes/default-admin/plugins/echarts/echarts.js', ['depends'=>'yii\web\JqueryAsset', 'position'=>\yii\web\View::POS_HEAD]);
 
-$this->title = '日志统计';
+$this->title = Yii::t('backend', 'Interface statics');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                     <?php if(!Yii::$app->request->get('ym')): ?>
     <div class="col-md-2" style="margin-bottom: 30px;">
-        <a class="btn btn-default" href="">查看详细</a>
+        <a class="btn btn-default" href=""><?= Yii::t('backend','View Detail'); ?></a>
 
     </div>
 <?php endif; ?>
@@ -50,6 +50,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
 <?php
+
+$title = Yii::t('backend', 'Program viewing ranking');
 
 $js=<<<JS
     function setOption(title,subtitle,data,value)
@@ -93,7 +95,7 @@ $js=<<<JS
             ],
             series: [
                 {
-                    name: '节目收看排行',
+                    name: '{$title}',
                     type: 'bar',
                     itemStyle: {
                         normal: {
@@ -163,6 +165,14 @@ try {
     $order = $model->ottCharge;
     $ott_genre = $model->getCountryList;
 
+    $text = Yii::t('backend', 'Interface call statistics');
+    $total_text = Yii::t('backend', 'Total');
+    $watch_text = Yii::t('backend', 'Watch');
+    $token_text = Yii::t('backend', 'Token');
+    $ott_text = Yii::t('backend', 'OttList');
+    $ott_genre_text = Yii::t('backend', 'OttGenre');
+    $app_text = Yii::t('backend', 'AppUpdate');
+
     $js =<<<JS
     var total_request = [$total];
     var watch_request = [$watch];
@@ -174,13 +184,13 @@ try {
     
     option = {
         title: {
-            text: '接口调用统计'
+            text: '{$text}'
         },
         tooltip: {
             trigger: 'axis'
         },
         legend: {
-            data:['请求总数','节目观看','token接口','ott列表','app更新', 'ott分类列表']
+            data:['{$total_text}','{$watch_text}','{$total_text}','{$ott_text}','{$app_text}','{$ott_genre_text}']
         },
         grid: {
             left: '3%',
@@ -204,37 +214,37 @@ try {
         series: [
             // data:[234,21,45,232, 256,562,452,213,2345, 3453,5646,5634,6363, 534,632,4523,4356,234,21,45,232, 256,562,452,213,2345, 3453,5646,5634,6363, 534,632,4523,4356]
             {
-                name:'请求总数',
+                name:'{$total_text}',
                 type:'line',
                 stack: 'All',
                 data : total_request
             },
             {
-                name:'节目观看',
+                name:'{$watch_text}',
                 type:'line',
                 stack: 'watch',
                 data : watch_request
             },
             {
-                name:'token接口',
+                name:'{$token_text}',
                 type:'line',
                 stack: 'token',
                 data : token_request
             },
             {
-                name:'ott列表',
+                name:'{$ott_text}',
                 type:'line',
                 stack: 'ott',
                 data : ottlist_request
             },
             {
-                name:'app更新',
+                name:'{$app_text}',
                 type:'line',
                 stack: 'app',
                 data : app_request
             },
             {
-                name:'ott分类列表',
+                name:'{$ott_genre_text}',
                 type:'line',
                 stack: 'ottgenre',
                 data : ottgenre_request
@@ -262,12 +272,15 @@ try {
     $program = "'" . implode(" ','", array_keys($programLog->server_program ? $programLog->server_program : [])) . "'";
     $program_value = implode(",", array_values($programLog->server_program ? $programLog->server_program : []));
 
+    $title = Yii::t('backend', 'Program viewing ranking');
+    $type = Yii::t('backend', 'Server + local resolution');
+
     $js =<<<JS
     var all_program =       [$program];
     var all_program_value = [$program_value];
 
     var program = echarts.init(document.getElementById('program'));
-    var option = setOption('节目收看排行','服务器+本地解析',all_program,all_program_value);
+    var option = setOption('{$title}','{$type}',all_program,all_program_value);
     program .setOption(option);
 JS;
 

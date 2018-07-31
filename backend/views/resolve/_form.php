@@ -103,7 +103,7 @@ use yii\widgets\ActiveForm;
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? '新增' : '保存编辑', ['class' => $model->isNewRecord? 'btn btn-success' : 'btn btn-info']) ?>
-        <?= Html::a('返回', \yii\helpers\Url::to(['resolve/index']),['class' => 'btn btn-default']) ?>
+        <?= Html::a(Yii::t('backend','Go Back'), \yii\helpers\Url::to(['resolve/index']),['class' => 'btn btn-default']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

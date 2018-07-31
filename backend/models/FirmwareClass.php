@@ -44,9 +44,9 @@ class FirmwareClass extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => '名称',
-            'is_use' => '是否可用',
-            'order_id' => '绑定订单号',
+            'name' => Yii::t('backend', 'Name'),
+            'is_use' => Yii::t('backend', 'Is Available'),
+            'order_id' => Yii::t('backend', 'Binding order number'),
         ];
     }
 

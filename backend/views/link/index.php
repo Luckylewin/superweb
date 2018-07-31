@@ -54,7 +54,7 @@ $this->params['breadcrumbs'][] = $this->title;
     'class' => 'gridview btn btn-danger',
 ])?>
 
-<?= Html::a('返回', Yii::$app->request->referrer, ['class' => 'btn btn-default']) ?>
+<?= Html::a(Yii::t('backend','Go Back'), Yii::$app->request->referrer, ['class' => 'btn btn-default']) ?>
 
 <?php
 

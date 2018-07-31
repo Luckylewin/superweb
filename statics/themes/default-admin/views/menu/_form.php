@@ -13,7 +13,7 @@ use yii\widgets\ActiveField;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'pid')->dropDownList([0 => '一级菜单']+$treeArr, ['encode' => false]) ?>
+    <?= $form->field($model, 'pid')->dropDownList([0 => Yii::t('backend', 'Top menu')]+$treeArr, ['encode' => false]) ?>
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
