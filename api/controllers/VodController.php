@@ -126,7 +126,6 @@ class VodController extends ActiveController
     {
         $data = [];
         $list = IptvType::find()->where(['vod_list_id' => $vod_id])
-                                ->orderBy('sort asc')
                                 ->asArray()
                                 ->all();
 
@@ -136,7 +135,7 @@ class VodController extends ActiveController
              $data[] = [
                  'name' => $type['name'],
                  'field' => $type['field'],
-                 'items' => IptvTypeItem::find()->select('name,zh_name')->where(['type_id' => $type['id']])->orderBy('sort')->asArray()->all()
+                 'items' => IptvTypeItem::find()->select('name,zh_name')->where(['type_id' => $type['id']])->orderBy('sort asc')->asArray()->all()
              ];
         }
 
