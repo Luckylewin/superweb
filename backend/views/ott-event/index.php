@@ -42,7 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'size' => 'btn-sm',
                     'buttons' => [
                             'create-team' => function($url, $model) {
-                                return Html::a('队伍列表', Url::to(['ott-event-team/index', 'event_id' => $model->id]), [
+                                return Html::a(Yii::t('backend', 'Team List'), Url::to(['ott-event-team/index', 'event_id' => $model->id]), [
                                         'class' => 'btn btn-sm btn-info'
                                 ]);
                             }
@@ -52,7 +52,7 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); ?>
 
     <p>
-        <?= Html::a('创建赛事类别', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('backend', 'Create'), ['create'], ['class' => 'btn btn-success']) ?>
 
     </p>
 

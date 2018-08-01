@@ -50,12 +50,12 @@ class Banner extends \yii\db\ActiveRecord implements Linkable
     {
         return [
             'id' => 'ID',
-            'vod_id' => '影片id',
-            'sort' => '排序',
-            'title' => '标题',
-            'description' => '描述',
-            'pic' => 'Pic',
-            'pic_bg' => 'Pic Bg',
+            'vod_id' => 'Video id',
+            'sort' => Yii::t('backend', 'Sort'),
+            'title' => Yii::t('backend', 'Title'),
+            'description' => Yii::t('backend', 'Description'),
+            'pic' => Yii::t('backend', 'Picture'),
+            'pic_bg' => Yii::t('backend', 'Picture(big)'),
         ];
     }
 

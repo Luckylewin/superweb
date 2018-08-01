@@ -61,10 +61,10 @@ use dosamigos\fileupload\FileUploadUI;
 
     <?= $form->field($model, 'sort')->textInput() ?>
 
-    <?= $form->field($model, 'force_update')->dropDownList(['0' => '否', '1' => '是']) ?>
+    <?= $form->field($model, 'force_update')->dropDownList(['0' => Yii::t('backend', 'No'), '1' => Yii::t('backend', 'Yes')]) ?>
 
     <div class="form-group">
-        <?= Html::submitButton('保存', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton(\Yii::t('backend','Save'), ['class' => 'btn btn-success']) ?>
 
         <?= Html::a(Yii::t('backend','Go Back'), \yii\helpers\Url::to(['apk-detail/index', 'id' => $model->apk_ID]), ['class' => 'btn btn-default']) ?>
     </div>

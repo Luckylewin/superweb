@@ -9,7 +9,7 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use yii\web\Link;
 use yii\web\Linkable;
-
+use Yii;
 /**
  * This is the model class for table "iptv_vod".
  *
@@ -153,63 +153,63 @@ class Vod extends \yii\db\ActiveRecord implements Linkable
     public function attributeLabels()
     {
         return [
-            'vod_id' => '影片id',
-            'vod_cid' => '影片分类',
-            'vod_name' => '影片名称',
-            'vod_ename' => '影片别名',
-            'vod_title' => '影片副标',
-            'vod_keywords' => '影片TAG',
-            'vod_type' => '扩展分类',//喜剧 爱情 恐怖 动作 科幻 剧情 战争 警匪 犯罪 动画 奇幻 武侠 冒险 枪战 恐怖 悬疑 惊悚 经典 青春文艺 微电影 古装 历史运动 农村 儿童 网络电影
-            'vod_actor' => '主演',
-            'vod_director' => '导演',
-            'vod_content' => '影片简介',
-            'vod_pic' => '海报剧照',
-            'vod_pic_bg' => '背景图片',
-            'vod_pic_slide' => '轮播图片',
-            'vod_area' => '发行地区', //内地 美国 香港 台湾 韩国 日本 法国 英国 德国 泰国 印度 欧洲 东南亚 其他
-            'vod_language' => '语言',// 国语 英语 粤语 闽南语 韩语 日语 其它
-            'vod_year' => '发行年份',
-            'vod_continu' => '连载信息',
-            'vod_total' => '总共集数',
-            'vod_isend' => '是否完结',
-            'vod_addtime' => '更新日期',
-            'vod_filmtime' => '上映日期',
-            'vod_hits' => '总人气',
-            'vod_hits_day' => '日人气',
-            'vod_hits_week' => '周人气',
-            'vod_hits_month' => '月人气',
-            'vod_stars' => '推荐星级',
-            'vod_status' => '影片状态',//（0隐藏1显示）
-            'vod_up' => '支持',
-            'vod_down' => '反对',
-            'vod_ispay' => '点播权限',
-            'vod_price' => '影币',
-            'vod_trysee' => '影片试看',
-            'vod_play' => '播放器选择',
-            'vod_server' => '服务器地址',
-            'vod_url' => '播放地址',
-            'vod_inputer' => '录入编辑',
-            'vod_reurl' => '来源标识',
-            'vod_jumpurl' => '跳转URL',
-            'vod_letter' => '首字母',
-            'vod_skin' => '独立模板',
-            'vod_gold' => '评分值',
-            'vod_golder' => '评分人数',
-            'vod_length' => '影片时长',
-            'vod_weekday' => '节目周期',
-            'vod_series' => '影片系列',//(如“变形金刚”1、2、3部ID分别为77，88，99则每部影片此处填写为77,88,99；或将每部影片都填“变形金刚”（推荐）)
-            'vod_copyright' => '版权跳转：',
-            'vod_state' => '资源类别',//(正片|预告片|花絮)
-            'vod_version' => '版本',//(高清版|剧场版|抢先版|OVA|TV|影院版)
-            'vod_douban_id' => '豆瓣ID',
-            'vod_douban_score' => '豆瓣评分',
-            'vod_scenario' => '影片剧情',
-            'vod_home' => '是否推荐到首页',
-            'vod_multiple' => '是否有多集',
+            'vod_id' => Yii::t('backend', 'id'),
+            'vod_cid' => Yii::t('backend', 'Genre Name'),
+            'vod_name' => Yii::t('backend', 'Movie name'),
+            'vod_ename' => Yii::t('backend', 'Video alias'),
+            'vod_title' => Yii::t('backend', 'subtitle'),
+            'vod_keywords' => Yii::t('backend', 'TAG'),
+            'vod_type' => Yii::t('backend', 'Extended Genre'),//喜剧 爱情 恐怖 动作 科幻 剧情 战争 警匪 犯罪 动画 奇幻 武侠 冒险 枪战 恐怖 悬疑 惊悚 经典 青春文艺 微电影 古装 历史运动 农村 儿童 网络电影
+            'vod_actor' => Yii::t('backend', 'Main actor'),
+            'vod_director' => Yii::t('backend', ''),
+            'vod_content' => Yii::t('backend', 'Movie introduction'),
+            'vod_pic' => Yii::t('backend', 'Poster stills'),
+            'vod_pic_bg' => Yii::t('backend', 'Background picture'),
+            'vod_pic_slide' => Yii::t('backend', 'Carousel picture'),
+            'vod_area' => Yii::t('backend', 'Distribution area'), //内地 美国 香港 台湾 韩国 日本 法国 英国 德国 泰国 印度 欧洲 东南亚 其他
+            'vod_language' => Yii::t('backend', 'Language'),// 国语 英语 粤语 闽南语 韩语 日语 其它
+            'vod_year' => Yii::t('backend', 'Release year'),
+            'vod_continu' => Yii::t('backend', 'Serial information'),
+            'vod_total' => Yii::t('backend', 'Total Episodes'),
+            'vod_isend' => Yii::t('backend', 'End Status'),
+            'vod_addtime' => Yii::t('backend', 'Created Time'),
+            'vod_filmtime' => Yii::t('backend', 'Release date'),
+            'vod_hits' => Yii::t('backend', 'Total popularity'),
+            'vod_hits_day' => Yii::t('backend', 'Popularity in the day'),
+            'vod_hits_week' => Yii::t('backend', 'Popularity in the week'),
+            'vod_hits_month' => Yii::t('backend', 'Popularity of the month'),
+            'vod_stars' => Yii::t('backend', 'Recommended Star'),
+            'vod_status' => Yii::t('backend', 'Status'),//（0隐藏1显示）
+            'vod_up' => Yii::t('backend', 'like'),
+            'vod_down' => Yii::t('backend', 'dislike'),
+            'vod_ispay' => Yii::t('backend', 'Permission'),
+            'vod_price' => Yii::t('backend', 'gold'),
+            'vod_trysee' => Yii::t('backend', 'Free Experience Time'),
+            'vod_play' => Yii::t('backend', 'Player selection'),
+            'vod_server' => Yii::t('backend', 'Server address'),
+            'vod_url' => Yii::t('backend', 'Play address'),
+            'vod_inputer' => Yii::t('backend', 'Creator'),
+            'vod_reurl' => Yii::t('backend', 'Source identifier'),
+            'vod_jumpurl' => Yii::t('backend', 'Jump URL'),
+            'vod_letter' => Yii::t('backend', 'First Letter'),
+            'vod_skin' => Yii::t('backend', 'Independent template'),
+            'vod_gold' => Yii::t('backend', 'Rating'),
+            'vod_golder' => Yii::t('backend', 'Total number of ratings'),
+            'vod_length' => Yii::t('backend', 'Movie duration'),
+            'vod_weekday' => Yii::t('backend', 'Program cycle'),
+            'vod_series' => Yii::t('backend', 'Film series'),//(如“变形金刚”1、2、3部ID分别为77，88，99则每部影片此处填写为77,88,99；或将每部影片都填“变形金刚”（推荐）)
+            'vod_copyright' => Yii::t('backend', 'Copyright jump'),
+            'vod_state' => Yii::t('backend', 'Resource Type'),//(正片|预告片|花絮)
+            'vod_version' => Yii::t('backend', 'Version'),//(高清版|剧场版|抢先版|OVA|TV|影院版)
+            'vod_douban_id' => Yii::t('backend', 'Douban ID'),
+            'vod_douban_score' => Yii::t('backend', 'Douban Ratting'),
+            'vod_scenario' => Yii::t('backend', 'Plot'),
+            'vod_home' => Yii::t('backend', 'Whether to recommend to the home page'),
+            'vod_multiple' => Yii::t('backend', 'Is multi-set'),
             'vod_imdb_id' => 'IMDb ID',
-            'vod_imdb_score' => 'IMDb 评分',
-            'vod_fill_flag' => '资料填充标志',
-            'sort' => '排序'
+            'vod_imdb_score' => Yii::t('backend', 'IMDb Ratting'),
+            'vod_fill_flag' => Yii::t('backend', 'Data fill flag'),
+            'sort' => Yii::t('backend', 'Sort')
         ];
     }
 

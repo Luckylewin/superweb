@@ -27,10 +27,10 @@ $this->registerJsFile('/statics/js/miniUtils.js')
 
     <ul id="myTab" class="nav nav-tabs">
         <li class="active">
-            <a href="#home" data-toggle="tab">基本数据</a>
+            <a href="#home" data-toggle="tab"><?= Yii::t('backend', 'Basic Data') ?></a>
         </li>
-        <li><a href="#advance" data-toggle="tab">扩展数据一</a></li>
-        <li><a href="#ios" data-toggle="tab">扩展数据二</a></li>
+        <li><a href="#advance" data-toggle="tab"><?= Yii::t('backend', 'Extended data (I)') ?></a></li>
+        <li><a href="#ios" data-toggle="tab"><?= Yii::t('backend', 'Extended data (II)') ?></a></li>
 
     </ul>
     <?php $form = ActiveForm::begin(); ?>
@@ -53,9 +53,9 @@ $this->registerJsFile('/statics/js/miniUtils.js')
                         <!-- 影片名称  -->
                         <?= $form->field($model, 'vod_name')->textInput([
                             'placeholder' => '必填'
-                        ])->label('<font style="color: red"><b>*</b></font>影片名称') ?>
+                        ])->label('<font style="color: red"><b>*</b></font>' . Yii::t('backend', 'Movie name')) ?>
                         <!-- 单片付费 -->
-                        <?= $form->field($model, 'vod_price')->textInput()->label('单片价格(元)') ?>
+                        <?= $form->field($model, 'vod_price')->textInput() ?>
 
                     </div>
 
@@ -66,7 +66,7 @@ $this->registerJsFile('/statics/js/miniUtils.js')
                         <!-- 影片试看 -->
                         <?= $form->field($model, 'vod_trysee')->textInput([
                                 'placeholder' => '必填'
-                        ])->label('<font style="color: red"><b>*</b></font>影片试看(分钟)') ?>
+                        ]) ?>
 
                     </div>
 
@@ -344,7 +344,7 @@ $this->registerJsFile('/statics/js/miniUtils.js')
     </div>
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? '新增':'保存', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton($model->isNewRecord ? '新增':\Yii::t('backend','Save'), ['class' => 'btn btn-success']) ?>
         <?= Html::a(Yii::t('backend','Go Back'), ['vod-list/index'], ['class' => 'btn btn-default']) ?>
     </div>
 

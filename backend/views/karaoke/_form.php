@@ -48,7 +48,7 @@ use yii\widgets\ActiveForm;
 
     <div class="col-md-12">
 
-        <?= $form->field($model, 'source')->dropDownList(['Youtube' => 'Youtube', 'upload' => '自定义上传']); ?>
+        <?= $form->field($model, 'source')->dropDownList(['Youtube' => 'Youtube', 'upload' => Yii::t('backend', 'Custom Upload')]); ?>
 
         <?= $form->field($model, 'url')->textInput(['maxlength' => true]) ?>
         <div id="upload-video" style="display: none">
@@ -101,7 +101,7 @@ use yii\widgets\ActiveForm;
     <div class="col-md-12">
         <?= $form->field($model, 'info')->textarea(['rows' => 6]) ?>
         <div class="form-group">
-            <?= Html::submitButton('保存', ['class' => 'btn btn-success']) ?>
+            <?= Html::submitButton(\Yii::t('backend','Save'), ['class' => 'btn btn-success']) ?>
             <?= Html::a(Yii::t('backend','Go Back'), ['karaoke/index'], ['class' => 'btn btn-default']) ?>
         </div>
     </div>

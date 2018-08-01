@@ -7,7 +7,7 @@ use yii\widgets\Pjax;
 /* @var $searchModel backend\models\search\KaraokeSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = '卡拉OK视频';
+$this->title = Yii::t('backend', 'Karaoke video');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="album-name-karaoke-index">
@@ -52,21 +52,21 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                     'attribute' => 'hit_count',
-                    'label' => '热度',
-                    'options' => [
-                            'style' => 'width:90px;'
-                    ]
+                    'label' => Yii::t('backend', 'heat'),
+                    'options' => ['style' => 'width:70px;']
             ],
 
             [
                     'attribute' => 'area',
-                    'filter' => \backend\models\Karaoke::getLang()
+                    'filter' => \backend\models\Karaoke::getLang(),
+                    'options' => ['style' => 'width:70px;']
 
             ],
 
             [
                     'attribute' => 'is_del',
                     'filter' => \backend\models\Karaoke::$delStatus,
+                    'options' => ['style' => 'width:100px;'],
                     'value' => function($model) {
                         return $model->status;
                     }
@@ -82,7 +82,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'class' => 'common\grid\MyActionColumn',
-                'header' => '操作'
+                'header' => Yii::t('backend', 'Operation')
             ],
 
 
@@ -114,6 +114,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php Pjax::begin(); ?>
     <?php Pjax::end(); ?>
     <p>
-        <?= Html::a('新增视频', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('backend', 'Create'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 </div>

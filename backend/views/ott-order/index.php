@@ -43,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     [
                             'attribute' => 'expire_time',
                             'value' => function($model) {
-                                return floor($model->expire_time / (30 * 86400)) . '个月';
+                                return floor($model->expire_time / (30 * 86400)) .' ' .Yii::t('backend', 'months');
                             },
                             'filter' => false
                     ],
@@ -52,7 +52,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'attribute' => 'mainOrder.order_ispay',
                         'format' => 'raw',
                         'value' => function($model) {
-                            $payText = ['未支付', '已支付'];
+                            $payText = [Yii::t('backend', 'Unpaid'), Yii::t('backend', 'Paid')];
                             $payText = $payText[$model->mainOrder->order_ispay];
 
                             if ($model->mainOrder->order_ispay) {

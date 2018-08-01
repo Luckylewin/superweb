@@ -51,15 +51,15 @@ class RenewalCard extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'card_num' => '卡号',
-            'card_secret' => '卡密',
-            'card_contracttime' => '续费时长',
-            'is_del' => '是否被删除',
-            'is_valid' => '是否已使用',
-            'created_time' => '创建时间',
-            'updated_time' => '更新时间',
-            'batch' => '批次',
-            'who_use' => '使用的人',
+            'card_num' => Yii::t('backend', 'Card number'),
+            'card_secret' => Yii::t('backend', 'Card key'),
+            'card_contracttime' => Yii::t('backend', 'Renewal time'),
+            'is_del' => Yii::t('backend', 'Soft delete'),
+            'is_valid' => Yii::t('backend', 'Status of use'),
+            'created_time' => Yii::t('backend', 'Created Time'),
+            'updated_time' =>  Yii::t('backend', 'Updated Time'),
+            'batch' => Yii::t('backend', 'Batch'),
+            'who_use' => Yii::t('backend', 'Person used'),
         ];
     }
 

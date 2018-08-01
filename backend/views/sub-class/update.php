@@ -8,7 +8,7 @@ use yii\helpers\Html;
 $this->title = 'Update Sub Class: ';
 $this->params['breadcrumbs'][] =  $model->name;
 
-$this->params['breadcrumbs'][] = '更新';
+$this->params['breadcrumbs'][] = Yii::t('backend', 'Update');
 ?>
 <div class="sub-class-update">
 

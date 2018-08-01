@@ -29,10 +29,7 @@ class VodList extends \yii\db\ActiveRecord implements Linkable
 {
     public $icon;
 
-    private $list_status = [
-        '关闭',
-        '正常'
-    ];
+    private $list_status = ['off', 'on'];
 
     /**
      * @inheritdoc
@@ -87,20 +84,20 @@ class VodList extends \yii\db\ActiveRecord implements Linkable
     {
         return [
             'list_id' => 'List ID',
-            'list_pid' => '父id',
-            'list_sid' => '模型id',
-            'list_name' => '分类名称',
-            'list_dir' => '分类英文别名',
-            'list_status' => 'List Status',
-            'list_keywords' => '分类SEO关键词',
-            'list_title' => '分类SEO标题',
-            'list_description' => '分类SEO描述',
-            'list_ispay' => '影片观看权限',
-            'list_price' => '影片付费',
-            'list_trysee' => '影片试看时间(分)',
-            'list_extend' => '扩展配置',
-            'list_icon' => '图标',
-            'list_sort' => '排序',
+            'list_pid' => Yii::t('backend', 'Parent ID'),
+            'list_sid' => Yii::t('backend', 'Model ID'),
+            'list_name' => Yii::t('backend', 'Genre Name'),
+            'list_dir' => Yii::t('backend', 'Alias'),
+            'list_status' => Yii::t('backend', 'List Status'),
+            'list_keywords' => Yii::t('backend', 'SEO Keywords'),
+            'list_title' => Yii::t('backend', 'SEO Keywords'),
+            'list_description' => Yii::t('backend', 'SEO Description'),
+            'list_ispay' => Yii::t('backend', 'Permission'),
+            'list_price' => Yii::t('backend', 'Price'),
+            'list_trysee' => Yii::t('backend', 'Free Experience Time') . '('. Yii::t('backend', 'minute') .')',
+            'list_extend' => Yii::t('backend', 'Extended configuration'),
+            'list_icon' => Yii::t('backend', 'Icon'),
+            'list_sort' => Yii::t('backend', 'Sort'),
         ];
     }
 

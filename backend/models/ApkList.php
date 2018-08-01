@@ -53,12 +53,12 @@ class ApkList extends \yii\db\ActiveRecord implements Linkable
     {
         return [
             'ID' => 'ID',
-            'typeName' => 'APK名称',
-            'type' => '类型',
-            'class' => '包名',
-            'img' => '图标',
-            'sort' => '排序',
-            'scheme_id' => '方案号',
+            'typeName' => Yii::t('backend', 'Name'),
+            'type' => Yii::t('backend', 'Type'),
+            'class' => Yii::t('backend', 'Package names'),
+            'img' => Yii::t('backend', 'Icon'),
+            'sort' => Yii::t('backend', 'Sort'),
+            'scheme_id' => Yii::t('backend', 'Schemes'),
         ];
     }
 

@@ -1,8 +1,9 @@
 <?php
 
 namespace common\models;
-use backend\models\Mac;
 
+use backend\models\Mac;
+use Yii;
 /**
  * This is the model class for table "iptv_order".
  *
@@ -24,15 +25,15 @@ class Order extends \yii\db\ActiveRecord
 {
 
     public static $payType = [
-        'alipay' => '支付宝',
-        'wxpay' => '微信',
-        'paypal' => '贝宝',
+        'alipay' => 'Alipay',
+        'wxpay' => 'WeChat payment',
+        'paypal' => 'Paypal',
         'dokypay'=> 'DokyPay'
     ];
 
     public static $payStatus = [
-        '未支付',
-        '已支付'
+        'Unpaid',
+        'Paid'
     ];
 
     /**
@@ -80,19 +81,19 @@ class Order extends \yii\db\ActiveRecord
     {
         return [
             'order_id' => 'Order ID',
-            'order_sign' => '订单日期',
-            'order_status' => '订单状态',
-            'order_uid' => '用户ID',
-            'order_total' => '订单数量',
-            'order_money' => '订单金额',
-            'order_ispay' => '是否支付',
-            'order_addtime' => '下单时间',
-            'order_paytime' => '支付时间',
-            'order_confirmtime' => '订单确认时间',
-            'order_info' => '订单信息',
-            'order_paytype' => '支付类型',
-            'user.username' => '用户',
-            'paystatus' => '订单状态'
+            'order_sign' => Yii::t('backend', 'Order Date'),
+            'order_status' => Yii::t('backend', 'Order Status'),
+            'order_uid' => Yii::t('backend', 'User ID'),
+            'order_total' => Yii::t('backend', 'Order Quantity'),
+            'order_money' => Yii::t('backend', 'Order Amount'),
+            'order_ispay' => Yii::t('backend', 'Payment Status'),
+            'order_addtime' => Yii::t('backend', 'Order Time'),
+            'order_paytime' => Yii::t('backend', 'Pay Time'),
+            'order_confirmtime' => Yii::t('backend', 'Confirmation Time'),
+            'order_info' => Yii::t('backend', 'Order information'),
+            'order_paytype' => Yii::t('backend', 'Payment Types'),
+            'user.username' => Yii::t('backend', 'User'),
+            'paystatus' => Yii::t('backend', 'Order Status')
         ];
     }
 

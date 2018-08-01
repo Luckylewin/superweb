@@ -166,7 +166,7 @@ try {
     $ott_genre = $model->getCountryList;
 
     $text = Yii::t('backend', 'Interface call statistics');
-    $total_text = Yii::t('backend', 'Total');
+    $total_text = Yii::t('backend', 'Total number');
     $watch_text = Yii::t('backend', 'Watch');
     $token_text = Yii::t('backend', 'Token');
     $ott_text = Yii::t('backend', 'OttList');

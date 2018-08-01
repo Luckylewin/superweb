@@ -46,13 +46,13 @@ class OttBanner extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'title' => '标题',
-            'desc' => '详情',
-            'image' => '小图',
-            'image_big' => '大图',
-            'sort' => '排序',
-            'channel_id' => '频道id',
-            'url' => '资源地址',
+            'title' => Yii::t('backend', 'Title'),
+            'desc' => Yii::t('backend', 'Description'),
+            'image' => Yii::t('backend', 'Thumbnail'),
+            'image_big' => Yii::t('backend', 'Big icon'),
+            'sort' => Yii::t('backend', 'Sort'),
+            'channel_id' => Yii::t('backend', 'Channel ID'),
+            'url' => Yii::t('backend', 'Resource address'),
         ];
     }
 

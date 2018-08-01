@@ -65,15 +65,15 @@ class OttEventTeam extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'event_id' => '所属赛事',
-            'team_name' => '队伍名称',
-            'team_zh_name' => '队伍中文名',
-            'team_introduce' => '队伍简介',
-            'team_icon' => '队伍图标',
-            'team_icon_big' => '队伍图标',
-            'team_country' => '国家代码',
-            'team_info' => '附加属性',
-            'team_alias_name' => '别名',
+            'event_id' => Yii::t('backend', 'Associated event'),
+            'team_name' => Yii::t('backend', 'Team Name'),
+            'team_zh_name' => Yii::t('backend', 'Team Chinese Name'),
+            'team_introduce' => Yii::t('backend', 'Description'),
+            'team_icon' => Yii::t('backend', 'Team Icon'),
+            'team_icon_big' => Yii::t('backend', 'Team Icon(big)'),
+            'team_country' => Yii::t('backend', 'Country Code'),
+            'team_info' => Yii::t('backend', 'Additional attribute'),
+            'team_alias_name' => Yii::t('backend', 'Alias'),
         ];
     }
 

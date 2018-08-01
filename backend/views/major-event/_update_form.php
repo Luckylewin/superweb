@@ -175,7 +175,7 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/laydate/laydate.js'
             <?php $form->field($model, 'sort')->textInput(['maxlength' => true]) ?>
 
             <div class="form-group">
-                <?= Html::submitButton('保存', ['class' => 'btn btn-info']) ?>
+                <?= Html::submitButton(\Yii::t('backend','Save'), ['class' => 'btn btn-info']) ?>
                 <?= Html::a(Yii::t('backend','Go Back'), ['major-event/index'], ['class' => 'btn btn-default']) ?>
             </div>
         </div>

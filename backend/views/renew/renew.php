@@ -2,8 +2,8 @@
 
 use \yii\bootstrap\Html;
 
-$this->title = '续费';
-$this->params['breadcrumbs'][] = "用户列表";
+$this->title = Yii::t('backend', 'Renewal');
+$this->params['breadcrumbs'][] = Yii::t('backend', 'User List');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -11,7 +11,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= Html::beginForm(\yii\helpers\Url::to(['renew/renew','mac'=>$model->MAC ]), 'POST'); ?>
 
      <div>
-         <label for="mac">当前操作对象(<?= $model->getUseFlag($model->use_flag) ?>)</label>
+         <label for="mac"><?= Yii::t('backend', 'Current operation object') ?>(<?= $model->getUseFlag($model->use_flag) ?>)</label>
          <?= Html::input('text', "mac", $model->MAC,[
              'class' => 'form-control',
              'readonly' => 'true',
@@ -20,8 +20,8 @@ $this->params['breadcrumbs'][] = $this->title;
      </div> <br/>
 
     <div>
-        <label for="unit">时间单位</label>
-        <?= Html::dropDownList('unit','year', ['year' => '年','month' => '月', 'day' => '天'],
+        <label for="unit"><?= Yii::t('backend', 'time unit') ?></label>
+        <?= Html::dropDownList('unit','year', \backend\models\Mac::getContractList(),
             [
                     'class' => 'form-control',
                     'style' => 'width:400px;'
@@ -30,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </div> <br/>
 
     <div>
-        <label for="text">时间</label>
+        <label for="text"><?= Yii::t('backend', 'Time') ?></label>
         <?= Html::input('text', 'contract_time', 1 , [
                 'class' => 'form-control',
                 'style' => 'width:400px;'
@@ -39,11 +39,11 @@ $this->params['breadcrumbs'][] = $this->title;
     </div> <br/>
 
     <div>
-        <?= Html::submitButton("续费", [
+        <?= Html::submitButton(Yii::t('backend', 'Renewal'), [
                 'class' => 'btn btn-success'
         ]) ?>
 
-        <?= Html::a("返回",\yii\helpers\Url::to(['mac/index']) ,[
+        <?= Html::a(Yii::t('backend', 'Go Back'),\yii\helpers\Url::to(['mac/index']) ,[
             'class' => 'btn btn-default'
         ]) ?>
 
@@ -58,7 +58,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="panel panel-default">
     <div class="panel-heading">
         <h3 class="panel-title">
-            续费历史记录
+            <?= Yii::t('backend', 'History Record') ?>
         </h3>
     </div>
     <div class="panel-body">
@@ -68,11 +68,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 <thead>
                 <tr>
                     <th>ID</th>
-                    <th>续费日期</th>
-                    <th>续费卡号</th>
-                    <th>续费时长</th>
-                    <th>过期时间</th>
-                    <th>续费方式</th>
+                    <th><?= Yii::t('backend', 'Renewal date') ?></th>
+                    <th><?= Yii::t('backend', 'Renewal card number') ?></th>
+                    <th><?= Yii::t('backend', 'Renewal time') ?></th>
+                    <th><?= Yii::t('backend', 'Expire Time') ?></th>
+                    <th><?= Yii::t('backend', 'Renewal method') ?></th>
                 </tr>
 
                 </thead>
@@ -82,18 +82,18 @@ $this->params['breadcrumbs'][] = $this->title;
                         <td><?= $record['id'] ?></td>
                         <td><?= date('Y-m-d',$record['date']) ?></td>
                         <td><?= $record['card_num'] ?></td>
-                        <td><?= str_replace([' day',' month',' year'],['天','个月','年'],$record['renew_period']); ?></td>
+                        <td><?= Yii::t('backend', $record['renew_period']); ?></td>
                         <td>
                             <?= $record['expire_time'];?>
                         </td>
                         <td>
                             <?php if(!$record['renew_operator']): ?>
                                 <span class="label label-success">
-                                后台操作
+                                    <?= Yii::t('backend', 'Background operation') ?>
                             </span>
                             <?php else: ?>
                                 <span class="label label-primary">
-                                续费卡
+                                    <?= Yii::t('backend', 'Renewal card') ?>
                             </span>
                             <?php endif; ?>
                         </td>

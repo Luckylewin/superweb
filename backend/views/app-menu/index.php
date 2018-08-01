@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-
+use \backend\models\AppMenu;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
@@ -42,7 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                     'attribute' => 'auth',
                     'value' => function($model) {
-                        return \backend\models\AppMenu::$isAuth[$model->auth];
+                        return Yii::t('backend', AppMenu::$isAuth[$model->auth]);
                     }
             ],
             'restful_url:url',

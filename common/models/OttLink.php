@@ -27,8 +27,8 @@ class OttLink extends \yii\db\ActiveRecord
 {
 
     public $use_flag_status = [
-        '不可用',
-        '可用',
+        'Unavailable',
+        'Available',
     ];
 
     public $use_flag_text;
@@ -67,16 +67,16 @@ class OttLink extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'channel_id' => '关联频道号',
-            'link' => '链接',
-            'source' => '来源',
-            'sort' => '排序',
-            'use_flag' => '可用',
-            'format' => 'Format',
-            'script_deal' => '脚本开关',
-            'definition' => '清晰度',
-            'method' => '本地算法',
-            'decode' => '硬软解',
+            'channel_id' => Yii::t('backend', 'Associated Channel'),
+            'link' => Yii::t('backend', 'Link'),
+            'source' => Yii::t('backend', 'Source'),
+            'sort' => Yii::t('backend', 'Sort'),
+            'use_flag' => Yii::t('backend', 'Available'),
+            'format' => Yii::t('backend', 'Format'),
+            'script_deal' => Yii::t('backend', 'Script switch'),
+            'definition' => Yii::t('backend', 'Sharpness'),
+            'method' => Yii::t('backend', 'Analytic method'),
+            'decode' => Yii::t('backend', 'coding'),
         ];
     }
 

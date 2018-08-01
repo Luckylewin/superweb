@@ -34,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         if ($account = $model->account) {
                             return $account->username;
                         } else {
-                            return Html::a("绑定帐号" , null , [
+                            return Html::a(Yii::t('backend', 'Associate Account') , null , [
                                     'class' => 'btn btn-success btn-sm bind',
                                     'data-toggle' => 'modal',
                                     'data-target' => '#blind-modal',

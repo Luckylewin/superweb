@@ -7,6 +7,8 @@
  */
 
 namespace backend\models;
+
+use Yii;
 use common\models\OttChannel;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
@@ -82,12 +84,12 @@ class Parade extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'channel_id' => '频道ID',
-            'channel_name' => '频道名称',
-            'parade_date' => '预告日期',
-            'upload_date' => '采集日期',
-            'parade_data' => '预告内容',
-            'parade_timestamp' => '世界时间'
+            'channel_id' => Yii::t('backend', 'Channel ID'),
+            'channel_name' => Yii::t('backend', 'Channel Name'),
+            'parade_date' => Yii::t('backend', 'Parade date'),
+            'upload_date' => Yii::t('backend', 'Date of collection'),
+            'parade_data' => Yii::t('backend', 'Parade Content'),
+            'parade_timestamp' => Yii::t('backend', 'Time')
         ];
     }
 

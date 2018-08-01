@@ -47,7 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                     'class' => 'common\grid\MyActionColumn',
                     'template' => '{view} {delete}',
-                    'options' => ['style' => 'width:200px;']
+                    'options' => ['style' => 'width:150px;']
             ],
         ],
     ]); ?>

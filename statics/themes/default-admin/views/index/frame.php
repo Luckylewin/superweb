@@ -63,11 +63,11 @@ $username = Yii::$app->user->isGuest == false ? Yii::$app->user->identity->usern
                                 <a class="J_menuItem" href="form_avatar.html">修改头像</a>
                              </li>-->
                              <li>
-                                 <a class="J_menuItem" href="<?= Url::to(['admin/reset-password']) ?>">修改密码</a>
+                                 <a class="J_menuItem" href="<?= Url::to(['admin/reset-password']) ?>"><?= Yii::t('backend', 'Change Password') ?></a>
                              </li>
 
                             <li class="divider"></li>
-                            <li><a href="<?= Url::to(['site/logout']) ?>">安全退出</a>
+                            <li><a href="<?= Url::to(['site/logout']) ?>"><?= Yii::t('backend', 'Sign Out') ?></a>
                             </li>
                         </ul>
                     </div>
@@ -418,7 +418,7 @@ $username = Yii::$app->user->isGuest == false ? Yii::$app->user->identity->usern
                 <div class="navbar-header"><a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
                     <form role="search" class="navbar-form-custom" >
                         <div class="form-group">
-                            <input type="text" placeholder="请输入您需要查找的内容 …" class="form-control" name="top-search" id="top-search">
+                            <input type="text" placeholder="<?= Yii::t('backend', 'Please enter what you need to find…') ?>" class="form-control" name="top-search" id="top-search">
                         </div>
                     </form>
                 </div>
@@ -503,7 +503,7 @@ $username = Yii::$app->user->isGuest == false ? Yii::$app->user->identity->usern
                     </li>-->
                     <li class="dropdown hidden-xs">
                         <a class="right-sidebar-toggle" aria-expanded="false">
-                            <i class="fa fa-tasks"></i> 主题
+                            <i class="fa fa-tasks"></i> <?= Yii::t('backend', 'Themes') ?>
                         </a>
                     </li>
                 </ul>
@@ -520,20 +520,20 @@ $username = Yii::$app->user->isGuest == false ? Yii::$app->user->identity->usern
             <button class="roll-nav roll-right J_tabRight"><i class="fa fa-forward"></i>
             </button>
             <div class="btn-group roll-nav roll-right">
-                <button class="dropdown J_tabClose" data-toggle="dropdown">关闭操作<span class="caret"></span>
+                <button class="dropdown J_tabClose" data-toggle="dropdown"><?= Yii::t('backend', 'Close') ?><span class="caret"></span>
 
                 </button>
                 <ul role="menu" class="dropdown-menu dropdown-menu-right">
-                    <li class="J_tabShowActive"><a>定位当前选项卡</a>
+                    <li class="J_tabShowActive"><a><?= Yii::t('backend', 'Locate the current tab') ?></a>
                     </li>
                     <li class="divider"></li>
-                    <li class="J_tabCloseAll"><a>关闭全部选项卡</a>
+                    <li class="J_tabCloseAll"><a><?= Yii::t('backend', 'Close all tabs') ?></a>
                     </li>
-                    <li class="J_tabCloseOther"><a>关闭其他选项卡</a>
+                    <li class="J_tabCloseOther"><a><?= Yii::t('backend', 'Close other tabs') ?></a>
                     </li>
                 </ul>
             </div>
-            <a href="<?= Url::to(['site/logout']) ?>" class="roll-nav roll-right J_tabExit"><i class="fa fa fa-sign-out"></i> 退出</a>
+            <a href="<?= Url::to(['site/logout']) ?>" class="roll-nav roll-right J_tabExit"><i class="fa fa fa-sign-out"></i> <?= Yii::t('backend', 'leave') ?></a>
         </div>
         <div class="row J_mainContent" id="content-main">
             <iframe class="J_iframe" name="iframe0" width="100%" height="100%" src="<?= Url::to('/admin.php?r=index%2Findex')?>" frameborder="0" data-id="<?= Url::to('/admin.php?r=index%2Findex')?>" seamless></iframe>
@@ -552,7 +552,7 @@ $username = Yii::$app->user->isGuest == false ? Yii::$app->user->identity->usern
 
                 <li class="active">
                     <a data-toggle="tab" href="#tab-1">
-                        <i class="fa fa-gear"></i> 主题
+                        <i class="fa fa-gear"></i> <?= Yii::t('backend', 'Themes') ?>
                     </a>
                 </li>
                 <!--<li class=""><a data-toggle="tab" href="#tab-2">
@@ -568,13 +568,13 @@ $username = Yii::$app->user->isGuest == false ? Yii::$app->user->identity->usern
             <div class="tab-content">
                 <div id="tab-1" class="tab-pane active">
                     <div class="sidebar-title">
-                        <h3> <i class="fa fa-comments-o"></i> 主题设置</h3>
-                        <small><i class="fa fa-tim"></i> 你可以从这里选择和预览主题的布局和样式，这些设置会被保存在本地，下次打开的时候会直接应用这些设置。</small>
+                        <h3> <i class="fa fa-comments-o"></i> <?= Yii::t('backend', 'Theme settings') ?></h3>
+                        <small><i class="fa fa-tim"></i> <?= Yii::t('backend', 'These settings will be saved locally and will be applied directly the next time you open them.') ?></small>
                     </div>
                     <div class="skin-setttings">
-                        <div class="title">主题设置</div>
+                        <div class="title"><?= Yii::t('backend', 'Theme settings') ?></div>
                         <div class="setings-item">
-                            <span>收起左侧菜单</span>
+                            <span><?= Yii::t('backend', 'Collapse the left menu') ?></span>
                             <div class="switch">
                                 <div class="onoffswitch">
                                     <input type="checkbox" name="collapsemenu" class="onoffswitch-checkbox" id="collapsemenu">
@@ -586,7 +586,7 @@ $username = Yii::$app->user->isGuest == false ? Yii::$app->user->identity->usern
                             </div>
                         </div>
                         <div class="setings-item">
-                            <span>固定顶部</span>
+                            <span><?= Yii::t('backend', 'Fixed top') ?></span>
 
                             <div class="switch">
                                 <div class="onoffswitch">
@@ -600,7 +600,7 @@ $username = Yii::$app->user->isGuest == false ? Yii::$app->user->identity->usern
                         </div>
                         <div class="setings-item">
                                 <span>
-                        固定宽度
+
                     </span>
 
                             <div class="switch">
@@ -613,25 +613,25 @@ $username = Yii::$app->user->isGuest == false ? Yii::$app->user->identity->usern
                                 </div>
                             </div>
                         </div>
-                        <div class="title">皮肤选择</div>
+                        <div class="title"><?= Yii::t('backend', 'Skin selection') ?></div>
                         <div class="setings-item default-skin nb">
                                 <span class="skin-name ">
                          <a href="#" class="s-skin-0">
-                             默认皮肤
+                             <?= Yii::t('backend', 'Default skin') ?>
                          </a>
                     </span>
                         </div>
                         <div class="setings-item blue-skin nb">
                                 <span class="skin-name ">
                         <a href="#" class="s-skin-1">
-                            蓝色主题
+                            <?= Yii::t('backend', 'Blue theme') ?>
                         </a>
                     </span>
                         </div>
                         <div class="setings-item yellow-skin nb">
                                 <span class="skin-name ">
                         <a href="#" class="s-skin-3">
-                            黄色/紫色主题
+                            <?= Yii::t('backend', 'Yellow/purple theme') ?>
                         </a>
                     </span>
                         </div>

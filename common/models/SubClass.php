@@ -5,6 +5,7 @@ namespace common\models;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
+use Yii;
 
 /**
  * This is the model class for table "ott_sub_class".
@@ -20,7 +21,7 @@ use yii\helpers\ArrayHelper;
  */
 class SubClass extends \yii\db\ActiveRecord
 {
-    public $use_flag_text = ['不可用', '可用'];
+    public $use_flag_text = ['Unavailable', 'Available'];
 
     /**
      * @inheritdoc
@@ -51,13 +52,13 @@ class SubClass extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'main_class_id' => '大类ID',
-            'name' => '名称',
-            'zh_name' => '中文名称',
-            'sort' => '排序',
-            'use_flag' => '是否可用',
-            'keyword' => '导入识别关键字',
-            'created_at' => '创建时间',
+            'main_class_id' => 'Main Class ID',
+            'name' => Yii::t('backend', 'Name'),
+            'zh_name' => Yii::t('backend', 'Chinese Name'),
+            'sort' => Yii::t('backend', 'Sort'),
+            'use_flag' => Yii::t('backend', 'Is Available'),
+            'keyword' => Yii::t('backend', 'Import identification keywords'),
+            'created_at' => Yii::t('backend', 'Created Time'),
         ];
     }
 
@@ -105,7 +106,7 @@ class SubClass extends \yii\db\ActiveRecord
 
     public function getUseText()
     {
-        return $this->use_flag_text[$this->use_flag];
+        return Yii::t('backend', $this->use_flag_text[$this->use_flag]);
     }
 
     public function beforeDelete()

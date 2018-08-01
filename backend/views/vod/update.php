@@ -8,7 +8,7 @@ use yii\helpers\Html;
 $this->title = $model->vod_name;
 $this->params['breadcrumbs'][] = ['label' => 'Vods', 'url' => Yii::$app->request->referrer];
 $this->params['breadcrumbs'][] = ['label' => $model->vod_name, 'url' => Yii::$app->request->referrer];
-$this->params['breadcrumbs'][] = '编辑';
+$this->params['breadcrumbs'][] = Yii::t('backend', 'Edit');
 ?>
 <div class="vod-update">
 

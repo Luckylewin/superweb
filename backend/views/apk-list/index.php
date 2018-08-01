@@ -10,7 +10,7 @@ use \common\oss\Aliyunoss;
 /* @var $searchModel backend\models\search\ApkListSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Apk列表';
+$this->title = Yii::t('backend', 'APK List');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="apk-list-index">
@@ -121,12 +121,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                     'class' => 'common\grid\MyActionColumn',
-                    'header' => '操作',
+                    'header' => Yii::t('backend', 'Operation'),
                     'size' => 'btn-sm',
                     'template' => '{child} {view} {update} {delete}',
                     'buttons' => [
                         'child' => function($url,$model, $key) {
-                            return Html::a("发布版本", \yii\helpers\Url::to(['apk-detail/create','id' => $model->ID]), [
+                            return Html::a(Yii::t('backend', 'Release Version'), \yii\helpers\Url::to(['apk-detail/create','id' => $model->ID]), [
                                 'class' => 'btn btn-default btn-sm'
                             ]);
                         }

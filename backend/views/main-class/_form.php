@@ -24,7 +24,7 @@ use yii\widgets\ActiveForm;
     </div>
 
     <div class="col-md-6">
-        <?= $form->field($model, 'is_charge')->dropDownList(['免费','收费']) ?>
+        <?= $form->field($model, 'is_charge')->dropDownList([Yii::t('backend', 'Free'), Yii::t('backend', 'Charge')]) ?>
     </div>
 
     <div class="col-md-6">
@@ -179,10 +179,10 @@ use yii\widgets\ActiveForm;
 
     <div class="col-md-12">
         <div class="form-group">
-            <?= $form->field($model, 'use_flag')->dropDownList(['关', '开']); ?>
+            <?= $form->field($model, 'use_flag')->dropDownList([Yii::t('backend', 'off'), Yii::t('backend', 'on')]); ?>
         </div>
         <div class="form-group">
-            <?= Html::submitButton('保存', ['class' => 'btn btn-success']) ?>
+            <?= Html::submitButton(\Yii::t('backend','Save'), ['class' => 'btn btn-success']) ?>
             <?= Html::a(Yii::t('backend','Go Back'), ['index'], ['class' => 'btn btn-default']) ?>
         </div>
     </div>

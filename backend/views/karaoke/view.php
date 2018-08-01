@@ -14,6 +14,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
+    <p>
+        <?= Html::a(Yii::t('backend', 'Update'), ['update', 'id' => $model->ID], ['class' => 'btn btn-primary']) ?>
+
+        <?= Html::a(Yii::t('backend','Go Back'), ['karaoke/index'], ['class' => 'btn btn-default']) ?>
+    </p>
 
 
     <?= DetailView::widget([
@@ -82,14 +87,3 @@ $this->params['breadcrumbs'][] = $this->title;
 
 </div>
 
-<p>
-    <?= Html::a('更新', ['update', 'id' => $model->ID], ['class' => 'btn btn-primary']) ?>
-    <?= Html::a('删除', ['delete', 'id' => $model->ID], [
-        'class' => 'btn btn-danger',
-        'data' => [
-            'confirm' => '确定要删除吗?',
-            'method' => 'post',
-        ],
-    ]) ?>
-    <?= Html::a(Yii::t('backend','Go Back'), ['karaoke/index'], ['class' => 'btn btn-default']) ?>
-</p>

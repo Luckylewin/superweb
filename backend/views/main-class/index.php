@@ -23,8 +23,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="main-class-index">
     <p>
-        <?= Html::a('创建分类', ['create'], ['class' => 'btn btn-success']) ?>
-        <?= Html::a('批量导入', ['sub-class/import-via-text','mode' => 'mainClass'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('backend', 'Create'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('backend', 'Batch Import'), ['sub-class/import-via-text','mode' => 'mainClass'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -62,7 +62,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             [
-                'label' => '列表版本',
+                'label' => Yii::t('backend', 'List version'),
                 'format' => 'raw',
                 'value' => function($model) {
                     $version = (new \backend\models\Cache())->getCacheVersion($model->name);
@@ -89,7 +89,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]);
                         },
                         'create-cache' => function($url, $model) {
-                            return Html::a('生成缓存', '#', [
+                            return Html::a(Yii::t('backend', 'Generate cache'), '#', [
                                 'url' => Url::to(['sub-class/generate-cache', 'id' => $model->id]),
                                 'class' => 'btn btn-success btn-sm create-cache',
                                 'id' => 'cache-btn',
@@ -99,7 +99,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         }
                 ]
             ]
-
 
         ],
     ]); ?>

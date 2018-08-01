@@ -11,15 +11,16 @@ $this->title = '点播分类列表';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <style>
-    .grid-view td {
+    .grid-view th ,.grid-view td {
         text-align: center;
         vertical-align: middle !important;
     }
+
 </style>
 <div class="vod-list-index">
 
     <p>
-        <?= Html::a('创建分类', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('backend', 'Create'), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
 
@@ -28,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'list_sort',
+
             //'list_pid',
             //'list_sid',
             [
@@ -37,14 +38,21 @@ $this->params['breadcrumbs'][] = $this->title;
                     'options' => ['style' => 'width:100px;'],
                     'value' => 'list_icon'
             ],
-            'list_name',
-            'list_dir',
+            [
+                    'attribute' => 'list_name',
+
+            ],
+            [
+                    'attribute' => 'list_dir',
+                    'options' => ['style' => 'width:100px;'],
+            ],
             //'list_status',
             //'list_keywords',
             //'list_title',
             //'list_description',
             [
                     'attribute' => 'list_ispay',
+                    'options' => ['style' => 'width:100px;'],
                     'value' => function($model) {
                         return \backend\blocks\VodBlock::$chargeStatus[$model->list_ispay];
                     }
@@ -52,17 +60,20 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                     'attribute' => 'list_price',
                     'value' => function($model) {
-                        return $model->list_price . ' 金币';
+                        return $model->list_price . ' ' . Yii::t('backend', 'gold');
                     }
             ],
             [
                 'attribute' => 'list_trysee',
                 'value' => function($model) {
-                    return $model->list_trysee . ' 分钟';
+                    return $model->list_trysee . ' ' . Yii::t('backend', 'minutes');
                 },
-                'options' => [
-                        'style' => 'width:140px;'
-                ]
+                'options' => ['style' => 'width:140px;']
+            ],
+
+            [
+                'attribute' =>  'list_sort',
+                'options' => ['style' => 'width:60px;']
             ],
 
             //'list_extend:ntext',
@@ -83,7 +94,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]);
                             }
                     ],
-                    'options' => ['style' => 'width:250px;']
+                    'options' => ['style' => 'width:280px;']
             ],
         ],
     ]); ?>

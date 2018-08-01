@@ -8,7 +8,7 @@ use yii\bootstrap\Modal;
 /* @var $searchModel common\models\search\OttChannelSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = '频道列表';
+$this->title = Yii::t('backend', 'Channel List');
 $this->params['breadcrumbs'][] = ['label' => $mainClass->zh_name? $mainClass->zh_name:$mainClass->name, 'url' => Url::to(['main-class/index'])];
 $this->params['breadcrumbs'][] = ['label' => $subClass->zh_name?$subClass->zh_name:$subClass->name, 'url' => Url::to(['sub-class/index', 'main-id' => $mainClass->id])];
 $this->params['breadcrumbs'][] = $this->title;
@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('添加频道', ['create','sub-id' => $subClass->id], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('backend', 'Create'), ['create','sub-id' => $subClass->id], ['class' => 'btn btn-success']) ?>
 
     </p>
 
@@ -122,7 +122,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'value' => function($model) {
                     $icon =  $model->use_flag ? '<i style="color: #23c6c8;font-size: large" class="glyphicon glyphicon-ok-circle"></i>' : '<i style="color: #953b39;font-size: large" class="glyphicon glyphicon-remove-circle"></i>';
-                    $dropDownList = Html::dropDownList('use_flag', $model->use_flag, ['不可用','可用'] , [
+                    $dropDownList = Html::dropDownList('use_flag', $model->use_flag, [Yii::t('backend', 'Unavailable'), Yii::t('backend', 'Available')] , [
                         'class' => 'form-control ajax-update',
                         'field' => 'use_flag',
                         'data-id' => $model->id,
@@ -141,7 +141,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'template' => '{channel} &nbsp;|&nbsp;{push-recommend} {push-banner} {view} {update} {delete}',
                     'buttons' => [
                             'channel' => function($url, $model, $key) {
-                                return Html::a("&nbsp;&nbsp;<i class='glyphicon glyphicon-link'></i>链接&nbsp;&nbsp;", null, [
+                                return Html::a("&nbsp;&nbsp;<i class='glyphicon glyphicon-link'></i>". Yii::t('backend', 'Link')."&nbsp;&nbsp;", null, [
                                         'class' => 'btn btn-success btn-sm load-link',
                                         'data-toggle' => 'modal',
                                         'data-target' => '#links-modal',
@@ -170,11 +170,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div>
 
-<?= Html::a('重新排列频道号', ['sub-class/reset-number','main_class_id' => $mainClass->id], ['class' => 'btn btn-primary']) ?>
+<?= Html::a(Yii::t('backend', 'Rearrange channel numbers'), ['sub-class/reset-number','main_class_id' => $mainClass->id], ['class' => 'btn btn-primary']) ?>
 
-<?= Html::button("批量删除",['class' => 'gridview btn btn-danger']) ?>
+<?= Html::button(Yii::t('backend', 'Batch Deletion'),['class' => 'gridview btn btn-danger']) ?>
 
-<?= Html::a('返回上一级', Url::to(['sub-class/index', 'main-id' => $mainClass->id]), ['class' => 'btn btn-default']) ?>
+<?= Html::a(Yii::t('backend', 'Go Back'), Url::to(['sub-class/index', 'main-id' => $mainClass->id]), ['class' => 'btn btn-default']) ?>
 
 </div>
 
@@ -184,8 +184,8 @@ $this->params['breadcrumbs'][] = $this->title;
 Modal::begin([
          'id' => 'links-modal',
           'size' => Modal::SIZE_LARGE,
-          'header' => '<h4 class="modal-title">链接</h4>',
-          'footer' => '<a href="#" class="btn btn-info create-link" data-id="0">新增链接</a>&nbsp;<a href="#" class="btn btn-default" data-dismiss="modal">关闭</a>',
+          'header' => '<h4 class="modal-title">'. Yii::t('backend', 'Link').'</h4>',
+          'footer' => '<a href="#" class="btn btn-info create-link" data-id="0">'. Yii::t('backend', 'Create Link') .'</a>&nbsp;<a href="#" class="btn btn-default" data-dismiss="modal">'. Yii::t('backend', 'close').'</a>',
 ]);
 
 
@@ -197,6 +197,14 @@ $delLinkUrl = Url::to(['ott-link/delete']);
 $createLinkUrl = Url::to(['ott-link/create']);
 $updateLinkUrl = Url::to(['ott-link/update']);
 
+$modify_text = Yii::t('backend', 'Editing Scheme');
+$switch_text = Yii::t('backend', 'Available switch');
+$update_text = Yii::t('backend', 'Update');
+$delete_text = Yii::t('backend', 'Delete');
+$soft_text = Yii::t('backend', 'Soft');
+$hard_text = Yii::t('backend', 'Hard');
+$all_text = Yii::t('backend', 'All Schemes');
+
 $requestJs=<<<JS
     $('.load-link').click(function(){
         $('.modal-lg').css('width','99%');
@@ -204,7 +212,7 @@ $requestJs=<<<JS
         $('.create-link').attr('data-id', $(this).attr('data-id'));
         
         $.getJSON('{$requestUrl}', {channel_id:$(this).attr('data-id')}, function(data) {
-            var table = '<table class="table table-bordered"><thead><tr><th style="width:32%;"><i class="fa fa-list-alt"></th><th style="width:50px;"><i class="fa fa-dot-circle-o"></th><th style="width:100px;"><i class="fa fa-link"></th><th width="50px"><i class="fa fa-key"></th><th width="50px"><i class="fa fa-tv"></i></th><th width="60px"><i class="fa fa-photo"></th><th width="70px"><i class="fa fa-flag"></i></th><th style="width:250px;"><i class="fa fa-cog fa-fw"></th></tr></thead><tbody>';
+            var table = '<table class="table table-bordered"><thead><tr><th style="width:32%;"><i class="fa fa-list-alt"></th><th style="width:30px;"><i class="fa fa-dot-circle-o"></th><th style="width:100px;"><i class="fa fa-link"></th><th width="50px"><i class="fa fa-key"></th><th width="50px"><i class="fa fa-tv"></i></th><th width="4px"><i class="fa fa-photo"></th><th width="50px"><i class="fa fa-flag"></i></th><th style="width:280px;"><i class="fa fa-cog fa-fw"></th></tr></thead><tbody>';
             var tr = '';
             
             $.each(data,function(){
@@ -212,7 +220,7 @@ $requestJs=<<<JS
                     var schemeString = ''
                     schemeText.forEach(function(v, k) {
                         if (v === '全部') {
-                          schemeString += '<span style="width:114px;font-size:1px;margin:1px 1px;" class="btn btn-xs btn-info">' + v + "</span>"
+                          schemeString += '<span style="width:114px;font-size:1px;margin:1px 1px;" class="btn btn-xs btn-info">{$all_text}</span>'
                         } else {
                           schemeString += '<span style="width:114px;font-size:1px;margin:1px 1px;" class="btn btn-xs btn-default">' + v + "</span>"
                         }
@@ -226,10 +234,10 @@ $requestJs=<<<JS
                     tr += '<td style="vertical-align:middle;">' + $(this).attr('source') + '</td>';
                     tr += '<td style="word-wrap:break-word;max-width:150px;">' + $(this).attr('link') + '</td>';
                     tr += '<td style="vertical-align:middle;">' + $(this).attr('method') + '</td>';
-                    tr += '<td style="vertical-align:middle;">' + ($(this).attr('decode') === '0' ? '软解':'硬解') + '</td>';
+                    tr += '<td style="vertical-align:middle;">' + ($(this).attr('decode') === '0' ? '{$soft_text}':'{$hard_text}') + '</td>';
                     tr += '<td style="vertical-align:middle;">' + $(this).attr('definition') + '</td>';
                     tr += '<td style="vertical-align:middle;" class="use-flag">' + ($(this).attr('use_flag_text')) + '</td>';
-                    tr += '<td style="vertical-align:middle;"><button class="btn btn-info btn-sm change-scheme" scheme-id=' + $(this).attr('scheme_id') + ' data-id='+ $(this).attr('id') +'>修改方案</button>&nbsp;<button class="btn btn-primary btn-sm use-switch">可用开关</button>&nbsp;&nbsp;<button class="btn btn-warning btn-sm link-edit">编辑</button>&nbsp;<button class="btn btn-danger btn-sm link-del">删除</button></td></tr>';
+                    tr += '<td style="vertical-align:middle;"><button class="btn btn-info btn-xs change-scheme" scheme-id=' + $(this).attr('scheme_id') + ' data-id='+ $(this).attr('id') +'>{$modify_text}</button>&nbsp;<button class="btn btn-primary btn-xs use-switch">{$switch_text}</button>&nbsp;&nbsp;<button class="btn btn-warning btn-xs link-edit">{$update_text}</button>&nbsp;<button class="btn btn-danger btn-xs link-del">{$delete_text}</button></td></tr>';
             });
                 
             table += tr;

@@ -36,9 +36,19 @@ class User extends ActiveRecord implements IdentityInterface
     const STATUS_ACTIVE = 10;
 
     public static $vipType = [
-        '试用会员',
-        '付费会员'
+        'Trial member',
+        'Paid member'
     ];
+
+    public static function getVipType()
+    {
+        $vipTypes = self::$vipType;
+        array_walk($vipTypes, function(&$v, $k) {
+            $v = Yii::t('backend', $v);
+        });
+
+        return $vipTypes;
+    }
 
     /**
      * {@inheritdoc}

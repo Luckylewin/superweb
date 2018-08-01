@@ -55,16 +55,16 @@ class OttChannel extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'sub_class_id' => '关联id',
-            'name' => '名称',
-            'zh_name' => '中文名称',
-            'keywords' => '关键字',
-            'sort' => '排序',
-            'use_flag' => '是否可用',
-            'channel_number' => '频道号',
-            'image' => '图标',
-            'alias_name' => '别名',
-            'is_recommend' => '推荐',
+            'sub_class_id' => Yii::t('backend', 'Associated CLASS ID'),
+            'name' => Yii::t('backend', 'Name'),
+            'zh_name' => Yii::t('backend', 'Chinese Name'),
+            'keywords' => Yii::t('backend', 'keyword'),
+            'sort' => Yii::t('backend', 'Sort'),
+            'use_flag' => Yii::t('backend', 'Is Available'),
+            'channel_number' => Yii::t('backend', 'channel number'),
+            'image' => Yii::t('backend', 'Icon'),
+            'alias_name' => Yii::t('backend', 'Alias'),
+            'is_recommend' => Yii::t('backend', 'Recommend'),
         ];
     }
 

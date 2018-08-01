@@ -29,14 +29,14 @@ use yii\helpers\Url;
     </div>
 
     <div class="col-md-6">
-        <?= $form->field($model, 'use_flag')->dropDownList(['不可用', '可用']) ?>
+        <?= $form->field($model, 'use_flag')->dropDownList([Yii::t('backend', 'Unavailable'), Yii::t('backend', 'Available')]) ?>
     </div>
 
     <div class="col-md-12">
         <?= $form->field($model, 'keyword')->textInput(['maxlength' => true]) ?>
         <?= $form->field($model, 'main_class_id')->hiddenInput()->label(false) ?>
         <div class="form-group">
-            <?= Html::submitButton('保存', ['class' => 'btn btn-success']) ?>
+            <?= Html::submitButton(\Yii::t('backend','Save'), ['class' => 'btn btn-success']) ?>
             <?= Html::a(Yii::t('backend','Go Back'), Url::to(['sub-class/index', 'main-id'=>$model->mainClass->id]), ['class' => 'btn btn-default']) ?>
 
         </div>

@@ -46,12 +46,12 @@ class AppBootPicture extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'boot_pic' => '启动页面图片',
-            'link' => '链接',
-            'during' => '时间范围',
-            'status' => '状态', //(0无效1有效)
-            'sort' => '排序',
-            'created_at' => '创建日期',
+            'boot_pic' => Yii::t('backend', 'Start Page Image'),
+            'link' => Yii::t('backend', 'Link'),
+            'during' => Yii::t('backend', 'Time Limit'),
+            'status' => Yii::t('backend', 'Status'), //(0无效1有效)
+            'sort' => Yii::t('backend', 'Sort'),
+            'created_at' => Yii::t('backend', 'Created Time'),
         ];
     }
 

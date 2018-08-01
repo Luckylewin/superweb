@@ -49,7 +49,7 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/laydate/laydate.js'
     <?= $form->field($model, 'sort')->textInput(['maxlength' => true]) ?>
 
     <div class="form-group">
-        <?= Html::submitButton('发布', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton(Yii::t('backend', 'Submit'), ['class' => 'btn btn-success']) ?>
         <?= Html::a(Yii::t('backend','Go Back'), ['app-boot-picture/index'], ['class' => 'btn btn-default']) ?>
     </div>
 

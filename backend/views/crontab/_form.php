@@ -22,7 +22,7 @@ use yii\widgets\ActiveForm;
     <?= $model->isNewRecord == false ? $form->field($model, 'switch')->dropDownList($model->getSwitchItems())->label('任务开关') : '' ?>
 
     <div class="form-group">
-        <?= Html::submitButton('保存', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton(\Yii::t('backend','Save'), ['class' => 'btn btn-success']) ?>
         <?= Html::a(Yii::t('backend','Go Back'),\yii\helpers\Url::to(['crontab/index']), ['class' => 'btn btn-default']) ?>
     </div>
 

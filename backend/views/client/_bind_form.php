@@ -17,7 +17,7 @@ use yii\widgets\ActiveForm;
         <?= $form->field($model, 'admin_id')->dropDownList($admin) ?>
         <?= $form->field($model, 'id')->hiddenInput()->label(false) ?>
         <div class="form-group">
-            <?= Html::submitButton('保存', ['class' => 'btn btn-success']) ?>
+            <?= Html::submitButton(\Yii::t('backend','Save'), ['class' => 'btn btn-success']) ?>
         </div>
     </div>
 

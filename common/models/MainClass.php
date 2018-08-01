@@ -55,17 +55,17 @@ class MainClass extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => '名字',
-            'zh_name' => '中文名字',
-            'description' => '简介',
-            'icon' => '图标',
-            'icon_hover' => '图标(高亮)',
-            'icon_bg' => '大图标',
-            'icon_bg_hover' => '大图标(高亮)',
-            'sort' => '排序',
-            'is_charge' => '是否收费',
-            'price' => '价格',
-            'use_flag' => '可用开关'
+            'name' => Yii::t('backend', 'Name'),
+            'zh_name' => Yii::t('backend', 'Chinese Name'),
+            'description' => Yii::t('backend', 'Description'),
+            'icon' => Yii::t('backend', 'Icon'),
+            'icon_hover' => Yii::t('backend', 'Icon(hover)'),
+            'icon_bg' => Yii::t('backend', 'Big icon'),
+            'icon_bg_hover' => Yii::t('backend', 'Big icon(hover)'),
+            'sort' => Yii::t('backend', 'Sort'),
+            'is_charge' => Yii::t('backend', 'Is Charge'),
+            'price' => Yii::t('backend', 'Price'),
+            'use_flag' => Yii::t('backend', 'Switch')
         ];
     }
 

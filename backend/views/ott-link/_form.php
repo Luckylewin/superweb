@@ -47,7 +47,7 @@ use \yii\helpers\ArrayHelper;
             <?= $form->field($model, 'scheme_id')->checkboxList($schemes); ?>
             <?= $form->field($model, 'link')->textInput(['rows' => 6]) ?>
             <div class="form-group">
-                <?= Html::submitButton('保存', ['class' => 'btn btn-success']) ?>
+                <?= Html::submitButton(\Yii::t('backend','Save'), ['class' => 'btn btn-success']) ?>
             </div>
         </div>
 

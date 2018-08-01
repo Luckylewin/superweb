@@ -7,8 +7,9 @@
  */
 
 namespace backend\models;
-use yii\helpers\ArrayHelper;
 
+use yii\helpers\ArrayHelper;
+use Yii;
 
 /**
  * This is the model class for table "tvlink_iptv".
@@ -63,28 +64,28 @@ class Link extends \yii\db\ActiveRecord
     {
         return [
             'ID' => 'ID',
-            'ChannelID' => '频道',
-            'link' => '链接',
-            'source' => '来源',
-            'sort' => '排序',
-            'use_flag' => '是否可用',
-            'format' => '格式',
+            'ChannelID' => Yii::t('backend', 'Channel'),
+            'link' => Yii::t('backend', 'Link'),
+            'source' => Yii::t('backend', 'Source identifier'),
+            'sort' => Yii::t('backend', 'Sort'),
+            'use_flag' => Yii::t('backend', 'Is Available'),
+            'format' => Yii::t('backend', 'Format'),
             'area_line' => 'Area Line',
             'mass_level' => 'Mass Level',
-            'domain' => '域名',
-            'client' => '客户',
-            'script_deal' => '脚本是否处理',
-            'scheme_id' => '所属方案',
-            'definition' => '清晰度',
-            'method' => '本地方法',
-            'decode' => '编码',
+            'domain' => Yii::t('backend', 'Domain'),
+            'client' => Yii::t('backend', 'client'),
+            'script_deal' => Yii::t('backend', 'Whether the script handles'),
+            'scheme_id' => Yii::t('backend', 'Associated scheme'),
+            'definition' => Yii::t('backend', 'Sharpness'),
+            'method' => Yii::t('backend', 'Analytic method'),
+            'decode' => Yii::t('backend', 'coding'),
         ];
     }
 
     public function getScheme()
     {
         if ($this->scheme_id == 'all') {
-            return '<div class="btn btn-success btn-xs">全部方案</div>';
+            return '<div class="btn btn-success btn-xs">'. Yii::t('backend', 'All Schemes').'</div>';
         }
 
         $schemes = Scheme::find()->select('schemeName')->where("id not in ({$this->scheme_id})")->asArray()->all();

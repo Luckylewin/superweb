@@ -8,6 +8,7 @@
 
 namespace common\widgets;
 
+use Yii;
 use yii\widgets\LinkPager;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
@@ -67,13 +68,18 @@ class goPager extends  LinkPager
         // go
         if ($this->go) {
             $goPage = $currentPage + 2;
+            $total = Yii::t('backend', 'Total');
+            $page = Yii::t('backend', 'Pages');
+            $go_to = Yii::t('backend', 'go to');
+            $go = Yii::t('backend', 'Go');
+
             $goHtml = <<<goHtml
                 <div class="form" style="float: left; color: #999; margin-left: 10px; font-size: 12px;">
-                    <span class="text">共 {$pageCount} 页</span>
-                    <span class="text">到第</span>
+                    <span class="text">{$total} {$pageCount} {$page}</span>
+                    <span class="text">{$go_to}</span>
                     <input class="input" type="number" value="{$goPage}" min="1" max="{$pageCount}" aria-label="页码输入框" style="text-align: center; height: 25px; line-height: 20px; margin-top: 5px; width: 40px;border-radius: 3px;border: 1px solid">
-                    <span class="text">页</span>
-                    <span class="btn go-page" role="button" tabindex="0" style="border: solid 1px #ccc; padding: 0px; height: 25px; width: 46px; line-height: 25px;">确定</span>
+                    <span class="text">{$page}</span>
+                    <span class="btn go-page" role="button" tabindex="0" style="border: solid 1px #ccc; padding: 0px; height: 25px; width: 46px; line-height: 25px;">{$go}</span>
                 </div>  
 goHtml;
             $buttons[] = $goHtml;

@@ -41,7 +41,7 @@ use yii\db\ActiveRecord;
 class Karaoke extends \yii\db\ActiveRecord
 {
 
-    public static $delStatus = ['有效', '无效'];
+    public static $delStatus = ['Valid', 'Invalid'];
 
     /**
      * @inheritdoc
@@ -76,33 +76,33 @@ class Karaoke extends \yii\db\ActiveRecord
     {
         return [
             'ID' => 'ID',
-            'albumName' => '标题',
-            'albumImage' => '封面',
+            'albumName' => Yii::t('backend', 'Title'),
+            'albumImage' => Yii::t('backend', 'Cover'),
             'tid' => 'Tid',
-            'mainActor' => '演员/歌手',
-            'directors' => '导演',
-            'tags' => '标签',
-            'info' => '描述信息',
-            'area' => '地区/语言',
-            'keywords' => '关键字',
+            'mainActor' => Yii::t('backend', 'singer'),
+            'directors' => Yii::t('backend', 'director'),
+            'tags' => Yii::t('backend', 'TAG'),
+            'info' => Yii::t('backend', 'Description'),
+            'area' => Yii::t('backend', 'Area'),
+            'keywords' => Yii::t('backend', 'Keyword'),
             'wflag' => 'Wflag',
-            'year' => '年份',
+            'year' => Yii::t('backend', 'year'),
             'mod_version' => 'Mod Version',
-            'updatetime' => '更新时间',
-            'totalDuration' => '集数',
+            'updatetime' => Yii::t('backend', 'Updated Time'),
+            'totalDuration' => Yii::t('backend', 'Total Episodes'),
             'flag' => 'Flag',
-            'hit_count' => '点击数',
+            'hit_count' => Yii::t('backend', 'Click quantity'),
             'voole_id' => 'Voole ID',
-            'price' => '价格',
-            'is_finish' => '是否完成',
-            'yesterday_viewed' => '昨日收看',
+            'price' => Yii::t('backend', 'Price'),
+            'is_finish' => Yii::t('backend', 'Completion result'),
+            'yesterday_viewed' => Yii::t('backend', 'Yesterday’s number'),
             'utime' => 'Utime',
             'url' => 'Url',
-            'act_img' => '真实图片地址',
-            'download_flag' => '是否下载',
-            'is_del' => '是否有效',
-            'sort' => '排序',
-            'source' => '视频来源',
+            'act_img' => Yii::t('backend', 'Real image address'),
+            'download_flag' => Yii::t('backend', 'Download status'),
+            'is_del' => Yii::t('backend', 'Valid Status'),
+            'sort' => Yii::t('backend', 'Sort'),
+            'source' => Yii::t('backend', 'Source identifier'),
         ];
     }
 
@@ -125,18 +125,20 @@ class Karaoke extends \yii\db\ActiveRecord
     {
 
         return [
-            'Vietnamese' => '越南语',
-            'Chinese' => '中文',
-            'English' => '英语',
-            'Korean' => '韩语',
-            'French' => '法语',
-            'Other' => '其它',
+            'Vietnamese' => Yii::t('backend', 'Vietnamese'),
+            'Chinese' => Yii::t('backend', 'Chinese'),
+            'English' => Yii::t('backend', 'English'),
+            'Korean' => Yii::t('backend', 'Korean'),
+            'French' => Yii::t('backend', 'French'),
+            'Other' => Yii::t('backend', 'Other'),
         ];
     }
 
+
+
     public function getStatus()
     {
-        return self::$delStatus[$this->is_del];
+        return Yii::t('backend', self::$delStatus[$this->is_del]);
     }
 
     public function beforeSave($insert)

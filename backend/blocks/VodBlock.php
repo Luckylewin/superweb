@@ -8,7 +8,7 @@
 
 namespace backend\blocks;
 
-
+use Yii;
 use common\models\Vod;
 use backend\models\IptvType;
 use yii\helpers\ArrayHelper;
@@ -16,15 +16,34 @@ use yii\helpers\ArrayHelper;
 class VodBlock extends Vod
 {
 
+    public static $defaultTag = [
+        'comedy', 'love', 'horror', 'action', 'sci-fi', 'drama', 'war', 'vigilance', 'crime', 'martial arts', 'adventure', 'suspension', 'classic', 'youth', 'dressage', 'history', 'Animation', 'Documentary'
+    ];
+
+    public static $defaultArea = [
+        'China', 'America' , 'Hong Kong', 'Taiwan', 'Korea', 'Japan', 'France', 'British', 'Germany', 'Thailand', 'India', 'Europe', 'Vietnam', 'Portugal', 'Spain'
+    ];
+
+    public static $defaultLanguage = [
+        'English', 'Korean', 'French', 'Mandarin', 'Cantonese', 'Thai', 'Japanese', 'Indian', 'Spanish', 'Portuguese', 'Other'
+    ];
+
+    public static $defaultVersion = [
+        'HD', 'theatrical', 'preemptive', 'theatern'
+    ];
+
+    public static $defaultType = [
+        'Positive', 'Trailer','Filming'
+    ];
 
     public $showStatus = [
-        '1' => '显示',
-        '0' => '隐藏'
+        '1' => 'show',
+        '0' => 'hidden'
     ];
 
     public static $chargeStatus = [
-        '0' => '免费点播',
-        '1' => 'VIP点播'
+        '0' => 'Free',
+        '1' => 'Charge'
     ];
 
     public static $starStatus = [
@@ -67,7 +86,12 @@ class VodBlock extends Vod
      */
     public static function getTags()
     {
-        return ['喜剧','爱情','恐怖','动作','科幻','剧情','战争','警匪','犯罪','动画','奇幻','武侠','冒险','枪战','恐怖','悬疑','惊悚','经典','青春','文艺','古装','历史','体育','儿童','微电影'];
+        $tags = self::$defaultTag;
+        array_walk($tags, function(&$v, $k) {
+           $v = Yii::t('backend', $v);
+        });
+
+        return $tags;
     }
 
     /**
@@ -89,7 +113,12 @@ class VodBlock extends Vod
      */
     public static function getAreas()
     {
-        return ['中国大陆','美国','中国香港','中国台湾','韩国','日本','法国','英国','德国','泰国','印度','欧洲','东南亚','其他'];
+        $areas = self::$defaultArea;
+        array_walk($areas, function(&$v, $k) {
+            $v = Yii::t('backend', $v);
+        });
+
+        return $areas;
     }
 
     /**
@@ -98,7 +127,13 @@ class VodBlock extends Vod
      */
     public static function getLanguages()
     {
-        return ['国语','英语','粤语','泰语','韩语','日语','印度语','其它'];
+        $languages = self::$defaultLanguage;
+        array_walk($languages, function(&$v, $k) {
+            $v = Yii::t('backend', $v);
+        });
+
+        return $languages;
+
     }
 
     /**
@@ -107,7 +142,12 @@ class VodBlock extends Vod
      */
     public static function getVersions()
     {
-        return ['高清版','剧场版','抢先版','OVA','TV','影院版'];
+        $versions = self::$defaultVersion;
+        array_walk($versions, function(&$v, $k) {
+            $v = Yii::t('backend', $v);
+        });
+
+        return $versions;
     }
 
     /**
@@ -116,7 +156,12 @@ class VodBlock extends Vod
      */
     public static function getResourceTypes()
     {
-        return ['正片','预告片','花絮'];
+        $types = self::$defaultType;
+        array_walk($types, function(&$v, $k) {
+            $v = Yii::t('backend', $v);
+        });
+
+        return $types;
     }
 
     /**

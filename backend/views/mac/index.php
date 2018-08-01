@@ -9,7 +9,7 @@ use yii\helpers\Url;
 /* @var $searchModel backend\models\search\MacSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = '终端状态管理';
+$this->title = Yii::t('backend', 'Terminal status management');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="mac-index">
@@ -23,8 +23,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'pager' => [
                 'class' => 'common\widgets\goPager',
-                'firstPageLabel' => '第一页',
-                'lastPageLabel' => '最后一页',
+                'firstPageLabel' => Yii::t('backend', 'First Page'),
+                'lastPageLabel' => Yii::t('backend', 'Last Page'),
                 'go' => true
         ],
         "options" => ["class" => "grid-view","style"=>"overflow:auto", "id" => "grid"],
@@ -33,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                     'class' => 'yii\grid\SerialColumn',
                     'options' => [
-                        'style' => 'width:40px;'
+                        'style' => 'width:30px;'
                     ],
             ],
 
@@ -48,16 +48,14 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                     'attribute' => 'MAC',
+                    'label' => 'MAC-SN',
+                    'format' => 'raw',
+                    'value' => function($model) {
+                        return $model->MAC . '<br/>' . $model->SN;
+                    },
                     'options' => [
-                        'style' => 'width:140px;'
+                        'style' => 'width:130px;'
                     ]
-            ],
-
-            [
-                'attribute' => 'SN',
-                'options' => [
-                    'style' => 'width:140px;'
-                ]
             ],
 
 
@@ -71,7 +69,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return date('Y-m-d', strtotime($data->regtime));
                 },
                 'options' => [
-                    'style' => 'width:100px;'
+                    'style' => 'width:90px;'
                 ]
             ],
 
@@ -79,10 +77,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'duetime',
                 'value' => function($data) {
                     if ($data->use_flag == 1) {
-                        return '未使用';
+                        return Yii::t('backend', 'Unused');
                     }
                     if ($data->duetime == '0000-00-00 00:00:00' && empty($data->contract_time)) {
-                        return "无限期";
+                        return  Yii::t('backend', 'Indefinite');
                     }
                     return date('Y-m-d', strtotime($data->duetime));
                 },
@@ -94,10 +92,10 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'contract_time',
                 'value' => function($data){
-                    return str_replace([' year', ' month', ' day'],['年', '个月', '天'], $data->contract_time);
+                    return Yii::t('backend', $data->contract_time);
                 },
                 'options' => [
-                    'style' => 'width:70px;'
+                    'style' => 'width:80px;'
                 ]
             ],
 
@@ -107,22 +105,22 @@ $this->params['breadcrumbs'][] = $this->title;
                  'value' => function($data) use($searchModel) {
                        return $searchModel->getUseFlagWithLabel($data->use_flag);
                  },
-                 'options' => ['style' => 'width:56px;']
+                 'options' => ['style' => 'width:66px;']
              ],
 
             [
                 'attribute' => 'online_status',
                 'format' => 'raw',
-                'label' => '在线状态',
+                'label' => Yii::t('backend', 'Online Status'),
                 'value' => function() use($searchModel) {
                     return $searchModel->getOnlineWithLabel();
                 },
-                'options' => [ 'style' => 'width:46px;']
+                'options' => [ 'style' => 'width:56px;']
             ],
 
             [
                 'attribute' => 'ver',
-                'options' => ['style' => 'width:50px;']
+                'options' => ['style' => 'width:60px;']
             ],
 
 
@@ -146,11 +144,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'class' => 'common\grid\MyActionColumn',
-                'header' => '操作',
+                'header' => Yii::t('backend', 'Operation'),
                 'template' => '{renew}&nbsp{view}&nbsp;{update}&nbsp;{delete}',
                 'buttons' => [
                         'renew' => function($url, $model, $key) {
-                            $title = "续费";
+                            $title = Yii::t('backend', 'Renewal');
                             $options = [
                                 'title' => $title,
                                 'aria-label' => $title,
@@ -160,7 +158,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
                             return Html::a($title, \yii\helpers\Url::to(['renew/renew','mac'=>$model->MAC]), $options);
                         }
-                ]
+                ],
+
               
             ],
         ],
@@ -168,22 +167,22 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php Pjax::end(); ?>
 
     <div>
-        <?= Html::a('新增', null, [
+        <?= Html::a(Yii::t('backend', 'Create'), null, [
                 'class' => 'btn btn-success create',
                 'data-toggle' => 'modal',
                 'data-target' => '#create-modal',
         ]) ?>
 
-        <?= Html::button('批量删除', [
+        <?= Html::button(Yii::t('backend', 'Batch Deletion'), [
                 'class' => 'btn btn-danger gridview',
                 'url' => \yii\helpers\Url::to(['mac/batch-delete'])
         ]) ?>
 
-        <?= Html::a('批量新增', ['batch-create'], ['class' => 'btn btn-default']) ?>
+        <?= Html::a(Yii::t('backend', 'Batch Creation'), ['batch-create'], ['class' => 'btn btn-default']) ?>
 
-        <?= Html::a('导出mac-sn', \yii\helpers\Url::to(['mac/export', 'queryParams' => $queryParams]), ['class' => 'btn btn-default']) ?>
+        <?= Html::a(Yii::t('backend', 'Export Mac-Sn'), \yii\helpers\Url::to(['mac/export', 'queryParams' => $queryParams]), ['class' => 'btn btn-default']) ?>
 
-        <?= Html::a('导入mac-sn', \yii\helpers\Url::to(['mac/import']), ['class' => 'btn btn-default']) ?>
+        <?= Html::a(Yii::t('backend', 'Import Mac-Sn'), \yii\helpers\Url::to(['mac/import']), ['class' => 'btn btn-default']) ?>
 
     </div>
     </div>

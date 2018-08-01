@@ -79,16 +79,16 @@ class Mac extends \yii\db\ActiveRecord implements IdentityInterface
     public function attributeLabels()
     {
         return [
-            'MAC' => 'mac地址',
-            'SN' => 'sn码',
-            'use_flag' => '是否可用',
-            'ver' => '版本',
-            'regtime' => '注册时间',
-            'logintime' => '登录时间',
-            'type' => '类型',
-            'duetime' => '过期时间',
-            'contract_time' => '有效期',
-            'client_name' => '所属客户'
+            'MAC' => Yii::t('backend', 'Mac Address'),
+            'SN' => Yii::t('backend', 'Sn Number'),
+            'use_flag' => Yii::t('backend', 'Is Available'),
+            'ver' => Yii::t('backend', 'Version'),
+            'regtime' => Yii::t('backend', 'Registration Time'),
+            'logintime' => Yii::t('backend', 'Login Time'),
+            'type' => Yii::t('backend', 'Type'),
+            'duetime' => Yii::t('backend', 'Expire Time'),
+            'contract_time' => Yii::t('backend', 'Validity Period'),
+            'client_name' => Yii::t('backend', 'Associated Client')
         ];
     }
 
@@ -137,10 +137,10 @@ class Mac extends \yii\db\ActiveRecord implements IdentityInterface
     public static function getUseFlagList()
     {
         return [
-           self::NOT_ACTIVE => '未激活',
-           self::NORMAL     => '可用',
-           self::EXPIRED    => '过期',
-           self::FORBIDDEN  => '禁用'
+           self::NOT_ACTIVE => Yii::t('backend', 'Inactivated'),
+           self::NORMAL     => Yii::t('backend', 'Available'),
+           self::EXPIRED    => Yii::t('backend', 'Expired'),
+           self::FORBIDDEN  => Yii::t('backend', 'Disable')
         ];
     }
 
@@ -151,9 +151,9 @@ class Mac extends \yii\db\ActiveRecord implements IdentityInterface
     public static function getContractList()
     {
         return [
-            'year' => '年',
-            'month' => '月',
-            'day' => '天'
+            'year' => Yii::t('backend', 'year'),
+            'month' => Yii::t('backend', 'month'),
+            'day' => Yii::t('backend', 'day')
         ];
     }
 
@@ -186,7 +186,7 @@ class Mac extends \yii\db\ActiveRecord implements IdentityInterface
     public function getOnlineWithLabel()
     {
         $value = $this->getOnLine();
-        $label = $value ? ['info', '在线'] : ['default', '离线'];
+        $label = $value ? ['info', Yii::t('backend', 'Online')] : ['default', Yii::t('backend', 'Offline')];
 
         return "<label class='label label-{$label[0]}'>{$label[1]}</label>";
     }

@@ -21,7 +21,7 @@ use Yii;
 class AppMenu extends \yii\db\ActiveRecord
 {
 
-    public static $isAuth = ["否", "是"];
+    public static $isAuth = ["No", "Yes"];
 
     /**
      * @inheritdoc
@@ -51,15 +51,15 @@ class AppMenu extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => '名字',
-            'zh_name' => '中文名字',
-            'icon' => '图标',
-            'icon_hover' => '图标高亮',
-            'icon_big' => '大图标',
-            'icon_big_hover' => '图标大(高亮)',
-            'restful_url' => '资源地址',
-            'auth' => '是否需权限访问',
-            'sort' => '排序',
+            'name' => Yii::t('backend', 'Name'),
+            'zh_name' => Yii::t('backend', 'Chinese name'),
+            'icon' => Yii::t('backend', 'Icon'),
+            'icon_hover' => Yii::t('backend', 'Icon(hover)'),
+            'icon_big' => Yii::t('backend', 'Big graph'),
+            'icon_big_hover' => Yii::t('backend', 'Big graph(hover)'),
+            'restful_url' => Yii::t('backend', 'Resource address'),
+            'auth' => Yii::t('backend', 'Permission access'),
+            'sort' => Yii::t('backend', 'Sort'),
         ];
     }
 }

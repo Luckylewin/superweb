@@ -13,12 +13,12 @@ $data = $model->version;
 <table class="table table-bordered" style="margin-top: 20px;">
     <thead>
     <tr>
-        <th>版本</th>
+        <th><?= Yii::t('backend', 'Version') ?></th>
 
-        <th>更新内容</th>
-        <th>下载地址</th>
-        <th>是否强制更新</th>
-        <th>操作</th>
+        <th><?= Yii::t('backend', 'Version update content') ?></th>
+        <th><?= Yii::t('backend', 'Download link') ?></th>
+        <th><?= Yii::t('backend', 'Whether to force an update') ?></th>
+        <th><?= Yii::t('backend', 'Operation') ?></th>
     </tr>
     </thead>
     <tbody>
@@ -36,18 +36,18 @@ $data = $model->version;
             <?= \yii\helpers\Html::a($ver->url, \common\components\Func::getAccessUrl($ver->url)) ?>
         </td>
         <td>
-            <?= \yii\helpers\Html::label($ver->force_update ? '是' : '否',null,[
+            <?= \yii\helpers\Html::label($ver->force_update ? Yii::t('backend', 'Yes') : Yii::t('backend', 'No'),null,[
                 'class' => 'label label-default'
             ]) ?>
         </td>
         <td>
-            <?= \yii\helpers\Html::a('查看', ['apk-detail/view','id' => $ver->ID],[
+            <?= \yii\helpers\Html::a(Yii::t('backend', 'View'), ['apk-detail/view','id' => $ver->ID],[
                     'class' => 'btn btn-primary btn-xs'
             ]); ?>
-            <?= \yii\helpers\Html::a('编辑', ['apk-detail/update','id' => $ver->ID],[
+            <?= \yii\helpers\Html::a(Yii::t('backend', 'Edit'), ['apk-detail/update','id' => $ver->ID],[
                 'class' => 'btn btn-info btn-xs'
             ]); ?>
-            <?= \yii\helpers\Html::a('删除', ['apk-detail/delete','id' => $ver->ID],[
+            <?= \yii\helpers\Html::a(Yii::t('backend', 'Delete'), ['apk-detail/delete','id' => $ver->ID],[
                 'class' => 'btn btn-danger btn-xs'
             ]); ?>
         </td>

@@ -17,7 +17,7 @@ use \backend\models\Search\MacSearch;
 
     <div class="panel panel-primary">
         <div class="panel-heading">
-            <h3 class="panel-title">查询面板</h3>
+            <h3 class="panel-title"><?= Yii::t('backend', 'Query panel') ?></h3>
         </div>
         <div class="panel-body">
             <?php $form = ActiveForm::begin([
@@ -34,7 +34,7 @@ use \backend\models\Search\MacSearch;
 
             <div class="col-md-3">
                 <?= $form->field($model, 'use_flag')->dropDownList(MacSearch::getUseFlagList(),[
-                        'prompt' => '请选择'
+                        'prompt' => Yii::t('backend', 'please choose')
                 ]) ?>
             </div>
 
@@ -45,20 +45,20 @@ use \backend\models\Search\MacSearch;
             <div class="col-md-3">
                 <?= $form->field($model, 'regtime')->textInput([
                     'class' => 'range form-control'
-                ])->label('注册时间(范围)') ?>
+                ]) ?>
             </div>
 
             <div class="col-md-3">
                 <?= $form->field($model, 'logintime')->textInput([
                     'class' => 'range form-control'
-                ])->label('登录时间(范围)') ?>
+                ])?>
             </div>
 
             <div class="col-md-3">
                 <?php $client = SysClient::find()->asArray()->all(); ?>
                 <?php $client = is_null($client) ? [] : ArrayHelper::map($client, 'id', 'name'); ?>
                 <?= $form->field($model, 'client_name')->dropDownList($client, [
-                        'prompt' => '请选择'
+                    'prompt' => Yii::t('backend', 'please choose')
                 ]); ?>
             </div>
 

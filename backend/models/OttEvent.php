@@ -47,12 +47,12 @@ class OttEvent extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'event_name' => '名称',
-            'event_name_zh' => '中文名称',
-            'event_introduce' => '介绍',
-            'event_icon' => '图标',
-            'event_icon_big' => '大图标',
-            'sort' => '排序',
+            'event_name' => Yii::t('backend', 'Name'),
+            'event_name_zh' => Yii::t('backend', 'Chinese Name'),
+            'event_introduce' => Yii::t('backend', 'Description'),
+            'event_icon' => Yii::t('backend', 'Icon'),
+            'event_icon_big' => Yii::t('backend', 'Big Icon'),
+            'sort' => Yii::t('backend', 'Sort'),
         ];
     }
 

@@ -48,14 +48,14 @@ class SysClient extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => '名称',
-            'phone' => '手机',
-            'admin_id' => '关联帐号',
-            'client_age' => '名称',
-            'client_address' => '地址',
-            'client_email' => '邮箱',
-            'client_qq' => 'qq',
-            'client_engname' => '英文名',
+            'name' => Yii::t('backend', 'Name'),
+            'phone' => Yii::t('backend', 'Phone'),
+            'admin_id' => Yii::t('backend', 'Associated Account'),
+
+            'client_address' => Yii::t('backend', 'Address'),
+            'client_email' => Yii::t('backend', 'Mail'),
+            'client_qq' => Yii::t('backend', 'QQ'),
+            'client_engname' => Yii::t('backend', 'English name'),
         ];
     }
 

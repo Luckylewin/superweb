@@ -9,7 +9,7 @@ use yii\bootstrap\Modal;
 /* @var $searchModel common\models\search\SubClassSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = '分类列表';
+$this->title = Yii::t('backend', 'Genre List');
 $this->params['breadcrumbs'][] = ['label' => $mainClass->name, 'url' => Url::to(['main-class/index'])];
 $this->params['breadcrumbs'][] = $this->title;
 
@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
     <p>
-        <?= Html::a('添加分类', '#', [
+        <?= Html::a(Yii::t('backend', 'Create'), '#', [
                 'class' => 'btn btn-success',
                 'data-toggle' => 'modal',
                 'data-target' => '#create-modal',
@@ -114,7 +114,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
 
             [
-                    'header' => '操作',
+                    'header' => Yii::t('backend', 'Operation'),
                     'class' => 'common\grid\MyActionColumn',
                     'size' => 'btn-sm',
                     'template' => '{next} &nbsp;&nbsp;| &nbsp;&nbsp;{update} {delete}',
@@ -136,7 +136,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php if(isset($mainClass)): ?>
         <?php $version = (new \backend\models\Cache())->getCacheVersion($mainClass->name); ?>
-        <?= Html::a("生成缓存($version)" , '#', [
+        <?= Html::a(Yii::t('backend', 'Generate cache'). "($version)" , '#', [
             'url' => Url::to(['sub-class/generate-cache', 'id' => $mainClass->id]),
             'class' => 'btn btn-success',
             'id' => 'cache-btn',
@@ -145,13 +145,13 @@ $this->params['breadcrumbs'][] = $this->title;
         ])  ?>
     <?php endif; ?>
 
-    <?= Html::a('重新排列频道号', ['sub-class/reset-number','main_class_id' => $mainClass->id], ['class' => 'btn btn-primary']) ?>
+    <?= Html::a(Yii::t('backend', 'Rearrange channel numbers'), ['sub-class/reset-number','main_class_id' => $mainClass->id], ['class' => 'btn btn-primary']) ?>
 
-    <?= Html::a('批量导入', Url::to(['sub-class/import-via-text', 'mode' => 'keywordChannel']), ['class' => 'btn btn-info'])  ?>
+    <?= Html::a(Yii::t('backend', 'Batch Import'), Url::to(['sub-class/import-via-text', 'mode' => 'keywordChannel']), ['class' => 'btn btn-info'])  ?>
 
-    <?= Html::button("批量删除",['class' => 'gridview btn btn-danger']) ?>
+    <?= Html::button(Yii::t('backend', 'Batch Deletion'),['class' => 'gridview btn btn-danger']) ?>
 
-    <?= Html::a('返回上一级', Url::to(['main-class/index']), ['class' => 'btn btn-default']) ?>
+    <?= Html::a(Yii::t('backend', 'Go Back'), Url::to(['main-class/index']), ['class' => 'btn btn-default']) ?>
 
 </div>
 </div>
@@ -159,19 +159,19 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php
     Modal::begin([
         'id' => 'create-modal',
-        'header' => '<h4 class="modal-title">创建二级分类</h4>',
-        'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">Close</a>',
+        'header' => '<h4 class="modal-title">'. Yii::t('backend', 'Create a secondary classification').'</h4>',
+        'footer' => '<a href="#" class="btn btn-primary" data-dismiss="modal">'. Yii::t('backend', 'close') .'</a>',
     ]);
     Modal::end();
 
     Modal::begin([
         'id' => 'cache-modal',
         'size' => Modal::SIZE_SMALL,
-        'header' => '<h4 class="modal-title">操作提示</h4>',
+        'header' => '<h4 class="modal-title">'. Yii::t('backend', 'Operation prompt') . '</h4>',
         'footer' => '',
     ]);
 
-    echo "<h4><i class='fa fa-spinner fa-pulse'> </i> 生成缓存中</h4>";
+    echo "<h4><i class='fa fa-spinner fa-pulse'> </i>" . Yii::t('backend', 'Generating cache') . "</h4>";
 
     Modal::end();
 ?>

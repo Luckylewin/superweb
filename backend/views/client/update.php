@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model backend\models\SysClient */
 
-$this->title = 'Update Sys Client: {nameAttribute}';
+$this->title = 'Update Sys Client';
 $this->params['breadcrumbs'][] = ['label' => 'Sys Clients', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';

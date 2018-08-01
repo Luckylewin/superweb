@@ -28,7 +28,7 @@ MyAppAsset::register($this);
 
     <?php $form->field($model, 'use_flag')->dropDownList(Mac::getUseFlagList()) ?>
 
-    <?= $form->field($model, 'client_name')->dropDownList(SysClient::getAll(), ['prompt' => '暂不指定']); ?>
+    <?= $form->field($model, 'client_name')->dropDownList(SysClient::getAll(), ['prompt' => Yii::t('backend', 'Not specified')]); ?>
 
     <?= $form->field($model, 'contract_time',[
             'options' => [
@@ -45,7 +45,8 @@ MyAppAsset::register($this);
     ])->textInput()?>
 
     <div class="form-group">
-        <?= Html::submitButton('保存', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton(\Yii::t('backend','Save'), ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('backend', 'Go Back'), ['mac/index'], ['class' => 'btn btn-default']) ?>
     </div>
     <?php ActiveForm::end(); ?>
 </div>

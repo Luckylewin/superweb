@@ -37,7 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template' => '{see}',
                 'buttons' => [
                     'see' => function($url, $model ) {
-                        return Html::a('查看', \yii\helpers\Url::to(['renewal-card/index', 'batch_id' => $model->batch]), [
+                        return Html::a(Yii::t('backend', 'View'), \yii\helpers\Url::to(['renewal-card/index', 'batch_id' => $model->batch]), [
                             'class' => 'btn btn-sm btn-info'
                         ]);
                     }
@@ -65,7 +65,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 [
                         'attribute' => 'is_valid',
                         'value' => function($model) {
-                            return $model->is_valid ? '有效' : '已核销';
+                            return $model->is_valid ? Yii::t('backend', 'Valid') : Yii::t('backend', 'Write off');
                         }
                 ],
 

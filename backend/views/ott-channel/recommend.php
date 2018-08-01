@@ -8,7 +8,7 @@ use yii\bootstrap\Modal;
 /* @var $searchModel common\models\search\OttChannelSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = '推荐频道列表';
+$this->title = Yii::t('backend', 'Recommended channel list');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a("生成缓存($version)", Url::to(['ott-channel/recommend-cache']), ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('backend', 'Generate cache')  . "($version)", Url::to(['ott-channel/recommend-cache']), ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -137,7 +137,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template' => '{channel} &nbsp;|&nbsp;{push-recommend} {view} {update}',
                 'buttons' => [
                     'channel' => function($url, $model, $key) {
-                        return Html::a("&nbsp;&nbsp;<i class='glyphicon glyphicon-link'></i>链接&nbsp;&nbsp;", null, [
+                        return Html::a("&nbsp;&nbsp;<i class='glyphicon glyphicon-link'></i>". Yii::t('backend', 'Link')."&nbsp;&nbsp;", null, [
                             'class' => 'btn btn-success btn-sm load-link',
                             'data-toggle' => 'modal',
                             'data-target' => '#links-modal',
@@ -170,8 +170,8 @@ $this->params['breadcrumbs'][] = $this->title;
 Modal::begin([
     'id' => 'links-modal',
     'size' => Modal::SIZE_LARGE,
-    'header' => '<h4 class="modal-title">链接</h4>',
-    'footer' => '<a href="#" class="btn btn-info create-link" data-id="0">新增链接</a>&nbsp;<a href="#" class="btn btn-default" data-dismiss="modal">关闭</a>',
+    'header' => '<h4 class="modal-title">'. Yii::t('backend', 'Link').'</h4>',
+    'footer' => '<a href="#" class="btn btn-info create-link" data-id="0">'. Yii::t('backend', 'Create Link') .'</a>&nbsp;<a href="#" class="btn btn-default" data-dismiss="modal">'. Yii::t('backend', 'close').'</a>',
 ]);
 
 
@@ -182,8 +182,14 @@ $updateUrl = Url::to(['ott-link/update', 'field'=>'scheme_id', 'id' => '']);
 $delLinkUrl = Url::to(['ott-link/delete']);
 $createLinkUrl = Url::to(['ott-link/create']);
 $updateLinkUrl = Url::to(['ott-link/update']);
-$updateRecommendUrl = Url::to(['ott-channel/update-recommend','channel_id' => '']);
-$csrfToken = Yii::$app->request->csrfToken;
+
+$modify_text = Yii::t('backend', 'Editing Scheme');
+$switch_text = Yii::t('backend', 'Available switch');
+$update_text = Yii::t('backend', 'Update');
+$delete_text = Yii::t('backend', 'Delete');
+$soft_text = Yii::t('backend', 'Soft');
+$hard_text = Yii::t('backend', 'Hard');
+$all_text = Yii::t('backend', 'All Schemes');
 
 $requestJs=<<<JS
     $('.load-link').click(function(){
@@ -192,19 +198,32 @@ $requestJs=<<<JS
         $('.create-link').attr('data-id', $(this).attr('data-id'));
         
         $.getJSON('{$requestUrl}', {channel_id:$(this).attr('data-id')}, function(data) {
-            var table = '<table class="table table-bordered"><thead><tr><th>方案</th><th>来源</th><th width="120px">链接</th><th>算法</th><th width="50px">解码</th><th width="60px">清晰度</th><th width="70px">状态</th><th style="width:250px;">操作</th></tr></thead><tbody>';
+            var table = '<table class="table table-bordered"><thead><tr><th style="width:32%;"><i class="fa fa-list-alt"></th><th style="width:30px;"><i class="fa fa-dot-circle-o"></th><th style="width:100px;"><i class="fa fa-link"></th><th width="50px"><i class="fa fa-key"></th><th width="50px"><i class="fa fa-tv"></i></th><th width="4px"><i class="fa fa-photo"></th><th width="50px"><i class="fa fa-flag"></i></th><th style="width:280px;"><i class="fa fa-cog fa-fw"></th></tr></thead><tbody>';
             var tr = '';
             
             $.each(data,function(){
-                    tr += '<tr link-id="' +  $(this).attr('id')  + '">';
-                    tr += '<td>' + $(this).attr('schemeText') + '</td>';
-                    tr += '<td>' + $(this).attr('source') + '</td>';
-                    tr += '<td>' + $(this).attr('link') + '</td>';
-                    tr += '<td>' + $(this).attr('method') + '</td>';
-                    tr += '<td>' + ($(this).attr('decode') === '0' ? '软解':'硬解') + '</td>';
-                    tr += '<td>' + $(this).attr('definition') + '</td>';
-                    tr += '<td class="use-flag">' + ($(this).attr('use_flag_text')) + '</td>';
-                    tr += '<td><button class="btn btn-info btn-xs change-scheme" scheme-id=' + $(this).attr('scheme_id') + ' data-id='+ $(this).attr('id') +'>修改方案</button>&nbsp;<button class="btn btn-primary btn-xs use-switch">可用开关</button>&nbsp;&nbsp;<button class="btn btn-warning btn-xs link-edit">编辑</button>&nbsp;<button class="btn btn-danger btn-xs link-del">删除</button></td></tr>';
+                    var schemeText = $(this).attr('schemeText').split(',')
+                    var schemeString = ''
+                    schemeText.forEach(function(v, k) {
+                        if (v === '全部') {
+                          schemeString += '<span style="width:114px;font-size:1px;margin:1px 1px;" class="btn btn-xs btn-info">{$all_text}</span>'
+                        } else {
+                          schemeString += '<span style="width:114px;font-size:1px;margin:1px 1px;" class="btn btn-xs btn-default">' + v + "</span>"
+                        }
+                        
+                        if ((k+1) % 3 === 0 ) {
+                          schemeString += '<br/>'
+                        }
+                    })
+                    tr += '<tr  link-id="' +  $(this).attr('id')  + '">';
+                    tr += '<td style="vertical-align:middle;">' +schemeString + '</td>';
+                    tr += '<td style="vertical-align:middle;">' + $(this).attr('source') + '</td>';
+                    tr += '<td style="word-wrap:break-word;max-width:150px;">' + $(this).attr('link') + '</td>';
+                    tr += '<td style="vertical-align:middle;">' + $(this).attr('method') + '</td>';
+                    tr += '<td style="vertical-align:middle;">' + ($(this).attr('decode') === '0' ? '{$soft_text}':'{$hard_text}') + '</td>';
+                    tr += '<td style="vertical-align:middle;">' + $(this).attr('definition') + '</td>';
+                    tr += '<td style="vertical-align:middle;" class="use-flag">' + ($(this).attr('use_flag_text')) + '</td>';
+                    tr += '<td style="vertical-align:middle;"><button class="btn btn-info btn-xs change-scheme" scheme-id=' + $(this).attr('scheme_id') + ' data-id='+ $(this).attr('id') +'>{$modify_text}</button>&nbsp;<button class="btn btn-primary btn-xs use-switch">{$switch_text}</button>&nbsp;&nbsp;<button class="btn btn-warning btn-xs link-edit">{$update_text}</button>&nbsp;<button class="btn btn-danger btn-xs link-del">{$delete_text}</button></td></tr>';
             });
                 
             table += tr;
@@ -281,11 +300,31 @@ $requestJs=<<<JS
             $('.modal-body').html(form).css('min-height','370px'); 
         });
     });
-    
-    
-//    ajax更新
 
-var commonJS = {
+
+JS;
+
+$this->registerJs($requestJs);
+
+Modal::end()
+
+?>
+<!--链接modal部分 结束-->
+
+<?php
+$batchDelete = Url::to(['ott-channel/batch-delete']);
+$updateChannelUrl = Url::to(['ott-channel/update', 'id'=>'']);
+$csrfToken = Yii::$app->request->csrfToken;
+
+$requestJs=<<<JS
+    
+    $(document).on("click", ".gridview", function () {
+                var keys = $("#grid").yiiGridView("getSelectedRows");
+                var url = '{$batchDelete}' + '&id=' + keys.join(',');
+                window.location.href = url;
+            });
+    
+   var commonJS = {
        'callback':function(obj,value) {
            var inp = obj.parent();
            var td = inp.parent();
@@ -300,8 +339,8 @@ var commonJS = {
         var field = $(this).attr('field');
         
         var id = $(this).attr('data-id');
-        var updateChannelUrl = '{$updateRecommendUrl}' + id;
-        
+        var updateChannelUrl = '{$updateChannelUrl}' + id;
+       
         if (newValue === oldValue) {
             return false;
         }
@@ -315,14 +354,25 @@ var commonJS = {
                commonJS.callback(that, newValue);
         })
     });
-    
+   
+     $('.ajax-td').click(function() {
+            var td = $('.ajax-td');
+            var index = $(this).index();
+           
+             $.each(td, function(){
+                 if ($(this).index() !== index) {
+                     $(this).find('.input').hide();
+                     $(this).find('.text').show(); 
+                 }
+                
+          })
+            $(this).find('.input').show();
+            $(this).find('.text').hide(); 
+     });
 
+   
 JS;
 
 $this->registerJs($requestJs);
-
-Modal::end()
-
 ?>
-<!--链接modal部分 结束-->
 

@@ -8,12 +8,12 @@
 
 namespace backend\blocks;
 
-
+use Yii;
 use backend\models\AppBootPicture;
 
 class AppBootPictureBlock extends AppBootPicture
 {
-    const STATUS = ['无效', '有效'];
+    const STATUS = ['invalid', 'valid'];
 
     static public function getStatus()
     {
@@ -22,6 +22,6 @@ class AppBootPictureBlock extends AppBootPicture
 
     public function getStatusText($status)
     {
-        return self::STATUS[$status];
+        return Yii::t('backend', self::STATUS[$status]);
     }
 }

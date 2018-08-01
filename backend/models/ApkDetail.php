@@ -54,14 +54,14 @@ class ApkDetail extends \yii\db\ActiveRecord
     {
         return [
             'ID' => 'ID',
-            'apk_ID' => 'APK类别',
-            'type' => '类型',
-            'ver' => '版本号',
-            'md5' => 'md5值',
-            'url' => '下载地址',
-            'content' => '版本更新内容',
-            'sort' => '排序',
-            'force_update' => '是否强制更新',
+            'apk_ID' => Yii::t('backend', 'APK Type'),
+            'type' => Yii::t('backend', 'Type'),
+            'ver' => Yii::t('backend', 'Version number'),
+            'md5' => 'md5',
+            'url' => Yii::t('backend', 'Download link'),
+            'content' => Yii::t('backend', 'Version update content'),
+            'sort' => Yii::t('backend', 'Sort'),
+            'force_update' => Yii::t('backend', 'Whether to force an update'),
         ];
     }
 

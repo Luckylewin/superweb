@@ -49,14 +49,14 @@ class RechargeCard extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'card_num' => '卡号',
-            'card_secret' => '卡密',
-            'card_contracttime' => '卡时长',
-            'is_valid' => '是否有效',
-            'is_del' => '是否删除',
-            'is_use' => '是否使用',
-            'create_time' => '\'生成时间\'',
-            'batch' => 'Batch',
+            'card_num' => Yii::t('backend', 'Renewal card number'),
+            'card_secret' => Yii::t('backend', 'Card key'),
+            'card_contracttime' => Yii::t('backend', 'Card duration'),
+            'is_valid' => Yii::t('backend', 'Valid Status'),
+            'is_del' => Yii::t('backend', 'Soft delete'),
+            'is_use' => Yii::t('backend', 'Status of use'),
+            'create_time' => Yii::t('backend', 'Created Time'),
+            'batch' => Yii::t('backend', 'Batch'),
         ];
     }
 }

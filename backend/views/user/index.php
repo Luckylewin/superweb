@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-
+use \common\models\User;
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\search\UserSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -40,13 +40,13 @@ $this->params['breadcrumbs'][] = $this->title;
             //'allowance_updated_at',
             [
                     'attribute' => 'identity_type',
-                    'filter' => \common\models\User::$vipType,
+                    'filter' => User::getVipType(),
                     'filterInputOptions' => [
-                            'prompt' => '全部',
+                            'prompt' => Yii::t('backend', 'All'),
                             'class' => 'form-control'
                     ],
                     'value' => function($model) {
-                        return \common\models\User::$vipType[$model->identity_type];
+                        return Yii::t('backend', User::$vipType[$model->identity_type]);
                     }
             ],
 

@@ -112,7 +112,7 @@ class OttLinkController extends BaseController
                 return [
                     'status' => 0,
                     'data' => ['use_flag' => $model->use_flag],
-                    'msg' => $model->use_flag_status[$model->use_flag]
+                    'msg' => Yii::t('backend', $model->use_flag_status[$model->use_flag])
                 ];
             } elseif ($field == 'scheme_id') {
                 $scheme_id = Yii::$app->request->post('scheme');

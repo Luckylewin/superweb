@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a("生成缓存($version)", ['ott-banner/create-cache'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('backend', 'Generate cache') . "($version)", ['ott-banner/create-cache'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([

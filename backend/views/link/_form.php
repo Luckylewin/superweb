@@ -125,7 +125,7 @@ $this->registerJs($uploadJS, $this::POS_END);
         <?= $form->field($model, 'plot')->textarea(['rows'=>6]) ?>
 
         <div class="form-group">
-            <?= Html::submitButton('保存', ['class' => 'btn btn-success']) ?>
+            <?= Html::submitButton(\Yii::t('backend','Save'), ['class' => 'btn btn-success']) ?>
 
             <?php if($model->isNewRecord): ?>
                 <?= Html::a(Yii::t('backend','Go Back'), Yii::$app->request->referrer, [
