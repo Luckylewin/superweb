@@ -123,4 +123,10 @@ return [
     'defaultRoute' => 'index/frame',
     'layout' => 'main',//布局文件 优先级: 控制器>配置文件>系统默认
     'params' => $params,
+    'on beforeRequest' => function ($event) {
+        $cookies = Yii::$app->request->cookies;//注意此处是request
+        $language = $cookies->get('language', 'en-US');//设置默认值
+        Yii::$app->language = $language;
+        return;
+    },
 ];

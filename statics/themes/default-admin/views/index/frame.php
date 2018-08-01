@@ -423,7 +423,7 @@ $username = Yii::$app->user->isGuest == false ? Yii::$app->user->identity->usern
                     </form>
                 </div>
                 <ul class="nav navbar-top-links navbar-right">
-                    <!--<li class="dropdown">
+                  <!-- <li class="dropdown">
                         <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
                             <i class="fa fa-envelope"></i> <span class="label label-warning">16</span>
                         </a>
@@ -464,8 +464,8 @@ $username = Yii::$app->user->isGuest == false ? Yii::$app->user->identity->usern
                                 </div>
                             </li>
                         </ul>
-                    </li>
-                    <li class="dropdown">
+                    </li>-->
+                    <!--<li class="dropdown">
                         <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
                             <i class="fa fa-bell"></i> <span class="label label-primary">8</span>
                         </a>
@@ -501,6 +501,30 @@ $username = Yii::$app->user->isGuest == false ? Yii::$app->user->identity->usern
                     <!--<li class="hidden-xs">
                         <a href="index_v1.html" class="J_menuItem" data-index="0"><i class="fa fa-cart-arrow-down"></i> 购买</a>
                     </li>-->
+                    <li class="dropdown">
+                        <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                            <i class="fa fa-language"></i> <?= Yii::t('backend', 'Language') ?>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="<?= Url::to(['index/language', 'lang' => 'en-US']) ?>">
+                                    <div>
+                                        <i class="fa fa-hand-o-right fa-fw"></i> English
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="<?= Url::to(['index/language', 'lang' => 'zh-CN']) ?>">
+                                    <div>
+                                        <i class="fa fa-hand-o-right fa-fw"></i> 简体中文
+                                    </div>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </li>
+
                     <li class="dropdown hidden-xs">
                         <a class="right-sidebar-toggle" aria-expanded="false">
                             <i class="fa fa-tasks"></i> <?= Yii::t('backend', 'Themes') ?>

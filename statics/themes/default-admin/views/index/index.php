@@ -4,9 +4,11 @@
         <p id="localtime"></p>
         <p>
 
-            <?= \yii\helpers\Html::a(Yii::t('backend', 'Interface statics'), \yii\helpers\Url::to(['log/now']), [
+            <?=  \yii\helpers\Html::a('<i class="fa-bar-chart fa"></i>' . Yii::t('backend', 'Interface statics'), \yii\helpers\Url::to(['log/now']), [
                     'class' => 'btn btn-primary btn-lg'
             ]) ?>
+
+
         </p>
     </div>
 </div>

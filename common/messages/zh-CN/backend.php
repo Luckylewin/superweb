@@ -3,6 +3,7 @@ return [
     'Home' => '首页',
     'Log Out' => '登出',
     'Sys Set' => '系统设置',
+    'language settings' => '系统设置',
     'Sys Info' => '系统信息',
     'Admin Setting' => '管理员设置',
     'Admin Management' => '管理员管理',

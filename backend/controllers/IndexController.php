@@ -8,6 +8,7 @@
 
 namespace backend\controllers;
 
+use Yii;
 
 class IndexController extends BaseController
 {
@@ -21,5 +22,22 @@ class IndexController extends BaseController
     {
 
         return $this->render('index');
+    }
+
+    /**
+     * 设定语言： 1) 设置session,2) 跳转回原来的页面
+     * 访问网址 - http://.../site/language?locale=zh-CN
+     */
+    public function actionLanguage($lang)
+    {
+        $cookies = Yii::$app->response->cookies;
+
+        $cookies->add(new \yii\web\Cookie([
+            'name' => 'language',
+            'value' => $lang,
+            'expire' => time() + 24640000
+        ]));
+
+        $this->goBack(Yii::$app->request->headers['Referer']);
     }
 }
