@@ -287,6 +287,8 @@ return [
     'Create Subcategory items'=>'Tạo mục danh mục phụ',
     'Name'=>'Tên',
     'Genre'=>'Thể loại',
+    "OTT Genre" => 'Phân loại OTT',
+    "IPTV Genre" => 'Phân loại IPTV',
     'Language'=>'Ngôn ngữ',
     'Rating'=>'Xếp hạng',
     'Total number of ratings'=>'Tổng số xếp hạng',

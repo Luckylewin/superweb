@@ -522,6 +522,8 @@ return [
     'Data not found' => '找不到数据',
     'Wrong time value' => '时间的值错误',
     "No yesterday's log" => '没有昨天的日志',
+    "OTT Genre" => '直播分类',
+    "IPTV Genre" => '点播分类',
 
     'Please assign a role to the account, otherwise it will not work properly.' => '请给帐号分配一个角色，否则无法正常使用',
 ];
