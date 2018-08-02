@@ -25,7 +25,7 @@ class IndexController extends BaseController
     }
 
     /**
-     * 设定语言： 1) 设置session,2) 跳转回原来的页面
+     * 设定语言： 1) 设置cookie,2) 跳转回原来的页面
      * 访问网址 - http://.../site/language?locale=zh-CN
      */
     public function actionLanguage($lang)

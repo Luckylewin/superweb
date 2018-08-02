@@ -68,7 +68,7 @@ class OttLinkController extends BaseController
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            $this->setFlash('info', '添加链接成功');
+            $this->setFlash('info', Yii::t('backend', 'Success'));
             return $this->redirect(['ott-channel/index', 'sub-id' => $model->channel->sub_class_id]);
         }
 
@@ -135,7 +135,7 @@ class OttLinkController extends BaseController
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            $this->setFlash('info', '修改成功');
+            $this->setFlash('info', Yii::t('backend', 'Success'));
             return $this->redirect(['ott-channel/index', 'sub-id' => $model->channel->sub_class_id]);
         }
 

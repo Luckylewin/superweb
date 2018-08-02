@@ -53,7 +53,7 @@ class DvbOrderController extends BaseController
         $model = new DvbOrder();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            $this->setFlash('success', '操作成功');
+            $this->setFlash('success', Yii::t('backend', 'Success'));
             return $this->redirect(['dvb-order/index']);
         }
 
@@ -74,7 +74,7 @@ class DvbOrderController extends BaseController
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            $this->setFlash('success', '操作成功');
+            $this->setFlash('success', Yii::t('backend', 'Success'));
             return $this->redirect(['dvb-order/index']);
         }
 

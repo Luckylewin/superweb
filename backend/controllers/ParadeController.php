@@ -76,7 +76,7 @@ class ParadeController extends BaseController
     public function actionBatchDelete($name)
     {
         Parade::deleteAll(['channel_name' => $name]);
-        Yii::$app->session->setFlash('success', "操作成功");
+        Yii::$app->session->setFlash('success', Yii::t('backend', 'Success'));
 
         return $this->redirect(Yii::$app->request->referrer);
     }
@@ -109,7 +109,7 @@ class ParadeController extends BaseController
             $model->source = '手动添加';
 
             if ($model->save()) {
-                $this->setFlash('success', '添加成功');
+                $this->setFlash('success', Yii::t('backend', 'Success'));
                 return $this->redirect(['parade/list', 'name' => $model->channel_name]);
             }
         }
@@ -219,7 +219,7 @@ class ParadeController extends BaseController
         }
 
         Yii::$app->cache->set($this->version, date('YmdHis'));
-        Yii::$app->session->setFlash('success', "本次生成{$totalCache}个节目的预告缓存");
+        Yii::$app->session->setFlash('success', Yii::t('backend', 'generated') . ' ' . $totalCache . ' ' . Yii::t('backend', 'items') . ' ' . Yii::t('backend', 'cache'));
 
         return $this->redirect(Yii::$app->request->referrer);
     }
@@ -319,7 +319,7 @@ class ParadeController extends BaseController
             if ($channel) {
                 $channel->alias_name = Yii::$app->request->post('alias_name');
                 $channel->save(false);
-                $this->setFlash('info', '操作成功');
+                $this->setFlash('info', Yii::t('backend', 'Success'));
                 $this->redirect(Yii::$app->request->referrer);
             }
         }

@@ -24,16 +24,16 @@ class RenewController extends BaseController
 
             $error = false;
             if ($mac->use_flag === Mac::NOT_ACTIVE) {
-                Yii::$app->session->setFlash('error', "该帐号未激活");
+                Yii::$app->session->setFlash('error', Yii::t('backend', 'This account is not activated'));
                 $error = true;
             } else if (strtotime($mac->duetime) == strtotime('1970')) {
-                Yii::$app->session->setFlash('error', "该帐号为无限期");
+                Yii::$app->session->setFlash('error', Yii::t('backend', 'This account is indefinite'));
                 $error = true;
             } else if (is_null($mac)) {
-                Yii::$app->session->setFlash('error', "数据不存在");
+                Yii::$app->session->setFlash('error', Yii::t('backend', 'Data not found'));
                 $error = true;
             } else if (Yii::$app->request->post('contract_time') <= 0) {
-                Yii::$app->session->setFlash('error', "续费时间错误");
+                Yii::$app->session->setFlash('error', Yii::t('backend', 'Wrong time value'));
                 $error = true;
             }
 
@@ -58,7 +58,7 @@ class RenewController extends BaseController
             //更新数据库,缓存
             $mac->save(false);
             MyRedis::init(MyRedis::REDIS_DEVICE_STATUS);
-            Yii::$app->session->setFlash('success', "续费操作成功");
+            Yii::$app->session->setFlash('success', Yii::t('backend', 'Success'));
 
             //记录日志
             $renewLog = new RenewLog();

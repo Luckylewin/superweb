@@ -53,7 +53,7 @@ class FirmwareClassController extends BaseController
         $model = new FirmwareClass();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            $this->setFlash('success', '操作成功');
+            $this->setFlash('success', Yii::t('backend', 'Success'));
             return $this->redirect(['firmware-class/index']);
         }
 
@@ -74,7 +74,7 @@ class FirmwareClassController extends BaseController
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            $this->setFlash('success', '操作成功');
+            $this->setFlash('success', Yii::t('backend', 'Success'));
             return $this->redirect(['firmware-class/index', 'id' => $model->id]);
         }
 

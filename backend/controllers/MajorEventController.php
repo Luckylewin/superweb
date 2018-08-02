@@ -69,7 +69,7 @@ class MajorEventController extends BaseController
 
 
         if ($model->load($post) && $model->initData($post) && $model->save()) {
-            $this->setFlash('success', '操作成功');
+            $this->setFlash('success', Yii::t('backend', 'Success'));
             return $this->redirect(['index']);
         }
 
@@ -95,7 +95,7 @@ class MajorEventController extends BaseController
         } else if (Yii::$app->request->isPost) {
             $post = Yii::$app->request->post();
             if ($model->load($post) && $model->initData($post) && $model->save()) {
-                $this->setFlash('success', '操作成功');
+                $this->setFlash('success', Yii::t('backend', 'Success'));
                 return $this->redirect(['index']);
             }
 
@@ -118,7 +118,7 @@ class MajorEventController extends BaseController
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
-        $this->setFlash('info', '操作成功');
+        $this->setFlash('info', Yii::t('backend', 'Success'));
         return $this->redirect(['index']);
     }
 
@@ -145,10 +145,10 @@ class MajorEventController extends BaseController
         if (!empty($ids)) {
             $ids = explode(',', $ids);
             MajorEvent::deleteAll(['in', 'id', $ids]);
-            $this->setFlash('success', '操作成功');
+            $this->setFlash('success', Yii::t('backend', 'Success'));
             return $this->redirect(['major-event/index']);
         }
-        $this->setFlash('error', '操作失败');
+        $this->setFlash('error', Yii::t('backend', 'operation failed'));
         return $this->redirect(['major-event/index']);
     }
 

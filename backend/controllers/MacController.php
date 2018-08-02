@@ -67,7 +67,7 @@ class MacController extends BaseController
         $model = new Mac();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            $this->setFlash('success', '添加成功');
+            $this->setFlash('success', Yii::t('backend', 'Success'));
             return $this->redirect(['mac/index']);
         }
 
@@ -90,7 +90,7 @@ class MacController extends BaseController
         list($model->contract_time, $model->unit) = explode(' ', $model->contract_time);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            $this->setFlash('info', '操作成功');
+            $this->setFlash('info', Yii::t('backend', 'Success'));
             return $this->redirect(['mac/index']);
         }
 
@@ -117,9 +117,9 @@ class MacController extends BaseController
                 $detail->delete();
             }
             $model->delete();
-            Yii::$app->session->setFlash('success', "删除成功");
+            Yii::$app->session->setFlash('success', Yii::t('backend', 'Success'));
         } catch (\Exception $e) {
-            Yii::$app->session->setFlash('success', "删除失败");
+            Yii::$app->session->setFlash('success', Yii::t('backend', 'operation failed'));
         }
 
         return $this->redirect(['index']);
@@ -134,7 +134,7 @@ class MacController extends BaseController
                Mac::findOne(['MAC' => $v])->delete();
             });
 
-            Yii::$app->session->setFlash('success', "删除成功");
+            Yii::$app->session->setFlash('success', Yii::t('backend', 'Success'));
             Yii::$app->response->format = Response::FORMAT_JSON;
             return ['status' => 0];
         }
@@ -153,7 +153,7 @@ class MacController extends BaseController
         }
 
         if (count($data) == 0) {
-            Yii::$app->session->setFlash('error', "没有可导出的数据");
+            Yii::$app->session->setFlash('error', Yii::t('backend', 'No data exported'));
             return $this->redirect(Yii::$app->request->referrer);
         }
 
@@ -197,7 +197,7 @@ class MacController extends BaseController
         $model = new ImportMacForm();
 
         if ($model->load(Yii::$app->request->post()) && $total = $model->import()) {
-            $this->setFlash('success', "新增成功{$total}条数据");
+            $this->setFlash('success', Yii::t('backend', 'Successfully imported') . $total . Yii::t('backend', 'items'));
             return $this->redirect(['mac/index']);
         }
 

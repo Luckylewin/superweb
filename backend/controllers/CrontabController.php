@@ -51,7 +51,7 @@ class CrontabController extends BaseController
         $model = new Crontab();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->session->setFlash('success', '创建成功');
+            Yii::$app->session->setFlash('success', Yii::t('backend', 'Success'));
             return $this->redirect(Url::to(['crontab/index']));
         }
 
@@ -72,7 +72,7 @@ class CrontabController extends BaseController
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->session->setFlash('info', '修改成功');
+            Yii::$app->session->setFlash('info', Yii::t('backend', 'Success'));
             return $this->redirect(Url::to(['crontab/index']));
         }
 

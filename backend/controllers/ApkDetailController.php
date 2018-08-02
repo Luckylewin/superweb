@@ -104,7 +104,7 @@ class ApkDetailController extends BaseController
         $apk_ID = $model->apk_ID;
         $model->delete();
 
-        Yii::$app->session->setFlash('success', '操作成功');
+        Yii::$app->session->setFlash('success', Yii::t('backend', 'Success'));
 
         return $this->redirect(['apk-detail/index', 'id' => $apk_ID]);
     }

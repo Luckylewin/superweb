@@ -159,8 +159,10 @@ class importTextForm extends \yii\base\Model
             $this->createMainClass($mainClassName);
             $this->createSubClass($subClassName);
             $this->createChannel($channelName);
-            $this->createLink($link, $method, $scheme , $total);
+            $total = $this->createLink($link, $method, $scheme , $total);
         }
+
+        return $total;
     }
 
     private function importViaKeyword()
@@ -255,5 +257,7 @@ class importTextForm extends \yii\base\Model
             $ottLink->save(false);
             $total++;
         }
+
+        return $total;
     }
 }

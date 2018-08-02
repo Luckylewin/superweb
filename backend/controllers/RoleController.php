@@ -88,7 +88,7 @@ class RoleController extends BaseController
                     $authManager->addChild($role, $itemModel);
                 }
             }
-            Yii::$app->session->setFlash('success', '操作成功');
+            Yii::$app->session->setFlash('success', Yii::t('backend', 'Success'));
         }
 
         $arr = Menu::find()->asArray()->all();

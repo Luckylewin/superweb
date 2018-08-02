@@ -62,7 +62,7 @@ class OttEventTeamController extends BaseController
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            $this->setFlash('success', '添加成功');
+            $this->setFlash('success', Yii::t('backend', 'Success'));
             return $this->redirect(Url::to(['ott-event-team/index', 'event_id' => $model->event_id]));
         }
 
@@ -83,7 +83,7 @@ class OttEventTeamController extends BaseController
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            $this->setFlash('success', '操作成功');
+            $this->setFlash('success', Yii::t('backend', 'Success'));
             return $this->redirect(Url::to(['ott-event-team/index', 'event_id' => $model->event_id]));
         }
 
@@ -104,7 +104,7 @@ class OttEventTeamController extends BaseController
         $model = $this->findModel($id);
         if ($model instanceof OttEventTeam) {
             $event_id = $model->event_id;
-            $this->setFlash('info', '操作成功');
+            $this->setFlash('info', Yii::t('backend', 'Success'));
             $model->delete();
             return $this->redirect(Url::to(['ott-event-team/index', 'event_id' => $event_id]));
         }

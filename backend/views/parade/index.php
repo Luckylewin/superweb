@@ -10,7 +10,7 @@ use yii\helpers\Url;
 /* @var $searchModel backend\models\search\ParadeQuery */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = '节目预告';
+$this->title = Yii::t('backend', 'EPG');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="parade-index">
@@ -37,7 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
 
             [
-                    'label' => '关联频道',
+                    'label' => Yii::t('backend', 'Associated Channel'),
                     'format' => 'raw',
                     'value' => function ($model) {
                         $channel = $model->channel;
@@ -46,7 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             return Html::a($channel->name, \yii\helpers\Url::to(['ott-channel/view', 'id' => $channel->id]),['class'=>'btn btn-link']);
                         }
 
-                        return Html::a('绑定频道', null, [
+                        return Html::a(Yii::t('backend', 'Bind Channel'), null, [
                                 'class' => 'btn btn-default btn-sm bind',
                                 'data-toggle' => 'modal',
                                 'data-target' => '#bind-modal',
@@ -62,7 +62,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'size' => 'btn-sm',
                     'buttons' => [
                             'view' => function($url, $model, $key) {
-                                $title = "查看";
+                                $title = Yii::t('backend', 'View');
                                 return Html::a($title, \yii\helpers\Url::to(['parade/list-channel','name'=>$model->channel_name]),[
                                         'class'=>'btn btn-info btn-sm',
                                         'title' => $title,
@@ -71,7 +71,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]);
                             },
                         'delete' => function($url, $model, $key) {
-                            $title = "删除";
+                            $title = Yii::t('backend', 'Delete');
                             return Html::a($title, \yii\helpers\Url::to(['parade/batch-delete','name'=>$model->channel_name]),[
                                 'class'=>'btn btn-danger btn-sm',
                                 'title' => $title,
@@ -90,8 +90,8 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 
 <p>
-    <?= Html::a('添加预告', ['create'], ['class' => 'btn btn-success']) ?>
-    <?= Html::a("生成缓存($version)", ['create-cache'], ['class' => 'btn btn-default']) ?>
+    <?= Html::a(Yii::t('backend', 'Create'), ['create'], ['class' => 'btn btn-success']) ?>
+    <?= Html::a(Yii::t('backend', 'Generate cache') . "($version)", ['create-cache'], ['class' => 'btn btn-default']) ?>
 </p>
 
 
@@ -100,8 +100,8 @@ $this->params['breadcrumbs'][] = $this->title;
 Modal::begin([
     'id' => 'bind-modal',
     'size' => Modal::SIZE_DEFAULT,
-    'header' => '<h4 class="modal-title">预告(<span id="channel_name"></span>)关联频道</h4>',
-    'footer' => '<a href="#" class="btn btn-default" data-dismiss="modal">关闭</a>',
+    'header' => '<h4 class="modal-title">'. Yii::t('backend', 'epg').'(<span id="channel_name"></span>)'. Yii::t('backend', 'Associated Channel').'</h4>',
+    'footer' => '<a href="#" class="btn btn-default" data-dismiss="modal">'. Yii::t('backend', 'close').'</a>',
 ]);
 
 $requestUrl = Url::to(['parade/bind']);

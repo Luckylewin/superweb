@@ -65,7 +65,7 @@ class ResolveController extends BaseController
         $data = Yii::$app->request->post($model->formName());
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->session->setFlash('success', '操作成功');
+            Yii::$app->session->setFlash('success', Yii::t('backend', 'Success'));
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -100,7 +100,7 @@ class ResolveController extends BaseController
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->session->setFlash('success', '操作成功');
+            Yii::$app->session->setFlash('success', Yii::t('backend', 'Success'));
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -158,7 +158,7 @@ class ResolveController extends BaseController
 
        $redis->set(self::CACHE, json_encode($data));
 
-       Yii::$app->session->setFlash('success', '操作成功');
+       Yii::$app->session->setFlash('success', Yii::t('backend', 'Success'));
        return $this->redirect(['resolve/index']);
     }
 

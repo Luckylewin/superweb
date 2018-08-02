@@ -81,7 +81,7 @@ class SubClassController extends BaseController
         $model->sort = 0;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            $this->setFlash('success', '创建成功');
+            $this->setFlash('success', Yii::t('backend', 'Success'));
             return $this->redirect(['index', 'main-id' => $model->main_class_id]);
         } else {
             return $this->renderAjax('create', ['model' => $model]);
@@ -121,7 +121,7 @@ class SubClassController extends BaseController
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            $this->setFlash('info', '修改成功');
+            $this->setFlash('info', Yii::t('backend', 'Success'));
             return $this->redirect(['index', 'main-id' => $model->mainClass->id]);
         }
 
@@ -143,7 +143,7 @@ class SubClassController extends BaseController
         $main_class_id = $subClass->main_class_id;
         $subClass->delete();
 
-        $this->setFlash('success', '操作成功');
+        $this->setFlash('success', Yii::t('backend', 'Success'));
         return $this->redirect(['index', 'main-id' => $main_class_id]);
     }
 
@@ -152,7 +152,7 @@ class SubClassController extends BaseController
         $id = Yii::$app->request->get('id');
         SubClass::deleteAll(['in', 'id', $id]);
 
-        $this->setFlash('info', "批量删除成功");
+        $this->setFlash('info', Yii::t('backend', 'Success'));
 
         return $this->redirect(Yii::$app->request->referrer);
     }
@@ -205,7 +205,7 @@ class SubClassController extends BaseController
             }
         }
 
-        $this->setFlash('info', '重新排列频道号成功');
+        $this->setFlash('info', Yii::t('backend', 'Success'));
 
         return $this->redirect(Yii::$app->request->referrer);
     }
@@ -218,9 +218,9 @@ class SubClassController extends BaseController
 
         if ($importForm->load(Yii::$app->request->post()) && $importForm->validate()) {
             if ($importNum = $importForm->import()) {
-                $this->setFlash('success', "导入成功:本次导入{$importNum}条");
+                $this->setFlash('success', Yii::t('backend', 'Successfully imported') . $importNum .' ' . Yii::t('backend', 'item'));
             } else {
-                $this->setFlash('warning', "导入0条");
+                $this->setFlash('warning', Yii::t('backend', 'No data imported'));
             }
 
              return $this->redirect(['main-class/index']);
@@ -238,7 +238,7 @@ class SubClassController extends BaseController
         $cache->createOttCache($id, Cache::$JSON);
         $cache->createOttCache($id, Cache::$XML);
 
-        $this->setFlash('success', '操作成功');
+        $this->setFlash('success', Yii::t('backend', 'Success'));
         return $this->redirect(Yii::$app->request->referrer);
     }
 

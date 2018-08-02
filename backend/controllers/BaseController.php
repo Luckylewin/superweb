@@ -79,12 +79,12 @@ class BaseController extends Controller
 
     public function success($status = 'success')
     {
-        $this->setFlash($status, '操作成功');
+        $this->setFlash($status, Yii::t('backend', 'Success'));
     }
 
     public function error($status = 'error')
     {
-        $this->setFlash($status, '操作失败');
+        $this->setFlash($status, Yii::t('backend', 'Error'));
     }
 
 }

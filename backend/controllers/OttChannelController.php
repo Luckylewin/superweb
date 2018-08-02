@@ -191,7 +191,7 @@ class OttChannelController extends BaseController
     {
         $this->findModel($id)->delete();
 
-        $this->setFlash('success', '操作成功');
+        $this->setFlash('success', Yii::t('backend', 'Success'));
         return $this->redirect(Yii::$app->request->referrer);
     }
 

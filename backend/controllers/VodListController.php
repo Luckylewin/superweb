@@ -60,7 +60,7 @@ class VodListController extends BaseController
         $model = new VodList();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            $this->setFlash('success', '操作成功');
+            $this->setFlash('success', Yii::t('backend', 'Success'));
             return $this->redirect(Url::to(['vod-list/index']));
         }
 
@@ -81,7 +81,7 @@ class VodListController extends BaseController
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            $this->setFlash('success', '操作成功');
+            $this->setFlash('success', Yii::t('backend', 'Success'));
             return $this->redirect(Url::to(['vod-list/index']));
         }
 

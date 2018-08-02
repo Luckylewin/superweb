@@ -81,7 +81,7 @@ class VodController extends BaseController
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            $this->setFlash('info', '操作成功');
+            $this->setFlash('info', Yii::t('backend', 'Success'));
             return $this->redirect(['view', 'id' => $model->vod_id]);
         }
 
@@ -96,7 +96,7 @@ class VodController extends BaseController
         $model->vod_home = $action;
         $model->save(false);
 
-        $this->setFlash('info', '操作成功');
+        $this->setFlash('info', Yii::t('backend', 'Success'));
         return $this->redirect(Yii::$app->request->referrer);
     }
 
@@ -110,7 +110,7 @@ class VodController extends BaseController
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
-        $this->setFlash('success', '操作成功');
+        $this->setFlash('success', Yii::t('backend', 'Success'));
 
         return $this->redirect(['index']);
     }
@@ -129,7 +129,7 @@ class VodController extends BaseController
             }
         }
 
-        $this->setFlash('info', '操作成功');
+        $this->setFlash('info', Yii::t('backend', 'Success'));
         return $this->redirect(['index']);
     }
 

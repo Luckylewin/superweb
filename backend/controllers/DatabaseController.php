@@ -29,7 +29,7 @@ class DatabaseController extends BaseController
         $tables = Yii::$app->request->get('tables', '');
         if($tables && in_array($operation, ['repair', 'optimize'])) {
             Yii::$app->db->createCommand($operation.' TABLE '.$tables);
-            Yii::$app->session->setFlash('success', '操作成功');
+            Yii::$app->session->setFlash('success', Yii::t('backend', 'Success'));
             return $this->redirect(['export']);
         }
     }

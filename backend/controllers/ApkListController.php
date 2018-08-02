@@ -88,7 +88,7 @@ class ApkListController extends BaseController
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
-        Yii::$app->session->setFlash('success', '操作成功');
+        Yii::$app->session->setFlash('success', Yii::t('backend', 'Success'));
         return $this->redirect(['index']);
     }
 

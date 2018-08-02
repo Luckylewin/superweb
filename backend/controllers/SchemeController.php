@@ -56,7 +56,7 @@ class SchemeController extends BaseController
         $model = new Scheme();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            $this->setFlash('success', '操作成功');
+            $this->setFlash('success', Yii::t('backend', 'Success'));
             return $this->redirect(['scheme/index']);
         }
 
@@ -77,7 +77,7 @@ class SchemeController extends BaseController
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            $this->setFlash('info', '操作成功');
+            $this->setFlash('info', Yii::t('backend', 'Success'));
             return $this->redirect(['scheme/index']);
         }
 

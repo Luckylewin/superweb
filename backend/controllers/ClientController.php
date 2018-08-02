@@ -122,7 +122,7 @@ class ClientController extends BaseController
             $model = $this->findModel($id);
 
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                $this->setFlash('info', '绑定成功');
+                $this->setFlash('info', Yii::t('backend', 'Success'));
                 return $this->redirect(Yii::$app->request->referrer);
             }
         }

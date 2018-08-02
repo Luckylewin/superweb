@@ -57,7 +57,7 @@ class AppMenuController extends BaseController
         $model = new AppMenu();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            $this->setFlash('success', '创建成功');
+            $this->setFlash('success', Yii::t('backend', 'Success'));
             return $this->redirect(['app-menu/index']);
         }
 
@@ -78,7 +78,7 @@ class AppMenuController extends BaseController
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            $this->setFlash('info', '创建成功');
+            $this->setFlash('info', Yii::t('backend', 'Success'));
             return $this->redirect(['app-menu/index']);
         }
 
@@ -98,7 +98,7 @@ class AppMenuController extends BaseController
     {
         $this->findModel($id)->delete();
 
-        $this->setFlash('info', '删除');
+        $this->setFlash('info', Yii::t('backend', 'Success'));
         return $this->redirect(['index']);
     }
 

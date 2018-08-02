@@ -26,7 +26,7 @@ class ConfigController extends BaseController
             $form = Yii::$app->request->post('form');
             $model->data = json_encode($form);
             $model->save();
-            $this->setFlash('success', '操作成功');
+            $this->setFlash('success', Yii::t('backend', 'Success'));
         }
         if(!isset($model->data)) $formParams = [];
         else $formParams = json_decode($model->data, true);
@@ -49,7 +49,7 @@ class ConfigController extends BaseController
             $form = Yii::$app->request->post('form');
             $model->data = json_encode($form);
             $model->save();
-            $this->setFlash('success', '操作成功');
+            $this->setFlash('success', Yii::t('backend', 'Success'));
         }
         if(!isset($model->data)) $formParams = [];
         else $formParams = json_decode($model->data, true);
@@ -73,7 +73,7 @@ class ConfigController extends BaseController
             }
             $form = Yii::$app->request->post('form');
             $model->data = json_encode($form);
-            $this->setFlash('success', '操作成功');
+            $this->setFlash('success', Yii::t('backend', 'Success'));
             $model->save();
         }
         if(!isset($model->data)) $formParams = [];

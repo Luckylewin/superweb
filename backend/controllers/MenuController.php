@@ -25,7 +25,7 @@ class MenuController extends BaseController
         }
         // 检查是否有修改权限
         if ( Yii::$app->session->has('auth') == false || Yii::$app->session['auth']['expire_time'] < time()) {
-            $this->setFlash('error', '需要输入操作码');
+            $this->setFlash('error', Yii::t('backend', 'Need to enter the opcode'));
             return $this->redirect(['menu/auth']);
         }
         return true;
@@ -41,10 +41,10 @@ class MenuController extends BaseController
                 $session = Yii::$app->session;
                 $data = ['expire_time' => time() + 1200]; //这里设置10秒过期
                 $session['auth'] = $data;
-                $this->setFlash('success','认证成功');
+                $this->setFlash('success', Yii::t('backend', 'Successful certification'));
                 return $this->redirect(['menu/index']);
             } else {
-                $this->setFlash('error', '认证失败');
+                $this->setFlash('error', Yii::t('backend', 'Authentication failed'));
             }
         }
 
@@ -65,7 +65,7 @@ class MenuController extends BaseController
                     $model->sort = $v;
                     $model->save();
                 }
-                Yii::$app->session->setFlash('success', '操作成功');
+                Yii::$app->session->setFlash('success', Yii::t('backend', 'Success'));
             }
         }
         $searchModel = new MenuSearch();
@@ -99,7 +99,7 @@ class MenuController extends BaseController
         $model = new Menu();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->session->setFlash('info', '操作成功');
+            Yii::$app->session->setFlash('info', Yii::t('backend', 'Success'));
             return $this->redirect(['index']);
         } else {
             $model->pid = Yii::$app->request->get('pid', 0);
@@ -123,7 +123,7 @@ class MenuController extends BaseController
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->session->setFlash('info', '操作成功');
+            Yii::$app->session->setFlash('info', Yii::t('backend', 'Success'));
             return $this->redirect(['index']);
         } else {
             $arr = Menu::find()->asArray()->all();

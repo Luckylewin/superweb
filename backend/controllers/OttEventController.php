@@ -52,7 +52,7 @@ class OttEventController extends BaseController
         $model = new OttEvent();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            $this->setFlash('success', '添加成功');
+            $this->setFlash('success', Yii::t('backend', 'Success'));
             return $this->redirect(['view', 'id' => $model->id]);
         }
 

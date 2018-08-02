@@ -59,7 +59,7 @@ class AdminController extends BaseController
         $model->scenario = 'create';
         $model->status = Admin::STATUS_ACTIVE;
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            $this->setFlash('info', '请给帐号分配一个角色，否则无法正常使用');
+            $this->setFlash('info', Yii::t('backend', 'Please assign a role to the account, otherwise it will not work properly.'));
             return $this->redirect(['admin/auth', 'id' => $model->id]);
         } else {
             return $this->render('create', [
@@ -115,7 +115,7 @@ class AdminController extends BaseController
             $authManager->revokeAll($id);
             //添加用户组
             $authManager->assign($authManager->getRole($roleName), $id);
-            Yii::$app->session->setFlash('success', '操作成功');
+            Yii::$app->session->setFlash('success', Yii::t('backend', 'Success'));
         }
 
         $searchModel = new AuthItemSearch();

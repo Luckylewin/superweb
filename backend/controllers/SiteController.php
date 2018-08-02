@@ -89,7 +89,7 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            Yii::$app->session->setFlash('info', '登录成功');
+            Yii::$app->session->setFlash('info', Yii::t('backend', 'login successful'));
             return $this->redirect(['index/frame']);
         } else {
             $model->password = '';

@@ -54,7 +54,7 @@ class FirmwareDetailController extends BaseController
         $model->firmware_id = Yii::$app->request->get('firmware_id');
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            $this->setFlash('success', '操作成功');
+            $this->setFlash('success', Yii::t('backend', 'Success'));
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -75,7 +75,7 @@ class FirmwareDetailController extends BaseController
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            $this->setFlash('success', '操作成功');
+            $this->setFlash('success', Yii::t('backend', 'Success'));
             return $this->redirect(['view', 'id' => $model->id]);
         }
 

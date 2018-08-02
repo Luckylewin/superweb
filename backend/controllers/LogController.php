@@ -21,14 +21,14 @@ class LogController extends BaseController
     public function actionIndex()
     {
         $type = \Yii::$app->request->get('type');
-        $value = \Yii::$app->request->get('value');
+        $value = \Yii::$app->request->get('value', date('Y-m-d', strtotime('yesterday')));
 
         // 查询
         $model = LogInterface::findByDate($value);
         $programLog = ProgramLog::findByDate($value);
 
         if (empty($model)) {
-            $this->setFlash('warning', '没有查询到日志 :(');
+            $this->setFlash('warning', Yii::t('backend', "No yesterday's log"));
         }
 
         return $this->render('index', [
