@@ -1,6 +1,6 @@
 <div class="container">
     <div class="jumbotron">
-        <h1> <i class="fa fa-tv"></i> <?php echo isset(Yii::$app->params['basic']['sitename'])? Yii::$app->params['basic']['sitename'] : '欢迎登录' ?></h1>
+        <h1> <i class="fa fa-tv"></i> <?php echo isset(Yii::$app->params['basic']['sitename'])? Yii::t('backend', Yii::$app->params['basic']['sitename'] ): Yii::t('backend', 'Welcome') ?></h1>
         <p id="localtime"></p>
         <p>
 

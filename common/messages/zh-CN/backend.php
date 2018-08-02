@@ -69,6 +69,8 @@ return [
     'Associated order' => '关联订单',
     'Firmware List' => '固件列表',
     'App' => 'APP管理',
+    'APP List' => 'APP列表',
+    'Boot Picture' => '启动页图片',
     'Start Page Image' => '启动页图片',
     'User' => '用户管理',
     'TV User' => '电视用户',
@@ -404,7 +406,7 @@ return [
     'Generating cache' => '正在生成缓存',
     'close' => '关闭',
     'System Information' => '系统信息',
-    'IPTV Management System' => 'IPTV管理系统',
+
     'Binding order number' => '绑定订单号',
     'Vietnamese' => '越南语',
 
@@ -498,5 +500,7 @@ return [
     'Thursday' => '星期四',
     'Friday' => '星期五',
     'Saturday' => '星期六',
-    'Today is' => '今天是'
+    'Today is' => '今天是',
+    'IPTV Management System' => 'IPTV 管理系统',
+    'Welcome' => '欢迎',
 ];

@@ -22,6 +22,7 @@ class ConfigController extends BaseController
                 $model = new Config();
                 $model->keyid = 'basic';
             }
+
             $form = Yii::$app->request->post('form');
             $model->data = json_encode($form);
             $model->save();
@@ -31,6 +32,7 @@ class ConfigController extends BaseController
         else $formParams = json_decode($model->data, true);
         if(!isset($formParams['close'])) $formParams['close'] = 0;
         if(!isset($formParams['close_reason'])) $formParams['close_reason'] = '站点升级中, 请稍后访问!';
+
         return $this->render('basic', [
             'formParams' => $formParams,
         ]);

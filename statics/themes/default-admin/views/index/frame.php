@@ -509,7 +509,7 @@ $username = Yii::$app->user->isGuest == false ? Yii::$app->user->identity->usern
                             <li>
                                 <a href="<?= Url::to(['index/language', 'lang' => 'en-US']) ?>">
                                     <div>
-                                        <i class="fa fa-hand-o-right fa-fw"></i> English
+                                        <i class="fa fa-hand-o-right fa-fw"></i> en-US
                                     </div>
                                 </a>
                             </li>
@@ -517,7 +517,15 @@ $username = Yii::$app->user->isGuest == false ? Yii::$app->user->identity->usern
                             <li>
                                 <a href="<?= Url::to(['index/language', 'lang' => 'zh-CN']) ?>">
                                     <div>
-                                        <i class="fa fa-hand-o-right fa-fw"></i> 简体中文
+                                        <i class="fa fa-hand-o-right fa-fw"></i> zh-CN
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="<?= Url::to(['index/language', 'lang' => 'vi-VN']) ?>">
+                                    <div>
+                                        <i class="fa fa-hand-o-right fa-fw"></i> vi-VN
                                     </div>
                                 </a>
                             </li>
