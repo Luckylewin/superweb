@@ -476,4 +476,5 @@ return [
     'Saturday'=>'Thứ Bảy',
     'Today is'=>'Hôm nay là',
     'Welcome' => 'Đăng nhập chào mừng',
+    'Price List' => 'Danh sách giá',
 ];

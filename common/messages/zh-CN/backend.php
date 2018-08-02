@@ -503,4 +503,5 @@ return [
     'Today is' => '今天是',
     'IPTV Management System' => 'IPTV 管理系统',
     'Welcome' => '欢迎',
+    'Price List' => '价目列表',
 ];
