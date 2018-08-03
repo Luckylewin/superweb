@@ -498,6 +498,8 @@ return [
     'Data not found' => 'Không tìm thấy dữ liệu',
     'Wrong time value' => 'Giá trị thời gian sai',
     "No yesterday's log" => 'Không có nhật ký ngày hôm qua',
+    'Are you sure?' => 'Bạn có chắc không?',
+    'Create APK' => 'Tạo APK',
 
     'Please assign a role to the account, otherwise it will not work properly.' => 'Vui lòng chỉ định vai trò cho tài khoản, nếu không nó sẽ không hoạt động đúng cách.',
 ];

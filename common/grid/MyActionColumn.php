@@ -24,7 +24,7 @@ class MyActionColumn extends \yii\grid\ActionColumn
         $this->initDefaultButton('update', null , ['class'=>'btn btn-primary '. $this->size]);
         $this->initDefaultButton('delete', null,[
             'class'=>'btn btn-danger ' . $this->size ,
-            'data-confirm' => Yii::t('yii', '您确定要删除此项吗？?'),
+            'data-confirm' => Yii::t('yii', Yii::t('backend', 'Are you sure?')),
             'data-method' => 'post',
         ]);
     }

@@ -524,6 +524,8 @@ return [
     "No yesterday's log" => '没有昨天的日志',
     "OTT Genre" => '直播分类',
     "IPTV Genre" => '点播分类',
+    'Are you sure?' => '确定进行该操作吗',
+    'Create APK' => '新增APK',
 
     'Please assign a role to the account, otherwise it will not work properly.' => '请给帐号分配一个角色，否则无法正常使用',
 ];

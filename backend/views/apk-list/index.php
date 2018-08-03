@@ -138,5 +138,5 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 
 <p>
-    <?= Html::a('新增APK', ['create'], ['class' => 'btn btn-success']) ?>
+    <?= Html::a(Yii::t('backend', 'Create APK'), ['create'], ['class' => 'btn btn-success']) ?>
 </p>
