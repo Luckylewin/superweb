@@ -211,6 +211,7 @@ return [
     'Channel ID' => '频道id',
     'Create Link' => '新增链接',
     'Editing Scheme' => '修改方案',
+    'Scheme List' => '方案列表',
     'Available switch' => '可用开关',
     'Soft' => '软解',
     'Hard' => '硬解',
@@ -526,6 +527,12 @@ return [
     "IPTV Genre" => '点播分类',
     'Are you sure?' => '确定进行该操作吗',
     'Create APK' => '新增APK',
+    'Created At'=>'创建时间',
+    'Updated At'=>'修改时间',
+    'username'=>'用户名',
+    'Create Renewal Card' => '生成续费卡',
+    'Are you sure to save your changes?' => '确定保存变更吗？',
+
 
     'Please assign a role to the account, otherwise it will not work properly.' => '请给帐号分配一个角色，否则无法正常使用',
 ];

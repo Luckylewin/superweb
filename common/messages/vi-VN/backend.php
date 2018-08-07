@@ -79,6 +79,7 @@ return [
     'Boot picture'=>'Hình ảnh trang bắt đầu',
     'Start Page Image'=>'Hình ảnh Trang Bắt đầu',
     'User'=>'Người dùng',
+    'username' => 'Tên người dùng',
     'TV User'=>'Người dùng TV',
     'Mobile User'=>'Người dùng di động',
     'Client'=>'Khách hàng',
@@ -228,6 +229,8 @@ return [
     'Opening time'=>'Thời gian mở cửa',
     'Text'=>'Văn bản',
     'Created Time'=>'Thời gian tạo',
+    'Created At'=>'Thời gian tạo',
+    'Updated At'=>'Được chọn lúc',
     'Import identification keywords'=>'Nhập từ khóa nhận dạng',
     'keyword'=>'từ khóa',
     'Batch'=>'Lô',
@@ -500,6 +503,10 @@ return [
     "No yesterday's log" => 'Không có nhật ký ngày hôm qua',
     'Are you sure?' => 'Bạn có chắc không?',
     'Create APK' => 'Tạo APK',
+    'Scheme List' => 'Danh sách lược đồ',
+
+    'Create Renewal Card' => 'Tạo thẻ gia hạn',
+    'Are you sure to save your changes?' => 'Bạn có chắc chắn lưu các thay đổi của mình không?',
 
     'Please assign a role to the account, otherwise it will not work properly.' => 'Vui lòng chỉ định vai trò cho tài khoản, nếu không nó sẽ không hoạt động đúng cách.',
 ];

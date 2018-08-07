@@ -2,8 +2,9 @@
 
 namespace common\models;
 
-use backend\models\Mac;
 use Yii;
+use backend\models\Mac;
+
 /**
  * This is the model class for table "iptv_order".
  *
@@ -43,7 +44,6 @@ class Order extends \yii\db\ActiveRecord
     {
         return 'iptv_order';
     }
-
 
     public function beforeSave($insert)
     {
@@ -91,8 +91,8 @@ class Order extends \yii\db\ActiveRecord
             'order_paytime' => Yii::t('backend', 'Pay Time'),
             'order_confirmtime' => Yii::t('backend', 'Confirmation Time'),
             'order_info' => Yii::t('backend', 'Order information'),
-            'order_paytype' => Yii::t('backend', 'Payment Types'),
-            'user.username' => Yii::t('backend', 'User'),
+            'order_paytype' => Yii::t('backend', 'Pay Type'),
+            'user.username' => Yii::t('backend', 'username'),
             'paystatus' => Yii::t('backend', 'Order Status')
         ];
     }
@@ -117,7 +117,7 @@ class Order extends \yii\db\ActiveRecord
             'order_total',
             'order_money',
             'order_ispay'=> function($model) {
-                return self::$payStatus[$model->order_ispay];
+                return Yii::t('backend', self::$payStatus[$model->order_ispay]);
             },
             'order_addtime'=> function($model) {
                 return date('Y-m-d H:i:s', $model->order_addtime);
@@ -146,7 +146,7 @@ class Order extends \yii\db\ActiveRecord
 
     public function getPayStatus()
     {
-        return self::$payStatus[$this->order_ispay];
+        return Yii::t('backend', self::$payStatus[$this->order_ispay]);
     }
 
     public function getPayType()

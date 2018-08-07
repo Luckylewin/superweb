@@ -24,15 +24,18 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'description',
+                'label' => Yii::t('backend', 'Description'),
             ],
             [
                 'attribute' => 'createdAt',
+                'label' => Yii::t('backend', 'Created At'),
                 'value' => function($data) {
                     return date('Y-m-d H:i:s', $data->createdAt);
                 }
             ],
             [
                 'attribute' => 'updatedAt',
+                'label' => Yii::t('backend', 'Updated At'),
                 'value' => function($data) {
                     return date('Y-m-d H:i:s', $data->updatedAt);
                 }

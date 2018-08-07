@@ -12,6 +12,8 @@ $this->title = Yii::t('backend', 'Channel List');
 $this->params['breadcrumbs'][] = ['label' => $mainClass->zh_name? $mainClass->zh_name:$mainClass->name, 'url' => Url::to(['main-class/index'])];
 $this->params['breadcrumbs'][] = ['label' => $subClass->zh_name?$subClass->zh_name:$subClass->name, 'url' => Url::to(['sub-class/index', 'main-id' => $mainClass->id])];
 $this->params['breadcrumbs'][] = $this->title;
+
+$this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js', ['depends' => 'yii\web\JqueryAsset']);
 ?>
 
 <style>
@@ -329,6 +331,9 @@ Modal::end()
 $batchDelete = Url::to(['ott-channel/batch-delete']);
 $updateChannelUrl = Url::to(['ott-channel/update', 'id'=>'']);
 $csrfToken = Yii::$app->request->csrfToken;
+$confirm_Text = Yii::t('backend', 'Are you sure to save your changes?');
+$yes = Yii::t('backend', 'Yes');
+$cancel = Yii::t('backend', 'Cancel');
 
 $requestJs=<<<JS
     
@@ -344,6 +349,13 @@ $requestJs=<<<JS
            var td = inp.parent();
            td.find('.text').text(value).show();
            inp.hide();  
+         
+       },
+       'callback2':function(obj, value) {
+          var inp = obj.parent().eq(0);
+          inp.val(value);
+          inp.html(inp.html())
+          console.log(inp);
        }
    };   
 
@@ -354,20 +366,36 @@ $requestJs=<<<JS
         
         var id = $(this).attr('data-id');
         var updateChannelUrl = '{$updateChannelUrl}' + id;
-       
+        
         if (newValue === oldValue) {
             return false;
         }
         
       var that = $(this);
-        $.post(updateChannelUrl, {field:field,value:newValue,_csrf:'{$csrfToken}'}, function(data){
+        window.layer = layer;
+        
+        layer.confirm('{$confirm_Text}', {
+              title: '',
+              btn: ['{$yes}', '{$cancel}'] //按钮
+            }, function(){
+              
+          $.post(updateChannelUrl, {field:field,value:newValue,_csrf:'{$csrfToken}'}, function(data){
                if(field == 'sort' || field == 'use_flag') {
                    window.location.reload();
-                   return false;
-               }
-               commonJS.callback(that, newValue);
-        })
-    });
+                    return false;
+               } 
+                commonJS.callback(that, newValue);
+              })
+                window.layer.closeAll()
+              
+            }, function() {
+               if(field == 'sort' || field == 'use_flag') {
+                    commonJS.callback2(that, oldValue);
+            } else {
+                  commonJS.callback(that, oldValue);
+            }
+         });
+   });
    
      $('.ajax-td').click(function() {
             var td = $('.ajax-td');

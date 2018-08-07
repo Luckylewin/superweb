@@ -44,7 +44,9 @@ class MainClass extends \yii\db\ActiveRecord
             ['price', 'number', 'integerOnly' => false, 'min' => 0],
             ['is_charge', 'boolean'],
             ['use_flag', 'safe'],
-            ['use_flag', 'default', 'value' => '1']
+            ['use_flag', 'default', 'value' => '1'],
+            ['price', 'default', 'value' => '0.00'],
+            ['is_charge', 'default', 'value' => 0]
         ];
     }
 

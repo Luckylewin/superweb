@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Renewal Card', ['renewal-card/batch-create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('backend', 'Create Renewal Card'), ['renewal-card/batch-create'], ['class' => 'btn btn-success']) ?>
     </p>
 
 
@@ -28,7 +28,10 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            'batch',
+            [
+                    'attribute' => 'batch',
+                    'options' => ['style' => 'width:90px']
+            ],
             'card_num',
             'card_contracttime',
             'created_time:datetime',
@@ -58,7 +61,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
 
-                'batch',
+                [
+                    'attribute' => 'batch',
+                    'options' => ['style' => 'width:90px']
+                ],
                 'card_num',
                 'card_secret',
                 'card_contracttime',

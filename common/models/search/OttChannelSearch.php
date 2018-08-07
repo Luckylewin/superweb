@@ -58,7 +58,7 @@ class OttChannelSearch extends OttChannel
             $dataProvider = new ActiveDataProvider([
                 'query' => $query,
                 'sort' => [
-                    'defaultOrder' => ['use_flag' =>SORT_DESC, 'channel_number' => SORT_ASC]
+                    'defaultOrder' => ['use_flag' => SORT_DESC, 'channel_number' => SORT_ASC, 'sort' => SORT_ASC]
                 ]
             ]);
         }

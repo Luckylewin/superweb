@@ -21,8 +21,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             'order_sign',
-            'user.username',
-            //'order_total',
+            // 'user.username',
+            // 'order_total',
              'order_money',
             'order_addtime:datetime',
             'order_paytime:datetime',
