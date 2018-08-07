@@ -64,15 +64,7 @@ class ApiController extends BaseController
         return $this->response($vod);
     }
 
-    public function actionLogin()
-    {
 
-    }
-
-    public function actionRegister()
-    {
-
-    }
 
     public function actionBanners()
     {

@@ -111,6 +111,27 @@ return [
             'class' => 'yii\redis\Cache'
         ],
 
+
+        /**
+         * 语言包配置
+         * 将"源语言"翻译成"目标语言". 注意"源语言"默认配置为 'sourceLanguage' => 'en-US'
+         * 使用: \Yii::t('common', 'title'); 将common/messages下的common.php中的title转为对应的中文
+         */
+        'i18n' => [
+            'translations' => [
+                '*' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => '@common/messages',
+                    //'sourceLanguage' => 'en-US',
+                    'fileMap' => [
+                        'common' => 'common.php',
+                        'frontend' => 'frontend.php',
+                        'backend' => 'backend.php',
+                    ],
+                ],
+            ],
+        ],
+
        'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
@@ -196,4 +217,5 @@ return [
 
     ],
     'params' => $params,
+
 ];

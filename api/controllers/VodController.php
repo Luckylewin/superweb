@@ -171,4 +171,5 @@ class VodController extends ActiveController
       return  $links = Vodlink::find()->where(['video_id'=>$vod_id])->all();
     }
 
+
 }

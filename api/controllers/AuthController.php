@@ -71,9 +71,5 @@ class AuthController extends ActiveController
         return Formatter::format(null,$errorCode, $errorMessage);
     }
 
-    public function actionTest()
-    {
-        echo 1;
-    }
 
 }
