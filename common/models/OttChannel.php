@@ -63,7 +63,7 @@ class OttChannel extends \yii\db\ActiveRecord
             'use_flag' => Yii::t('backend', 'Is Available'),
             'channel_number' => Yii::t('backend', 'channel number'),
             'image' => Yii::t('backend', 'Icon'),
-            'alias_name' => Yii::t('backend', 'Alias'),
+            'alias_name' => Yii::t('backend', 'Alias Name'),
             'is_recommend' => Yii::t('backend', 'Recommend'),
         ];
     }

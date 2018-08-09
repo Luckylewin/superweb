@@ -228,6 +228,9 @@ return [
     'go to' => '到第',
     'Query panel' => '查询面板',
     'please choose' => '请选择',
+    'Search' => '搜索',
+    'search' => '搜索',
+    'Global Search' => '全局搜索',
 
 
     'Create a secondary classification' => '创建二级分类',
@@ -525,6 +528,7 @@ return [
     "No yesterday's log" => '没有昨天的日志',
     "OTT Genre" => '直播分类',
     "IPTV Genre" => '点播分类',
+    "genre" => '分类名称',
     'Are you sure?' => '确定进行该操作吗',
     'Create APK' => '新增APK',
     'Created At'=>'创建时间',
