@@ -3,9 +3,11 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use \yii\helpers\ArrayHelper;
+use common\models\OttLink;
 /* @var $this yii\web\View */
 /* @var $model common\models\OttLink */
 /* @var $form yii\widgets\ActiveForm */
+/* @var $schemes array */
 
 
 ?>
@@ -27,7 +29,7 @@ use \yii\helpers\ArrayHelper;
         </div>
 
         <div class="col-md-4">
-            <?= $form->field($model, 'script_deal')->dropDownList(['关','开'], ['value'=>0]) ?>
+            <?= $form->field($model, 'script_deal')->dropDownList(OttLink::getSwitchStatus(), ['value'=>0]) ?>
         </div>
 
         <div class="col-md-4">
@@ -39,7 +41,7 @@ use \yii\helpers\ArrayHelper;
         </div>
 
         <div class="col-md-4">
-            <?= $form->field($model, 'decode')->dropDownList(['软解', '硬解']) ?>
+            <?= $form->field($model, 'decode')->dropDownList(OttLink::getDecodeStatus()) ?>
         </div>
 
         <div class="col-md-12">

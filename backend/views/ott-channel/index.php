@@ -211,7 +211,8 @@ $requestJs=<<<JS
     $('.load-link').click(function(){
         $('.modal-lg').css('width','99%');
         $('.modal-body').css('min-height','100px'); 
-        $('.create-link').attr('data-id', $(this).attr('data-id'));
+        $('.create-link').attr('data-id', $(this).attr('data-id')).show();
+         
         
         $.getJSON('{$requestUrl}', {channel_id:$(this).attr('data-id')}, function(data) {
             var table = '<table class="table table-bordered"><thead><tr><th style="width:32%;"><i class="fa fa-list-alt"></th><th style="width:30px;"><i class="fa fa-dot-circle-o"></th><th style="width:100px;"><i class="fa fa-link"></th><th width="50px"><i class="fa fa-key"></th><th width="50px"><i class="fa fa-tv"></i></th><th width="4px"><i class="fa fa-photo"></th><th width="50px"><i class="fa fa-flag"></i></th><th style="width:280px;"><i class="fa fa-cog fa-fw"></th></tr></thead><tbody>';
@@ -305,7 +306,8 @@ $requestJs=<<<JS
         var channel_id = $(this).attr('data-id');
         $.get('{$createLinkUrl}',{id:channel_id}, function(form) {
             $('.modal-lg').css('width','70%');
-            $('.modal-body').html(form).css('min-height','370px'); 
+            $('.modal-body').html(form).css('min-height','390px'); 
+            $('.create-link').hide();
         });
         
     }).on('click','.link-edit', function() {
@@ -371,9 +373,14 @@ $requestJs=<<<JS
             return false;
         }
         
-      var that = $(this);
-        window.layer = layer;
+        var that = $(this);
+        if (field === 'sort')  {
+            $.post(updateChannelUrl, {field:field,value:newValue,_csrf:'{$csrfToken}'});
+            return;
+        }
         
+        window.layer = layer;
+          
         layer.confirm('{$confirm_Text}', {
               title: '',
               btn: ['{$yes}', '{$cancel}'] //按钮

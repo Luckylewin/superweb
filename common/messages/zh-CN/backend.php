@@ -213,8 +213,8 @@ return [
     'Editing Scheme' => '修改方案',
     'Scheme List' => '方案列表',
     'Available switch' => '可用开关',
-    'Soft' => '软解',
-    'Hard' => '硬解',
+    'Soft Decode' => '软解',
+    'Hard Decode' => '硬解',
     'All Schemes' => '支持全部方案',
 
 

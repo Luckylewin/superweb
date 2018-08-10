@@ -26,10 +26,11 @@ use yii\helpers\ArrayHelper;
 class OttLink extends \yii\db\ActiveRecord
 {
 
-    public $use_flag_status = [
-        'Unavailable',
-        'Available',
-    ];
+    public static $decode_status = ['Hard Decode', 'Soft Decode'];
+
+    public static $switch_status = ['Off','On',];
+
+    public $use_flag_status = ['Unavailable', 'Available',];
 
     public $use_flag_text;
     public $schemeText;
@@ -142,5 +143,24 @@ class OttLink extends \yii\db\ActiveRecord
         return $this->hasOne(OttChannel::className(), ['id' => 'channel_id']);
     }
 
+    public static function getDecodeStatus()
+    {
+        $options = self::$decode_status;
+        array_walk($options, function(&$v) {
+            $v = Yii::t('backend', $v);
+        });
+
+        return $options;
+    }
+
+    public static function getSwitchStatus()
+    {
+        $options = self::$switch_status;
+        array_walk($options, function(&$v) {
+            $v = Yii::t('backend', $v);
+        });
+
+        return $options;
+    }
 
 }

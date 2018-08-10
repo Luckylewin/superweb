@@ -79,7 +79,7 @@ class MainClass extends \yii\db\ActiveRecord
     {
         $query = $this->hasMany(SubClass::className(), ['main_class_id' => 'id']);
         if ($where) {
-            $query->where($where);
+            $query->where($where)->orderBy('sort asc');
         }
         return $query;
     }
@@ -87,6 +87,7 @@ class MainClass extends \yii\db\ActiveRecord
     public function getSubChannel()
     {
         return $this->hasMany(OttChannel::className(), ['sub_class_id' => 'id'])
+                    ->orderBy('sort asc')
                     ->via('sub');
     }
 
