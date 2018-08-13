@@ -73,7 +73,7 @@ class importTextForm extends \yii\base\Model
     public static function getMode()
     {
         return [
-            'mainClass' => '一级分类,二级分类,频道名称,链接,算法',
+            'mainClass' => '一级分类,二级分类,频道名称,频道台标,链接,算法',
             'keywordChannel' => '关键字,频道名称,链接,算法',
         ];
     }
@@ -116,7 +116,7 @@ class importTextForm extends \yii\base\Model
         switch ($this->mode)
         {
             case 'mainClass' :
-                $this->addError($attribute, '请用类似 “中国(一级分类),CCTV(频道分类),CCTV-1(频道名),http://yf.m.l.cztv.com/channels/lantian/channel15/360p.m3u8(链接),flag1(算法名称[可不加]”的格式');
+                $this->addError($attribute, '请用类似 “中国(一级分类),CCTV(频道分类),CCTV-1(频道名),http://img.baidu.com/hn1.png(频道台标),http://yf.m.l.cztv.com/channels/lantian/channel15/360p.m3u8(链接),flag1(算法名称[可不加]”的格式');
                 break;
             case 'subClass' :
                 $this->addError($attribute, '请用类似 “新蓝(频道分类),CCTV-1(频道名),http://yf.m.l.cztv.com/channels/lantian/channel15/360p.m3u8(链接),flag1(算法名称[可不加]”的格式');
@@ -151,14 +151,14 @@ class importTextForm extends \yii\base\Model
 
         foreach ($this->importData as $data)
         {
-            list($mainClassName, $subClassName, $channelName, $link) = $data;
+            list($mainClassName, $subClassName, $channelName, $channelIcon, $link) = $data;
             //是否有算法
-            $method = isset($data[4]) ? $data[4] : '';
-            $scheme = isset($data[5]) ? $data[5] : 'all';
+            $method = isset($data[5]) ? $data[5] : '';
+            $scheme = isset($data[6]) ? $data[6] : 'all';
 
             $this->createMainClass($mainClassName);
             $this->createSubClass($subClassName);
-            $this->createChannel($channelName);
+            $this->createChannel($channelName, $channelIcon);
             $total = $this->createLink($link, $method, $scheme , $total);
         }
 
@@ -219,7 +219,7 @@ class importTextForm extends \yii\base\Model
         $this->subClass = $subClass;
     }
 
-    private function createChannel($name)
+    private function createChannel($name, $icon = null)
     {
         $channel = OttChannel::find()->where(['sub_class_id' => $this->subClass->id, 'name' => $name])->one();
 
@@ -229,6 +229,7 @@ class importTextForm extends \yii\base\Model
             $channel->sub_class_id = $this->subClass->id;
             $channel->name = $name;
             $channel->keywords = $name;
+            if ($icon)  $channel->image = $icon;
             $channel->save(false);
         }
 

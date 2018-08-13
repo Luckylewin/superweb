@@ -14,27 +14,37 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <style>
-    .grid-view td {
+    .grid-view th ,.grid-view td {
         text-align: center;
         vertical-align: middle !important;
     }
+
     .label-red td:nth-child(3){background-color: #dca7a7!important;color: white}
 </style>
 
 <div class="main-class-index">
     <p>
         <?= Html::a(Yii::t('backend', 'Create'), ['create'], ['class' => 'btn btn-success']) ?>
-        <?= Html::a(Yii::t('backend', 'Batch Import'), ['sub-class/import-via-text','mode' => 'mainClass'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('backend', 'Batch Import'), ['sub-class/import-via-text','mode' => 'mainClass'], ['class' => 'btn btn-info']) ?>
+        <?= Html::a(Yii::t('backend', 'Batch Export'), ['main-class/export','mode' => 'mainClass'], ['class' => 'btn btn-info btn-export']) ?>
     </p>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'tableOptions' => ['class' => 'table table-hover table-bordered'],
+        "options" => ["class" => "grid-view","style"=>"overflow:auto", "id" => "grid"],
         'rowOptions' => function($model, $key, $index, $grid) {
             return $model->use_flag == 0 ? ['class' => 'label-red'] : ['class' => 'label-green'];
         },
         'columns' => [
+
             ['class' => 'yii\grid\SerialColumn'],
+
+            [
+                "class" => "yii\grid\CheckboxColumn",
+                "name" => "id",
+            ],
+
             [
                     'attribute' => 'icon',
                     'options' => ['style' => 'width:100px;'],
@@ -149,5 +159,20 @@ $requestJs=<<<JS
 JS;
 
 $this->registerJs($requestJs);
+
+?>
+
+<?php
+$exportUrl = Url::to(['main-class/export', 'id' => '']);
+$js =<<<JS
+    $(document).on('click', '.btn-export', function () {
+    var keys = $("#grid").yiiGridView("getSelectedRows");
+    window.location.href = '{$exportUrl}' + keys;
+    return false;
+  });
+JS;
+
+
+$this->registerJs($js);
 
 ?>

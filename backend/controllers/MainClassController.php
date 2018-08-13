@@ -168,4 +168,68 @@ class MainClassController extends BaseController
         exit($cache);
     }
 
+
+    public function actionExport($id)
+    {
+        if (empty($id)) {
+            $this->setFlash('error', '请选择要导出的分类数据');
+            return $this->redirect(Yii::$app->request->referrer);
+        }
+
+        $id = explode(',', trim($id));
+        $result = MainClass::find()->where(['in', 'a.id', $id])->alias('a')
+                                   ->with([
+                                       'sub' => function($query) {
+                                           return $query->with([
+                                               'ownChannel' => function($query) {
+                                                   return $query->with('ownLink');
+                                               }
+                                           ]);
+                                       }
+                                   ])
+
+                                   ->asArray()->all();
+
+        $str = '';
+
+        foreach ($result as $value) {
+            $mainClass = $value['name'];
+            if (!empty($value['sub'])) {
+                foreach ($value['sub'] as $val) {
+                    $subClassName = $val['name'];
+                    if (!empty($val['ownChannel'])) {
+                         foreach ($val['ownChannel'] as $channel) {
+                             $channelName = $channel['name'];
+                             $channelIcon = $channel['image'];
+                             if (!empty($channel['ownLink'])) {
+                                 foreach ($channel['ownLink'] as $link) {
+                                     $url = $link['link'];
+                                     $method = $link['method'];
+                                     $scheme = $link['scheme_id'];
+
+                                     $str .= "{$mainClass},{$subClassName},{$channelName},{$channelIcon},{$url},{$method},{$scheme}" . PHP_EOL;
+                                 }
+                             }
+                         }
+                    }
+                }
+            }
+        }
+
+        if (!empty($str)) {
+            $response = Yii::$app->response;
+            $response->format = $response::FORMAT_RAW;
+
+            $response->getHeaders()->set('Content-Type', 'application/text');
+            $response->getHeaders()->set('Content-Disposition', "attachment;filename=" . "OTT列表导出文件_".date('YmdHi') . '.txt');
+            $response->getHeaders()->set('Cache-Control', 'max-age=0');
+
+            return $str;
+        }
+
+        $this->setFlash('error', '没有数据可导出');
+        return $this->redirect(Yii::$app->request->referrer);
+
+    }
+
 }
