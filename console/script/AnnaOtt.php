@@ -37,14 +37,80 @@ class AnnaOtt extends base
         foreach ($accounts as $account => $password) {
             self::$data = $this->download($account, $password);
             $data = $this->initData();
-
+            
+            // 基本数据录入
             foreach ($data as $value) {
+
+                // 普通数据
                 $mainClassID  = $this->_mainClass($value);
                 $subClassID = $this->_subClass($value, $mainClassID);
                 $channelID = $this->_channel($value, $subClassID);
                 $this->_link($value, $channelID);
+
+                // A-Z 数据
+                $this->attachAZ($value);
+                // HD SD
+                $this->attachHDAndSD($value);
+            }
+            
+        }
+    }
+
+    /**
+     * a-z
+     * @param $value
+     * @return bool
+     */
+    private function attachAZ($value)
+    {
+        $className = explode('|',$value['group-title']);
+        if (!isset($className[1])) {
+            return false;
+        }
+
+        $mainClassName = $className[1];
+        $mainClass = MainClass::findOne(['name' => $mainClassName]);
+        if ($mainClass && $mainClass->name == 'br') {
+            $tmp['group-title'] = 'A-Z|br';
+            $subClassID = $this->_subClass($tmp, $mainClass->id);
+            $channelID = $this->_channel($value, $subClassID);
+            $this->_link($value, $channelID);
+        }
+
+        return false;
+    }
+
+    /**
+     * hd sd
+     * @param $value
+     * @return bool
+     */
+    private function attachHDAndSD($value)
+    {
+        $className = explode('|',$value['group-title']);
+        if (!isset($className[1])) {
+            return false;
+        }
+
+        $mainClassName = $className[1];
+        $mainClass = MainClass::findOne(['name' => $mainClassName]);
+        if ($mainClass && $mainClass->name == 'br') {
+            if (strpos($value['tvg-name'], 'HD') !== false) {
+                $tmp['group-title'] = 'Canais HD|br';
+                $subClassID = $this->_subClass($tmp, $mainClass->id);
+                $channelID = $this->_channel($value, $subClassID);
+                $this->_link($value, $channelID);
+            } elseif (strpos($value['tvg-name'], '4K') == false
+                      &&
+                      strpos($value['tvg-name'], '4k') == false) {
+                $tmp['group-title'] = 'Canais SD|br';
+                $subClassID = $this->_subClass($tmp, $mainClass->id);
+                $channelID = $this->_channel($value, $subClassID);
+                $this->_link($value, $channelID);
             }
         }
+
+        return false;
     }
 
     /**
