@@ -55,14 +55,14 @@ class AnnaIptv extends base
             foreach ($originData as $file) {
                 $data = $this->initData($file['file'], 'iptv', 'movie');
                 $this->saveNewMovieData($data, $file['lang']['en']);
-                $this->saveNewType($data);
+                //$this->saveNewType($data);
             }
 
             // 处理电视剧
             foreach ($originData as $file) {
                 $data = $this->initData($file['file'], 'iptv', 'program');
                 $this->saveNewProgramData($data, $file['lang']['en']);
-                $this->saveNewType($data);
+                //$this->saveNewType($data);
             }
         }
 
