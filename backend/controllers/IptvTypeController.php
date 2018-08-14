@@ -39,6 +39,11 @@ class IptvTypeController extends BaseController
 
         $dataProvider = new ActiveDataProvider([
             'query' => IptvType::find()->where(['vod_list_id' => $vod_list_id]),
+            'sort' => [
+                'defaultOrder' => [
+                    'sort' => SORT_ASC
+                ]
+            ]
         ]);
 
         return $this->render('index', [
