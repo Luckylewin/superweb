@@ -68,7 +68,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('发布片源', \yii\helpers\Url::to(['create','vod_cid' => Yii::$app->request->get('VodSearch')['vod_cid']]), ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('backend', 'Create'), \yii\helpers\Url::to(['create','vod_cid' => Yii::$app->request->get('VodSearch')['vod_cid']]), ['class' => 'btn btn-success']) ?>
 
         <?php if(strpos(Yii::$app->request->referrer, 'vod-list') !== false): ?>
             <?= Html::a(Yii::t('backend','Go Back'), null, [
@@ -95,7 +95,12 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         "options" => ["class" => "grid-view","style"=>"overflow:auto", "id" => "grid"],
-        'pager' => ['class' => 'common\widgets\goPager', 'go' => true],
+        'summaryOptions' => ['tag' => 'p', 'class' => 'text-right text-muted'],
+        'pager' => [
+                'class' => 'common\widgets\goPager',
+                'go' => true,
+        ],
+
         'columns' => [
 
             [
