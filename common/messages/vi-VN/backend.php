@@ -504,6 +504,9 @@ return [
     'Are you sure?' => 'Bạn có chắc không?',
     'Create APK' => 'Tạo APK',
     'Scheme List' => 'Danh sách lược đồ',
+    'Condition List' => 'Danh sách điều kiện',
+    'No executive authority' => 'Không có quyền thực thi',
+
 
     'Create Renewal Card' => 'Tạo thẻ gia hạn',
     'Are you sure to save your changes?' => 'Bạn có chắc chắn lưu các thay đổi của mình không?',

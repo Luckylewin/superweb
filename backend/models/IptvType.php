@@ -13,6 +13,7 @@ use yii\helpers\ArrayHelper;
  * @property string $name 名称
  * @property string $field 字段
  * @property int $vod_list_id 关联类型id
+ * @property int $sort 排序
  */
 class IptvType extends \yii\db\ActiveRecord
 {
@@ -33,6 +34,7 @@ class IptvType extends \yii\db\ActiveRecord
             [['name', 'field', 'vod_list_id'], 'required'],
             [['vod_list_id'], 'integer'],
             [['name', 'field'], 'string', 'max' => 20],
+            ['sort', 'default', 'value' => 0]
         ];
     }
 
@@ -46,6 +48,7 @@ class IptvType extends \yii\db\ActiveRecord
             'name' => '名称',
             'field' => '字段',
             'vod_list_id' => '关联类型id',
+            'sort' => '排序',
         ];
     }
 
@@ -94,8 +97,8 @@ class IptvType extends \yii\db\ActiveRecord
     public static function getTypeItem($list_id, $field)
     {
         $type = self::find()->where(['field' => $field, 'vod_list_id' => $list_id])
-            ->with('items')
-            ->one();
+                            ->with('items')
+                            ->one();
 
         if ($type) {
             $items = $type->items;

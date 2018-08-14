@@ -14,19 +14,21 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('添加分类字段', ['create','vod_list_id' => $list->list_id], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('backend', 'Create'), ['create','vod_list_id' => $list->list_id], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
+
             'name',
             'field',
+
             [
-                    'label' => '选项',
+                    'label' => Yii::t('backend', 'options'),
                     'format' => 'raw',
-                    'options' => ['style' => 'width:60%'],
+                    'options' => ['style' => 'width:55%'],
                     'value' => function($model) {
                         $data = $model->items;
                         $str = '';
@@ -41,13 +43,16 @@ $this->params['breadcrumbs'][] = $this->title;
                         return $str;
                     }
             ],
+
+            'sort',
+
             [
                     'class' => 'common\grid\MyActionColumn',
                     'size' => 'btn-sm',
                     'template' => '{sub} {view} {update} {delete}',
                     'buttons' => [
                             'sub' => function($url, $model, $key) {
-                                return Html::a("条件列表", \yii\helpers\Url::to(['type-item/index', 'type_id' => $model->id, 'list_id' => Yii::$app->request->get('list_id')]),[
+                                return Html::a(Yii::t('backend', 'Condition List'), \yii\helpers\Url::to(['type-item/index', 'type_id' => $model->id, 'list_id' => Yii::$app->request->get('list_id')]),[
                                         'class' => 'btn btn-sm btn-info'
                                 ]);
                             }

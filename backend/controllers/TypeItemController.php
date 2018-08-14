@@ -28,6 +28,8 @@ class TypeItemController extends BaseController
             return $this->redirect(['vod-list/index']);
         }
 
+        $this->session()->set('type_id', $type_id);
+
         $dataProvider = new ActiveDataProvider([
             'query' => IptvTypeItem::find()->where(['type_id' => $type_id]),
             'sort' => [
@@ -68,7 +70,7 @@ class TypeItemController extends BaseController
         $model = new IptvTypeItem();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            $this->jump($model, 'success');
         }
 
         $model->type_id = Yii::$app->request->get('type_id');
@@ -90,7 +92,7 @@ class TypeItemController extends BaseController
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->jump($model, 'info');
         }
 
         return $this->render('update', [
@@ -109,7 +111,7 @@ class TypeItemController extends BaseController
     {
         $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['index', 'type_id' => $this->session()->get('type_id')]);
     }
 
     /**
@@ -126,5 +128,19 @@ class TypeItemController extends BaseController
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    /**
+     * @param $model IptvTypeItem
+     * @return \yii\web\Response
+     */
+    protected function jump($model, $status)
+    {
+        if ($this->session()->has('type_id')) {
+            $this->setFlash($status, Yii::t('backend', 'Success'));
+            return $this->redirect(['index', 'type_id' => $this->session()->get('type_id')]);
+        }
+
+        return $this->redirect(['view', 'id' => $model->id]);
     }
 }

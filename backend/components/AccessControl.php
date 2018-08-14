@@ -5,26 +5,20 @@
 namespace backend\components;
 
 use Yii;
-use yii\web\User;
-use yii\di\Instance;
-use yii\web\ForbiddenHttpException;
+use yii\filters\AccessRule;
 
 //class AccessControl extends \yii\base\ActionFilter {
 class AccessControl extends \yii\filters\AccessControl {
 
     /**
-     * This method is invoked right before an action is to be executed (after all possible filters.)
-     * You may override this method to do last-minute preparation for the action.
-     * @param Action $action the action to be executed.
-     * @return boolean whether the action should continue to be executed.
-     * @throws
+     * @param \yii\base\Action $action
+     * @return bool
      */
     public function beforeAction($action)
     {
-        $user = $this->user;
         //-----菜单权限检查-----
+        $user = $this->user;
         $actionId = $action->getUniqueId();
-
         foreach ($this->rules as $i => $rule) {
 
             if (in_array($action->id, $rule->actions)) break;

@@ -20,16 +20,9 @@ class BaseController extends Controller
                 'class' => AccessControl::className(),
                 'except' => ['error','login'], //except是除了以外
                 'rules' => [
-                    //行为过滤器
-                   /* [
-                        //表示无条件通过
-                        'actions' => ['login','error'],
-                        'allow' => true,
-                        'roles' => ['?','@'],
-                    ],*/
                     [
                         //表示只允许认证过的用户执行 其roles用@表示 游客用?表示
-                        'actions' => ['logout','frame','auth', 'reset-password'],
+                        'actions' => ['logout', 'frame', 'auth', 'reset-password', 'language'],
                         'allow' => true,
                         'roles' => ['@'],
                     ]
@@ -85,6 +78,14 @@ class BaseController extends Controller
     public function error($status = 'error')
     {
         $this->setFlash($status, Yii::t('backend', 'Error'));
+    }
+
+    /**
+     * @return mixed|\yii\web\Session
+     */
+    public function session()
+    {
+        return Yii::$app->session;
     }
 
 }

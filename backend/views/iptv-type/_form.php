@@ -14,6 +14,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
+    <?= $form->field($model, 'sort')->textInput(['maxlength' => true]) ?>
+
     <?= $form->field($model, 'field')->textInput(['maxlength' => true]) ?>
 
     <?php if($model->isNewRecord): ?>
@@ -21,7 +23,8 @@ use yii\widgets\ActiveForm;
     <?php endif; ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton(Yii::t('backend', 'Save'), ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('backend', 'Go Back'), Yii::$app->request->referrer, ['class' => 'btn btn-default']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

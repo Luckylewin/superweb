@@ -29,10 +29,12 @@ class IptvTypeController extends BaseController
             return $this->redirect(Url::to(['vod-list/index']));
         }
 
+        $this->session()->set('vod_list_id', $vod_list_id);
+
         $this->list = VodList::findOne($vod_list_id);
 
         if (is_null($this->list)) {
-            throw new NotFoundHttpException('找不到对象');
+            throw new NotFoundHttpException(Yii::t('backend', '404 Not Found'));
         }
 
         $dataProvider = new ActiveDataProvider([
@@ -90,6 +92,10 @@ class IptvTypeController extends BaseController
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $this->setFlash('success', Yii::t('backend', 'success'));
+            if ($this->session()->has('vod_list_id')) {
+                return $this->redirect(['iptv-type/index', 'list_id' => $this->session()->get('vod_list_id')]);
+            }
             return $this->redirect(['view', 'id' => $model->id]);
         }
 

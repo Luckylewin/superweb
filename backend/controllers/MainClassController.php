@@ -220,9 +220,9 @@ class MainClassController extends BaseController
             $response = Yii::$app->response;
             $response->format = $response::FORMAT_RAW;
 
-            $response->getHeaders()->set('Content-Type', 'application/text');
-            $response->getHeaders()->set('Content-Disposition', "attachment;filename=" . "OTT列表导出文件_".date('YmdHi') . '.txt');
-            $response->getHeaders()->set('Cache-Control', 'max-age=0');
+            $response->headers->set('Content-Type', 'application/text');
+            $response->headers->set('Content-Disposition', "attachment;filename=" . "OTT列表导出文件_".date('YmdHi') . '.txt');
+            $response->headers->set('Cache-Control', 'max-age=0');
 
             return $str;
         }
