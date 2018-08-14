@@ -90,7 +90,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php $search = Yii::$app->request->get('VodSearch'); ?>
 
 
-    <?php \yii\widgets\Pjax::begin() ;?>
+    <?php \yii\widgets\Pjax::begin([
+            'scrollTo' => true,
+    ]) ;?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -379,6 +381,7 @@ $sortJs=<<<JS
            }
          );
     });
+    
     
     
 JS;

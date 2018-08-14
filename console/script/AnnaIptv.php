@@ -234,8 +234,10 @@ class AnnaIptv extends base
 
         foreach ($data as $key => $val) {
             $vod = $this->getVod($vodList->list_id,  $val['tvg-name'],  $val['group-title'], $val['tvg-logo'], $lang);
-            $vod->sort = $key;
-            $vod->save(false);
+            if ($vod->sort != 0) {
+                $vod->sort = $key + 1;
+                $vod->save(false);
+            }
             //$this->fillWithMovieProfile($vod);
             $this->attachLink($vod, $val['ts']);
         }
@@ -408,7 +410,7 @@ class AnnaIptv extends base
             $vod->vod_pic = $picture;
             $vod->vod_letter = common::getFirstCharter($name);
             $vod->vod_language = $language;
-
+            $vod->sort = 0;
             $vod->save(false);
             $this->stdout("新增{$type}{$name}" . PHP_EOL, Console::FG_YELLOW);
         }
