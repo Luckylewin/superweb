@@ -3,12 +3,9 @@
         <h1> <i class="fa fa-tv"></i> <?php echo isset(Yii::$app->params['basic']['sitename'])? Yii::t('backend', Yii::$app->params['basic']['sitename'] ): Yii::t('backend', 'Welcome') ?></h1>
         <p id="localtime"></p>
         <p>
-
             <?=  \yii\helpers\Html::a('<i class="fa-bar-chart fa"></i>' . Yii::t('backend', 'Interface statics'), \yii\helpers\Url::to(['log/now']), [
-                    'class' => 'btn btn-primary btn-lg'
+                'class' => 'btn btn-primary btn-lg'
             ]) ?>
-
-
         </p>
     </div>
 </div>
