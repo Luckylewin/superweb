@@ -506,6 +506,7 @@ return [
     'Scheme List' => 'Danh sách lược đồ',
     'Condition List' => 'Danh sách điều kiện',
     'No executive authority' => 'Không có quyền thực thi',
+    'Reset Sort' => 'Đặt lại sắp xếp',
 
 
     'Create Renewal Card' => 'Tạo thẻ gia hạn',

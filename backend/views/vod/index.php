@@ -13,6 +13,8 @@ use \common\models\VodList;
 
 $this->title = '点播列表';
 $this->params['breadcrumbs'][] = $this->title;
+
+$this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js', ['depends' => 'yii\web\JqueryAsset'])
 ?>
 <style>
     .current_up
@@ -96,6 +98,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'tableOptions' => ['class' => 'table-center table table-striped table-bordered'],
         "options" => ["class" => "grid-view","style"=>"overflow:auto", "id" => "grid"],
         'summaryOptions' => ['tag' => 'p', 'class' => 'text-right text-muted'],
         'pager' => [
@@ -106,16 +109,18 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
 
             [
-                'class' => 'yii\grid\SerialColumn'
+                'class' => 'yii\grid\SerialColumn',
             ],
 
             [
                 "class" => "yii\grid\CheckboxColumn",
+
                 "name" => "id",
             ],
 
             [
                   'attribute' => 'vod_name',
+                  'headerOptions' => ['class' => 'col-md-2'],
                   'filterInputOptions' => [
                     'placeholder' => '输入影片名称',
                     'class' => 'form-control'
@@ -125,22 +130,22 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                     'attribute' => 'vod_type',
+                    'headerOptions' => ['class' => 'col-md-1'],
                     'filter' => \backend\models\IptvType::getVodType($search['vod_cid']),
                     'filterInputOptions' => [
                             'prompt' => '请选择',
                             'class' => 'form-control'
                     ],
-                    'options' => ['style' => 'width:110px;']
             ],
 
             [
                 'attribute' => 'vod_language',
+                'headerOptions' => ['class' => 'col-md-1'],
                 'filter' => \backend\models\IptvType::getTypeItem($search['vod_cid'], 'vod_language'),
                 'filterInputOptions' => [
                     'prompt' => '请选择',
                     'class' => 'form-control'
                 ],
-                'options' => ['style' => 'width:110px;']
             ],
 
             /* [
@@ -163,7 +168,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],*/
              [
                   'attribute' => 'vod_gold',
-                  'options' => ['style' => 'width:60px;']
+                  'headerOptions' => ['class' => 'col-xs-1'],
               ],
             /*[
                 'attribute' => 'vod_hits',
@@ -185,9 +190,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'attribute' => 'sort',
+                'headerOptions' => ['class' => 'col-md-1'],
                 'format' => 'raw',
-                'options' => ['style' => 'width:98px'],
-
                 'value' => function($model) {
                     return
                         '<div style="position: relative">' .
@@ -204,14 +208,15 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                     'attribute' => 'vod_addtime',
+                    'headerOptions' => ['class' => 'col-md-1'],
                     'format' => 'date',
                     'value' => function($model) {
                         return $model->vod_addtime;
-                    },
-                    'options' => ['style' => 'width:100px;']
+                    }
             ],
             [
                     'class' => 'common\grid\MyActionColumn',
+                    'headerOptions' => ['class' => 'col-md-2'],
                     'template' => '{push-home}&nbsp;{banner-create}',
                     'buttons' => [
                         'banner-create' => function($url, $model, $key) {
@@ -226,14 +231,16 @@ $this->params['breadcrumbs'][] = $this->title;
                             ]);
                         },
                     ],
-                    'options' => ['style' => 'width:140px;'],
+
                     'header' => '推送'
             ],
 
             [
                     'class' => 'common\grid\MyActionColumn',
+                    'headerOptions' => ['class' => 'col-md-3'],
                     'size' => 'btn-sm',
                     'template' => '{link-index} {view} {update} {delete}',
+
                     'buttons' => [
 
                             'link-index' => function($url, $model) {
@@ -302,12 +309,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
 </div>
 
-<?= Html::a("重置排序", \yii\helpers\Url::to(['vod/sort-all', 'vod_cid' => Yii::$app->request->get('VodSearch')['vod_cid']]) ,['class' => 'gridview btn btn-primary']); ?> &nbsp;
-<?= Html::button("批量删除",['class' => 'gridview btn btn-danger']); ?>
+<?= Html::a(Yii::t('backend', 'Reset Sort'), \yii\helpers\Url::to(['vod/sort-all', 'vod_cid' => Yii::$app->request->get('VodSearch')['vod_cid']]) ,['class' => 'gridview btn btn-primary']); ?> &nbsp;
+<?= Html::button(Yii::t('backend', 'Batch Deletion'),['class' => 'gridview btn btn-danger']); ?>
 
 <?php
-
-
 
 $batchDelete = \yii\helpers\Url::to(['vod/batch-delete']);
 
@@ -322,71 +327,91 @@ JS;
 $this->registerJs($requestJs);
 ?>
 
+
+
 <?php
 
 $sortUrl = \yii\helpers\Url::to(['vod/sort','vod_cid' => Yii::$app->request->get('VodSearch')['vod_cid']]);
-$sortJs=<<<JS
+$success = Yii::t('backend', 'Success');
+$error = Yii::t('backend', 'operation failed')
+?>
 
-    $('.sort').change(function() {
-        var tr = $(this).parent().parent().parent(),
-            sort = $(this).val(),
-            id = tr.attr('data-key');
-        
-        $.getJSON('{$sortUrl}', {id:id,sort:sort,action:'appoint',compare_id:null}, function(e) {
-          if(e.status === 'success') {
-             window.location.reload();
-          }
-        }
-      );
-    });
+<?php $js=<<<JS
+  var Sort = {
+     sort_up_handler : function() {
+                        var tr = $(this).parent().parent().parent(),
+                          id = tr.attr('data-key'),
+                          index = tr.index() + 1,
+                          pre = index - 1,
+                          _this = $(this);
+                    
+                        var preTr = $("#grid tbody tr:nth-child(" + pre + ")"),
+                          preId = preTr.attr('data-key');
+                    
+                        $(this).addClass('current_up');
+                    
+                        preTr.insertAfter($("#grid tbody tr:nth-child(" + index + ")"));
+                        $.getJSON('{$sortUrl}', {id:id,action:'up',compare_id:preId}, function(e) {
+                            if (e.status === 'success') {
+                              _this.parent().find('input').val(e.data.sort);
+                              layer.msg('{$success}');
+                            } else {
+                              layer.msg('{$error}');
+                            }
+                          }
+                        );
+      },
+      sort_down_handler : function() {
+                        var tr = $(this).parent().parent().parent(),
+                            id = tr.attr('data-key'),
+                            index = tr.index() + 1,
+                            next = index + 1,
+                            _this = $(this);
+                    
+                        var nextTr = $("#grid tbody tr:nth-child(" + next + ")"),
+                            nextId = nextTr.attr('data-key');
+                    
+                        $(this).addClass('current_down');
+                    
+                        $("#grid tbody tr:nth-child(" + index + ")").insertAfter($("#grid tbody tr:nth-child(" + next + ")"));
+                        $.getJSON('{$sortUrl}', {id:id,action:'down',compare_id:nextId}, function(e) {
+                            if(e.status === 'success') {
+                              _this.parent().find('input').val(e.data.sort);
+                              layer.msg('{$success}');
+                            } else {
+                              layer.msg('{$error}');
+                            }
+                          }
+                        );
+      },
+      change_handler : function() {
+                        var tr = $(this).parent().parent().parent(),
+                            sort = $(this).val(),
+                            id = tr.attr('data-key');
+                    
+                        $.getJSON("{$sortUrl}", {id:id,sort:sort,action:'appoint',compare_id:null}, function(e) {
+                            if(e.status === 'success') {
+                              layer.msg('{$success}');
+                            } else {
+                              layer.msg('{$error}');
+                            }
+                          }
+                        );   
+      }
+  }
+  
+  $(document).on('load pjax:success', function() {
+     $('.triangle_border_up').click(Sort.sort_up_handler)
+     $('.triangle_border_down').click(Sort.sort_down_handler);
+     $('.sort').change(Sort.change_handler);
+  }).ready(function() {
+     $('.triangle_border_up').click(Sort.sort_up_handler);
+     $('.triangle_border_down').click(Sort.sort_down_handler);
+     $('.sort').change(Sort.change_handler);
+  });
 
-    $('.triangle_border_up').click(function() {
-     var tr = $(this).parent().parent().parent(),
-         id = tr.attr('data-key'),
-         index = tr.index() + 1,
-         pre = index - 1,
-         _this = $(this);
-     
-     var preTr = $("#grid tbody tr:nth-child(" + pre + ")"),
-         preId = preTr.attr('data-key');
-     
-     $(this).addClass('current_up');
-      
-     preTr.insertAfter($("#grid tbody tr:nth-child(" + index + ")"));
-     $.getJSON('{$sortUrl}', {id:id,action:'up',compare_id:preId}, function(e) {
-          if (e.status === 'success') {
-              _this.parent().find('input').val(e.data.sort)
-          }
-        }
-     );
-     });
-    
-    $('.triangle_border_down').click(function() {
-         var tr = $(this).parent().parent().parent(),
-             id = tr.attr('data-key'),
-             index = tr.index() + 1,
-             next = index + 1,
-             _this = $(this);
-         
-         var nextTr = $("#grid tbody tr:nth-child(" + next + ")"),
-             nextId = nextTr.attr('data-key');
-         
-         $(this).addClass('current_down');
-          
-         $("#grid tbody tr:nth-child(" + index + ")").insertAfter($("#grid tbody tr:nth-child(" + next + ")"));
-         $.getJSON('{$sortUrl}', {id:id,action:'down',compare_id:nextId}, function(e) {
-              if(e.status === 'success') {
-                  _this.parent().find('input').val(e.data.sort)
-              }
-           }
-         );
-    });
-    
-    
-    
 JS;
 
-$this->registerJs($sortJs, \yii\web\View::POS_END)
+$this->registerJs($js, \yii\web\View::POS_END);
+ ?>
 
-?>
-<?php  ?>
