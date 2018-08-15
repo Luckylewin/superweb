@@ -14,6 +14,12 @@ MyAppAsset::register($this);
 
 ?>
 
+<style>
+    div.required label:after {
+        content: " *";
+        color: red;
+    }
+</style>
 <div class="mac-form">
 
     <?php $form = ActiveForm::begin([

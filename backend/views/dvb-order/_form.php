@@ -7,7 +7,12 @@ use yii\widgets\ActiveForm;
 /* @var $model backend\models\DvbOrder */
 /* @var $form yii\widgets\ActiveForm */
 ?>
-
+<style>
+    div.required label:after {
+        content: " *";
+        color: red;
+    }
+</style>
 <div class="dvb-order-form">
 
     <?php $form = ActiveForm::begin(); ?>

@@ -9,7 +9,12 @@ use dosamigos\fileupload\FileUploadUI;
 /* @var $model backend\models\ApkDetail */
 /* @var $form yii\widgets\ActiveForm */
 ?>
-
+<style>
+    div.required label:after {
+        content: " *";
+        color: red;
+    }
+</style>
 <div class="apk-detail-form">
 
     <?php $form = ActiveForm::begin(); ?>

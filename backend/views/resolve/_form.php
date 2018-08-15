@@ -8,7 +8,12 @@ use yii\widgets\ActiveForm;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-
+<style>
+    div.required label:after {
+        content: " *";
+        color: red;
+    }
+</style>
 <div class="iptv-url-resolution-form">
     <?php $form = ActiveForm::begin([
             'method' => 'post'

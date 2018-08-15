@@ -7,7 +7,12 @@ use \backend\models\FirmwareClass;
 /* @var $model backend\models\FirmwareClass */
 /* @var $form yii\widgets\ActiveForm */
 ?>
-
+<style>
+    div.required label:after {
+        content: " *";
+        color: red;
+    }
+</style>
 <div class="firmware-class-form">
 
     <?php $form = ActiveForm::begin(); ?>

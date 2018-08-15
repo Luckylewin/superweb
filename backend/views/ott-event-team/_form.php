@@ -9,7 +9,12 @@ use \common\widgets\country\CountryWidget;
 /* @var $model backend\models\OttEventTeam */
 /* @var $form yii\widgets\ActiveForm */
 ?>
-
+<style>
+    div.required label:after {
+        content: " *";
+        color: red;
+    }
+</style>
 
 <div class="ott-event-team-form">
 

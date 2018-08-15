@@ -11,7 +11,12 @@ use backend\models\UploadForm;
 /* @var $model backend\models\ApkList */
 /* @var $form yii\widgets\ActiveForm */
 ?>
-
+<style>
+    div.required label:after {
+        content: " *";
+        color: red;
+    }
+</style>
 <div class="apk-list-form">
 
     <?php $form = ActiveForm::begin(); ?>

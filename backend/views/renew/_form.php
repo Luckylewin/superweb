@@ -4,10 +4,15 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\RechargeCard */
+/* @var $model \backend\models\RechargeCard */
 /* @var $form yii\widgets\ActiveForm */
 ?>
-
+<style>
+    div.required label:after {
+        content: " *";
+        color: red;
+    }
+</style>
 <div class="recharge-card-form">
 
     <?php $form = ActiveForm::begin(); ?>

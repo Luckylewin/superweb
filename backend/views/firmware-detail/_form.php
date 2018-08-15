@@ -8,7 +8,12 @@ use common\widgets\md5\HashWidget;
 /* @var $model backend\models\FirmwareDetail */
 /* @var $form yii\widgets\ActiveForm */
 ?>
-
+<style>
+    div.required label:after {
+        content: " *";
+        color: red;
+    }
+</style>
 <div class="firmware-detail-form">
 
     <?php $form = ActiveForm::begin(); ?>

@@ -16,6 +16,10 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/laydate/laydate.js'
 ?>
 
 <style>
+    div.required label:after {
+        content: " *";
+        color: red;
+    }
     .select2-container--open{
         z-index:9999999
     }

@@ -9,7 +9,12 @@ use yii\widgets\ActiveForm;
 
 $this->registerJsFile('/statics/js/big-file-uploader/common.js', ['depends' => 'yii\web\JqueryAsset']);
 ?>
-
+<style>
+    div.required label:after {
+        content: " *";
+        color: red;
+    }
+</style>
 <div class="vodlink-form">
 
         <script type="text/template" id="file-upload-tpl">

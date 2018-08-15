@@ -10,6 +10,10 @@ use yii\helpers\Url;
 $this->registerJsFile('/statics/themes/default-admin/plugins/laydate/laydate.js', ['depends' => 'yii\web\JqueryAsset']);
 ?>
 <style>
+    div.required label:after {
+        content: " *";
+        color: red;
+    }
     .rows{margin-bottom: 4px;}
 </style>
 <div class="parade-form">

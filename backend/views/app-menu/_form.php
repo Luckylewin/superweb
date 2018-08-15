@@ -10,6 +10,10 @@ use \backend\models\AppMenu;
 $uploadForm = new UploadForm();
 ?>
 <style>
+    div.required label:after {
+        content: " *";
+        color: red;
+    }
     img {
         max-width: 70px;
     }

@@ -15,6 +15,10 @@ MyAppAsset::register($this);
 $this->registerJsFile('/statics/js/miniUtils.js')
 ?>
 <style>
+    div.required label:after {
+        content: " *";
+        color: red;
+    }
     .single-select{
         height: 2.69rem;
         line-height: 3.6rem;

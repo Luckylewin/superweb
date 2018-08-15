@@ -7,7 +7,12 @@ use yii\widgets\ActiveForm;
 /* @var $model common\models\Order */
 /* @var $form yii\widgets\ActiveForm */
 ?>
-
+<style>
+    div.required label:after {
+        content: " *";
+        color: red;
+    }
+</style>
 <div class="order-form">
 
     <?php $form = ActiveForm::begin(); ?>

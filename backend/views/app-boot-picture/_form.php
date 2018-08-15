@@ -11,6 +11,10 @@ use common\widgets\Jsblock;
 $this->registerJsFile('/statics/themes/default-admin/plugins/laydate/laydate.js', ['depends' => 'yii\web\JqueryAsset']);
 ?>
 <style>
+    div.required label:after {
+        content: " *";
+        color: red;
+    }
     .preview img {width: 160px;}
 </style>
 <div class="app-boot-picture-form">

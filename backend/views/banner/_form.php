@@ -7,7 +7,12 @@ use yii\widgets\ActiveForm;
 /* @var $model common\models\Banner */
 /* @var $form yii\widgets\ActiveForm */
 ?>
-
+<style>
+    div.required label:after {
+        content: " *";
+        color: red;
+    }
+</style>
 <div class="banner-form">
 
     <?php $form = ActiveForm::begin(); ?>

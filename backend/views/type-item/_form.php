@@ -7,7 +7,12 @@ use yii\widgets\ActiveForm;
 /* @var $model backend\models\IptvTypeItem */
 /* @var $form yii\widgets\ActiveForm */
 ?>
-
+<style>
+    div.required label:after {
+        content: " *";
+        color: red;
+    }
+</style>
 <div class="iptv-type-item-form">
 
     <?php $form = ActiveForm::begin(); ?>

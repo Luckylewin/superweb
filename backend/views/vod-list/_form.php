@@ -3,13 +3,20 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use \common\models\Vod;
+use backend\assets\AppAsset;
 
+AppAsset::register($this);
 $this->registerJsFile('/statics/js/pinyin.js');
 /* @var $this yii\web\View */
 /* @var $model common\models\VodList */
 /* @var $form yii\widgets\ActiveForm */
 ?>
-
+<style>
+    div.required label:after {
+        content: " *";
+        color: red;
+    }
+</style>
 <div class="vod-list-form">
 
     <?php $form = ActiveForm::begin(); ?>

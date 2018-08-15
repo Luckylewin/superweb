@@ -9,7 +9,12 @@ use backend\models\UploadForm;
 /* @var $model backend\models\OttEvent */
 /* @var $form yii\widgets\ActiveForm */
 ?>
-
+<style>
+    div.required label:after {
+        content: " *";
+        color: red;
+    }
+</style>
 <div class="ott-event-form">
 
     <?php $form = ActiveForm::begin(); ?>

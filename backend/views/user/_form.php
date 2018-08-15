@@ -7,7 +7,12 @@ use yii\widgets\ActiveForm;
 /* @var $model common\models\User */
 /* @var $form yii\widgets\ActiveForm */
 ?>
-
+<style>
+    div.required label:after {
+        content: " *";
+        color: red;
+    }
+</style>
 <div class="user-form">
 
     <?php $form = ActiveForm::begin(); ?>

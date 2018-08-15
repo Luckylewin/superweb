@@ -7,7 +7,12 @@ use yii\helpers\Url;
 /* @var $model common\models\SubClass */
 /* @var $form yii\widgets\ActiveForm */
 ?>
-
+<style>
+    div.required label:after {
+        content: " *";
+        color: red;
+    }
+</style>
 <div class="sub-class-form">
 
     <?php $form = ActiveForm::begin([

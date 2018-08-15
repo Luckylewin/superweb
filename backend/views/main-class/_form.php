@@ -8,6 +8,10 @@ use yii\widgets\ActiveForm;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 <style>
+    div.required label:after {
+        content: " *";
+        color: red;
+    }
     .preview img {width: 200px;}
 </style>
 
