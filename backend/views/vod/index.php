@@ -101,10 +101,7 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js'
         'tableOptions' => ['class' => 'table-center table table-striped table-bordered'],
         "options" => ["class" => "grid-view","style"=>"overflow:auto", "id" => "grid"],
         'summaryOptions' => ['tag' => 'p', 'class' => 'text-right text-muted'],
-        'pager' => [
-                'class' => 'common\widgets\goPager',
-                'go' => true,
-        ],
+        'pager' => ['class' => 'common\widgets\goPager', 'go' => true],
 
         'columns' => [
 
@@ -122,7 +119,7 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js'
                   'attribute' => 'vod_name',
                   'headerOptions' => ['class' => 'col-md-2'],
                   'filterInputOptions' => [
-                    'placeholder' => '输入影片名称',
+                    'placeholder' => Yii::t('backend', "Enter movie's name"),
                     'class' => 'form-control'
                   ],
             ],
@@ -133,7 +130,7 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js'
                     'headerOptions' => ['class' => 'col-md-1'],
                     'filter' => \backend\models\IptvType::getVodType($search['vod_cid']),
                     'filterInputOptions' => [
-                            'prompt' => '请选择',
+                            'prompt' => Yii::t('backend', 'please choose'),
                             'class' => 'form-control'
                     ],
             ],
@@ -143,7 +140,7 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js'
                 'headerOptions' => ['class' => 'col-md-1'],
                 'filter' => \backend\models\IptvType::getTypeItem($search['vod_cid'], 'vod_language'),
                 'filterInputOptions' => [
-                    'prompt' => '请选择',
+                    'prompt' => Yii::t('backend', 'please choose'),
                     'class' => 'form-control'
                 ],
             ],
@@ -232,7 +229,7 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js'
                         },
                     ],
 
-                    'header' => '推送'
+                    'header' => Yii::t('backend', 'Push')
             ],
 
             [
@@ -251,7 +248,7 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js'
 
                     ],
                     'options' => ['style' => 'width:280px;'],
-                    'header' => '操作'
+                    'header' => Yii::t('backend', 'Operate')
             ],
             //'vod_title',
             //'vod_ename',

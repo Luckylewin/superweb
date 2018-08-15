@@ -336,6 +336,7 @@ $csrfToken = Yii::$app->request->csrfToken;
 $confirm_Text = Yii::t('backend', 'Are you sure to save your changes?');
 $yes = Yii::t('backend', 'Yes');
 $cancel = Yii::t('backend', 'Cancel');
+$success = Yii::t('backend', 'Success');
 
 $requestJs=<<<JS
     
@@ -376,6 +377,7 @@ $requestJs=<<<JS
         var that = $(this);
         if (field === 'sort')  {
             $.post(updateChannelUrl, {field:field,value:newValue,_csrf:'{$csrfToken}'});
+            layer.msg('{$success}');
             return;
         }
         
@@ -387,7 +389,7 @@ $requestJs=<<<JS
             }, function(){
               
           $.post(updateChannelUrl, {field:field,value:newValue,_csrf:'{$csrfToken}'}, function(data){
-               if(field == 'sort' || field == 'use_flag') {
+               if(field == 'use_flag') {
                    window.location.reload();
                     return false;
                } 

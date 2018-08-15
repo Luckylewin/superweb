@@ -507,6 +507,7 @@ return [
     'Condition List' => 'Danh sách điều kiện',
     'No executive authority' => 'Không có quyền thực thi',
     'Reset Sort' => 'Đặt lại sắp xếp',
+    "Enter movie's name" => 'Nhập tên phim',
 
 
     'Create Renewal Card' => 'Tạo thẻ gia hạn',
