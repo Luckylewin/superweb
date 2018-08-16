@@ -101,7 +101,7 @@ class ApkList extends \yii\db\ActiveRecord implements Linkable
         return true;
     }
 
-    public function beforeSave($insert)
+    public function setScheme()
     {
         /**
          * @var $scheme_ids array
@@ -136,6 +136,8 @@ class ApkList extends \yii\db\ActiveRecord implements Linkable
         if (!empty($this->scheme_id)) {
             $this->scheme_id = implode(',', $this->scheme_id);
         }
+
+        $this->save();
 
         return true;
     }

@@ -36,7 +36,7 @@ class Scheme extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['cpu', 'flash'], 'required'],
+            [['schemeName'], 'required'],
             [['schemeName', 'cpu', 'flash', 'ddr'], 'string', 'max' => 50],
         ];
     }

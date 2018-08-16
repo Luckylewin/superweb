@@ -39,23 +39,7 @@ use backend\models\UploadForm;
 
     <div class="col-md-12">
 
-        <table class="table table-bordered" style="font-size: 13px; width: 100%;">
 
-            <tbody>
-            <tr>
-                <td>
-                    <?= $form->field($model, "scheme_id")->checkboxList(\yii\helpers\ArrayHelper::map(Scheme::getAll(),'id', 'schemeName')); ?>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="3">
-                    <a class="btn btn-default btn-xs check"  href="#" style="margin-right: 10px">全选</a>
-                    <a class="btn btn-default btn-xs check"  href="#" style="margin-right: 10px">取消</a>
-                </td>
-            </tr>
-            </tbody>
-
-        </table>
 
         <?= $form->field($model, 'img')->textInput(['maxlength' => true]) ?>
 
@@ -93,13 +77,4 @@ use backend\models\UploadForm;
 
 
 
-<?php JsBlock::begin(); ?>
-<script>
-    $('.check').click(function(){
-       var flag = !$(this).index();
-       $('input[type=checkbox]').prop('checked', flag);
-       return false;
-    });
-</script>
-<?php JsBlock::end(); ?>
 

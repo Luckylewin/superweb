@@ -85,7 +85,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class'=>'kartik\grid\EditableColumn',
                 'attribute'=>'sort',
                 'editableOptions'=>[
-                    'header'=>'排序',
+                    'header'=> Yii::t('backend', 'Sort'),
                     'inputType'=>\kartik\editable\Editable::INPUT_SPIN,
                     'options'=>['pluginOptions'=>['min'=>0, 'max'=>5000]],
                     'formOptions' => [
@@ -123,12 +123,20 @@ $this->params['breadcrumbs'][] = $this->title;
                     'class' => 'common\grid\MyActionColumn',
                     'header' => Yii::t('backend', 'Operation'),
                     'size' => 'btn-sm',
-                    'template' => '{child} {view} {update} {delete}',
+                    'template' => '{child} {set-scheme} {view} {update} {delete}',
                     'buttons' => [
                         'child' => function($url,$model, $key) {
                             return Html::a(Yii::t('backend', 'Release Version'), \yii\helpers\Url::to(['apk-detail/create','id' => $model->ID]), [
                                 'class' => 'btn btn-default btn-sm'
                             ]);
+                        },
+                        'set-scheme' => function($url,$model, $key) {
+                            if (Yii::$app->user->can('apk-list/set-scheme')) {
+                                return Html::a(Yii::t('backend', 'Set Scheme'), \yii\helpers\Url::to(['apk-list/set-scheme','id' => $model->ID]), [
+                                    'class' => 'btn btn-default btn-sm'
+                                ]);
+                            }
+                            return '';
                         }
                 ],
             ],

@@ -6,6 +6,7 @@ namespace backend\components;
 
 use Yii;
 use yii\filters\AccessRule;
+use yii\helpers\ArrayHelper;
 
 //class AccessControl extends \yii\base\ActionFilter {
 class AccessControl extends \yii\filters\AccessControl {
@@ -19,6 +20,8 @@ class AccessControl extends \yii\filters\AccessControl {
         //-----菜单权限检查-----
         $user = $this->user;
         $actionId = $action->getUniqueId();
+        $allLimitedPermission = ArrayHelper::getColumn(Yii::$app->authManager->getPermissions(), 'ruleName');
+
         foreach ($this->rules as $i => $rule) {
 
             if (in_array($action->id, $rule->actions)) break;
@@ -28,7 +31,7 @@ class AccessControl extends \yii\filters\AccessControl {
                     'allow' => true,
                 ]));
 
-            } elseif (Yii::$app->user->can($actionId) == false) {
+            } else if (array_key_exists($actionId, $allLimitedPermission) && Yii::$app->user->can($actionId) == false) {
                 $this->rules[] = Yii::createObject(array_merge($this->ruleConfig, [
                     'actions' => [$action->id],
                     'allow' => false,

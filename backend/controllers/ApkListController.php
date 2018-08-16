@@ -71,11 +71,26 @@ class ApkListController extends BaseController
             $this->success();
             return $this->redirect(['view', 'id' => $model->ID]);
         }
+
+        return $this->render('update', [
+            'model' => $model,
+        ]);
+    }
+
+    public function actionSetScheme($id)
+    {
+        $model = $this->findModel($id);
+
+        if ($model->load(Yii::$app->request->post()) && $model->setScheme()) {
+            $this->success();
+            return $this->redirect(['view', 'id' => $model->ID]);
+        }
+
         if (!empty($model->scheme_id)) {
             $model->scheme_id = explode(',', $model->scheme_id);
         }
 
-        return $this->render('update', [
+        return $this->render('set-scheme', [
             'model' => $model,
         ]);
     }
