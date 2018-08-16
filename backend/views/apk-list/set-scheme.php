@@ -23,7 +23,7 @@ use common\widgets\Jsblock;
     <tr>
         <td colspan="3">
             <a class="btn btn-default btn-xs check"  href="#" style="margin-right: 10px"><?= Yii::t('backend', 'All') ?></a>
-            <a class="btn btn-default btn-xs check"  href="#" style="margin-right: 10px"><?php Yii::t('backend', 'Cancel') ?></a>
+            <a class="btn btn-default btn-xs check"  href="#" style="margin-right: 10px"><?= Yii::t('backend', 'Cancel') ?></a>
         </td>
     </tr>
     </tbody>
