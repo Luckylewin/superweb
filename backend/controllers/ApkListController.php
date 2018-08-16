@@ -80,8 +80,9 @@ class ApkListController extends BaseController
     public function actionSetScheme($id)
     {
         $model = $this->findModel($id);
+        $model->setScenario('set-scheme');
 
-        if ($model->load(Yii::$app->request->post()) && $model->setScheme()) {
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $this->success();
             return $this->redirect(['view', 'id' => $model->ID]);
         }

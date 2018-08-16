@@ -38,6 +38,7 @@ class ApkList extends \yii\db\ActiveRecord implements Linkable
     public function rules()
     {
         return [
+            ['scheme_id','required', 'on' => 'set-scheme'],
             [['typeName', 'type', 'class'], 'required'],
             [['img'], 'string'],
             [['sort'], 'integer'],
@@ -101,20 +102,35 @@ class ApkList extends \yii\db\ActiveRecord implements Linkable
         return true;
     }
 
+    public function scenario($value)
+    {
+        return [
+            'set-scheme' => ['scheme_id'],
+        ];
+
+    }
+
+    public function beforeValidate()
+    {
+        if ($this->scenario == 'set-scheme') {
+             $this->setScheme();
+        }
+
+        return true;
+    }
+
     public function setScheme()
     {
         /**
          * @var $scheme_ids array
          */
         $scheme_ids = $this->scheme_id;
-        $scheme_ids = explode(',', $scheme_ids);
-
         // 查找关联的订单号
-        $dbData = ApkToScheme::find()->where(['apk_id' => $this->ID])->select('scheme_id')->all();
-        $dbData = ArrayHelper::getColumn($dbData, 'scheme_id');
+        $dbData = ApkToScheme::find()->where(['apk_id' => $this->ID])->select('scheme_id')->column();
 
         // 删除 A-AnB
         $intersection = array_intersect($dbData, $scheme_ids);
+
         $aDiff = array_diff($dbData,  $intersection);
         if (!empty($aDiff)) {
             $ship = ApkToScheme::find()->where(['apk_id' => $this->ID])->andWhere(['in', 'scheme_id', $aDiff])->all();
@@ -125,6 +141,7 @@ class ApkList extends \yii\db\ActiveRecord implements Linkable
 
         // 增加 B-AnB
         $bDiff = array_diff($scheme_ids, $intersection);
+
         if (!empty($bDiff)) {
              foreach ($bDiff as $scheme_id) {
                  $ship = new ApkToScheme();
@@ -134,7 +151,10 @@ class ApkList extends \yii\db\ActiveRecord implements Linkable
              }
         }
 
-        $this->save();
+
+        if (!empty($this->scheme_id)) {
+            $this->scheme_id = implode(',', $this->scheme_id);
+        }
 
         return true;
     }
