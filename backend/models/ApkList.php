@@ -107,6 +107,7 @@ class ApkList extends \yii\db\ActiveRecord implements Linkable
          * @var $scheme_ids array
          */
         $scheme_ids = $this->scheme_id;
+        $scheme_ids = explode(',', $scheme_ids);
 
         // 查找关联的订单号
         $dbData = ApkToScheme::find()->where(['apk_id' => $this->ID])->select('scheme_id')->all();
@@ -131,10 +132,6 @@ class ApkList extends \yii\db\ActiveRecord implements Linkable
                  $ship->apk_id = $this->ID;
                  $ship->save();
              }
-        }
-
-        if (!empty($this->scheme_id)) {
-            $this->scheme_id = implode(',', $this->scheme_id);
         }
 
         $this->save();

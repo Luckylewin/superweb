@@ -232,6 +232,7 @@ return [
     'search' => '搜索',
     'Global Search' => '全局搜索',
     "Enter movie's name" => '输入影片名称',
+    "set Scheme" => '设置方案号',
 
 
     'Create a secondary classification' => '创建二级分类',

@@ -29,9 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                     'class' => 'yii\grid\CheckboxColumn',
                     'name' => 'id',
-                    'options' => [
-                        'style' => 'width:40px;'
-                    ]
+
             ],
 
             [
@@ -56,28 +54,19 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                     return '<i class="fa fa-android" style="font-size: 20px;color:green;text-align: center;text-indent: 7px;"><i>';
                 },
-
-                'options' => [
-                        'style' => 'width:30px;'
-                ]
+                'headerOptions' => ['class' => 'col-md-1']
             ],
             [
                     'attribute' => 'typeName',
-                    'options' => [
-                        'style' => 'width:130px;'
-                    ]
+                'headerOptions' => ['class' => 'col-md-1']
             ],
             [
                 'attribute' => 'type',
-                'options' => [
-                    'style' => 'width:130px;'
-                ]
+                'headerOptions' => ['class' => 'col-md-1']
             ],
             [
                 'attribute' => 'class',
-                'options' => [
-                    'style' => 'width:130px;'
-                ]
+                'headerOptions' => ['class' => 'col-md-1']
             ],
 
 
@@ -98,20 +87,20 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
                 'hAlign'=>'center',
                 'vAlign'=>'middle',
-                'width'=>'100px',
+                'headerOptions' => ['class' => 'col-md-1'],
                 'format'=>['html'],
             ],
 
             [
                 'class' => 'kartik\grid\ExpandRowColumn',
-                'width' => '50px',
+                'headerOptions' => ['class' => 'col-md-2 kartik-sheet-style'],
                 'value' => function ($model, $key, $index, $column) {
                     return GridView::ROW_COLLAPSED;
                 },
                 'detail' => function ($model, $key, $index, $column) {
                     return Yii::$app->controller->renderPartial('_expand-row-details', ['model' => $model]);
                 },
-                'headerOptions' => ['class' => 'kartik-sheet-style'],
+
                 'expandOneOnly' => true,
                 'mergeHeader' => false,
                 'expandIcon' => '<i class="fa fa-android"></i>'
@@ -121,6 +110,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                     'class' => 'common\grid\MyActionColumn',
+                    'headerOptions' => ['class' => 'col-md-6'],
                     'header' => Yii::t('backend', 'Operation'),
                     'size' => 'btn-sm',
                     'template' => '{child} {set-scheme} {view} {update} {delete}',

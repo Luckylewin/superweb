@@ -508,6 +508,7 @@ return [
     'No executive authority' => 'Không có quyền thực thi',
     'Reset Sort' => 'Đặt lại sắp xếp',
     "Enter movie's name" => 'Nhập tên phim',
+    "set Scheme" => 'Đặt số gói',
 
 
     'Create Renewal Card' => 'Tạo thẻ gia hạn',
