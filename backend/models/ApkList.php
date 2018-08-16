@@ -38,7 +38,7 @@ class ApkList extends \yii\db\ActiveRecord implements Linkable
     public function rules()
     {
         return [
-            [['typeName', 'type', 'class','scheme_id'], 'required'],
+            [['typeName', 'type', 'class'], 'required'],
             [['img'], 'string'],
             [['sort'], 'integer'],
             ['sort', 'default', 'value' => 0],
