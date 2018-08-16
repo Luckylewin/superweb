@@ -113,18 +113,35 @@ class ApkList extends \yii\db\ActiveRecord implements Linkable
     public function beforeValidate()
     {
         if ($this->scenario == 'set-scheme') {
-             $this->setScheme();
+             $this->setScheme($this->scheme_id);
+        } else if(Admin::isSuperAdmin() == false) {
+             $this->bindScheme();
         }
 
         return true;
     }
 
-    public function setScheme()
+    public function bindScheme()
+    {
+        $user = Admin::getCurrentUser();
+        $scheme = ArrayHelper::getColumn($user->getScheme('id'), 'id');
+        // 查看我拥有的方案号 是否与 apk 关联
+        foreach ($scheme as $scheme_id) {
+            $exist = ApkToScheme::find()->where(['apk_id' => $this->ID, 'scheme_id' => $value])->exists();
+            if ($exist == false) {
+                $ship = new ApkToScheme();
+                $ship->scheme_id = $scheme_id;
+                $ship->apk_id = $this->ID;
+                $ship->save();
+            }
+        }
+    }
+
+    public function setScheme($scheme_ids)
     {
         /**
          * @var $scheme_ids array
          */
-        $scheme_ids = $this->scheme_id;
         // 查找关联的订单号
         $dbData = ApkToScheme::find()->where(['apk_id' => $this->ID])->select('scheme_id')->column();
 

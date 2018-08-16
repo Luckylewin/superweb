@@ -219,4 +219,14 @@ class Admin extends ActiveRecord implements IdentityInterface
         ]);
     }
 
+    public static function getCurrentUser()
+    {
+        return self::findOne(Yii::$app->user->getId());
+    }
+
+    public static function isSuperAdmin()
+    {
+        return self::SUPER_ADMIN == Yii::$app->user->identity->username;
+    }
+
 }
