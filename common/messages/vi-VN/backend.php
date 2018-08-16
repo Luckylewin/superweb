@@ -166,7 +166,7 @@ return [
     'Unavailable'=>'Không khả dụng',
     'Post content'=>'Đăng nội dung',
     'Resource'=>'Tài nguyên',
-    'Whether to force an update'=>'Liệu có bắt buộc phải cập nhật hay không',
+    'force update'=>'lực lượng cập nhật',
     'File List'=>'Danh sách tệp',
     'APP List Danh' =>'sách ứng dụng',
     'Create Apk'=>'Tạo Apk',

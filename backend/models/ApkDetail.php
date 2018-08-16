@@ -63,7 +63,7 @@ class ApkDetail extends \yii\db\ActiveRecord
             'url' => Yii::t('backend', 'Download link'),
             'content' => Yii::t('backend', 'Version update content'),
             'sort' => Yii::t('backend', 'Sort'),
-            'force_update' => Yii::t('backend', 'Whether to force an update'),
+            'force_update' => Yii::t('backend', 'force update'),
         ];
     }
 

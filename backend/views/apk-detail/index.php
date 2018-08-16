@@ -47,6 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                     'attribute' => 'force_update',
+                    'headerOptions' => ['class' => 'col-md-2'],
                     'format' => 'raw',
                     'value' => function($model) {
                         $theme = $model->force_update ? 'info' : 'default';
@@ -60,9 +61,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'class' => 'common\grid\MyActionColumn',
                     'size' => 'btn-sm',
                     'header' => Yii::t('backend', 'Operate'),
-                    'options' => [
-                            'style' => 'width:350px;'
-                    ]
+                    'headerOptions' => ['class' => 'col-md-4']
             ],
         ],
     ]); ?>
