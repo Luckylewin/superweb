@@ -15,6 +15,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
 
+
+
 <p>
    <?= Html::a('发布版本', ['apk-detail/create', 'id' => $model->ID], ['class' => 'btn btn-info']) ?>
 </p>
@@ -33,14 +35,17 @@ $this->params['breadcrumbs'][] = $this->title;
             'sort',
             [
                     'attribute' => 'scheme_id',
+                    'visible' => Yii::$app->user->can('apk-list/set-scheme'),
+                    'headerOptions' => ['class' => 'col-md-6'],
                     'format' => 'raw',
                     'value' => function($data) {
                         $schemes = $data->scheme;
                         $str = '';
-                        foreach ($schemes as $scheme) {
-                            $str .= Html::label($scheme->schemeName, null ,[
-                                    'class' => 'label label-default'
-                            ]) . "&nbsp";
+                        foreach ($schemes as $key => $scheme) {
+                            $str .= Html::button($scheme->schemeName ,[
+                                    'class' => 'btn btn-default btn-xs',
+                                    'style' => 'margin:2px 2px'
+                            ]) . "&nbsp" . ($key > 0 && $key % 6 == 0 ? '<br/>' : '');
                         }
                         return $str;
                     }
@@ -51,6 +56,6 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 
 <p>
-    <?= Html::a('编辑', ['update', 'id' => $model->ID], ['class' => 'btn btn-primary']) ?>
+    <?= Html::a(Yii::t('backend', 'Update'), ['update', 'id' => $model->ID], ['class' => 'btn btn-primary']) ?>
     <?= Html::a(Yii::t('backend','Go Back'), \yii\helpers\Url::to(['apk-list/index']), ['class' => 'btn btn-default']) ?>
 </p>
