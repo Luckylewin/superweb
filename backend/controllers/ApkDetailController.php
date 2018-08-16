@@ -65,7 +65,7 @@ class ApkDetailController extends BaseController
 
         return $this->render('create', [
             'model' => $model,
-            'apkModel' => $apkModel
+            'apkModel' => $apkModel,
         ]);
     }
 

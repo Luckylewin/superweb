@@ -5,6 +5,7 @@ namespace backend\models;
 use common\components\Func;
 use Yii;
 use common\oss\Aliyunoss;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "apk_detail".
@@ -18,6 +19,7 @@ use common\oss\Aliyunoss;
  * @property string $content
  * @property int $sort
  * @property string $force_update
+ * @property string $is_newest
  */
 class ApkDetail extends \yii\db\ActiveRecord
 {
@@ -40,10 +42,10 @@ class ApkDetail extends \yii\db\ActiveRecord
         return [
             [['apk_ID', 'ver', 'md5', 'url', 'content'], 'required'],
             [['apk_ID', 'sort'], 'integer'],
-            [['url', 'content'], 'string'],
+            [['url', 'content', 'is_newest'], 'string'],
             [['type', 'ver', 'md5'], 'string', 'max' => 255],
             [['force_update'], 'string', 'max' => 1],
-            ['type','default','value' => 1]
+            [['type','sort'],'default','value' => 1]
         ];
     }
 
@@ -73,6 +75,18 @@ class ApkDetail extends \yii\db\ActiveRecord
     public function getTrueUrl()
     {
         return Func::getAccessUrl($this->url, 3600);
+    }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        self::updateAll(['is_newest' => '0'], ['apk_ID' => $this->apk_ID]);
+        $data = self::find()->where(['apk_ID' => $this->apk_ID])->select('ver,ID')->asArray()->all();
+        array_walk($data, function(&$v) {
+           $v['ver'] = str_replace(['v', 'V'], ['',''], $v['ver']);
+        });
+
+        ArrayHelper::multisort($data, 'ver', SORT_DESC);
+        self::updateAll(['is_newest' => '1'], ['ID' => $data[0]['ID']]);
     }
 
 }

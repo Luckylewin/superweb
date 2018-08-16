@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 
 use yii\widgets\Pjax;
-use kartik\grid\GridView;
+use yii\grid\GridView;
 use \common\oss\Aliyunoss;
 
 /* @var $this yii\web\View */
@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'options' => ['class' => 'grid-view',"style"=>"overflow:auto", "id" => "grid"],
-        'export' => false,
+
         'columns' => [
 
             [
@@ -71,39 +71,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
             [
-                'class'=>'kartik\grid\EditableColumn',
+
                 'attribute'=>'sort',
-                'editableOptions'=>[
-                    'header'=> Yii::t('backend', 'Sort'),
-                    'inputType'=>\kartik\editable\Editable::INPUT_SPIN,
-                    'options'=>['pluginOptions'=>['min'=>0, 'max'=>5000]],
-                    'formOptions' => [
-                            'action' => ['/apk-list/editsort']
-                    ],
-                    'submitButton' => [
-                            'icon' => '<i class="glyphicon glyphicon-saved"></i>',
-                            'class' => 'btn btn-sm btn-default'
-                    ]
-                ],
-                'hAlign'=>'center',
-                'vAlign'=>'middle',
-                'headerOptions' => ['class' => 'col-md-1'],
+
                 'format'=>['html'],
-            ],
-
-            [
-                'class' => 'kartik\grid\ExpandRowColumn',
-                'headerOptions' => ['class' => 'col-md-2 kartik-sheet-style'],
-                'value' => function ($model, $key, $index, $column) {
-                    return GridView::ROW_COLLAPSED;
-                },
-                'detail' => function ($model, $key, $index, $column) {
-                    return Yii::$app->controller->renderPartial('_expand-row-details', ['model' => $model]);
-                },
-
-                'expandOneOnly' => true,
-                'mergeHeader' => false,
-                'expandIcon' => '<i class="fa fa-android"></i>'
             ],
 
             //'scheme_id',
@@ -116,7 +87,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'template' => '{child} {set-scheme} {view} {update} {delete}',
                     'buttons' => [
                         'child' => function($url,$model, $key) {
-                            return Html::a(Yii::t('backend', 'Release Version'), \yii\helpers\Url::to(['apk-detail/create','id' => $model->ID]), [
+                            return Html::a(Yii::t('backend', 'Version List'), \yii\helpers\Url::to(['apk-detail/index','id' => $model->ID]), [
                                 'class' => 'btn btn-default btn-sm'
                             ]);
                         },

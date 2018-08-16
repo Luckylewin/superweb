@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="apk-detail-index">
 
 
-    <?php Pjax::begin(); ?>
+
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?= GridView::widget([
@@ -25,7 +25,16 @@ $this->params['breadcrumbs'][] = $this->title;
 
             //'apk_ID',
             //'type',
-            'ver',
+            [
+                    'attribute' => 'ver',
+                    'format' => 'raw',
+                    'value' => function($model) {
+                        if ($model->is_newest) {
+                            return '<b>' . $model->ver . '</b>';
+                        }
+                        return $model->ver;
+                    }
+            ],
             'md5',
             [
                     'attribute' => 'url',
@@ -35,7 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
             ],
             'content:ntext',
-            'sort',
+
             [
                     'attribute' => 'force_update',
                     'format' => 'raw',
@@ -49,17 +58,18 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                     'class' => 'common\grid\MyActionColumn',
-                    'header' => '操作',
+                    'size' => 'btn-sm',
+                    'header' => Yii::t('backend', 'Operate'),
                     'options' => [
-                            'style' => 'width:200px;'
+                            'style' => 'width:350px;'
                     ]
             ],
         ],
     ]); ?>
-    <?php Pjax::end(); ?>
+
 </div>
 
 <p>
-    <?= Html::a('新增版本', \yii\helpers\Url::to(['apk-detail/create','apk_ID' => $id]), ['class' => 'btn btn-success']) ?>
-    <?= Html::a(Yii::t('backend','Go Back'), \yii\helpers\Url::to(['apk-list/index']), ['class' => 'btn btn-default']) ?>
+    <?= Html::a(Yii::t('backend', 'Create'), \yii\helpers\Url::to(['apk-detail/create','id' => $id]), ['class' => 'btn btn-success']) ?>
+    <?= Html::a(Yii::t('backend','Go Back'), \yii\helpers\Url::to(['apk-list/index' ,'id' => $id]), ['class' => 'btn btn-default']) ?>
 </p>

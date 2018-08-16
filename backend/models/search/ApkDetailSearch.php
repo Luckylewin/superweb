@@ -18,7 +18,7 @@ class ApkDetailSearch extends ApkDetail
     public function rules()
     {
         return [
-            [['ID', 'apk_ID', 'sort'], 'integer'],
+            [['ID', 'apk_ID', 'sort', 'is_newest'], 'integer'],
             [['type', 'ver', 'md5', 'url', 'content', 'force_update'], 'safe'],
         ];
     }
@@ -45,6 +45,11 @@ class ApkDetailSearch extends ApkDetail
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' => [
+                'defaultOrder' => [
+                    'is_newest' => SORT_DESC
+                ]
+            ]
         ]);
 
         $this->load($params);

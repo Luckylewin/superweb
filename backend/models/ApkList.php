@@ -98,6 +98,10 @@ class ApkList extends \yii\db\ActiveRecord implements Linkable
 
                 }
             }
+
+            // 删除管理表关系
+            ApkToScheme::deleteAll(['apk_id' => $this->ID]);
+
         }
         return true;
     }
@@ -114,29 +118,55 @@ class ApkList extends \yii\db\ActiveRecord implements Linkable
     {
         if ($this->scenario == 'set-scheme') {
              $this->setScheme($this->scheme_id);
-        } else if(Admin::isSuperAdmin() == false) {
-             $this->bindScheme();
         }
 
         return true;
     }
 
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        if (Admin::isSuperAdmin() == false) {
+            $this->bindScheme();
+        }
+
+        return true;
+    }
+
+    /**
+     * APK 管理员管理时 自动绑定关联关系
+     */
     public function bindScheme()
     {
         $user = Admin::getCurrentUser();
         $scheme = ArrayHelper::getColumn($user->getScheme('id'), 'id');
         // 查看我拥有的方案号 是否与 apk 关联
         foreach ($scheme as $scheme_id) {
-            $exist = ApkToScheme::find()->where(['apk_id' => $this->ID, 'scheme_id' => $value])->exists();
+            $exist = ApkToScheme::find()->where(['apk_id' => $this->ID, 'scheme_id' => $scheme_id])->exists();
             if ($exist == false) {
                 $ship = new ApkToScheme();
                 $ship->scheme_id = $scheme_id;
                 $ship->apk_id = $this->ID;
                 $ship->save();
+
+                $apk = ApkList::findOne($this->ID);
+                if ($apk) {
+                    $db_scheme_id= explode(',', $apk->scheme_id);
+                    if (!in_array($scheme_id, $db_scheme_id)) {
+                        $db_scheme_id[] = $scheme_id;
+                        $apk->scheme_id = implode(',', $db_scheme_id);
+                        $apk->save(false);
+                    }
+                }
             }
         }
     }
 
+    /**
+     * 管理设置关联
+     * @param $scheme_ids
+     * @return bool
+     */
     public function setScheme($scheme_ids)
     {
         /**

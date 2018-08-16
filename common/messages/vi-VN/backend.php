@@ -509,6 +509,7 @@ return [
     'Reset Sort' => 'Đặt lại sắp xếp',
     "Enter movie's name" => 'Nhập tên phim',
     "Set Scheme" => 'Đặt số gói',
+    "Version List" => 'Danh sách phiên bản',
 
 
     'Create Renewal Card' => 'Tạo thẻ gia hạn',

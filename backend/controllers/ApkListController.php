@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\models\Admin;
 use Yii;
 use backend\models\ApkList;
 use yii\helpers\ArrayHelper;
@@ -50,6 +51,7 @@ class ApkListController extends BaseController
         $model = new ApkList();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $this->success('success', Yii::t('backend', 'Success'));
             return $this->redirect(['view', 'id' => $model->ID]);
         }
 
