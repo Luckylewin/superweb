@@ -67,6 +67,11 @@ class ApkListSearch extends ApkList
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' => [
+                'defaultOrder' => [
+                    'sort' => SORT_ASC
+                ]
+            ]
         ]);
 
         $this->load($params);

@@ -424,17 +424,25 @@ class AnnaIptv extends base
      * @param $url
      * @param int $episode
      */
-    private function attachLink(Vod $vod, $url, $episode = 0)
+    private function attachLink(Vod $vod, $url, $episode = 1)
     {
+        $baseName = basename($url);
         // 查找是否存在
-        $link = Vodlink::findOne(['video_id' => $vod->vod_id, 'url' => $url]);
-        if (empty($link)) {
+        $link =  Vodlink::find()->where(['video_id' => $vod->vod_id])->andWhere(['LIKE', 'url', $baseName])->one();
+
+        if (!empty($link)) {
+            if ($link->url != $url) {
+                $link->url = $url;
+                $link->save(false);
+                $this->stdout("更新链接{$url}" . PHP_EOL, Console::FG_BLUE);
+            }
+        } else {
             $link = new Vodlink();
             $link->url = $url;
             $link->episode = $episode;
             $vod->link('vodLinks', $link);
 
-            $this->stdout("新增链接{$url}" . PHP_EOL, Console::FG_BLUE);
+            $this->stdout("新增链接{$url}" . PHP_EOL, Console::FG_GREEN);
         }
     }
 
