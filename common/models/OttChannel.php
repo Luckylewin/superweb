@@ -133,4 +133,30 @@ class OttChannel extends \yii\db\ActiveRecord
         return [];
     }
 
+    public static function globalSearch($value)
+    {
+        $channels = static::find()
+                            ->alias('a')
+                            ->joinWith('subClass')
+                            ->where(['like', 'a.name', $value])
+                            ->orWhere(['like', 'alias_name', $value])
+                            ->select(['a.id','a.name','a.alias_name','a.sub_class_id'])
+                            ->limit(10)
+                            ->asArray()
+                            ->all();
+
+        $array = [];
+        foreach ($channels as $channel) {
+            $array[] = [$channel['subClass']['name'],$channel['id'], $channel['name'], $channel['alias_name']];
+        }
+
+        $result['result'] = $array;
+        $channels = json_encode($result);
+        $channels = Yii::$app->request->get('callback') . "({$channels})";
+        $response = Yii::$app->response;
+        Yii::$app->response->format = $response::FORMAT_HTML;
+
+        return $channels;
+    }
+
 }

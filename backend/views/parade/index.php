@@ -103,7 +103,6 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 
 
-
 <?php
 
 Modal::begin([
@@ -113,7 +112,7 @@ Modal::begin([
     'footer' => '<a href="#" class="btn btn-default" data-dismiss="modal">'. Yii::t('backend', 'close').'</a>',
 ]);
 
-$requestUrl = Url::to(['parade/bind']);
+$requestUrl = Url::to(['parade/global-search']);
 
 $requestJs=<<<JS
      $(document).on('click', '.bind', function() {

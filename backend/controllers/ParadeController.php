@@ -199,17 +199,30 @@ class ParadeController extends BaseController
     public function actionBind()
     {
         if (Yii::$app->request->isPost) {
-            $channel = OttChannel::findOne(Yii::$app->request->post('channel'));
+            $channel = OttChannel::findOne(Yii::$app->request->post('channel_id'));
             if ($channel) {
                 $channel->alias_name = Yii::$app->request->post('alias_name');
                 $channel->save(false);
                 $this->setFlash('info', Yii::t('backend', 'Success'));
-                $this->redirect(Yii::$app->request->referrer);
+                $this->redirect(Url::to(['parade/index']));
             }
         }
 
+    }
+
+    /**
+     * 全局搜索
+     * @return string
+     */
+    public function actionGlobalSearch()
+    {
+        if (Yii::$app->request->get('search')) {
+            $value = Yii::$app->request->get('value');
+            return OttChannel::globalSearch($value);
+        }
+
         $alias_name = Yii::$app->request->get('id');
-        return $this->renderAjax('bind', [
+        return $this->renderAjax('global-search', [
             'alias_name' => $alias_name
         ]);
     }

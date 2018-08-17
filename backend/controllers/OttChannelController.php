@@ -278,28 +278,9 @@ class OttChannelController extends BaseController
     {
         if (Yii::$app->request->get('search')) {
             $value = Yii::$app->request->get('value');
-            $channels = OttChannel::find()
-                                    ->alias('a')
-                                    ->joinWith('subClass')
-                                    ->where(['like', 'a.name', $value])
-                                    ->orWhere(['like', 'alias_name', $value])
-                                    ->select(['a.id','a.name','a.alias_name','a.sub_class_id'])
-                                    ->limit(10)
-                                    ->asArray()
-                                    ->all();
-
-            $array = [];
-            foreach ($channels as $channel) {
-                $array[] = [$channel['subClass']['name'],$channel['id'], $channel['name'], $channel['alias_name']];
-            }
-
-            $result['result'] = $array;
-            $channels = json_encode($result);
-            $channels = Yii::$app->request->get('callback') . "({$channels})";
-            Yii::$app->response->format = Response::FORMAT_HTML;
-            return $channels;
+            return OttChannel::globalSearch($value);
         }
-        return $this->render('global-search');
+        return $this->renderAjax('global-search');
     }
 
 }

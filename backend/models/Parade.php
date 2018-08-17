@@ -26,7 +26,7 @@ use yii\db\ActiveRecord;
  * @property string $parade_timestamp
  * @property string $source
  * @property string $url
- * @property string $main_class_name
+
  */
 class Parade extends \yii\db\ActiveRecord
 {
@@ -62,7 +62,7 @@ class Parade extends \yii\db\ActiveRecord
             [['channel_id'], 'integer'],
             [['parade_date', 'upload_date', 'parade_data'], 'safe'],
             [['parade_data', 'source', 'url'], 'string'],
-            [['channel_name', 'main_class_name'], 'string', 'max' => 30],
+            [['channel_name'], 'string', 'max' => 30],
             ['parade_date', 'is_exist', 'when' => function($model) {
                 return !empty($model->channel_name);
             }]
