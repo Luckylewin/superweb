@@ -510,7 +510,8 @@ return [
     "Enter movie's name" => 'Nhập tên phim',
     "Set Scheme" => 'Đặt số gói',
     "Version List" => 'Danh sách phiên bản',
-
+    'Main Genre' => 'Thể loại chính',
+    'Sub Genre' => 'Thể loại phụ',
 
     'Create Renewal Card' => 'Tạo thẻ gia hạn',
     'Are you sure to save your changes?' => 'Bạn có chắc chắn lưu các thay đổi của mình không?',

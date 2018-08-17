@@ -436,9 +436,8 @@ return [
     'Is Charge' => '是否收费',
     'Movie name' => '影片名称',
     'Extended Genre' => '扩展分类',
-
-
-
+    'Main Genre' => '一级分类',
+    'Sub Genre' => '二级分类',
 
     'comedy'=>'喜剧',
     'love'=>'爱情',

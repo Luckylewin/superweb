@@ -77,7 +77,11 @@ class OttChannel extends \yii\db\ActiveRecord
         return $this->hasOne(SubClass::className(), ['id' => 'sub_class_id']);
     }
 
-
+    public function getMainClass()
+    {
+        return $this->hasOne(MainClass::className(), ['id' => 'main_class_id'])
+                    ->via('subClass');
+    }
 
     public function beforeSave($insert)
     {

@@ -7,7 +7,7 @@ use yii\bootstrap\Modal;
 use yii\helpers\Url;
 
 /* @var $this yii\web\View */
-/* @var $searchModel backend\models\search\ParadeQuery */
+/* @var $searchModel backend\models\search\ParadeSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = Yii::t('backend', 'EPG');
@@ -40,10 +40,16 @@ $this->params['breadcrumbs'][] = $this->title;
                     'label' => Yii::t('backend', 'Associated Channel'),
                     'format' => 'raw',
                     'value' => function ($model) {
-                        $channel = $model->channel;
+                        $channels = $model->channel;
 
-                        if ($channel) {
-                            return Html::a($channel->name, \yii\helpers\Url::to(['ott-channel/view', 'id' => $channel->id]),['class'=>'btn btn-link']);
+                        if ($channels) {
+                            $str = '';
+                            foreach ($channels as $key => $channel) {
+                                $str .= Html::a($channel['name'], \yii\helpers\Url::to(['ott-channel/view', 'id' => $channel['id']])) . '&nbsp;,';
+                                if ($key != 0 && $key % 3 == 0) $str .= '<br/>';
+                            }
+
+                            return $str;
                         }
 
                         return Html::a(Yii::t('backend', 'Bind Channel'), null, [
@@ -55,7 +61,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
             ],
 
-            'upload_date',
 
             [
                     'class' => 'common\grid\MyActionColumn',

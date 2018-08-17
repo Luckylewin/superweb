@@ -111,7 +111,7 @@ class Cache
     private function getChannel($class, $scheme)
     {
         $items = [];
-        $channels = $class->getOwnChannel(['use_flag' => 1])->orderBy('name asc')->all();
+        $channels = $class->getOwnChannel(['use_flag' => 1])->orderBy('channel_number asc')->all();
 
         if (empty($channels)) {
             return false;
