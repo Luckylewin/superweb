@@ -35,7 +35,7 @@ $this->registerJsFile('/statics/plugins/bootstrap-suggest/bootstrap-suggest.min.
                 ]); ?>
 
                 <?= Html::hiddenInput('alias_name', $alias_name); ?>
-               
+
                 <div class="col-md-8">
                     <div class="input-group">
                         <?= Html::textInput('channel_id', '', [
