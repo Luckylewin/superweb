@@ -16,6 +16,11 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="parade-index">
 
 
+    <p>
+        <?= Html::a(Yii::t('backend', 'Create'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('backend', 'Clear Cache'), ['clear-cache'], ['class' => 'btn btn-warning']) ?>
+    </p>
+    
     <?php Pjax::begin(); ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -94,10 +99,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php Pjax::end(); ?>
 </div>
 
-<p>
-    <?= Html::a(Yii::t('backend', 'Create'), ['create'], ['class' => 'btn btn-success']) ?>
-    <?= Html::a(Yii::t('backend', 'Generate cache') . "($version)", ['create-cache'], ['class' => 'btn btn-default']) ?>
-</p>
 
 
 <?php

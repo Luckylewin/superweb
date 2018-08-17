@@ -523,6 +523,7 @@ return [
     'login successful' => '登录成功',
     'generated' => '生成',
     'cache' => '缓存',
+    'Clear Cache' => '清除缓存',
     'This account is not activated' => '该帐号未激活',
     'This account is indefinite' => '该帐号是无限期帐号',
     'Data not found' => '找不到数据',

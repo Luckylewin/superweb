@@ -9,6 +9,7 @@
 namespace backend\components;
 
 use Yii;
+use yii\redis\Connection;
 
 class MyRedis
 {
@@ -26,6 +27,11 @@ class MyRedis
     const REDIS_ADVER_DATA            = 13;
     const REDIS_DEVICE_ONLINE_STATUS  = 15;
 
+    /**
+     *
+     * @param int $database
+     * @return Connection
+     */
     public static function init($database = 0)
     {
         $redis = Yii::$app->redis;
