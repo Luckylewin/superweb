@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a(Yii::t('backend', 'Create'), ['create'], ['class' => 'btn btn-success']) ?>
         <?= Html::a(Yii::t('backend', 'Clear Cache'), ['clear-cache'], ['class' => 'btn btn-warning']) ?>
     </p>
-    
+
     <?php Pjax::begin(); ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -56,13 +56,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                             return $str;
                         }
-
-                        return Html::a(Yii::t('backend', 'Bind Channel'), null, [
-                                'class' => 'btn btn-default btn-sm bind',
-                                'data-toggle' => 'modal',
-                                'data-target' => '#bind-modal',
-                                'data-id' => $model->channel_name,
-                        ]);
+                        return '';
                     }
             ],
 
@@ -80,17 +74,26 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'data-pjax' => '0',
                                 ]);
                             },
-                        'delete' => function($url, $model, $key) {
-                            $title = Yii::t('backend', 'Delete');
-                            return Html::a($title, \yii\helpers\Url::to(['parade/batch-delete','name'=>$model->channel_name]),[
-                                'class'=>'btn btn-danger btn-sm',
-                                'title' => $title,
-                                'aria-label' => $title,
-                                'data-pjax' => '0',
-                            ]);
-                        }
+                                'delete' => function($url, $model, $key) {
+                                    $title = Yii::t('backend', 'Delete');
+                                    return Html::a($title, \yii\helpers\Url::to(['parade/batch-delete','name'=>$model->channel_name]),[
+                                        'class'=>'btn btn-danger btn-sm',
+                                        'title' => $title,
+                                        'aria-label' => $title,
+                                        'data-pjax' => '0',
+                                    ]);
+                                },
+
+                            'bind' => function($url, $model, $key) {
+                                return Html::a(Yii::t('backend', 'Bind Channel'), null, [
+                                    'class' => 'btn btn-default btn-sm bind',
+                                    'data-toggle' => 'modal',
+                                    'data-target' => '#bind-modal',
+                                    'data-id' => $model->channel_name,
+                                ]);
+                            }
                     ],
-                'template' => '{view} &nbsp;{delete}',
+                'template' => '{bind}&nbsp;{view} &nbsp;{delete}',
             ],
 
 
