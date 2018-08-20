@@ -200,7 +200,7 @@ class MainClassController extends BaseController
                     if (!empty($val['ownChannel'])) {
                          foreach ($val['ownChannel'] as $channel) {
                              $channelName = $channel['name'];
-                             $channelIcon = $channel['image'];
+                             $channelIcon = empty($channel['image']) ? 'null' : $channel['image'];
                              if (!empty($channel['ownLink'])) {
                                  foreach ($channel['ownLink'] as $link) {
                                      $url = $link['link'];
