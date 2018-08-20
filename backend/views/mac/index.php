@@ -68,7 +68,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     if ($data->logintime == '0000-00-00 00:00:00') {
                         return "";
                     }
-                    return Yii::$app->formatter->asRelativeTime($data->logintime);
+                    return Yii::$app->formatter->asRelativeTime(strtotime($data->logintime));
                 },
                 'options' => [
                     'style' => 'width:130px;'
