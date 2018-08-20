@@ -44,6 +44,13 @@ class Mac extends \yii\db\ActiveRecord implements IdentityInterface
     }
 
 
+    public function attributes ()
+    {
+        $attributes = parent::attributes();
+        $attributes[] = 'unit';
+        return $attributes;
+    }
+
     /**
      * @inheritdoc
      */
