@@ -43,6 +43,7 @@ class Mac extends \yii\db\ActiveRecord implements IdentityInterface
         return 'mac';
     }
 
+
     /**
      * @inheritdoc
      */
@@ -92,7 +93,7 @@ class Mac extends \yii\db\ActiveRecord implements IdentityInterface
             'client_name' => Yii::t('backend', 'Associated Client')
         ];
     }
-    
+
     public function beforeSave($insert)
     {
         parent::beforeSave($insert);

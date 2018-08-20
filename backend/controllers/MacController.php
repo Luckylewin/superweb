@@ -87,8 +87,8 @@ class MacController extends BaseController
     {
         $model = $this->findModel($id);
 
-        if (preg_match('/\d+ [year|day|month]/', $model->contract_time) == false) {
-            $model->contract_time = '3 month';
+        if (preg_match('/\d+\s+[year|day|month]/', $model->contract_time) == false) {
+            $model->contract_time = '1 month';
             $model->save(false);
         }
 
