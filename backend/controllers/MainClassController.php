@@ -206,8 +206,10 @@ class MainClassController extends BaseController
                                      $url = $link['link'];
                                      $method = $link['method'];
                                      $scheme = $link['scheme_id'];
+                                     $use_flag = $link['use_flag'];
+                                     $decode = $link['decode'];
 
-                                     $str .= "{$mainClass},{$subClassName},{$channelName},{$channelIcon},{$url},{$method},{$scheme}" . PHP_EOL;
+                                     $str .= "{$mainClass},{$subClassName},{$channelName},{$channelIcon},{$url},{$method},{$scheme},{$use_flag},{$decode}" . PHP_EOL;
                                  }
                              }
                          }

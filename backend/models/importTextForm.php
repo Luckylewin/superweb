@@ -155,11 +155,13 @@ class importTextForm extends \yii\base\Model
             //是否有算法
             $method = isset($data[5]) ? $data[5] : '';
             $scheme = isset($data[6]) ? $data[6] : 'all';
+            $use_flag = isset($data[7]) ? $data[7] : OttLink::AVAILABLE;
+            $decode = isset($data[8]) ? $data[8] : OttLink::SOFT_DECODE;
 
             $this->createMainClass($mainClassName);
             $this->createSubClass($subClassName);
             $this->createChannel($channelName, $channelIcon);
-            $total = $this->createLink($link, $method, $scheme , $total);
+            $total = $this->createLink($link, $method, $scheme ,$use_flag, $decode, $total);
         }
 
         return $total;
@@ -176,6 +178,8 @@ class importTextForm extends \yii\base\Model
             //是否有算法
             $method = isset($data[3]) ? $data[3] : '';
             $scheme = isset($data[4]) ? $data[4] : '';
+            $use_flag = OttLink::AVAILABLE;
+            $decode = OttLink::SOFT_DECODE;
 
             $this->subClass = SubClass::find()->where(['keyword' => $keyword])->one();
 
@@ -183,7 +187,7 @@ class importTextForm extends \yii\base\Model
                 //判断是否已经存在该频道
                 $this->createChannel($name);
                 //存在则判断是否有链接
-                $this->createLink($link, $method, $scheme,  $total);
+                $this->createLink($link, $method, $scheme, $use_flag, $decode, $total);
             }
         }
 
@@ -236,7 +240,8 @@ class importTextForm extends \yii\base\Model
         $this->channel = $channel;
     }
 
-    private function createLink($link, $method, $scheme ,&$total)
+
+    private function createLink($link, $method, $scheme, $use_flag, $decode ,&$total)
     {
         $ottLink = OttLink::find()->where(['link' => $link, 'channel_id' => $this->channel->id])->one();
 
@@ -245,6 +250,8 @@ class importTextForm extends \yii\base\Model
             $ottLink->channel_id = $this->channel->id;
             $ottLink->link = $link;
             $ottLink->method = $method;
+            $ottLink->use_flag = $use_flag;
+            $ottLink->decode = $decode;
 
             if ($scheme != 'all') {
                 $scheme = explode('|', trim($scheme));

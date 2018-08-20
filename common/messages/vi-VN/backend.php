@@ -354,6 +354,7 @@ return [
     'First Letter'=>'Thư đầu tiên',
     'Film plot'=>'Phim truyện',
     'Batch Import'=>'Nhập hàng loạt',
+    'Batch Export' => 'Xuất hàng loạt',
     'Chinese name'=>'Tên Trung Quốc',
     'Generate cache'=>'Tạo bộ nhớ cache',
     'Rearrange channel numbers'=>'Sắp xếp lại số kênh',
@@ -513,6 +514,8 @@ return [
     'Main Genre' => 'Thể loại chính',
     'Sub Genre' => 'Thể loại phụ',
     'Clear Cache' => 'Xóa bộ nhớ cache',
+    'Super administrator' => 'Quản trị viên cấp cao',
+    'administrator' => 'Quản trị viên',
 
     'Create Renewal Card' => 'Tạo thẻ gia hạn',
     'Are you sure to save your changes?' => 'Bạn có chắc chắn lưu các thay đổi của mình không?',

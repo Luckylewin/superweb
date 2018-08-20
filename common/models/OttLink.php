@@ -25,6 +25,11 @@ use yii\helpers\ArrayHelper;
  */
 class OttLink extends \yii\db\ActiveRecord
 {
+    const AVAILABLE = 1;
+    const DISABLE = 0;
+
+    const HARD_DECODE = 0;
+    const SOFT_DECODE = 1;
 
     public static $decode_status = ['Hard Decode', 'Soft Decode'];
 

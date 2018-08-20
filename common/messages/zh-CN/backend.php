@@ -364,6 +364,7 @@ return [
     'First Letter' => '首字母',
     'Film plot' => '电影剧情',
     'Batch Import' => '批量导入',
+    'Batch Export' => '批量导出',
     'Chinese name' => '中文名称',
     'Generate cache' => '生成缓存',
     'Rearrange channel numbers' => '重新排列频道号',
@@ -542,6 +543,7 @@ return [
     'Condition List' => '条件列表',
     'No executive authority' => '没有执行权限',
     'Reset Sort' => '重置排序',
-
+    'Super administrator' => '超级管理员',
+    'administrator' => '管理员',
     'Please assign a role to the account, otherwise it will not work properly.' => '请给帐号分配一个角色，否则无法正常使用',
 ];

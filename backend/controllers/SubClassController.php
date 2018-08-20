@@ -210,11 +210,14 @@ class SubClassController extends BaseController
         return $this->redirect(Yii::$app->request->referrer);
     }
 
+    /**
+     * 通过文本方式进行导入
+     * @return string|Response
+     */
     public function actionImportViaText()
     {
         $importForm = new importTextForm();
         $importForm->mode = Yii::$app->request->get('mode');
-
 
         if ($importForm->load(Yii::$app->request->post()) && $importForm->validate()) {
             if ($importNum = $importForm->import()) {
