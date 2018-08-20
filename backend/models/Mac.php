@@ -23,6 +23,7 @@ use yii\web\IdentityInterface;
  * @property string $access_token 有效期
  * @property string $access_token_expire 有效期
  * @property int $identity_type 会员类型
+ * @property int $client_id 关联的客户id
  */
 class Mac extends \yii\db\ActiveRecord implements IdentityInterface
 {
@@ -66,7 +67,7 @@ class Mac extends \yii\db\ActiveRecord implements IdentityInterface
             [['MAC', 'SN'], 'string', 'max' => 64],
             [['contract_time'], 'string', 'max' => 8],
 
-            [['ver', 'identity_type'], 'default', 'value'=>'0'],
+            [['ver', 'identity_type', 'client_id'], 'default', 'value' => 0],
             [['regtime'], 'default', 'value' => date('Y-m-d H:i:s', time())],
             [['logintime'], 'default', 'value' => '']
         ];

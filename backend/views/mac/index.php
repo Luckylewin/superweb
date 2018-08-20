@@ -66,7 +66,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'logintime',
                 'value' => function($data) {
                     if ($data->logintime == '0000-00-00 00:00:00') {
-                        return "";
+                        return Yii::t('backend', 'no record');
                     }
                     return Yii::$app->formatter->asRelativeTime(strtotime($data->logintime));
                 },
@@ -94,11 +94,16 @@ $this->params['breadcrumbs'][] = $this->title;
                     if ($data->use_flag == 1) {
                         return Yii::t('backend', 'Unused');
                     }
+
                     if ($data->duetime == '0000-00-00 00:00:00' && empty($data->contract_time)) {
                         return  Yii::t('backend', 'Indefinite');
+                    } else if($data->duetime == '0000-00-00 00:00:00') {
+                       return '-';
+                    } else {
+                        return date('Y-m-d', strtotime($data->duetime));
                     }
                     
-                    return date('Y-m-d', strtotime($data->duetime));
+
                 },
                 'options' => [
                     'style' => 'width:100px;'

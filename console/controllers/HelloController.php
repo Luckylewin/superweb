@@ -8,6 +8,8 @@
 namespace console\controllers;
 
 use backend\models\LinkToScheme;
+use backend\models\Mac;
+use backend\models\MacDetail;
 use backend\models\Scheme;
 use common\models\OttLink;
 use common\models\Vod;
@@ -20,6 +22,7 @@ use console\models\profile;
 use Symfony\Component\DomCrawler\Crawler;
 use yii\console\Controller;
 use yii\console\ExitCode;
+use yii\db\Query;
 
 /**
  * This command echoes the first argument that you have entered.
@@ -42,19 +45,19 @@ class HelloController extends Controller
      */
     public function actionIndex($message = 'hello world')
     {
-        // $data = IMDB::search('Condorito La pelicula');
-        // $data = OMDB::findByTitle('Adam Patel Real Magic');
-        // $data = OMDB::findByIMDbID('tt4794544');
-        // $data = profile::like('Cobras');
+        $query = new Query();
+        $query->from('mac_detail');
+        foreach($query->batch() as $users){
+            foreach($users as $user){
+               if (!empty($user['client_id']) && !empty($user['MAC'])) {
+                   Mac::updateAllCounters(['client_id' => $user['client_id']], [
+                      'MAC' => $user['MAC']
+                   ]);
+               }
+            }
+        }
 
-        /*
-            $data = profile::search('Orgullo y Prejuicio y Zombis');
-          var_dump($data);
-        */
 
-        $a = preg_match('/(S\d+)\s+(E\d+)/', 'Segundo Sol S01 E04', $match);
-        print_r($match);
-        echo $a = (int) $a[2];
         return ExitCode::OK;
     }
 

@@ -18,7 +18,7 @@ class MacSearch extends Mac
     public function rules()
     {
         return [
-            [['MAC', 'SN', 'ver', 'regtime', 'logintime', 'duetime', 'contract_time','client_name'], 'safe'],
+            [['MAC', 'SN', 'ver', 'regtime', 'logintime', 'duetime', 'contract_time','client_name', 'client_id'], 'safe'],
             [['use_flag', 'type'], 'integer'],
         ];
     }
@@ -40,8 +40,6 @@ class MacSearch extends Mac
     public function search($params, $all = false)
     {
         $query = Mac::find();
-
-        $query->joinWith(['detail']);
 
         // add conditions that should always apply here
         if ($all) {
@@ -71,14 +69,13 @@ class MacSearch extends Mac
         $this->load($params);
 
         if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
             return $dataProvider;
         }
 
         if ($this->client_name < 0) {
             $this->client_name = null;
         }
+
         // grid filtering conditions
         $query->andFilterWhere([
             'use_flag' => $this->use_flag,
