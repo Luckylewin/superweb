@@ -126,8 +126,10 @@ class OttLink extends \yii\db\ActiveRecord
     {
         parent::afterFind();
 
-        $this->use_flag_text = $this->use_flag_status[$this->use_flag];
-
+        if (isset($this->use_flag_status[$this->use_flag])) {
+            $this->use_flag_text = $this->use_flag_status[$this->use_flag];
+        }
+        
         if ($this->scheme_id == 'all') {
             $this->schemeText = '全部';
         } elseif (!empty($this->scheme_id)){
