@@ -227,18 +227,16 @@ class importTextForm extends \yii\base\Model
     {
         $channel = OttChannel::find()->where(['sub_class_id' => $this->subClass->id, 'name' => $name])->one();
 
-
-
         //不存在则新建
         if ($this->subClass && is_null($channel)) {
             $channel = new OttChannel();
             $channel->sub_class_id = $this->subClass->id;
             $channel->name = $name;
             $channel->keywords = $name;
-            if ($icon)  $channel->image = $icon;
+            if ($icon && $icon != 'null')  $channel->image = $icon;
             $channel->save(false);
         } elseif ($channel->image != $icon && !is_null($icon)) {
-            $channel->image = $icon;
+            $channel->image = ($icon == 'null' ? '' : $icon);
             $channel->save(false);
         }
 
