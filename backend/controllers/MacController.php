@@ -86,7 +86,7 @@ class MacController extends BaseController
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        
+
         if (preg_match('/\d+ [year|day|month]/', $model->contract_time) == false) {
             $model->contract_time = '3 month';
             $model->save(false);

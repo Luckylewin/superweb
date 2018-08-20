@@ -92,22 +92,7 @@ class Mac extends \yii\db\ActiveRecord implements IdentityInterface
             'client_name' => Yii::t('backend', 'Associated Client')
         ];
     }
-
-    public function afterSave($insert, $changedAttributes)
-    {
-        parent::afterSave($insert, $changedAttributes);
-        if (MacDetail::find()->where(['MAC' => $this->MAC])->exists() == false) {
-            $macDetail = new MacDetail();
-            $macDetail->MAC = $this->MAC;
-
-            $macDetail->client_id = !empty($this->client_name) ? $this->client_name : '-1';
-
-            $macDetail->save(false);
-        };
-
-        return true;
-    }
-
+    
     public function beforeSave($insert)
     {
         parent::beforeSave($insert);
