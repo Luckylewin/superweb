@@ -5,6 +5,7 @@
  */
 namespace common\components;
 
+use common\oss\Aliyunoss;
 use Yii;
 
 class Func
@@ -47,9 +48,13 @@ class Func
      */
     public static function getAccessUrl($path, $expireTime = 300)
     {
-        if (empty($path)) return 'null';
+        if (empty($path)) {
+            return 'null';
+        }
 
-        if (strpos($path, '/') === false) return $path;
+        if (strpos($path,'http') === false && strpos($path, '/') === false) {
+            return Aliyunoss::getDownloadUrl($path, 300);
+        }
 
         $url = "http://" . Yii::$app->request->hostName . ":" . Yii::$app->params['nginx']['media_port'] ."{$path}?";
 
