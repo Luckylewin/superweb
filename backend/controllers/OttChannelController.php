@@ -280,7 +280,7 @@ class OttChannelController extends BaseController
             $value = Yii::$app->request->get('value');
             return OttChannel::globalSearch($value);
         }
-        return $this->renderAjax('global-search');
+        return $this->render('global-search');
     }
 
 }

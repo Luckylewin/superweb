@@ -97,10 +97,10 @@ class LogController extends BaseController
         //节目收看排行
         $key = "program:" . date('m-d:') . 'set';
         $program_rank = $this->hgetallMap($this->redis->hgetall($key));
-        $program_rank = array_slice($program_rank, 0, 10);
-        arsort($program_rank);
 
         if ($program_rank) {
+            $program_rank = array_slice($program_rank, 0, 10);
+            arsort($program_rank);
             $program['key'] = array_keys($program_rank);
             $program['value'] = array_values($program_rank);
         } else {
