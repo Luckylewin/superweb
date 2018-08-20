@@ -88,7 +88,7 @@ class importTextForm extends \yii\base\Model
         }
 
         foreach ($rows as $row) {
-            $row = preg_split('/[,\|]+/s', $row);
+            $row = preg_split('/[,]+/s', $row);
             if (count($row) >= $this->_getSpiltNumber()) {
                 $this->importData[] = $row;
             }
