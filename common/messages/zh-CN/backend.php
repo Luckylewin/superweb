@@ -204,7 +204,7 @@ return [
     'Expired' => '过期',
     'Disable' => '禁用',
     'Online' => '在线',
-    'Offline' => '在线',
+    'Offline' => '离线',
     'time unit' => '时间单位',
     'Current operation object' => '当前操作对象',
     'Channel' => '频道',

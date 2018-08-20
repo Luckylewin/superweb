@@ -15,9 +15,10 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="mac-index">
 
     <h1><?php Html::encode($this->title) ?></h1>
-    <?php Pjax::begin(); ?>
     <?php echo $this->render('_search', ['model' => $searchModel]); ?>
 
+
+    <?php Pjax::begin(); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -47,18 +48,32 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
 
             [
-                    'attribute' => 'MAC',
-                    'label' => 'MAC-SN',
-                    'format' => 'raw',
-                    'value' => function($model) {
-                        return $model->MAC . '<br/>' . $model->SN;
-                    },
-                    'options' => [
-                        'style' => 'width:130px;'
-                    ]
+                'attribute' => 'online_status',
+                'format' => 'raw',
+                'label' => Yii::t('backend', 'Online Status'),
+                'value' => function() use($searchModel) {
+                    return $searchModel->getOnlineWithLabel();
+                },
+                'options' => [ 'style' => 'width:56px;']
             ],
 
+            'MAC',
+            'SN',
 
+
+
+            [
+                'attribute' => 'logintime',
+                'value' => function($data) {
+                    if ($data->logintime == '0000-00-00 00:00:00') {
+                        return "";
+                    }
+                    return Yii::$app->formatter->asRelativeTime($data->logintime);
+                },
+                'options' => [
+                    'style' => 'width:130px;'
+                ]
+            ],
 
             [
                 'attribute' => 'regtime',
@@ -82,20 +97,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     if ($data->duetime == '0000-00-00 00:00:00' && empty($data->contract_time)) {
                         return  Yii::t('backend', 'Indefinite');
                     }
+                    
                     return date('Y-m-d', strtotime($data->duetime));
                 },
                 'options' => [
                     'style' => 'width:100px;'
-                ]
-            ],
-
-            [
-                'attribute' => 'contract_time',
-                'value' => function($data){
-                    return Yii::t('backend', $data->contract_time);
-                },
-                'options' => [
-                    'style' => 'width:80px;'
                 ]
             ],
 
@@ -105,37 +111,12 @@ $this->params['breadcrumbs'][] = $this->title;
                  'value' => function($data) use($searchModel) {
                        return $searchModel->getUseFlagWithLabel($data->use_flag);
                  },
-                 'options' => ['style' => 'width:66px;']
+                 'options' => ['style' => 'width:76px;']
              ],
 
-            [
-                'attribute' => 'online_status',
-                'format' => 'raw',
-                'label' => Yii::t('backend', 'Online Status'),
-                'value' => function() use($searchModel) {
-                    return $searchModel->getOnlineWithLabel();
-                },
-                'options' => [ 'style' => 'width:56px;']
-            ],
-
-            [
-                'attribute' => 'ver',
-                'options' => ['style' => 'width:60px;']
-            ],
 
 
-            [
-                'attribute' => 'logintime',
-                'value' => function($data) {
-                    if ($data->logintime == '0000-00-00 00:00:00') {
-                        return "";
-                    }
-                    return date('Y-m-d H:i', strtotime($data->logintime));
-                },
-                'options' => [
-                    'style' => 'width:130px;'
-                ]
-            ],
+
 
             //',
             //'type',
