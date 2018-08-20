@@ -545,5 +545,7 @@ return [
     'Reset Sort' => '重置排序',
     'Super administrator' => '超级管理员',
     'administrator' => '管理员',
+    'set' => '设定',
+    'Live charging mode setting' => '直播收费模式设置',
     'Please assign a role to the account, otherwise it will not work properly.' => '请给帐号分配一个角色，否则无法正常使用',
 ];

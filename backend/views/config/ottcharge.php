@@ -7,7 +7,7 @@ use yii\bootstrap\ActiveForm;
 /* @var $model \backend\models\form\OttSettingForm  */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = '直播收费模式设定';
+$this->title = Yii::t('backend', 'Live charging mode setting');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="ott-price-list-index">
@@ -16,16 +16,37 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'mode')->dropDownList($model->mode_select); ?>
+    <?= $form->field($model, 'mode')->dropDownList($model->mode_select, [
+            'id' => 'mode'
+    ]); ?>
 
-    <?= $form->field($model, 'free_day')->textInput(); ?>
+    <?= $form->field($model, 'free_day')->textInput([
+            'style' => $model->mode == 0 ? "display:none" : '',
+            'id' => 'free_day'
+    ]); ?>
 
     <div class="form-group">
-        <?= Html::submitButton('设定', ['class' => 'btn btn-primary']) ?>
+        <?= Html::submitButton(Yii::t('backend', 'set'), ['class' => 'btn btn-primary']) ?>
         <?= Html::a(Yii::t('backend','Go Back'), ['ott-price-list/index'], ['class' => 'btn btn-default']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
 
 </div>
+
+<?php
+
+$js = <<<JS
+    $('#mode').change(function() {
+     
+        var val = $(this).val();
+        if (val != 0) {
+         $('#free_day').parent().show();   
+        } else {
+         $('#free_day').parent().hide();   
+        }
+    });
+JS;
+
+$js = $this->registerJs($js); ?>
 
