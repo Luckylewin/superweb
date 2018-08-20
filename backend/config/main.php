@@ -111,6 +111,7 @@ return [
             'database' => 0,
         ],
         'formatter' => [
+            'timeZone' => 'Asia/Shanghai',
             'class' => 'yii\i18n\Formatter',
             'dateFormat' => 'php:Y/m/d',
             'datetimeFormat' => 'php:Y/m/d H:i',
