@@ -239,6 +239,9 @@ class importTextForm extends \yii\base\Model
         } elseif ($channel->image != $icon && !is_null($icon)) {
             $channel->image = ($icon == 'null' ? '' : $icon);
             $channel->save(false);
+        } else if ($channel->sort != $channelSort) {
+            $channel->sort = $channelSort;
+            $channel->save(false);
         }
 
         $this->channel = $channel;
