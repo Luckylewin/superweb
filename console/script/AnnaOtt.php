@@ -29,7 +29,7 @@ class AnnaOtt extends base
      */
     public function dealOTT()
     {
-       // $this->dealLiveTV();
+        $this->dealLiveTV();
         $this->dealMiTV();
     }
 
