@@ -29,23 +29,26 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a(Yii::t('backend', 'Batch Export'), ['main-class/export','mode' => 'mainClass'], ['class' => 'btn btn-info btn-export']) ?>
     </p>
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'tableOptions' => ['class' => 'table table-hover table-bordered'],
-        "options" => ["class" => "grid-view","style"=>"overflow:auto", "id" => "grid"],
-        'rowOptions' => function($model, $key, $index, $grid) {
-            return $model->use_flag == 0 ? ['class' => 'label-red'] : ['class' => 'label-green'];
-        },
-        'columns' => [
+    <?php
 
-            ['class' => 'yii\grid\SerialColumn'],
+    try {
+        echo GridView::widget([
+            'dataProvider' => $dataProvider,
+            'tableOptions' => ['class' => 'table table-hover table-bordered'],
+            "options" => ["class" => "grid-view","style"=>"overflow:auto", "id" => "grid"],
+            'rowOptions' => function($model, $key, $index, $grid) {
+                return $model->use_flag == 0 ? ['class' => 'label-red'] : ['class' => 'label-green'];
+            },
+            'columns' => [
 
-            [
-                "class" => "yii\grid\CheckboxColumn",
-                "name" => "id",
-            ],
+                ['class' => 'yii\grid\SerialColumn'],
 
-            [
+                [
+                    "class" => "yii\grid\CheckboxColumn",
+                    "name" => "id",
+                ],
+
+                [
                     'attribute' => 'icon',
                     'options' => ['style' => 'width:100px;'],
                     'format' => ['image',['height'=>'45']],
@@ -55,44 +58,44 @@ $this->params['breadcrumbs'][] = $this->title;
                         }
                         return null;
                     }
-            ],
-            'name',
-            'zh_name',
+                ],
+                'name',
+                'zh_name',
 
-            [
-                'attribute' => 'sort',
-                'options' => ['style' => 'width:70px;'],
-                'format' => 'raw',
-                'value' => function($model) {
-                    return \yii\bootstrap\Html::textInput('sort', $model->sort, [
-                        'class' => 'form-control change-sort',
-                        'data-id' => $model->id,
-                        'old-value' => $model->sort
-                    ]);
-                }
-            ],
-            [
-                'label' => Yii::t('backend', 'List version'),
-                'format' => 'raw',
-                'value' => function($model) {
-                    $version = (new \backend\models\Cache())->getCacheVersion($model->name);
-                    if ($version) {
-                        return Html::a($version,Url::to(['main-class/list-cache', 'id' => $model->id]), [
-                                'class' => 'btn btn-link'
+                [
+                    'attribute' => 'sort',
+                    'options' => ['style' => 'width:70px;'],
+                    'format' => 'raw',
+                    'value' => function($model) {
+                        return \yii\bootstrap\Html::textInput('sort', $model->sort, [
+                            'class' => 'form-control change-sort',
+                            'data-id' => $model->id,
+                            'old-value' => $model->sort
                         ]);
                     }
-                    return '';
-                }
-            ],
-            //'icon',
-            //'icon_bg',
+                ],
+                [
+                    'label' => Yii::t('backend', 'List version'),
+                    'format' => 'raw',
+                    'value' => function($model) {
+                        $version = (new \backend\models\Cache())->getCacheVersion($model->name);
+                        if ($version) {
+                            return Html::a(Yii::$app->formatter->asRelativeTime($version),Url::to(['main-class/list-cache', 'id' => $model->id]), [
+                                'class' => 'btn btn-link'
+                            ]);
+                        }
+                        return '';
+                    }
+                ],
+                //'icon',
+                //'icon_bg',
 
-            [
-                'class'=> 'common\grid\MyActionColumn',
-                'options' => ['style' => 'width:360px;'],
-                'size' => 'btn-sm',
-                'template' => '{next}&nbsp;&nbsp;| &nbsp;&nbsp;{create-cache} {view} {update} {delete}',
-                'buttons' => [
+                [
+                    'class'=> 'common\grid\MyActionColumn',
+                    'options' => ['style' => 'width:360px;'],
+                    'size' => 'btn-sm',
+                    'template' => '{next}&nbsp;&nbsp;| &nbsp;&nbsp;{create-cache} {view} {update} {delete}',
+                    'buttons' => [
                         'next' => function($url ,$model) {
                             return Html::a('&nbsp;&nbsp;<i class="glyphicon glyphicon-th-list"></i>&nbsp;&nbsp;', ['sub-class/index', 'main-id' => $model->id], [
                                 'class' => 'btn btn-success btn-sm'
@@ -107,11 +110,16 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'data-target' => '#operate-modal',
                             ]);
                         }
+                    ]
                 ]
-            ]
 
-        ],
-    ]); ?>
+            ],
+        ]);
+    } catch (\Exception $e) {
+
+    }
+
+    ?>
 
     
 </div>
