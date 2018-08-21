@@ -151,16 +151,16 @@ class importTextForm extends \yii\base\Model
 
         foreach ($this->importData as $data)
         {
-            list($mainClassName, $subClassName, $channelName, $channelIcon, $link) = $data;
+            list($mainClassName, $subClassName, $channelName, $channelIcon, $channelSort, $link) = $data;
             //是否有算法
-            $method = isset($data[5]) ? $data[5] : '';
-            $scheme = isset($data[6]) ? $data[6] : 'all';
-            $use_flag = isset($data[7]) ? $data[7] : OttLink::AVAILABLE;
-            $decode = isset($data[8]) ? $data[8] : OttLink::SOFT_DECODE;
+            $method = isset($data[6]) ? $data[6] : '';
+            $scheme = isset($data[7]) ? $data[7] : 'all';
+            $use_flag = isset($data[8]) ? $data[8] : OttLink::AVAILABLE;
+            $decode = isset($data[9]) ? $data[9] : OttLink::SOFT_DECODE;
 
             $this->createMainClass($mainClassName);
             $this->createSubClass($subClassName);
-            $this->createChannel($channelName, $channelIcon);
+            $this->createChannel($channelName, $channelIcon, $channelSort);
             $total = $this->createLink($link, $method, $scheme ,$use_flag, $decode, $total);
         }
 
@@ -223,7 +223,7 @@ class importTextForm extends \yii\base\Model
         $this->subClass = $subClass;
     }
 
-    private function createChannel($name, $icon = null)
+    private function createChannel($name, $icon = null, $channelSort = 0)
     {
         $channel = OttChannel::find()->where(['sub_class_id' => $this->subClass->id, 'name' => $name])->one();
 
@@ -233,6 +233,7 @@ class importTextForm extends \yii\base\Model
             $channel->sub_class_id = $this->subClass->id;
             $channel->name = $name;
             $channel->keywords = $name;
+            $channel->sort = $channelSort;
             if ($icon && $icon != 'null')  $channel->image = $icon;
             $channel->save(false);
         } elseif ($channel->image != $icon && !is_null($icon)) {

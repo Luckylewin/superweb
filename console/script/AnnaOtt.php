@@ -29,15 +29,21 @@ class AnnaOtt extends base
      */
     public function dealOTT()
     {
+       // $this->dealLiveTV();
+        $this->dealMiTV();
+    }
+
+    private function dealLiveTV()
+    {
         $accounts = [
-            '287994000090' => '287994000090',
-            '287994000099' => '287994000099',
+            "http://www.hdboxtv.net:8000/get.php?username=287994000090&password=287994000090&type=m3u_plus&output=ts",
+            "http://www.hdboxtv.net:8000/get.php?username=287994000099&password=287994000099&type=m3u_plus&output=ts",
         ];
 
-        foreach ($accounts as $account => $password) {
-            self::$data = $this->download($account, $password);
+        foreach ($accounts as $url) {
+            self::$data = $this->download($url);
             $data = $this->initData();
-            
+
             // 基本数据录入
             foreach ($data as $value) {
 
@@ -52,7 +58,26 @@ class AnnaOtt extends base
                 // HD SD
                 $this->attachHDAndSD($value);
             }
-            
+
+        }
+    }
+
+    private function dealMiTV()
+    {
+        $url = "http://dns.infinitytv.xyz:8000/get.php?username=287994000026&password=287994000026&type=m3u_plus&output=ts";
+        self::$data = $this->download($url);
+        $data = $this->initData();
+
+        if ($data) {
+            // 基本数据录入
+            foreach ($data as $value) {
+                // 普通数据
+                $temp['group-title'] = 'xxx|MITV';
+                $mainClassID  = $this->_mainClass($temp);
+                $subClassID = $this->_subClass($value, $mainClassID, false);
+                $channelID = $this->_channel($value, $subClassID);
+                $this->_link($value, $channelID);
+            }
         }
     }
 
@@ -142,17 +167,19 @@ class AnnaOtt extends base
      * 二级分类
      * @param $value
      * @param $mainClassID
+     * @param $split boolean 是否需要分割符号
      * @return bool|int
      */
-    private function _subClass($value, $mainClassID)
+    private function _subClass($value, $mainClassID, $split = true)
     {
         $className = explode('|',$value['group-title']);
-        if (!isset($className[1])) {
+
+        if ($split == true && !isset($className[1])) {
             return false;
         }
 
         $subClassName = $className[0];
-        $subClass = SubClass::findOne(['name' => $subClassName]);
+        $subClass = SubClass::findOne(['name' => $subClassName, 'main_class_id' => $mainClassID]);
 
         if (is_null($subClass)) {
             $subClass = new SubClass();
@@ -189,13 +216,17 @@ class AnnaOtt extends base
            $channel->name = $value['tvg-name'];
            $channel->zh_name = $value['tvg-name'];
            $channel->keywords = $value['tvg-name'];
+           if ($value['tvg-logo']) $channel->image = $value['tvg-logo'];
            // 判断是否有HD 有的话去掉
            $alias = preg_replace('/\s*HD/', '', $value['tvg-name']);
            $channel->alias_name = $alias;
-
            $channel->save(false);
-
            $this->stdout("直播新增频道：" . $value['tvg-name'].PHP_EOL, Console::FG_BLUE);
+
+        } else if ($channel->image != $value['tvg-logo'] && !empty($value['tvg-logo'])) {
+            $channel->image = $value['tvg-logo'];
+            $channel->save(false);
+            $this->stdout("更新直播频道：" . $value['tvg-name'].PHP_EOL, Console::FG_BLUE);
         }
 
         return $channel->id;
@@ -230,21 +261,31 @@ class AnnaOtt extends base
         return $Link->id;
     }
 
-    private static function get($data)
+    private static function get($data, $default = null)
     {
         if (isset($data[0]) && !empty($data[0])) {
             return trim($data[0]);
         }
 
-        return null;
+        if (is_null($default)) {
+            return $default;
+        }
+
+        return $default;
     }
 
-    private function download($account, $password)
+    private function download($url)
     {
         $this->stdout("下载文件".PHP_EOL);
-        $data = file_get_contents("http://www.hdboxtv.net:8000/get.php?username={$account}&password={$password}&type=m3u_plus&output=ts");
-        $this->stdout("下载文件结束" . PHP_EOL);
-        return $data;
+        try {
+            $data = file_get_contents($url);
+            $this->stdout("下载文件结束" . PHP_EOL);
+            return $data;
+
+        } catch (\Exception $e) {
+            $this->stdout("下载文件失败" . PHP_EOL);
+            return false;
+        }
     }
 
     /**

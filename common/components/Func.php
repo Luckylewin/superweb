@@ -51,8 +51,14 @@ class Func
         if (empty($path)) {
             return 'null';
         }
-        
-        if (strpos($path,'http') === false && strpos($path, '/') !== 0) {
+
+        $httpPos = strpos($path,'http');
+
+        if ($httpPos === 0) {
+            return $path;
+        }
+
+        if ($httpPos === false && strpos($path, '/') !== 0) {
             return Aliyunoss::getDownloadUrl($path, 300);
         }
 

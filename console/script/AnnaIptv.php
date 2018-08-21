@@ -417,6 +417,9 @@ class AnnaIptv extends base
         } else if ($type == '电影' && $vod->vod_multiple != '0') {
             $vod->vod_multiple = 0;
             $vod->save(false);
+        } else if ($type == '电视剧' && $vod->vod_multiple == '0') {
+            $vod->vod_multiple = 1;
+            $vod->save(false);
         }
 
         return $vod;
