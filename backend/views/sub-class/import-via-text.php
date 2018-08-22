@@ -7,8 +7,8 @@ use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $model common\models\SubClass */
 
-$this->title = '批量导入';
-$this->params['breadcrumbs'][] = ['label' => '返回', 'url' => Url::to(['main-class/index'])];
+$this->title = Yii::t('backend', 'Batch Import');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('backend', 'Go Back'), 'url' => Url::to(['main-class/index'])];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="sub-class-create">
@@ -57,7 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ]) ?>
 
         <div class="form-group">
-            <?= Html::submitButton('提交', ['class' => 'btn btn-success']) ?>
+            <?= Html::submitButton(Yii::t('backend', 'Submit'), ['class' => 'btn btn-success']) ?>
             <?= Html::a(Yii::t('backend','Go Back'), ['main-class/index'], ['class' => 'btn btn-default']) ?>
         </div>
 

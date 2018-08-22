@@ -75,4 +75,28 @@ class Func
 
         return $url;
     }
+
+    /**
+     * 设置文件下载请求头
+     */
+    public static function setDownloadFileHeader($filename)
+    {
+        $response = Yii::$app->response;
+        $response->format = $response::FORMAT_RAW;
+
+        $response->headers->set('Content-Type', 'application/text');
+        $response->headers->set('Content-Disposition', "attachment;filename=" . $filename);
+        $response->headers->set('Cache-Control', 'max-age=0');
+    }
+
+    public static function setDownloadZipHeader($filepath, $filename)
+    {
+        $response = Yii::$app->response;
+        $response->format = $response::FORMAT_RAW;
+
+        header('Content-Type: application/zip;charset=utf8');
+        header('Content-disposition: attachment; filename=' . $filename);
+        header('Content-Length: ' . filesize($filepath));
+        readfile($filepath);
+    }
 }

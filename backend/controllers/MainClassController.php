@@ -3,10 +3,15 @@
 namespace backend\controllers;
 
 use backend\components\MyRedis;
+use common\components\Func;
+use http\Exception\InvalidArgumentException;
 use Yii;
 use common\models\MainClass;
 use yii\data\ActiveDataProvider;
 use yii\data\ArrayDataProvider;
+use yii\helpers\ArrayHelper;
+use yii\helpers\FileHelper;
+use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
@@ -219,19 +224,85 @@ class MainClassController extends BaseController
         }
 
         if (!empty($str)) {
-            $response = Yii::$app->response;
-            $response->format = $response::FORMAT_RAW;
-
-            $response->headers->set('Content-Type', 'application/text');
-            $response->headers->set('Content-Disposition', "attachment;filename=" . "OTT列表导出文件_".date('YmdHi') . '.txt');
-            $response->headers->set('Cache-Control', 'max-age=0');
-
+            Func::setDownloadHeader("OTT列表导出文件_" . date('YmdHi') . '.txt');
             return $str;
         }
 
         $this->setFlash('error', '没有数据可导出');
         return $this->redirect(Yii::$app->request->referrer);
 
+    }
+
+    /**
+     * 导出频道的图标
+     */
+    public function actionExportImage($main_class_id)
+    {
+        ini_set('max_execution_time','1800');
+
+        $main_class_id = explode(',', $main_class_id);
+        if (empty($main_class_id)) {
+            throw new BadRequestHttpException('错误的请求');
+        }
+
+        $data = [];
+        foreach ($main_class_id as $id) {
+           $data[] = MainClass::find()->where(['in', 'a.id', $id])
+                                    ->alias('a')
+                                    ->with([
+                                        'sub' => function($query) {
+                                            return $query->with('ownChannel');
+                                        }])
+                                    ->asArray()
+                                    ->all();
+        }
+
+        $images = [];
+        if (!empty($data)) {
+            foreach ($data as $value) {
+                foreach ($value as $val) {
+                    foreach ($val['sub'] as $sub) {
+                        foreach ($sub['ownChannel'] as $channel) {
+
+                            if ($channel['image']) $images[] = ['name' => $channel['name'] , 'path' => $channel['image']];
+                        }
+                    }
+                }
+            }
+        }
+
+        $zipFile = tempnam('/tmp/', '');
+        $savePath = '/tmp/export';
+
+        !is_dir($savePath) && FileHelper::createDirectory($savePath);
+
+        // 下载远程文件
+        array_walk($images, function(&$v, $k) use ($savePath) {
+
+            if ($k !=0 && $k % 5 == 0) sleep(1);
+
+            $downloadPath = $savePath . '/' . $v['name'] . strstr(basename($v['path']), '.', false);
+
+            $v['path'] = Func::getAccessUrl($v['path'], 3600);
+
+            if (file_exists($downloadPath) == false) {
+                file_put_contents($downloadPath, file_get_contents($v['path']));
+            }
+            $v['path'] = $downloadPath;
+        });
+
+        $zip = new \ZipArchive();
+        $zip->open($zipFile,\ZipArchive::CREATE);   //打开压缩包
+
+        foreach($images as $file){
+            $zip->addFile($file['path'], basename($file['path']));   //向压缩包中添加文件
+        }
+
+        $zip->close();  //关闭压缩包
+
+        FileHelper::removeDirectory($savePath); // 删除下载的文件
+
+        Func::setDownloadZipHeader($zipFile, '频道图片导出.zip');
     }
 
 }

@@ -274,6 +274,12 @@ class importTextForm extends \yii\base\Model
 
             $ottLink->save(false);
             $total++;
+        } else {
+            if($ottLink->use_flag != $use_flag)  $ottLink->use_flag = $use_flag;
+            if($ottLink->sort != $link_sort)  $ottLink->sort = $link_sort;
+            if($ottLink->decode != $decode)  $ottLink->decode = $decode;
+            if($ottLink->method != $method)  $ottLink->method = $method;
+            $ottLink->save(false);
         }
 
         return $total;

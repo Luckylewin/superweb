@@ -25,6 +25,10 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="main-class-index">
     <p>
         <?= Html::a(Yii::t('backend', 'Create'), ['create'], ['class' => 'btn btn-success']) ?>
+
+        &nbsp;&nbsp;
+
+        <?= Html::a(Yii::t('backend', 'Export Image'), ['main-class/export-image'], ['class' => 'btn btn-primary btn-export-image']) ?>
         <?= Html::a(Yii::t('backend', 'Batch Import'), ['sub-class/import-via-text','mode' => 'mainClass'], ['class' => 'btn btn-info']) ?>
         <?= Html::a(Yii::t('backend', 'Batch Export'), ['main-class/export','mode' => 'mainClass'], ['class' => 'btn btn-info btn-export']) ?>
     </p>
@@ -171,13 +175,24 @@ $this->registerJs($requestJs);
 ?>
 
 <?php
+
 $exportUrl = Url::to(['main-class/export', 'id' => '']);
+$exportImageUrl = Url::to(['main-class/export-image', 'main_class_id' => '']);
+
 $js =<<<JS
     $(document).on('click', '.btn-export', function () {
-    var keys = $("#grid").yiiGridView("getSelectedRows");
-    window.location.href = '{$exportUrl}' + keys;
-    return false;
+      var keys = $("#grid").yiiGridView("getSelectedRows");
+      window.location.href = '{$exportUrl}' + keys;
+      return false;
+    });
+    
+    $(document).on('click', '.btn-export-image', function () {
+      var keys = $("#grid").yiiGridView("getSelectedRows");
+      window.location.href = '{$exportImageUrl}' + keys;
+      return false;
   });
+    
+
 JS;
 
 
