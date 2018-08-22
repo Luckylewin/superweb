@@ -30,7 +30,7 @@ use common\models\OttLink;
         </div>
 
         <div class="col-md-4">
-            <?= $form->field($model, 'sort')->textInput(['value' => 0]) ?>
+            <?= $form->field($model, 'sort')->textInput() ?>
         </div>
 
         <div class="col-md-4">
@@ -42,7 +42,7 @@ use common\models\OttLink;
         </div>
 
         <div class="col-md-4">
-            <?= $form->field($model, 'method')->textInput(['value' => 'null']) ?>
+            <?= $form->field($model, 'method')->textInput() ?>
         </div>
 
         <div class="col-md-4">

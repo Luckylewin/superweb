@@ -60,9 +60,10 @@ class OttLink extends \yii\db\ActiveRecord
             [['source'], 'string', 'max' => 30],
             [['use_flag', 'script_deal', 'definition', 'decode'], 'string', 'max' => 1],
             [['method'], 'string', 'max' => 20],
-            [['use_flag'], 'default', 'value' => 1],
+            [['use_flag','sort'], 'default', 'value' => 1],
             ['format','default', 'value' => '0'],
-            ['scheme_id', 'safe']
+            ['scheme_id', 'safe'],
+            ['method', 'default', 'null']
         ];
     }
 
