@@ -18,7 +18,7 @@ return [
 
         'cache' => [
             'class' => 'yii\caching\FileCache',
-            'cachePath' => '@storage/runtime/cache'
+            'cachePath' => '@webroot/storage/runtime/cache'
         ],
 
         //资源包管理
