@@ -17,14 +17,14 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="list-group">
             <a href="#" class="list-group-item active">
                 <h4 class="list-group-item-heading">
-                    模式一 (一级分类,二级分类,频道名称,频道图标,排序,链接,算法,可用标志,硬软解标志)
+                    模式一 (一级分类,二级分类,频道名称,频道图标,排序,链接,[算法,可用标志,硬软解标志,链接排序])
                 </h4>
             </a>
             <a href="#" class="list-group-item">
                 <p class="list-group-item-heading">
                     1) 不带方案号默认支持全部<br>
-                    vn,vtv,vtv1,http://topthinker.oss-cn-hongkong.aliyuncs.com/channel/5b25dd9c859a2.png,123,http://ott.realplaytv.net:12388/?header=hplus&name=vtv1&cdn=1,null,1,1<br>
-                    vn,vtv,vtv1,http://topthinker.oss-cn-hongkong.aliyuncs.com/channel/5b25dd9c859a2.png,123,https://tvplay.vn/truyen-hinh-70.htm,local_tvplay,1,1
+                    vn,vtv,vtv1,http://topthinker.oss-cn-hongkong.aliyuncs.com/channel/5b25dd9c859a2.png,123,http://ott.realplaytv.net:12388/?header=hplus&name=vtv1&cdn=1,null,1,1,2<br>
+                    vn,vtv,vtv1,http://topthinker.oss-cn-hongkong.aliyuncs.com/channel/5b25dd9c859a2.png,123,https://tvplay.vn/truyen-hinh-70.htm,local_tvplay,1,1,2
                 </p>
                 <br/>
                 <p class="list-group-item-heading">
