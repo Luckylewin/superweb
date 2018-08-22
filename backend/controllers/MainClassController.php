@@ -335,7 +335,7 @@ class MainClassController extends BaseController
         if (empty($images)) {
             return false;
         }
-        
+
         $savePath = '/tmp/export';
         if (!is_dir($savePath)) FileHelper::createDirectory($savePath);
         array_walk($images, function(&$v, $k) use ($savePath) {

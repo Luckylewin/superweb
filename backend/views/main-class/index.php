@@ -213,7 +213,7 @@ $js =<<<JS
                       $.getJSON(queryUrl, function(e) {
                            if (e.status) {
                               clearInterval(timer);
-                              $('#download-modal').hide(); 
+                              $('#download-modal').modal('hide'); 
                               window.location.href = e.url;
                            } 
                       }); 
