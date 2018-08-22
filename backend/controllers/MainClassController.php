@@ -246,8 +246,8 @@ class MainClassController extends BaseController
         $zip->open($zipFile,\ZipArchive::CREATE);   //打开压缩包
 
         $task = Yii::$app->cache->get("queue-" . $queue_id);
-        $task_id = $task['main_class_id'];
-        $images = $this->getImagesPath($task_id);
+        $images = $this->getImagesPath($task['main_class_id']);
+
         if (empty($images)) {
             $this->setFlash('error', '导出数据不存在');
             $this->redirect(Yii::$app->request->referrer);
@@ -299,6 +299,7 @@ class MainClassController extends BaseController
 
         $main_class_id = explode(',', $main_class_id);
         $images = $this->getImagesPath($main_class_id);
+        
         if (empty($images)) {
             return ['status' => false];
         }
