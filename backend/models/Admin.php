@@ -92,8 +92,11 @@ class Admin extends ActiveRecord implements IdentityInterface
      * 获取账号信息
      * @param  [int] $id [后台用户id]
      */
-    public static function findIdentity($id) {
-        return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
+    public static function findIdentity($id)
+    {
+        return Yii::$app->cache->getOrSet('sys-admin', function() use ($id) {
+            return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
+        }, 3600);
     }
 
     public static function findIdentityByAccessToken($token, $type = null) {

@@ -11,37 +11,50 @@ use yii\helpers\ArrayHelper;
 //class AccessControl extends \yii\base\ActionFilter {
 class AccessControl extends \yii\filters\AccessControl {
 
-    /**
-     * @param \yii\base\Action $action
-     * @return bool
-     */
+
     public function beforeAction($action)
     {
         //-----菜单权限检查-----
         $user = $this->user;
         $actionId = $action->getUniqueId();
-        $allLimitedPermission = ArrayHelper::getColumn(Yii::$app->authManager->getPermissions(), 'ruleName');
+
+        $permissions = Yii::$app->cache->getOrSet('sys-permissions', function() {
+            return Yii::$app->authManager->getPermissions();
+        });
+        $allLimitedPermission = ArrayHelper::getColumn($permissions, 'ruleName');
 
         foreach ($this->rules as $i => $rule) {
 
             if (in_array($action->id, $rule->actions)) break;
             if(!Yii::$app->user->isGuest && Yii::$app->user->identity->username == 'admin') {
-                $this->rules[] = Yii::createObject(array_merge($this->ruleConfig, [
-                    'actions' => [$action->id],
-                    'allow' => true,
-                ]));
+                try {
+                    $this->rules[] = Yii::createObject(array_merge($this->ruleConfig, [
+                        'actions' => [$action->id],
+                        'allow' => true,
+                    ]));
+                }catch (\Exception $e) {
+
+                }
 
             } else if (array_key_exists($actionId, $allLimitedPermission) && Yii::$app->user->can($actionId) == false) {
-                $this->rules[] = Yii::createObject(array_merge($this->ruleConfig, [
-                    'actions' => [$action->id],
-                    'allow' => false,
-                ]));
+                try {
+                    $this->rules[] = Yii::createObject(array_merge($this->ruleConfig, [
+                        'actions' => [$action->id],
+                        'allow' => false,
+                    ]));
+                } catch (\Exception $e) {
+
+                }
 
             } else {
-                $this->rules[] = Yii::createObject(array_merge($this->ruleConfig, [
-                    'actions' => [$action->id],
-                    'allow' => true,
-                ]));
+                try {
+                    $this->rules[] = Yii::createObject(array_merge($this->ruleConfig, [
+                        'actions' => [$action->id],
+                        'allow' => true,
+                    ]));
+                } catch (\Exception $e) {
+
+                }
             }
         }
 

@@ -61,7 +61,11 @@ class BaseController extends Controller
     public function init()
     {
         parent::init();
-        Yii::$app->params['basic'] = Config::getConfigs('basic');
+
+        Yii::$app->params['basic'] = Yii::$app->cache->getOrSet('basic', function () {
+            return Config::getConfigs('basic');
+        });
+
         return true;
     }
 

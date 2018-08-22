@@ -9,6 +9,8 @@ use backend\models\SysClient;
 use Yii;
 
 use yii\bootstrap\ActiveForm;
+use yii\caching\DbDependency;
+use yii\caching\TagDependency;
 use yii\web\Response;
 use backend\models\Mac;
 use backend\models\search\MacSearch;

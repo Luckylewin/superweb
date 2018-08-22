@@ -94,7 +94,7 @@ return [
             'password' => '12345678',
             'charset' => 'utf8',
             'tablePrefix' => 'yii2_',
-            'enableSchemaCache' => false
+            'enableSchemaCache' => true
         ],
 
         //阿里云组件

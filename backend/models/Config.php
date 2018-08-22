@@ -50,7 +50,8 @@ class Config extends \yii\db\ActiveRecord
         ];
     }
 
-    public static function getConfigs($keyid) {
+    public static function getConfigs($keyid)
+    {
         $configs = self::find()->where(['keyid' => $keyid])->asArray()->one();
         return json_decode($configs['data'], true);
     }

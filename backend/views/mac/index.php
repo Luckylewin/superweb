@@ -20,119 +20,122 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php Pjax::begin(); ?>
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'pager' => [
+    <?php
+
+    try {
+        echo GridView::widget([
+            'dataProvider' => $dataProvider,
+            'pager' => [
                 'class' => 'common\widgets\goPager',
                 'firstPageLabel' => Yii::t('backend', 'First Page'),
                 'lastPageLabel' => Yii::t('backend', 'Last Page'),
                 'go' => true
-        ],
-        "options" => ["class" => "grid-view","style"=>"overflow:auto", "id" => "grid"],
+            ],
+            "options" => ["class" => "grid-view","style"=>"overflow:auto", "id" => "grid"],
 
-        'columns' => [
-            [
+            'columns' => [
+                [
                     'class' => 'yii\grid\SerialColumn',
                     'options' => [
                         'style' => 'width:30px;'
                     ],
-            ],
+                ],
 
 
-            [
+                [
                     'class' => 'yii\grid\CheckboxColumn',
                     'name' => 'MAC',
                     'options' => [
                         'style' => 'width:30px;'
                     ],
-            ],
+                ],
 
-            [
-                'attribute' => 'online_status',
-                'format' => 'raw',
-                'label' => Yii::t('backend', 'Online Status'),
-                'value' => function() use($searchModel) {
-                    return $searchModel->getOnlineWithLabel();
-                },
-                'options' => [ 'style' => 'width:56px;']
-            ],
+                [
+                    'attribute' => 'online_status',
+                    'format' => 'raw',
+                    'label' => Yii::t('backend', 'Online Status'),
+                    'value' => function() use($searchModel) {
+                        return $searchModel->getOnlineWithLabel();
+                    },
+                    'options' => [ 'style' => 'width:56px;']
+                ],
 
-            'MAC',
-            'SN',
-
-
-
-            [
-                'attribute' => 'logintime',
-                'value' => function($data) {
-                    if ($data->logintime == '0000-00-00 00:00:00') {
-                        return Yii::t('backend', 'no record');
-                    }
-                    return Yii::$app->formatter->asRelativeTime(strtotime($data->logintime));
-                },
-                'options' => [
-                    'style' => 'width:130px;'
-                ]
-            ],
-
-            [
-                'attribute' => 'regtime',
-                'value' => function($data) {
-                    if ($data->regtime == '0000-00-00 00:00:00') {
-                        return "-";
-                    }
-                    return date('Y-m-d', strtotime($data->regtime));
-                },
-                'options' => [
-                    'style' => 'width:90px;'
-                ]
-            ],
-
-            [
-                'attribute' => 'duetime',
-                'value' => function($data) {
-                    if ($data->use_flag == 1) {
-                        return Yii::t('backend', 'Unused');
-                    }
-
-                    if ($data->duetime == '0000-00-00 00:00:00' && empty($data->contract_time)) {
-                        return  Yii::t('backend', 'Indefinite');
-                    } else if($data->duetime == '0000-00-00 00:00:00') {
-                       return '-';
-                    } else {
-                        return date('Y-m-d', strtotime($data->duetime));
-                    }
-                    
-
-                },
-                'options' => [
-                    'style' => 'width:100px;'
-                ]
-            ],
-
-            [
-                 'attribute' => 'use_flag',
-                 'format' => 'raw',
-                 'value' => function($data) use($searchModel) {
-                       return $searchModel->getUseFlagWithLabel($data->use_flag);
-                 },
-                 'options' => ['style' => 'width:76px;']
-             ],
+                'MAC',
+                'SN',
 
 
 
+                [
+                    'attribute' => 'logintime',
+                    'value' => function($data) {
+                        if ($data->logintime == '0000-00-00 00:00:00') {
+                            return Yii::t('backend', 'no record');
+                        }
+                        return Yii::$app->formatter->asRelativeTime(strtotime($data->logintime));
+                    },
+                    'options' => [
+                        'style' => 'width:130px;'
+                    ]
+                ],
+
+                [
+                    'attribute' => 'regtime',
+                    'value' => function($data) {
+                        if ($data->regtime == '0000-00-00 00:00:00') {
+                            return "-";
+                        }
+                        return date('Y-m-d', strtotime($data->regtime));
+                    },
+                    'options' => [
+                        'style' => 'width:90px;'
+                    ]
+                ],
+
+                [
+                    'attribute' => 'duetime',
+                    'value' => function($data) {
+                        if ($data->use_flag == 1) {
+                            return Yii::t('backend', 'Unused');
+                        }
+
+                        if ($data->duetime == '0000-00-00 00:00:00' && empty($data->contract_time)) {
+                            return  Yii::t('backend', 'Indefinite');
+                        } else if($data->duetime == '0000-00-00 00:00:00') {
+                            return '-';
+                        } else {
+                            return date('Y-m-d', strtotime($data->duetime));
+                        }
 
 
-            //',
-            //'type',
-            //'duetime',
-            //',
+                    },
+                    'options' => [
+                        'style' => 'width:100px;'
+                    ]
+                ],
 
-            [
-                'class' => 'common\grid\MyActionColumn',
-                'header' => Yii::t('backend', 'Operation'),
-                'template' => '{renew}&nbsp{view}&nbsp;{update}&nbsp;{delete}',
-                'buttons' => [
+                [
+                    'attribute' => 'use_flag',
+                    'format' => 'raw',
+                    'value' => function($data) use($searchModel) {
+                        return $searchModel->getUseFlagWithLabel($data->use_flag);
+                    },
+                    'options' => ['style' => 'width:76px;']
+                ],
+
+
+
+
+
+                //',
+                //'type',
+                //'duetime',
+                //',
+
+                [
+                    'class' => 'common\grid\MyActionColumn',
+                    'header' => Yii::t('backend', 'Operation'),
+                    'template' => '{renew}&nbsp{view}&nbsp;{update}&nbsp;{delete}',
+                    'buttons' => [
                         'renew' => function($url, $model, $key) {
                             $title = Yii::t('backend', 'Renewal');
                             $options = [
@@ -144,12 +147,17 @@ $this->params['breadcrumbs'][] = $this->title;
 
                             return Html::a($title, \yii\helpers\Url::to(['renew/renew','mac'=>$model->MAC]), $options);
                         }
-                ],
+                    ],
 
-              
+
+                ],
             ],
-        ],
-    ]); ?>
+        ]);
+    }catch (\Exception $e) {
+
+    }
+
+     ?>
     <?php Pjax::end(); ?>
 
     <div>
