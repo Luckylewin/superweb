@@ -63,7 +63,7 @@ class OttLink extends \yii\db\ActiveRecord
             [['use_flag','sort'], 'default', 'value' => 1],
             ['format','default', 'value' => '0'],
             ['scheme_id', 'safe'],
-            ['method', 'default', 'null']
+            ['method', 'default', 'value' => 'null'],
         ];
     }
 
