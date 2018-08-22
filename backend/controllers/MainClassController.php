@@ -299,7 +299,6 @@ class MainClassController extends BaseController
 
         $main_class_id = explode(',', $main_class_id);
         $images = $this->getImagesPath($main_class_id);
-        
         if (empty($images)) {
             return ['status' => false];
         }
@@ -311,7 +310,7 @@ class MainClassController extends BaseController
         ]));
 
         // 记录下此次导出
-        Yii::$app->cache->set("queue-" . $queue_id, ['main_class_id' => $main_class_id], 86400);
+        Yii::$app->cache->set("queue-" . $queue_id, ['main_class_id' => $main_class_id]);
 
         return [
             'queue_id' => $queue_id,

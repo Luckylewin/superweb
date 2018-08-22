@@ -33,121 +33,124 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js'
 
     </p>
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'tableOptions' => [
-                'class' => 'table table-bordered table-hover',
-        ],
-        'options' => ["class" => "grid-view","style"=>"overflow:auto", "id" => "grid"],
-        'columns' => [
-            [
-                "class" => "yii\grid\CheckboxColumn",
-                "name" => "id",
-            ],
+    <?php
 
-            ['class' => 'yii\grid\SerialColumn'],
+        try {
+            echo GridView::widget([
+                'dataProvider' => $dataProvider,
+                'filterModel' => $searchModel,
+                'tableOptions' => [
+                    'class' => 'table table-bordered table-hover',
+                ],
+                'options' => ["class" => "grid-view","style"=>"overflow:auto", "id" => "grid"],
+                'columns' => [
+                    [
+                        "class" => "yii\grid\CheckboxColumn",
+                        "name" => "id",
+                    ],
 
-            [
-                'attribute' => 'image',
-                'format' => ['image',['width'=>80,'height'=>60]],
-                'options' => ['style' => 'width:100px;'],
-                'value' => function($model) {
-                    return \common\components\Func::getAccessUrl($model->image);
-                }
-            ],
-            //'id',
-            //'sub_class_id',
-            [
-                'attribute' => 'name',
-                'contentOptions' => ['class' => 'ajax-td'],
-                'options' => ['style' => 'min-width:120px;'],
-                'format' => 'raw',
-                'value' => function($model) {
-                    $str =  Html::textInput('name', $model->name, [
-                        'class' => 'form-control ajax-update',
-                        'field' => 'name',
-                        'data-id' => $model->id,
-                        'old-value' => $model->name
-                    ]);
-                    return $str = "<div class='text'>{$model->name}</div>" . "<div class='input' style='display: none'>$str</div>";
-                }
-            ],
-            [
-                'attribute' => 'zh_name',
-                'contentOptions' => ['class' => 'ajax-td'],
-                'options' => ['style' => 'min-width:120px;'],
-                'format' => 'raw',
-                'value' => function($model) {
-                    $str =  Html::textInput('sort', $model->zh_name, [
-                        'class' => 'form-control ajax-update',
-                        'field' => 'zh_name',
-                        'data-id' => $model->id,
-                        'old-value' => $model->zh_name
-                    ]);
-                    return $str = "<div class='text'>{$model->zh_name}</div>" . "<div class='input' style='display: none'>$str</div>";
-                }
-            ],
+                    ['class' => 'yii\grid\SerialColumn'],
 
-            [
-                'attribute' => 'keywords',
-                'contentOptions' => ['class' => 'ajax-td'],
-                'options' => ['style' => 'min-width:120px;'],
-                'format' => 'raw',
-                'value' => function($model) {
-                    $str =  Html::textInput('sort', $model->keywords, [
-                        'class' => 'form-control ajax-update',
-                        'field' => 'keywords',
-                        'data-id' => $model->id,
-                        'old-value' => $model->keywords
-                    ]);
-                    return $str = "<div class='text'>{$model->keywords}</div>" . "<div class='input' style='display: none'>$str</div>";
-                }
-            ],
-            [
-                'attribute' => 'sort',
-                'contentOptions' => ['class' => 'ajax-td'],
-                'options' => ['style' => 'width:70px;'],
-                'format' => 'raw',
-                'value' => function($model) {
-                    return \yii\bootstrap\Html::textInput('sort', $model->sort, [
-                        'class' => 'form-control ajax-update',
-                        'data-id' => $model->id,
-                        'field' => 'sort',
-                        'old-value' => $model->sort
-                    ]);
-                }
-            ],
-            [
-                'attribute' => 'use_flag',
-                'contentOptions' => ['class' => 'ajax-td'],
-                'format' => 'raw',
-                'value' => function($model) {
-                    $icon =  $model->use_flag ? '<i style="color: #23c6c8;font-size: large" class="glyphicon glyphicon-ok-circle"></i>' : '<i style="color: #953b39;font-size: large" class="glyphicon glyphicon-remove-circle"></i>';
-                    $dropDownList = Html::dropDownList('use_flag', $model->use_flag, [Yii::t('backend', 'Unavailable'), Yii::t('backend', 'Available')] , [
-                        'class' => 'form-control ajax-update',
-                        'field' => 'use_flag',
-                        'data-id' => $model->id,
-                        'old-value' => $model->use_flag,
-                        'style' => 'width:120px;margin:0 auto;'
-                    ]);
-                    return $str = "<div class='text'>{$icon}</div>" . "<div class='input' style='display: none'>{$dropDownList}</div>";
-                }
-            ],
-            'channel_number',
-            //'alias_name',
+                    [
+                        'attribute' => 'image',
+                        'format' => ['image',['width'=>80,'height'=>60]],
+                        'options' => ['style' => 'width:100px;'],
+                        'value' => function($model) {
+                            return \common\components\Func::getAccessUrl($model->image);
+                        }
+                    ],
+                    //'id',
+                    //'sub_class_id',
+                    [
+                        'attribute' => 'name',
+                        'contentOptions' => ['class' => 'ajax-td'],
+                        'options' => ['style' => 'min-width:120px;'],
+                        'format' => 'raw',
+                        'value' => function($model) {
+                            $str =  Html::textInput('name', $model->name, [
+                                'class' => 'form-control ajax-update',
+                                'field' => 'name',
+                                'data-id' => $model->id,
+                                'old-value' => $model->name
+                            ]);
+                            return $str = "<div class='text'>{$model->name}</div>" . "<div class='input' style='display: none'>$str</div>";
+                        }
+                    ],
+                    [
+                        'attribute' => 'zh_name',
+                        'contentOptions' => ['class' => 'ajax-td'],
+                        'options' => ['style' => 'min-width:120px;'],
+                        'format' => 'raw',
+                        'value' => function($model) {
+                            $str =  Html::textInput('sort', $model->zh_name, [
+                                'class' => 'form-control ajax-update',
+                                'field' => 'zh_name',
+                                'data-id' => $model->id,
+                                'old-value' => $model->zh_name
+                            ]);
+                            return $str = "<div class='text'>{$model->zh_name}</div>" . "<div class='input' style='display: none'>$str</div>";
+                        }
+                    ],
 
-            [
-                    'class' => 'common\grid\MyActionColumn',
-                    'size' => 'btn-sm',
-                    'template' => '{channel} &nbsp;|&nbsp;{push-recommend} {push-banner} {view} {update} {delete}',
-                    'buttons' => [
+                    [
+                        'attribute' => 'keywords',
+                        'contentOptions' => ['class' => 'ajax-td'],
+                        'options' => ['style' => 'min-width:120px;'],
+                        'format' => 'raw',
+                        'value' => function($model) {
+                            $str =  Html::textInput('sort', $model->keywords, [
+                                'class' => 'form-control ajax-update',
+                                'field' => 'keywords',
+                                'data-id' => $model->id,
+                                'old-value' => $model->keywords
+                            ]);
+                            return $str = "<div class='text'>{$model->keywords}</div>" . "<div class='input' style='display: none'>$str</div>";
+                        }
+                    ],
+                    [
+                        'attribute' => 'sort',
+                        'contentOptions' => ['class' => 'ajax-td'],
+                        'options' => ['style' => 'width:70px;'],
+                        'format' => 'raw',
+                        'value' => function($model) {
+                            return \yii\bootstrap\Html::textInput('sort', $model->sort, [
+                                'class' => 'form-control ajax-update',
+                                'data-id' => $model->id,
+                                'field' => 'sort',
+                                'old-value' => $model->sort
+                            ]);
+                        }
+                    ],
+                    [
+                        'attribute' => 'use_flag',
+                        'contentOptions' => ['class' => 'ajax-td'],
+                        'format' => 'raw',
+                        'value' => function($model) {
+                            $icon =  $model->use_flag ? '<i style="color: #23c6c8;font-size: large" class="glyphicon glyphicon-ok-circle"></i>' : '<i style="color: #953b39;font-size: large" class="glyphicon glyphicon-remove-circle"></i>';
+                            $dropDownList = Html::dropDownList('use_flag', $model->use_flag, [Yii::t('backend', 'Unavailable'), Yii::t('backend', 'Available')] , [
+                                'class' => 'form-control ajax-update',
+                                'field' => 'use_flag',
+                                'data-id' => $model->id,
+                                'old-value' => $model->use_flag,
+                                'style' => 'width:120px;margin:0 auto;'
+                            ]);
+                            return $str = "<div class='text'>{$icon}</div>" . "<div class='input' style='display: none'>{$dropDownList}</div>";
+                        }
+                    ],
+                    'channel_number',
+                    //'alias_name',
+
+                    [
+                        'class' => 'common\grid\MyActionColumn',
+                        'size' => 'btn-sm',
+                        'template' => '{channel} &nbsp;|&nbsp;{push-recommend} {push-banner} {view} {update} {delete}',
+                        'buttons' => [
                             'channel' => function($url, $model, $key) {
                                 return Html::a("&nbsp;&nbsp;<i class='glyphicon glyphicon-link'></i>". Yii::t('backend', 'Link')."&nbsp;&nbsp;", null, [
-                                        'class' => 'btn btn-success btn-sm load-link',
-                                        'data-toggle' => 'modal',
-                                        'data-target' => '#links-modal',
-                                        'data-id' => $model->id,
+                                    'class' => 'btn btn-success btn-sm load-link',
+                                    'data-toggle' => 'modal',
+                                    'data-target' => '#links-modal',
+                                    'data-id' => $model->id,
                                 ]);
                             },
                             'push-banner' => function($url, $model, $key) {
@@ -162,11 +165,16 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js'
                                     'class' => 'btn btn-sm ' . $class
                                 ]);
                             }
+                        ],
+                        'options' => [ 'style' => 'width:350px;']
                     ],
-                    'options' => [ 'style' => 'width:350px;']
-            ],
-        ],
-    ]); ?>
+                ],
+            ]);
+        }  catch (\Exception $e) {
+
+        }
+
+    ?>
 
 </div>
 
@@ -215,7 +223,7 @@ $requestJs=<<<JS
          
         
         $.getJSON('{$requestUrl}', {channel_id:$(this).attr('data-id')}, function(data) {
-            var table = '<table class="table table-bordered"><thead><tr><th style="width:32%;"><i class="fa fa-list-alt"></th><th style="width:30px;"><i class="fa fa-dot-circle-o"></th><th style="width:100px;"><i class="fa fa-link"></th><th width="50px"><i class="fa fa-key"></th><th width="50px"><i class="fa fa-tv"></i></th><th width="4px"><i class="fa fa-photo"></th><th width="50px"><i class="fa fa-flag"></i></th><th style="width:280px;"><i class="fa fa-cog fa-fw"></th></tr></thead><tbody>';
+            var table = '<table class="table table-bordered"><thead><th style="width:30px;"><i class="fa fa-dot-circle-o"></th><th><i class="fa fa-link"></th><th width="50px"><i class="fa fa-key"></th><th width="50px"><i class="fa fa-tv"></i></th><th width="4px"><i class="fa fa-photo"></th><th width="50px"><i class="fa fa-flag"></i></th><th style="width:280px;"><i class="fa fa-cog fa-fw"></th></tr></thead><tbody>';
             var tr = '';
             
             $.each(data,function(){
@@ -233,7 +241,7 @@ $requestJs=<<<JS
                         }
                     })
                     tr += '<tr  link-id="' +  $(this).attr('id')  + '">';
-                    tr += '<td style="vertical-align:middle;">' +schemeString + '</td>';
+                    // tr += '<td style="vertical-align:middle;">' +schemeString + '</td>';
                     tr += '<td style="vertical-align:middle;">' + $(this).attr('source') + '</td>';
                     tr += '<td style="word-wrap:break-word;max-width:150px;">' + $(this).attr('link') + '</td>';
                     tr += '<td style="vertical-align:middle;">' + $(this).attr('method') + '</td>';
