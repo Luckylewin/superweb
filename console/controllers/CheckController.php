@@ -20,7 +20,7 @@ class CheckController extends Controller
 {
     public $date;
 
-    public function options()
+    public function options($actionID)
     {
         return ['date','message'];
     }

@@ -120,4 +120,31 @@ class MainClass extends \yii\db\ActiveRecord
     {
         return ArrayHelper::map(self::find()->all(), 'id', 'name');
     }
+
+    public static function getSelectedChannelImage($main_class_id)
+    {
+        foreach ($main_class_id as $id) {
+            $data[] = static::find()->where(['in', 'a.id', $id])
+                                    ->alias('a')
+                                    ->with('subChannel')
+                                    ->asArray()
+                                    ->all();
+        }
+
+        $images = [];
+        if (!empty($data)) {
+            foreach ($data as $value) {
+                foreach ($value as $val) {
+                    foreach ($val['subChannel'] as $channel) {
+                        if ($channel['image']) $images[] = ['name' => $channel['name'] , 'path' => $channel['image']];
+                    }
+                }
+            }
+        }
+
+        return $images;
+    }
+
+
+
 }

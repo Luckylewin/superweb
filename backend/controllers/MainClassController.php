@@ -4,7 +4,9 @@ namespace backend\controllers;
 
 use backend\components\MyRedis;
 use common\components\Func;
+use console\queues\DownloadJob;
 use http\Exception\InvalidArgumentException;
+use http\Url;
 use Yii;
 use common\models\MainClass;
 use yii\data\ActiveDataProvider;
@@ -234,75 +236,112 @@ class MainClassController extends BaseController
     }
 
     /**
-     * 导出频道的图标
+     * 下载zip文件
+     * @param $queue_id
      */
-    public function actionExportImage($main_class_id)
+    public function actionDownloadZip($queue_id)
     {
-        ini_set('max_execution_time','1800');
-
-        $main_class_id = explode(',', $main_class_id);
-        if (empty($main_class_id)) {
-            throw new BadRequestHttpException('错误的请求');
-        }
-
-        $data = [];
-        foreach ($main_class_id as $id) {
-           $data[] = MainClass::find()->where(['in', 'a.id', $id])
-                                    ->alias('a')
-                                    ->with([
-                                        'sub' => function($query) {
-                                            return $query->with('ownChannel');
-                                        }])
-                                    ->asArray()
-                                    ->all();
-        }
-
-        $images = [];
-        if (!empty($data)) {
-            foreach ($data as $value) {
-                foreach ($value as $val) {
-                    foreach ($val['sub'] as $sub) {
-                        foreach ($sub['ownChannel'] as $channel) {
-
-                            if ($channel['image']) $images[] = ['name' => $channel['name'] , 'path' => $channel['image']];
-                        }
-                    }
-                }
-            }
-        }
-
         $zipFile = tempnam('/tmp/', '');
-        $savePath = '/tmp/export';
-
-        !is_dir($savePath) && FileHelper::createDirectory($savePath);
-
-        // 下载远程文件
-        array_walk($images, function(&$v, $k) use ($savePath) {
-
-            if ($k !=0 && $k % 5 == 0) sleep(1);
-
-            $downloadPath = $savePath . '/' . $v['name'] . strstr(basename($v['path']), '.', false);
-
-            $v['path'] = Func::getAccessUrl($v['path'], 3600);
-
-            if (file_exists($downloadPath) == false) {
-                file_put_contents($downloadPath, file_get_contents($v['path']));
-            }
-            $v['path'] = $downloadPath;
-        });
-
         $zip = new \ZipArchive();
         $zip->open($zipFile,\ZipArchive::CREATE);   //打开压缩包
 
-        foreach($images as $file){
-            $zip->addFile($file['path'], basename($file['path']));   //向压缩包中添加文件
+        $task = Yii::$app->cache->get("queue-" . $queue_id);
+        $task_id = $task['main_class_id'];
+        $images = $this->getImagesPath($task_id);
+        if (empty($images)) {
+            $this->setFlash('error', '导出数据不存在');
+            $this->redirect(Yii::$app->request->referrer);
         }
 
-        $zip->close();  //关闭压缩包
+        foreach($images as $file){
+            //向压缩包中添加文件
+            $zip->addFile($file['localPath'], basename($file['localPath']));
+        }
 
-        FileHelper::removeDirectory($savePath); // 删除下载的文件
+        //关闭压缩包
+        $zip->close();
 
         Func::setDownloadZipHeader($zipFile, '频道图片导出.zip');
+    }
+
+    /**
+     * 查询任务是否执行完毕
+     * @param $queue_id
+     * @return array
+     */
+    public function actionQueryTask($queue_id)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+         if (Yii::$app->queue->isDone($queue_id)) {
+              return [
+                  'status' => true,
+                  'url' => \yii\helpers\Url::to(['main-class/download-zip', 'queue_id' => $queue_id])
+              ];
+         } else {
+             return [
+                 'status' => false
+             ];
+         }
+    }
+
+    /**
+     * 导出频道的图标
+     */
+    public function actionExportImage()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        $main_class_id = Yii::$app->request->get('main_class_id');
+
+        if (!$main_class_id) {
+            return ['status' => false];
+        }
+
+        $main_class_id = explode(',', $main_class_id);
+        $images = $this->getImagesPath($main_class_id);
+        if (empty($images)) {
+            return ['status' => false];
+        }
+
+        // 下载远程文件 加入队列任务
+        $queue_id = Yii::$app->queue->push(new DownloadJob([
+            'url' => ArrayHelper::getColumn($images, 'url'),
+            'file' => ArrayHelper::getColumn($images, 'localPath')
+        ]));
+
+        // 记录下此次导出
+        Yii::$app->cache->set("queue-" . $queue_id, ['main_class_id' => $main_class_id], 86400);
+
+        return [
+            'queue_id' => $queue_id,
+            'status' => true
+        ];
+
+    }
+
+    /**
+     * 获取图片路径
+     * @param $main_class_id
+     * @return array|bool
+     * @throws \yii\base\Exception
+     */
+    private function getImagesPath($main_class_id)
+    {
+        $images = MainClass::getSelectedChannelImage($main_class_id);
+
+        if (empty($images)) {
+            return false;
+        }
+
+        $savePath = '/tmp/export';
+        if (!is_dir($savePath)) FileHelper::createDirectory($savePath);
+        array_walk($images, function(&$v, $k) use ($savePath) {
+            $downloadPath = $savePath . '/' . $v['name'] . strstr(basename($v['path']), '.', false);
+            $v['url'] = Func::getAccessUrl($v['path'], 3600);
+            $v['localPath'] = $downloadPath;
+        });
+
+        return $images;
     }
 
 }

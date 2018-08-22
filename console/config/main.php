@@ -9,7 +9,7 @@ $params = array_merge(
 return [
     'id' => 'app-console',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log'],
+    'bootstrap' => ['log', 'queue'],
     'controllerNamespace' => 'console\controllers',
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
@@ -51,7 +51,13 @@ return [
         //cache组件
         'cache' => [
             'class' => 'yii\caching\FileCache',
-        ]
+        ],
+
+        // 队列组件
+        'queue' => [
+            'class' => \yii\queue\file\Queue::className(),
+            'path' => '@storage/runtime/queue',
+        ],
     ],
     'params' => $params,
     'modules' => [

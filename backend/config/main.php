@@ -12,7 +12,10 @@ return [
     'sourceLanguage' => 'en-US',
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
-    'bootstrap' => ['log'],
+    'bootstrap' => [
+        'log',
+        'queue',
+    ],
     'modules' => [
         'db-manager' => [
             'class' => 'bs\dbManager\Module',
@@ -30,14 +33,6 @@ return [
                 ],
             ],
         ],
-        'gridview' =>  [
-            'class' => '\kartik\grid\Module'
-            // enter optional module parameters below - only if you need to
-            // use your own export download action or custom translation
-            // message source
-            // 'downloadAction' => 'gridview/export/download',
-            // 'i18n' => []
-        ]
     ],
     'components' => [
         'request' => [
@@ -110,13 +105,20 @@ return [
             'password' => '198721',
             'database' => 0,
         ],
+        // 格式化组件
         'formatter' => [
             'timeZone' => 'Asia/Shanghai',
             'class' => 'yii\i18n\Formatter',
             'dateFormat' => 'php:Y/m/d',
             'datetimeFormat' => 'php:Y/m/d H:i',
             'timeFormat' => 'php:H:i:s',
-        ]
+        ],
+
+        // 队列组件
+        'queue' => [
+            'class' => \yii\queue\file\Queue::className(),
+            'path' => '@storage/runtime/queue',
+        ],
     ],
 
      //指定时区
