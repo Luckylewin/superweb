@@ -248,12 +248,12 @@ class MainClassController extends BaseController
         $task = Yii::$app->cache->get("queue-" . $queue_id);
         $images = $this->getImagesPath($task['main_class_id']);
 
-        if (empty($images)) {
+        if (empty($images['images'])) {
             $this->setFlash('error', '导出数据不存在');
             $this->redirect(Yii::$app->request->referrer);
         }
 
-        foreach($images as $file){
+        foreach($images['images'] as $file) {
             //向压缩包中添加文件
             $zip->addFile($file['localPath'], basename($file['localPath']));
         }
@@ -261,6 +261,7 @@ class MainClassController extends BaseController
         //关闭压缩包
         $zip->close();
 
+        FileHelper::removeDirectory($images['savePath']);
         Func::setDownloadZipHeader($zipFile, '频道图片导出.zip');
     }
 
@@ -299,9 +300,11 @@ class MainClassController extends BaseController
 
         $main_class_id = explode(',', $main_class_id);
         $images = $this->getImagesPath($main_class_id);
-        if (empty($images)) {
+        if (empty($images['images'])) {
             return ['status' => false];
         }
+
+        $images = $images['images'];
 
         // 下载远程文件 加入队列任务
         $queue_id = Yii::$app->queue->push(new DownloadJob([
@@ -332,7 +335,7 @@ class MainClassController extends BaseController
         if (empty($images)) {
             return false;
         }
-
+        
         $savePath = '/tmp/export';
         if (!is_dir($savePath)) FileHelper::createDirectory($savePath);
         array_walk($images, function(&$v, $k) use ($savePath) {
@@ -341,7 +344,10 @@ class MainClassController extends BaseController
             $v['localPath'] = $downloadPath;
         });
 
-        return $images;
+        return [
+            'savePath' => $savePath,
+            'images' => $images
+        ];
     }
 
 }
