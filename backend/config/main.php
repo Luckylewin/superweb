@@ -120,7 +120,6 @@ return [
             'path' => '@storage/runtime/queue',
         ],
 
-
         'cache' => [
             'class' => 'yii\caching\FileCache',
             'cachePath' => '@webroot/storage/runtime/cache'

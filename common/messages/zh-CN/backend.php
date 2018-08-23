@@ -548,4 +548,10 @@ return [
     'set' => '设定',
     'Live charging mode setting' => '直播收费模式设置',
     'Please assign a role to the account, otherwise it will not work properly.' => '请给帐号分配一个角色，否则无法正常使用',
+
+    'Creating cache in the background' => '已加入后台任务队列 ',
+    'One-click generate cache' => '一键生成缓存',
+    "Export Channel's Images" => '导出频道台标',
+
+
 ];

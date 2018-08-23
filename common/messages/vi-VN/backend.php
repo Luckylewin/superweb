@@ -521,4 +521,8 @@ return [
     'Are you sure to save your changes?' => 'Bạn có chắc chắn lưu các thay đổi của mình không?',
 
     'Please assign a role to the account, otherwise it will not work properly.' => 'Vui lòng chỉ định vai trò cho tài khoản, nếu không nó sẽ không hoạt động đúng cách.',
+
+    'Creating cache in the background' => 'Trong hậu trường tạo bộ nhớ tạm ',
+    'One-click generate cache' => 'Bộ nhớ cache thế hệ một lần nhấp',
+     "Export Channel's Images" => 'Xuất hình ảnh của kênh',
 ];

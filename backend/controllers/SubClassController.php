@@ -5,6 +5,8 @@ namespace backend\controllers;
 use backend\components\MyRedis;
 use backend\models\Cache;
 use backend\models\Scheme;
+use console\queues\CacheOttListJob;
+use phpDocumentor\Reflection\Types\Integer;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
@@ -236,12 +238,27 @@ class SubClassController extends BaseController
 
     public function actionGenerateCache($id)
     {
-        $cache = new Cache();
+        Yii::$app->queue->push(new CacheOttListJob([
+                        'id' => $id
+                    ]));
 
-        $cache->createOttCache($id, Cache::$JSON);
-        $cache->createOttCache($id, Cache::$XML);
+        $this->setFlash('info', Yii::t('backend', 'Creating cache in the background'));
+        return $this->redirect(Yii::$app->request->referrer);
+    }
 
-        $this->setFlash('success', Yii::t('backend', 'Success'));
+    public function actionBatchGenerateCache()
+    {
+        $mainClass = MainClass::find()->where(['use_flag' => 1])->all();
+
+        if ($mainClass) {
+            foreach ($mainClass as $class) {
+                Yii::$app->queue->push(new CacheOttListJob([
+                    'id' => $class->id
+                ]));
+            }
+        }
+
+        $this->setFlash('info', Yii::t('backend', 'Creating cache in the background'));
         return $this->redirect(Yii::$app->request->referrer);
     }
 

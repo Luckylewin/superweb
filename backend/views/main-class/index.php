@@ -24,13 +24,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="main-class-index">
     <p>
-        <?= Html::a(Yii::t('backend', 'Create'), ['create'], ['class' => 'btn btn-success']) ?>
-
-        &nbsp;&nbsp;
-
-        <?= Html::a(Yii::t('backend', 'Export Image'), ['main-class/export-image'], ['class' => 'btn btn-primary btn-export-image']) ?>
-        <?= Html::a(Yii::t('backend', 'Batch Import'), ['sub-class/import-via-text','mode' => 'mainClass'], ['class' => 'btn btn-info']) ?>
-        <?= Html::a(Yii::t('backend', 'Batch Export'), ['main-class/export','mode' => 'mainClass'], ['class' => 'btn btn-info btn-export']) ?>
+        <?= Html::a(Yii::t('backend', 'Create'), ['create'], ['class' => 'btn btn-success']) ?>&nbsp;&nbsp;|&nbsp;
+        <?= Html::a('<i class="fa fa-database">&nbsp;</i>' . Yii::t('backend', 'One-click generate cache'), ['sub-class/batch-generate-cache'], ['class' => 'btn btn-success']) ?>&nbsp;&nbsp;|&nbsp;
+        <?= Html::a('<i class="fa fa-file-text">&nbsp;</i>' . Yii::t('backend', 'Batch Import'), ['sub-class/import-via-text','mode' => 'mainClass'], ['class' => 'btn btn-info']) ?>
+        <?= Html::a('<i class="fa fa-file-text">&nbsp;</i>' . Yii::t('backend', 'Batch Export'), ['main-class/export','mode' => 'mainClass'], ['class' => 'btn btn-info btn-export']) ?>&nbsp;&nbsp;|&nbsp;
+        <?= Html::a('<i class="fa fa-file-zip-o">&nbsp;</i>' . Yii::t('backend', "Export Channel's Images"), ['main-class/export-image'], ['class' => 'btn btn-primary btn-export-image']) ?>
     </p>
 
     <?php
@@ -109,9 +107,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             return Html::a(Yii::t('backend', 'Generate cache'), '#', [
                                 'url' => Url::to(['sub-class/generate-cache', 'id' => $model->id]),
                                 'class' => 'btn btn-success btn-sm create-cache',
-                                'id' => 'cache-btn',
-                                'data-toggle' => 'modal',
-                                'data-target' => '#operate-modal',
+                                'id' => 'cache-btn'
                             ]);
                         }
                     ]
@@ -129,15 +125,6 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 
 <?php
-
-Modal::begin([
-    'id' => 'operate-modal',
-    'size' => Modal::SIZE_SMALL,
-    'header' => '<h4 class="modal-title">操作提示</h4>',
-    'footer' => '',
-]);
-echo "<h4><i class='fa fa-spinner fa-pulse'> </i> 生成缓存中</h4>";
-Modal::end();
 
 Modal::begin([
     'id' => 'download-modal',
