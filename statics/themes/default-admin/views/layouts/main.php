@@ -28,22 +28,33 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/toastr/toastr.min.j
 
 <body>
 <?php $this->beginBody() ?>
-<div class="wrapper">
+
+
+
+<div class="wrapper" style="position: relative">
     <div class="panel">
         <div class="panel-body">
             <div class="col-md-12">
                 <!-- 面包屑导航 -->
                 <div>
-                    <?=    Breadcrumbs::widget([
-                        'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-                        'homeLink' => false
-                    ]); ?>
+                    <?php
+                        try {
+                           echo Breadcrumbs::widget([
+                                'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+                                'homeLink' => false
+                            ]);
+                        } catch (\Exception $e) {
+
+                        }
+                    ?>
                 </div>
                 <?= $content ?>
             </div>
         </div>
     </div>
 </div>
+
+
 
 <?php $this->endBody() ?>
 </body>
@@ -54,7 +65,7 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/toastr/toastr.min.j
         "closeButton": true,
         "debug": true,
         "progressBar": true,
-        "positionClass": "toast-top-full-width",
+        "positionClass": "toast-bottom-right",
         "showDuration": "400",
         "hideDuration": "1000",
         "timeOut": "4000",
@@ -64,6 +75,7 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/toastr/toastr.min.j
         "showMethod": "slideDown",
         "hideMethod": "slideUp"
     }
+
 </script>
 
 <?= \common\widgets\Toastr::widget();?>

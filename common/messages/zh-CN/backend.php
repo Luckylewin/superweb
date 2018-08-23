@@ -553,6 +553,7 @@ return [
     'One-click generate cache' => '一键生成缓存',
     "Export Channel's Images" => '导出频道台标',
     "Generate Cache" => '生成缓存',
+    'Switch language successfully' => '已切换语言'
 
 
 ];

@@ -20,7 +20,6 @@ class IndexController extends BaseController
 
     public function actionIndex()
     {
-
         return $this->render('index');
     }
 
@@ -38,6 +37,7 @@ class IndexController extends BaseController
             'expire' => time() + 24640000
         ]));
 
+        $this->setFlash('success', 'Switch language successfully');
         $this->goBack(Yii::$app->request->headers['Referer']);
     }
 }

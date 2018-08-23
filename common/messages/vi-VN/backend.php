@@ -525,4 +525,5 @@ return [
     'Creating cache in the background' => 'Trong hậu trường tạo bộ nhớ tạm ',
     'One-click generate cache' => 'Bộ nhớ cache thế hệ một lần nhấp',
      "Export Channel's Images" => 'Xuất hình ảnh của kênh',
+    'Switch language successfully' => 'Chuyển đổi ngôn ngữ thành công'
 ];
