@@ -41,6 +41,23 @@ class Func
     }
 
     /**
+     * 获取服务器IP
+     * @return mixed|null|string
+     */
+    public static function getServerIp()
+    {
+        if (isset(Yii::$app->request->hostName)) {
+            return Yii::$app->request->hostName;
+        } else if (isset(Yii::$app->params['serverDomain'])) {
+            return Yii::$app->params['serverDomain'];
+        } else if (isset(Yii::$app->params['serverIP'])) {
+            return Yii::$app->params['serverIP'];
+        } else {
+            return getHostByName(getHostName());
+        }
+    }
+
+    /**
      * nginx防盗链
      * @param $path
      * @param int $expireTime
@@ -62,7 +79,7 @@ class Func
             return Aliyunoss::getDownloadUrl($path, 300);
         }
 
-        $url = "http://" . Yii::$app->request->hostName . ":" . Yii::$app->params['nginx']['media_port'] ."{$path}?";
+        $url = "http://" . self::getServerIp() . ":" . Yii::$app->params['nginx']['media_port'] ."{$path}?";
 
         $mac = '287994000001';//mac地址
         $secret = Yii::$app->params['nginx']['secret']; //加密密钥

@@ -248,7 +248,10 @@ class SubClassController extends BaseController
 
     public function actionBatchGenerateCache()
     {
-        $mainClass = MainClass::find()->where(['use_flag' => 1])->all();
+        $mainClass = MainClass::find()
+                            ->where(['use_flag' => 1])
+                            ->orderBy(['id' => 'asc', 'sort' => 'asc'])
+                            ->all();
 
         if ($mainClass) {
             foreach ($mainClass as $class) {

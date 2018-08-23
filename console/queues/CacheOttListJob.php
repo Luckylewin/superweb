@@ -24,7 +24,6 @@ class CacheOttListJob extends BaseObject implements JobInterface
     {
         if (is_array($this->id)) {
             foreach ($this->id as $id) {
-                echo "生成缓存中";
                 $this->_generateCache($id);
             }
         } else {
@@ -36,7 +35,7 @@ class CacheOttListJob extends BaseObject implements JobInterface
     {
         $cache = new Cache();
 
-        $cache->createOttCache($id, Cache::$JSON);
         $cache->createOttCache($id, Cache::$XML);
+        $cache->createOttCache($id, Cache::$JSON);
     }
 }

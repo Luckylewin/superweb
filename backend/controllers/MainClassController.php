@@ -229,7 +229,7 @@ class MainClassController extends BaseController
         }
 
         $str = rtrim($str, PHP_EOL);
-        
+
         if (!empty($str)) {
             Func::setDownloadFileHeader("OTT列表导出文件_" . date('YmdHi') . '.txt');
             return $str;

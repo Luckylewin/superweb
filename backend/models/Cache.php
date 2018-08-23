@@ -29,15 +29,18 @@ class Cache
         //方案号
         $schemes = Scheme::find()->all();
 
-        if ($format == 'json') {
+        if ($format == self::$JSON) {
             //缓存全部方案
-            $this->setJsonCache($id, null);
+            $this->setJsonCache($id);
             //按方案号缓存
             foreach ($schemes as $scheme) {
                 $this->setJsonCache($id, $scheme);
             }
-        } else {
-            $this->setXMLCache($id, null);
+        }
+
+        if ($format == self::$XML) {
+            //缓存全部方案
+            $this->setXMLCache($id);
             //按方案号缓存
             foreach ($schemes as $scheme) {
                 $this->setXMLCache($id, $scheme);
@@ -50,7 +53,7 @@ class Cache
      * @param Scheme|null $scheme
      * @return mixed
      */
-    private function setJsonCache($id, $scheme)
+    private function setJsonCache($id, $scheme = null)
     {
         $mainClass = MainClass::findOne($id);
 
@@ -94,13 +97,15 @@ class Cache
                                           ->orderBy('sort ASC');
                          }])
                          ->limit(1)
+                         ->asArray()
                          ->one();
+
         $subClass = !empty($subClass) && !empty($subClass['sub']) ? $subClass['sub'] : [];
 
         //查询频道
         if (!empty($subClass)) {
             foreach ($subClass as $class) {
-                if ($result = $this->getChannel($class->id, $scheme)) {
+                if ($result = $this->getChannel($class['id'], $scheme)) {
                     $_subClass = ArrayHelper::toArray($class);
                     $_subClass['channels'] = $result;
                     $items[] = $_subClass;
@@ -124,8 +129,8 @@ class Cache
                                         return $query->where(['use_flag' => 1])
                                                      ->orderBy('channel_number asc');
                                     }])
-                                    ->asArray()
                                     ->limit(1)
+                                    ->asArray()
                                     ->one();
 
         if (empty($channels) || empty($channels['ownChannel'])) {
@@ -201,7 +206,7 @@ class Cache
      * @param Scheme|null $scheme
      * @return bool|DOMDocument
      */
-    private function setXMLCache($id, $scheme)
+    private function setXMLCache($id, $scheme = null)
     {
         $dom = new DomDocument('1.0', 'utf-8');
         $response = $dom->createElement('response');
@@ -224,7 +229,7 @@ class Cache
 
         $ipaddr=$dom->createElement("ipaddr");
         $attributes->appendChild($ipaddr);
-        $value = $dom->createTextNode(Yii::$app->request->hostName);
+        $value = $dom->createTextNode(Func::getServerIp());
         $ipaddr->appendChild($value);
 
         $newVersion=$dom->createElement("newVersion");
@@ -234,6 +239,7 @@ class Cache
         $newVersion->appendChild($value);
 
         $mainClass = MainClass::findOne($id);
+
         $subClassData = $this->getSubClassLink($mainClass->id, $scheme);
 
         foreach ($subClassData as $class) {
