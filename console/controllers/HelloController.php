@@ -7,10 +7,14 @@
 
 namespace console\controllers;
 
+use backend\models\Cache;
 use backend\models\LinkToScheme;
 use backend\models\Mac;
 use backend\models\MacDetail;
+use backend\models\MiddleParade;
+use backend\models\Parade;
 use backend\models\Scheme;
+use common\models\MainClass;
 use common\models\OttLink;
 use common\models\Vod;
 use common\models\Vodlink;
@@ -61,9 +65,71 @@ class HelloController extends Controller
         return ExitCode::OK;
     }
 
-
-    public function actionScheme()
+    public function actionCache()
     {
+        $data = MainClass::find()
+                ->with('subChannel')
+                ->asArray()
+                ->all();
+
+        foreach ($data as $class) {
+            foreach ($class['subChannel'] as $channel) {
+
+                 if (empty($channel['alias_name'])) continue;
+
+
+                 $parade = Parade::find()->where(['channel_name' => $channel['alias_name']])
+                                             ->andWhere(['<=', 'parade_date', date('Y-m-d', strtotime('+4 day'))])
+                                             ->asArray()
+                                             ->all();
+
+
+
+                 if (!empty($parade)) {
+                     $exist = MiddleParade::find()->where(['channel' => trim($channel['name']), 'genre' => trim($class['name'])])->exists();
+                     if ($exist == false) {
+                         $middleParade = new MiddleParade();
+                         $middleParade->channel = $channel['name'];
+                         $middleParade->genre = $class['name'];
+                         $middleParade->parade_content = json_encode($parade);
+                         $middleParade->save(false);
+                     }
+                 }
+            }
+        }
+
+        echo 'ok';
+
+    }
+
+    public function actionMaintain()
+    {
+        $links = OttLink::find()->all();
+        foreach ($links as $link) {
+            if (empty($link->scheme_id)) {
+                $link->scheme_id = 'all';
+                $link->save(false);
+            }
+        }
+    }
+
+    /**
+     * 测试生成缓存
+     */
+    public function actionList()
+    {
+        $mainClass = MainClass::find()
+            ->where(['use_flag' => 1])
+            ->orderBy(['id' => 'asc', 'sort' => 'asc'])
+            ->all();
+
+        $cache = new Cache();
+
+        foreach ($mainClass as $class) {
+            $this->stdout("generate {$class->name}" . PHP_EOL);
+            $cache->createOttCache($class->id, Cache::$XML);
+            $cache->createOttCache($class->id, Cache::$JSON);
+        }
 
     }
 

@@ -1,7 +1,6 @@
 <?php
 /**
  * 公共函数
- * @author 边走边乔 <771405950>
  */
 namespace common\components;
 
