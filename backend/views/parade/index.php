@@ -18,30 +18,35 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?= Html::a(Yii::t('backend', 'Create'), ['create'], ['class' => 'btn btn-success']) ?>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <?= Html::a(Yii::t('backend', 'Create Cache'), ['clear-cache'], ['class' => 'btn btn-info']) ?>
         <?= Html::a(Yii::t('backend', 'Clear Cache'), ['clear-cache'], ['class' => 'btn btn-warning']) ?>
     </p>
 
     <?php Pjax::begin(); ?>
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'pager' => [
-            'class' => 'common\widgets\goPager',
-            'go' => true
-        ],
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+    <?php
 
-            [
-                'attribute' => 'channel_name',
-                'format' => 'raw',
-                'value' => function($data) {
-                    $channel = $data->channel;
-                    return Html::a($data->channel_name,'#',['btn btn-link']);
-                }
+    try {
+        echo GridView::widget([
+            'dataProvider' => $dataProvider,
+            'filterModel' => $searchModel,
+            'pager' => [
+                'class' => 'common\widgets\goPager',
+                'go' => true
             ],
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
 
-            [
+                [
+                    'attribute' => 'channel_name',
+                    'format' => 'raw',
+                    'value' => function($data) {
+                        $channel = $data->channel;
+                        return Html::a($data->channel_name,'#',['btn btn-link']);
+                    }
+                ],
+
+                [
                     'label' => Yii::t('backend', 'Associated Channel'),
                     'format' => 'raw',
                     'value' => function ($model) {
@@ -58,47 +63,52 @@ $this->params['breadcrumbs'][] = $this->title;
                         }
                         return '';
                     }
-            ],
+                ],
 
 
-            [
+                [
                     'class' => 'common\grid\MyActionColumn',
                     'size' => 'btn-sm',
                     'buttons' => [
-                            'view' => function($url, $model, $key) {
-                                $title = Yii::t('backend', 'View');
-                                return Html::a($title, \yii\helpers\Url::to(['parade/list-channel','name'=>$model->channel_name]),[
-                                        'class'=>'btn btn-info btn-sm',
-                                        'title' => $title,
-                                        'aria-label' => $title,
-                                        'data-pjax' => '0',
-                                ]);
-                            },
-                                'delete' => function($url, $model, $key) {
-                                    $title = Yii::t('backend', 'Delete');
-                                    return Html::a($title, \yii\helpers\Url::to(['parade/batch-delete','name'=>$model->channel_name]),[
-                                        'class'=>'btn btn-danger btn-sm',
-                                        'title' => $title,
-                                        'aria-label' => $title,
-                                        'data-pjax' => '0',
-                                    ]);
-                                },
+                        'view' => function($url, $model, $key) {
+                            $title = Yii::t('backend', 'View');
+                            return Html::a($title, \yii\helpers\Url::to(['parade/list-channel','name'=>$model->channel_name]),[
+                                'class'=>'btn btn-info btn-sm',
+                                'title' => $title,
+                                'aria-label' => $title,
+                                'data-pjax' => '0',
+                            ]);
+                        },
+                        'delete' => function($url, $model, $key) {
+                            $title = Yii::t('backend', 'Delete');
+                            return Html::a($title, \yii\helpers\Url::to(['parade/batch-delete','name'=>$model->channel_name]),[
+                                'class'=>'btn btn-danger btn-sm',
+                                'title' => $title,
+                                'aria-label' => $title,
+                                'data-pjax' => '0',
+                            ]);
+                        },
 
-                            'bind' => function($url, $model, $key) {
-                                return Html::a(Yii::t('backend', 'Bind Channel'), null, [
-                                    'class' => 'btn btn-default btn-sm bind',
-                                    'data-toggle' => 'modal',
-                                    'data-target' => '#bind-modal',
-                                    'data-id' => $model->channel_name,
-                                ]);
-                            }
+                        'bind' => function($url, $model, $key) {
+                            return Html::a(Yii::t('backend', 'Bind Channel'), null, [
+                                'class' => 'btn btn-default btn-sm bind',
+                                'data-toggle' => 'modal',
+                                'data-target' => '#bind-modal',
+                                'data-id' => $model->channel_name,
+                            ]);
+                        }
                     ],
-                'template' => '{bind}&nbsp;{view} &nbsp;{delete}',
+                    'template' => '{bind}&nbsp;{view} &nbsp;{delete}',
+                ],
+
+
             ],
+        ]);
+    } catch (\Exception $e) {
 
+    }
 
-        ],
-    ]); ?>
+    ?>
     <?php Pjax::end(); ?>
 </div>
 

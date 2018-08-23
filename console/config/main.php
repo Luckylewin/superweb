@@ -51,6 +51,7 @@ return [
         //cache组件
         'cache' => [
             'class' => 'yii\caching\FileCache',
+            'cachePath' => '@runtime/cache'
         ],
 
         // 队列组件

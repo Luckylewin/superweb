@@ -140,7 +140,7 @@ class Cache
     {
         $items = [];
         //查询链接
-        $links = $channel->getOwnLink(['use_flag' => 1])->all();
+        $links = $channel->getOwnLink(['use_flag' => 1])->orderBy('sort asc')->all();
         if (!empty($links)) {
             foreach ($links as $link) {
                 $flag = false;

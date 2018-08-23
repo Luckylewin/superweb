@@ -119,6 +119,12 @@ return [
             'class' => \yii\queue\file\Queue::className(),
             'path' => '@storage/runtime/queue',
         ],
+
+
+        'cache' => [
+            'class' => 'yii\caching\FileCache',
+            'cachePath' => '@webroot/storage/runtime/cache'
+        ],
     ],
 
      //指定时区

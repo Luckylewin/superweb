@@ -15,12 +15,6 @@ return [
             // 'db' => 'mydb',
             'sessionTable' => 'yii2_session',
         ],
-
-        'cache' => [
-            'class' => 'yii\caching\FileCache',
-            'cachePath' => '@webroot/storage/runtime/cache'
-        ],
-
         //资源包管理
         'assetManager' => [
             'basePath' => '@webroot/storage/assets',
