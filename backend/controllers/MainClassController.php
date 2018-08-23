@@ -208,6 +208,8 @@ class MainClassController extends BaseController
                          foreach ($val['ownChannel'] as $channel) {
                              $channelName = $channel['name'];
                              $channelIcon = empty($channel['image']) ? 'null' : $channel['image'];
+                             $channelSort = $channel['sort'];
+
                              if (!empty($channel['ownLink'])) {
                                  foreach ($channel['ownLink'] as $link) {
                                      $url = $link['link'];
@@ -215,8 +217,9 @@ class MainClassController extends BaseController
                                      $scheme = $link['scheme_id'];
                                      $use_flag = $link['use_flag'];
                                      $decode = $link['decode'];
+                                     $linkSort = $link['sort'];
 
-                                     $str .= "{$mainClass},{$subClassName},{$channelName},{$channelIcon},{$url},{$method},{$scheme},{$use_flag},{$decode}" . PHP_EOL;
+                                     $str .= "{$mainClass},{$subClassName},{$channelName},{$channelIcon},{$channelSort},{$url},{$method},{$scheme},{$use_flag},{$decode},{$linkSort}" . PHP_EOL;
                                  }
                              }
                          }
@@ -225,8 +228,10 @@ class MainClassController extends BaseController
             }
         }
 
+        $str = rtrim($str, PHP_EOL);
+        
         if (!empty($str)) {
-            Func::setDownloadHeader("OTT列表导出文件_" . date('YmdHi') . '.txt');
+            Func::setDownloadFileHeader("OTT列表导出文件_" . date('YmdHi') . '.txt');
             return $str;
         }
 
