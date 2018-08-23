@@ -14,6 +14,7 @@ use common\models\MainClass;
 use common\models\SubClass;
 use common\models\OttChannel;
 use backend\components\MyRedis;
+use yii\db\ActiveQuery;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 use DOMDocument;
@@ -59,7 +60,7 @@ class Cache
         $data['zh_name'] = $mainClass->zh_name;
         $data['icon'] = $mainClass->icon;
         $data['description'] = $mainClass->description;
-        $data['subClass'] = $this->getSubClassLink($mainClass, $scheme);
+        $data['subClass'] = $this->getSubClassLink($mainClass->id, $scheme);
         $redis = MyRedis::init(MyRedis::REDIS_PROTOCOL);
         $redis->set("OTT_LIST_JSON_{$data['name']}_{$data['scheme']}", Json::encode($data));
         $redis->set("OTT_LIST_JSON_{$data['name']}_{$data['scheme']}_VERSION", $data['version']);
@@ -79,20 +80,27 @@ class Cache
     }
 
     /**
-     * @param MainClass $mainClass
-     * @param $mainClass
+     * @param $mainClassID
      * @param $scheme
      * @return array
      */
-    public function getSubClassLink($mainClass, $scheme)
+    public function getSubClassLink($mainClassID, $scheme)
     {
         //查询子分类
         $items = [];
-        $subClass = $mainClass->getSub(['use_flag' => 1])->all();
+        $subClass = MainClass::find()->where(['id' => $mainClassID])
+                         ->with(['sub' => function(ActiveQuery $query) {
+                             return $query->where(['use_flag' => 1])
+                                          ->orderBy('sort ASC');
+                         }])
+                         ->limit(1)
+                         ->one();
+        $subClass = !empty($subClass) && !empty($subClass['sub']) ? $subClass['sub'] : [];
+
         //查询频道
         if (!empty($subClass)) {
             foreach ($subClass as $class) {
-                if ($result = $this->getChannel($class, $scheme)) {
+                if ($result = $this->getChannel($class->id, $scheme)) {
                     $_subClass = ArrayHelper::toArray($class);
                     $_subClass['channels'] = $result;
                     $items[] = $_subClass;
@@ -104,26 +112,33 @@ class Cache
     }
 
     /**
-     * @param SubClass $class
+     * @param $subClassID
      * @param $scheme
      * @return bool|array
      */
-    private function getChannel($class, $scheme)
+    private function getChannel($subClassID, $scheme)
     {
         $items = [];
-        $channels = $class->getOwnChannel(['use_flag' => 1])->orderBy('channel_number asc')->all();
+        $channels = SubClass::find()->where(['id' => $subClassID])
+                                    ->with(['ownChannel' => function(ActiveQuery $query) {
+                                        return $query->where(['use_flag' => 1])
+                                                     ->orderBy('channel_number asc');
+                                    }])
+                                    ->asArray()
+                                    ->limit(1)
+                                    ->one();
 
-        if (empty($channels)) {
+        if (empty($channels) || empty($channels['ownChannel'])) {
             return false;
         }
 
+        $channels = $channels['ownChannel'];
+
         foreach ($channels as $channel) {
-            if ($channel instanceof OttChannel) {
-                if ($links = $this->getLink($channel, $scheme)) {
-                    $channel = ArrayHelper::toArray($channel);
-                    $channel['links'] = $links;
-                    $items[] = $channel;
-                }
+            if ($links = $this->getLink($channel['id'], $scheme)) {
+                $channel = ArrayHelper::toArray($channel);
+                $channel['links'] = $links;
+                $items[] = $channel;
             }
         }
 
@@ -131,16 +146,30 @@ class Cache
     }
 
     /**
-     * @param OttChannel $channel
-     * @param $channel
+     * @param $channelID
      * @param $scheme
      * @return array|bool
      */
-    private function getLink($channel, $scheme)
+    private function getLink($channelID, $scheme)
     {
         $items = [];
         //查询链接
-        $links = $channel->getOwnLink(['use_flag' => 1])->orderBy('sort asc')->all();
+        $links = OttChannel::find()
+                    ->where(['id' => $channelID])
+                    ->with(['ownLink' => function(ActiveQuery $query) {
+                         return $query->where(['use_flag' => 1])
+                                      ->orderBy('sort asc');
+                    }])
+                    ->asArray()
+                    ->limit(1)
+                    ->one();
+
+        if ($links && !empty($links['ownLink'])) {
+            $links = $links['ownLink'];
+        } else {
+            $links = [];
+        }
+
         if (!empty($links)) {
             foreach ($links as $link) {
                 $flag = false;
@@ -205,7 +234,7 @@ class Cache
         $newVersion->appendChild($value);
 
         $mainClass = MainClass::findOne($id);
-        $subClassData = $this->getSubClassLink($mainClass, $scheme);
+        $subClassData = $this->getSubClassLink($mainClass->id, $scheme);
 
         foreach ($subClassData as $class) {
             $liveType = $dom->createElement("liveType");
