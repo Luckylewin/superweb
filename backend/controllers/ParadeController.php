@@ -6,10 +6,9 @@ use backend\components\MyRedis;
 use backend\models\search\ParadeSearch;
 use common\models\MainClass;
 use common\models\OttChannel;
+use console\queues\CacheParadeJob;
 use Yii;
 use backend\models\Parade;
-
-use yii\helpers\Json;
 use yii\helpers\Url;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
@@ -225,6 +224,17 @@ class ParadeController extends BaseController
         return $this->renderAjax('global-search', [
             'alias_name' => $alias_name
         ]);
+    }
+
+    /**
+     *
+     */
+    public function actionCreateCache()
+    {
+        Yii::$app->queue->push(new CacheParadeJob());
+
+        $this->setFlash('info', Yii::t('backend', 'Creating cache in the background'));
+        return $this->redirect(Yii::$app->request->referrer);
     }
 
 }

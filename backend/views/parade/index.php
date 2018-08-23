@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a(Yii::t('backend', 'Create'), ['create'], ['class' => 'btn btn-success']) ?>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <?= Html::a(Yii::t('backend', 'Create Cache'), ['clear-cache'], ['class' => 'btn btn-info']) ?>
+        <?= Html::a(Yii::t('backend', 'Generate Cache'), ['create-cache'], ['class' => 'btn btn-info']) ?>
         <?= Html::a(Yii::t('backend', 'Clear Cache'), ['clear-cache'], ['class' => 'btn btn-warning']) ?>
     </p>
 

@@ -552,6 +552,7 @@ return [
     'Creating cache in the background' => '已加入后台任务队列 ',
     'One-click generate cache' => '一键生成缓存',
     "Export Channel's Images" => '导出频道台标',
+    "Generate Cache" => '生成缓存',
 
 
 ];
