@@ -24,6 +24,7 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/toastr/toastr.min.j
     <?php $this->registerCssFile('/statics/themes/default-admin/css/style.css?v=4.1.0') ?>
     <?php $this->registerCssFile('/statics/themes/default-admin/css/font-awesome.min.css?v=4.4.0',['depends'=>['yii\bootstrap\BootstrapAsset']]) ?>
     <?php $this->registerCssFile('/statics/themes/default-admin/plugins/toastr/toastr.min.css',['depends'=>['yii\bootstrap\BootstrapAsset']]) ?>
+    <?php $this->registerCssFile('/statics/plugins/page/pace-blue-theme-flash.css') ?>
 
 
 <body>
@@ -31,7 +32,7 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/toastr/toastr.min.j
 
 
 
-<div class="wrapper" style="position: relative">
+<div class="wrapper" style="margin-top: 20px;">
     <div class="panel">
         <div class="panel-body">
             <div class="col-md-12">
@@ -79,3 +80,6 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/toastr/toastr.min.j
 </script>
 
 <?= \common\widgets\Toastr::widget();?>
+
+<!-- 网页加载进度条插件 -->
+<script src="/statics/plugins/page/page.min.js"></script>

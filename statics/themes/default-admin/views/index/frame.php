@@ -33,6 +33,7 @@ $username = Yii::$app->user->isGuest == false ? Yii::$app->user->identity->usern
     <link href="/statics/themes/default-admin/css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
     <link href="/statics/themes/default-admin/css/animate.css" rel="stylesheet">
     <link href="/statics/themes/default-admin/css/style.css?v=4.1.0" rel="stylesheet">
+
 </head>
 
 <body class="fixed-sidebar full-height-layout gray-bg" style="overflow:hidden">
@@ -285,9 +286,6 @@ $username = Yii::$app->user->isGuest == false ? Yii::$app->user->identity->usern
 <!-- 自定义js -->
 <script src="/statics/themes/default-admin/js/hplus.js?v=4.1.0"></script>
 <script type="text/javascript" src="/statics/themes/default-admin/js/contabs.js"></script>
-
-<!-- 网页加载进度条插件 -->
-<script src="/statics/themes/default-admin/plugins/pace/pace.min.js"></script>
 
 </body>
 
