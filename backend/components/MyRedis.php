@@ -15,7 +15,7 @@ class MyRedis
 {
     const REDIS_PARADE_CONTENT	      =	0;
     const REDIS_DEVICE_STATUS	      =	1;
-    const REDIS_CLIENT_ID_STATUS      =	2;
+    const REDIS_EPG     =	2;
     const REDIS_SERVER_ID_STATUS      =	3;
     const REDIS_PROTOCOL          	  =	4;
     const REDIS_VOD_ALBUM          	  =	5;

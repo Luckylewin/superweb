@@ -28,23 +28,13 @@ class ParadeController extends BaseController
      */
     public function actionIndex()
     {
-        $cache = Yii::$app->cache;
-        if ($cache->exists("parade-check-task") == false) {
-            //删除旧的数据
-            $date = date('Y-m-d',strtotime('-2 day'));
-            Parade::deleteAll("parade_date <= '$date'");
-            $cache->set("parade-check-task",true, 86400);
-        }
-
         $searchModel = new ParadeSearch();
         $query = Parade::find()->groupBy('channel_name');
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $query);
-        $version = $cache->get($this->version);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-            'version' => $version
+            'dataProvider' => $dataProvider
         ]);
     }
 
@@ -171,12 +161,18 @@ class ParadeController extends BaseController
 
     public function actionClearCache()
     {
-        $redis = MyRedis::init(2);
+        $redis = MyRedis::init(MyRedis::REDIS_EPG);
         $mainClass = MainClass::find()->all();
+
         if ($mainClass) {
             foreach ($mainClass as $class) {
                 $key = "ALL_" . strtoupper($class->name) . "_PARADE_LIST";
                 $redis->del($key);
+                if ($class->name != $class->list_name) {
+                    $key = "ALL_" . strtoupper($class->name) . "_PARADE_LIST";
+                    $redis->del($key);
+                }
+
             }
         }
 

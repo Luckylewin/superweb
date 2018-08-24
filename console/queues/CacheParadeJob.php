@@ -33,6 +33,9 @@ class CacheParadeJob extends BaseObject implements JobInterface
 
         }
 
+        // 删除过期的预告数据
+        $date = date('Y-m-d',strtotime('-2 day'));
+        Parade::deleteAll("parade_date <= '$date'");
 
         $data = MainClass::find()
                         ->with('subChannel')
@@ -40,24 +43,35 @@ class CacheParadeJob extends BaseObject implements JobInterface
                         ->all();
 
         foreach ($data as $class) {
-            foreach ($class['subChannel'] as $channel) {
+            $this->generateCache($class['subChannel'], $class['name']);
+            if ($class['name'] != $class['list_name']) {
+                $this->generateCache($class['subChannel'], $class['list_name']);
+            }
+        }
 
-                if (empty($channel['alias_name'])) continue;
+    }
 
-                $parade = Parade::find()->where(['channel_name' => $channel['alias_name']])
-                                        ->andWhere(['<=', 'parade_date', date('Y-m-d', strtotime('+4 day'))])
-                                        ->asArray()
-                                        ->all();
+    private function generateCache($channels, $genre)
+    {
+        if (empty($channels)) {
+            return false;
+        }
 
-                if (!empty($parade)) {
-                    $exist = MiddleParade::find()->where(['channel' => trim($channel['name']), 'genre' => trim($class['name'])])->exists();
-                    if ($exist == false) {
-                        $middleParade = new MiddleParade();
-                        $middleParade->channel = $channel['name'];
-                        $middleParade->genre = $class['name'];
-                        $middleParade->parade_content = json_encode($parade);
-                        $middleParade->save(false);
-                    }
+        foreach ($channels as $channel) {
+            if (empty($channel['alias_name'])) continue;
+            $parade = Parade::find()->where(['channel_name' => $channel['alias_name']])
+                ->andWhere(['<=', 'parade_date', date('Y-m-d', strtotime('+4 day'))])
+                ->asArray()
+                ->all();
+
+            if (!empty($parade)) {
+                $exist = MiddleParade::find()->where(['channel' => trim($channel['name']), 'genre' => trim($genre)])->exists();
+                if ($exist == false) {
+                    $middleParade = new MiddleParade();
+                    $middleParade->channel = $channel['name'];
+                    $middleParade->genre = $genre;
+                    $middleParade->parade_content = json_encode($parade);
+                    $middleParade->save(false);
                 }
             }
         }

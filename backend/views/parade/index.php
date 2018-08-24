@@ -39,6 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 [
                     'attribute' => 'channel_name',
+                    'contentOptions' => ['class' => 'col-md-1'],
                     'format' => 'raw',
                     'value' => function($data) {
                         $channel = $data->channel;
@@ -49,6 +50,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 [
                     'label' => Yii::t('backend', 'Associated Channel'),
                     'format' => 'raw',
+                    'contentOptions' => ['class' => 'col-md-8'],
                     'value' => function ($model) {
                         $channels = $model->channel;
 
@@ -69,6 +71,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 [
                     'class' => 'common\grid\MyActionColumn',
                     'size' => 'btn-sm',
+                    'contentOptions' => ['class' => 'col-md-3'],
                     'buttons' => [
                         'view' => function($url, $model, $key) {
                             $title = Yii::t('backend', 'View');

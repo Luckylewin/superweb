@@ -68,7 +68,11 @@ class AnnaParade extends base
         ];
 
         foreach ($source as $key => $url) {
-            $this->_readXml($url, $key);
+           try {
+               $this->_readXml($url, $key);
+           } catch (\Exception $e) {
+               $this->stdout("读取XML错误" . PHP_EOL,Console::FG_RED);
+           }
         }
         return true;
     }
