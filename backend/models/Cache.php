@@ -267,7 +267,7 @@ class Cache
                 $channelDom->setAttribute("id", $channel['channel_number']);
                 $channelDom->setAttribute("name", $this->handleXml($channel['zh_name']));
                 $channelDom->setAttribute("eng_name", $this->handleXml($channel['name']));
-                $channelDom->setAttribute("icon", $this->handleXml(Func::getAccessUrl($channel['image'], 86400 * 7)));
+                $channelDom->setAttribute("icon", $this->handleXml(Func::getAccessUrl($channel['image'], 86400 * 14)));
                 $channelDom->setAttribute("number", "1");
                 $channelDom->setAttribute("playback", "0");
                 $liveType->appendChild($channelDom);

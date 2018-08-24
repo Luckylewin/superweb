@@ -147,10 +147,16 @@ class MainClassController extends BaseController
         if (!empty($cacheKeys)) {
             foreach ($cacheKeys as $key => $redisKey) {
                 if (strpos($redisKey, 'VERSION') == false) {
-                    $data[] = ['id' => $key, 'key_name'=>$redisKey];
+                    $data[] = [
+                        'id' => $key,
+                        'key_name'=> $redisKey,
+                        'scheme' => ltrim(strstr($redisKey, $model->list_name, false), $model->list_name . '_')
+                    ];
                 }
             }
         }
+
+        ArrayHelper::multisort($data, 'scheme', SORT_ASC);
 
         $dataProvider = new ArrayDataProvider([
             'key' => 'id',
@@ -175,6 +181,14 @@ class MainClassController extends BaseController
         exit($cache);
     }
 
+    public function actionDeleteCache($key)
+    {
+        $redis = MyRedis::init(MyRedis::REDIS_PROTOCOL);
+        $cache = $redis->del($key);
+
+        $this->setFlash('info', Yii::t('backend', 'Success'));
+        return $this->redirect(Yii::$app->request->referrer);
+    }
 
     public function actionExport($id)
     {
