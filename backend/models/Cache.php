@@ -75,7 +75,7 @@ class Cache
         $data['subClass'] = $this->getSubClassLink($mainClass->id, $scheme);
         $redis = MyRedis::init(MyRedis::REDIS_PROTOCOL);
 
-        $schemeName = str_replace('', '#', $data['scheme']);
+        $schemeName = str_replace(' ', '#', $data['scheme']);
         $redis->set("OTT_LIST_JSON_{$mainClass->list_name}_{$schemeName}", Json::encode($data));
         $redis->set("OTT_LIST_JSON_{$mainClass->list_name}_{$schemeName}_VERSION", $data['version']);
 
