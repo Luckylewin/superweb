@@ -11,6 +11,7 @@ use yii\helpers\ArrayHelper;
  *
  * @property int $id
  * @property string $name 名字
+ * @property string $list_name 取列表名称
  * @property string $zh_name 中文名字
  * @property string $description
  * @property string $icon 图标
@@ -38,8 +39,8 @@ class MainClass extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'zh_name'], 'required'],
-            [['name', 'zh_name', 'description', 'icon', 'icon_bg','icon_hover', 'icon_bg', 'icon_bg_hover'], 'string', 'max' => 255],
+            [['name', 'zh_name', 'list_name'], 'required'],
+            [['name', 'zh_name', 'description', 'icon', 'icon_bg','icon_hover', 'icon_bg', 'icon_bg_hover', 'list_name'], 'string', 'max' => 255],
             [['sort'], 'string', 'max' => 3],
             ['price', 'number', 'integerOnly' => false, 'min' => 0],
             ['is_charge', 'boolean'],
@@ -67,7 +68,8 @@ class MainClass extends \yii\db\ActiveRecord
             'sort' => Yii::t('backend', 'Sort'),
             'is_charge' => Yii::t('backend', 'Is Charge'),
             'price' => Yii::t('backend', 'Price'),
-            'use_flag' => Yii::t('backend', 'Switch')
+            'use_flag' => Yii::t('backend', 'Switch'),
+            'list_name' => Yii::t('backend', 'List name')
         ];
     }
 

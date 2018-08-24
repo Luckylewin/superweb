@@ -38,12 +38,21 @@ class Cache
             }
         }
 
+        $mainClass = MainClass::findOne($id);
+
         if ($format == self::$XML) {
             //缓存全部方案
-            $this->setXMLCache($id);
+            $this->setXMLCache($mainClass->id, $mainClass->name);
+            if ($mainClass->list_name != $mainClass->name) {
+                $this->setXMLCache($mainClass->id, $mainClass->list_name);
+            }
             //按方案号缓存
             foreach ($schemes as $scheme) {
-                $this->setXMLCache($id, $scheme);
+                $this->setXMLCache($mainClass->id, $mainClass->name, $scheme);
+                if ($mainClass->list_name != $mainClass->name) {
+                    $this->setXMLCache($mainClass->id, $mainClass->list_name, $scheme);
+                }
+
             }
         }
     }
@@ -65,8 +74,8 @@ class Cache
         $data['description'] = $mainClass->description;
         $data['subClass'] = $this->getSubClassLink($mainClass->id, $scheme);
         $redis = MyRedis::init(MyRedis::REDIS_PROTOCOL);
-        $redis->set("OTT_LIST_JSON_{$data['name']}_{$data['scheme']}", Json::encode($data));
-        $redis->set("OTT_LIST_JSON_{$data['name']}_{$data['scheme']}_VERSION", $data['version']);
+        $redis->set("OTT_LIST_JSON_{$mainClass->list_name}_{$data['scheme']}", Json::encode($data));
+        $redis->set("OTT_LIST_JSON_{$mainClass->list_name}_{$data['scheme']}_VERSION", $data['version']);
 
         return $data;
     }
@@ -203,10 +212,11 @@ class Cache
 
     /**
      * @param $id
+     * @param $mainClassName string
      * @param Scheme|null $scheme
      * @return bool|DOMDocument
      */
-    private function setXMLCache($id, $scheme = null)
+    private function setXMLCache($id, $mainClassName, $scheme = null)
     {
         $dom = new DomDocument('1.0', 'utf-8');
         $response = $dom->createElement('response');
@@ -238,9 +248,9 @@ class Cache
         $value = $dom->createTextNode($version);
         $newVersion->appendChild($value);
 
-        $mainClass = MainClass::findOne($id);
 
-        $subClassData = $this->getSubClassLink($mainClass->id, $scheme);
+
+        $subClassData = $this->getSubClassLink($id, $scheme);
 
         foreach ($subClassData as $class) {
             $liveType = $dom->createElement("liveType");
@@ -278,8 +288,8 @@ class Cache
         }
 
         $redis = MyRedis::init(MyRedis::REDIS_PROTOCOL);
-        $redis->set("OTT_LIST_XML_{$mainClass->name}_{$schemeName}", $dom->saveXML());
-        $redis->set("OTT_LIST_XML_{$mainClass->name}_{$schemeName}_VERSION", $version);
+        $redis->set("OTT_LIST_XML_{$mainClassName}_{$schemeName}", $dom->saveXML());
+        $redis->set("OTT_LIST_XML_{$mainClassName}_{$schemeName}_VERSION", $version);
 
         return true;
     }

@@ -141,7 +141,7 @@ class MainClassController extends BaseController
     {
         $model = $this->findModel($id);
         $redis = MyRedis::init(MyRedis::REDIS_PROTOCOL);
-        $cacheKeys = $redis->keys("OTT_LIST_XML_{$model->name}*");
+        $cacheKeys = $redis->keys("OTT_LIST_XML_{$model->list_name}*");
         $data = [];
 
         if (!empty($cacheKeys)) {

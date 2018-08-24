@@ -52,14 +52,15 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 [
                     'attribute' => 'icon',
-                    'options' => ['style' => 'width:100px;'],
+                    'options' => ['style' => 'width:100px;',],
                     'format' => ['image',['height'=>'45']],
                     'value' => function($model) {
                         if (strpos($model->icon, '/') !== false) {
                             return Func::getAccessUrl($model->icon,600);
                         }
                         return null;
-                    }
+                    },
+
                 ],
                 'name',
                 'zh_name',
@@ -80,7 +81,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'label' => Yii::t('backend', 'List version'),
                     'format' => 'raw',
                     'value' => function($model) {
-                        $version = (new \backend\models\Cache())->getCacheVersion($model->name);
+                        $version = (new \backend\models\Cache())->getCacheVersion($model->list_name);
                         if ($version) {
                             return Html::a(Yii::$app->formatter->asRelativeTime($version),Url::to(['main-class/list-cache', 'id' => $model->id]), [
                                 'class' => 'btn btn-link'

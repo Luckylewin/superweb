@@ -24,6 +24,10 @@ use yii\widgets\ActiveForm;
     </div>
 
     <div class="col-md-6">
+        <?= $form->field($model, 'list_name')->textInput(['maxlength' => true]) ?>
+    </div>
+
+    <div class="col-md-6">
         <?= $form->field($model, 'zh_name')->textInput(['maxlength' => true]) ?>
     </div>
 
