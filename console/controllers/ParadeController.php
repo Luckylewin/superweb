@@ -9,7 +9,7 @@
 namespace console\controllers;
 
 use backend\models\Parade;
-use console\models\event\liveso;
+use console\jobs\ParadeJob;
 use console\models\event\sportsmediawatch;
 use console\models\event\zhiboba;
 use console\models\parade\beginsport;
@@ -29,11 +29,17 @@ class ParadeController extends Controller
     public function actionHelp()
     {
         $list = [
-            'sky','tsn','espn','sport','sfr','euro', 'begin', 'cctv5'
+            'sky','tsn','espn','sport','sfr','euro', 'begin', 'cctv5','create-cache'
         ];
+        
         foreach ($list as $action) {
             $this->stdout($action . PHP_EOL);
         }
+    }
+
+    public function actionCreateCache()
+    {
+        ParadeJob::generateCache();
     }
 
     public function clearExpire()

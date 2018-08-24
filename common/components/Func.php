@@ -75,7 +75,7 @@ class Func
         }
 
         if ($httpPos === false && strpos($path, '/') !== 0) {
-            return Aliyunoss::getDownloadUrl($path, 300);
+            return Aliyunoss::getDownloadUrl($path, $expireTime);
         }
 
         $url = "http://" . self::getServerIp() . ":" . Yii::$app->params['nginx']['media_port'] ."{$path}?";
