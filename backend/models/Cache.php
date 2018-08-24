@@ -291,7 +291,7 @@ class Cache
 
         $redis = MyRedis::init(MyRedis::REDIS_PROTOCOL);
 
-        $schemeName = str_replace('', '#', $schemeName);
+        $schemeName = str_replace(' ', '#', $schemeName);
 
         $redis->set("OTT_LIST_XML_{$mainClassName}_{$schemeName}", $dom->saveXML());
         $redis->set("OTT_LIST_XML_{$mainClassName}_{$schemeName}_VERSION", $version);
