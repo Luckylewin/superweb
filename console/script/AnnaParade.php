@@ -202,7 +202,10 @@ class AnnaParade extends base
         if (!$isExist &&!empty($channelData)) {
             $parade['parade_data'] = json_encode(array($parade['parade_data']));
             // 新增 parade
-            Yii::$app->db->createCommand()->insert('iptv_parade', $parade)->execute();
+            if ($parade['channel_name']) {
+                Yii::$app->db->createCommand()->insert('iptv_parade', $parade)->execute();
+            }
+
         } else {
             $data = json_decode($isExist['parade_data'],true);
 
@@ -244,7 +247,7 @@ class AnnaParade extends base
                     $parade['parade_data'] = json_encode(['parade_name' => $title,'parade_time'=>'00:00']);
                     $isExist = Parade::findOne(['channel_name' => $channelData->alias_name, 'parade_date' => $parade['parade_date']]);
 
-                    if (is_null($isExist)) {
+                    if (is_null($isExist) && $parade['channel_name']) {
                         Yii::$app->db->createCommand()->insert('iptv_parade', $parade)->execute();
                     }
                 }
