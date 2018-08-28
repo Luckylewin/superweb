@@ -40,11 +40,14 @@ class AnnaParade extends base
         $classData = MainClass::find()
                                 ->alias('a')
                                 ->joinWith('subChannel')
-                                ->where(['a.name' => 'br'])
+                                ->where(['a.name' => 'Brazil'])
+                                ->orWhere(['a.name' => 'br'])
                                 ->one();
 
         $items = [];
-        $items[] = ArrayHelper::map($classData->subChannel, 'name', 'alias_name');
+        if (isset($classData->subChannel)) {
+            $items[] = ArrayHelper::map($classData->subChannel, 'name', 'alias_name');
+        }
 
         if (!empty($items)) {
             $this->str = $items;
