@@ -53,9 +53,15 @@ class vn extends CommonParade
             'htv9'  => 'http://tv.vietbao.vn/lich-phat-song/htv9/ngay-',
         ];
 
+        $start = strtotime('today');
+
         foreach ($data as $key => $url) {
-            $this->crawlViebao($key, $url);
-            $this->_sleep(2, 4);
+            for ($i=0; $i<5; $i++) {
+                $actualUrl = $url . date('d-m-Y', $start + $i * 86400) . '.html',PHP_EOL;
+                $this->crawlViebao($key, $actualUrl);
+                $this->_sleep(4, 8);
+            }
+
         }
 
     }
