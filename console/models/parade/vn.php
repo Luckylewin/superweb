@@ -57,7 +57,7 @@ class vn extends CommonParade
 
         foreach ($data as $key => $url) {
             for ($i=0; $i<5; $i++) {
-                $actualUrl = $url . date('d-m-Y', $start + $i * 86400) . '.html',PHP_EOL;
+                $actualUrl = $url . date('d-m-Y', $start + $i * 86400) . '.html';
                 $this->crawlViebao($key, $actualUrl);
                 $this->_sleep(4, 8);
             }

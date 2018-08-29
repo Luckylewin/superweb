@@ -15,7 +15,9 @@ use backend\models\MiddleParade;
 use backend\models\Parade;
 use backend\models\Scheme;
 use common\models\MainClass;
+use common\models\OttChannel;
 use common\models\OttLink;
+use common\models\SubClass;
 use common\models\Vod;
 use common\models\Vodlink;
 use common\models\VodList;
@@ -104,11 +106,27 @@ class HelloController extends Controller
 
     public function actionMaintain()
     {
+        $subclass = SubClass::find()->all();
+        foreach ($subclass as $class) {
+            if (is_null($class->mainClass)) {
+                $class->delete();
+                $this->stdout("删除" . $class->name . PHP_EOL);
+            }
+        }
+
+        $channels = OttChannel::find()->all();
+        foreach ($channels as $channel) {
+            if (is_null($channel->subClass)) {
+                $channel->delete();
+                $this->stdout('删除' . $channel->name . PHP_EOL);
+            }
+        }
+
         $links = OttLink::find()->all();
         foreach ($links as $link) {
-            if (empty($link->scheme_id)) {
-                $link->scheme_id = 'all';
-                $link->save(false);
+            if (is_null($link->channel)) {
+                $link->delete();
+                $this->stdout('删除' . $link->link . PHP_EOL);
             }
         }
     }
