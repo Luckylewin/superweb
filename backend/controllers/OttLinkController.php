@@ -106,15 +106,28 @@ class OttLinkController extends BaseController
         if (Yii::$app->request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
             $field = Yii::$app->request->get('field');
+
             if ($field == 'use_flag') {
                 $model->use_flag = $model->use_flag ? '0' : '1';
                 $model->save(false);
                 return [
                     'status' => 0,
                     'data' => ['use_flag' => $model->use_flag],
-                    'msg' => Yii::t('backend', $model->use_flag_status[$model->use_flag])
+                    'msg' => $model->use_flag_status[$model->use_flag]
                 ];
-            } elseif ($field == 'scheme_id') {
+            }
+
+            if ($field == 'sort') {
+                $model->sort = Yii::$app->request->post('value', 1);
+                $model->save(false);
+                return [
+                    'status' => 0,
+                    'data' => ['sort' => $model->sort],
+                    'msg' => Yii::t('backend', 'Success')
+                ];
+            }
+
+            if ($field == 'scheme_id') {
                 $scheme_id = Yii::$app->request->post('scheme');
                 $count = Scheme::find()->count('id');
                 if (count($scheme_id) == $count) {

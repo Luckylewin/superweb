@@ -30,7 +30,6 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js'
 
     <p>
         <?= Html::a(Yii::t('backend', 'Create'), ['create','sub-id' => $subClass->id], ['class' => 'btn btn-success']) ?>
-
     </p>
 
     <?php
@@ -175,8 +174,7 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js'
         }
 
     ?>
-
-</div>
+ </div>
 
 <div>
 
@@ -215,6 +213,8 @@ $soft_text = Yii::t('backend', 'Soft');
 $hard_text = Yii::t('backend', 'Hard');
 $all_text = Yii::t('backend', 'All Schemes');
 
+$success = Yii::t('backend', 'Success');
+
 $requestJs=<<<JS
     $('.load-link').click(function(){
         $('.modal-lg').css('width','99%');
@@ -223,7 +223,7 @@ $requestJs=<<<JS
          
         
         $.getJSON('{$requestUrl}', {channel_id:$(this).attr('data-id')}, function(data) {
-            var table = '<table class="table table-bordered"><thead><th style="width:30px;"><i class="fa fa-dot-circle-o"></th><th><i class="fa fa-link"></th><th width="50px"><i class="fa fa-key"></th><th width="50px"><i class="fa fa-tv"></i></th><th width="4px"><i class="fa fa-photo"></th><th width="50px"><i class="fa fa-flag"></i></th><th style="width:280px;"><i class="fa fa-cog fa-fw"></th></tr></thead><tbody>';
+            var table = '<table class="table table-bordered"><thead><th style="width:30px;"><i class="fa fa-dot-circle-o"></th><th><i class="fa fa-link"></th><th width="50px"><i class="fa fa-key"></th><th width="50px"><i class="fa fa-tv"></i></th><th width="4px"><i class="fa fa-photo"></th><th width="80px"><i class="fa fa-flag"></i></th><th width="65px"><i class="fa fa-sort"></i></th><th style="width:200px;"><i class="fa fa-cog fa-fw"></th></tr></thead><tbody>';
             var tr = '';
             
             $.each(data,function(){
@@ -247,8 +247,9 @@ $requestJs=<<<JS
                     tr += '<td style="vertical-align:middle;">' + $(this).attr('method') + '</td>';
                     tr += '<td style="vertical-align:middle;">' + ($(this).attr('decode') === '0' ? '{$soft_text}':'{$hard_text}') + '</td>';
                     tr += '<td style="vertical-align:middle;">' + $(this).attr('definition') + '</td>';
-                    tr += '<td style="vertical-align:middle;" class="use-flag">' + ($(this).attr('use_flag_text')) + '</td>';
-                    tr += '<td style="vertical-align:middle;"><button class="btn btn-info btn-xs change-scheme" scheme-id=' + $(this).attr('scheme_id') + ' data-id='+ $(this).attr('id') +'>{$modify_text}</button>&nbsp;<button class="btn btn-primary btn-xs use-switch">{$switch_text}</button>&nbsp;&nbsp;<button class="btn btn-warning btn-xs link-edit">{$update_text}</button>&nbsp;<button class="btn btn-danger btn-xs link-del">{$delete_text}</button></td></tr>';
+                    tr += '<td style="vertical-align:middle;" class="use-flag"><button class="btn btn-default btn-xs use-switch">' + $(this).attr('use_flag_text') + '</button></td>';
+                    tr += '<td style="vertical-align:middle;" ><input class="link-sort form-control" data-id="'+ $(this).attr('id') +'" value="'+ ($(this).attr('sort')) +'">' + '</td>';
+                    tr += '<td style="vertical-align:middle;"><button class="btn btn-info btn-xs change-scheme" scheme-id=' + $(this).attr('scheme_id') + ' data-id='+ $(this).attr('id') +'>{$modify_text}</button>&nbsp;&nbsp;<button class="btn btn-warning btn-xs link-edit">{$update_text}</button>&nbsp;<button class="btn btn-danger btn-xs link-del">{$delete_text}</button></td></tr>';
             });
                 
             table += tr;
@@ -262,7 +263,7 @@ $requestJs=<<<JS
         var tr = $(this).parent().parent();
         var link_id = tr.attr('link-id');
         $.getJSON('{$switchUrl}', {id:link_id}, function(back) {
-             $(tr).find('.use-flag').html(back.msg);
+             $(tr).find('.use-switch').html(back.msg);
         });
         
     }).on('click', '.link-del',function(){
@@ -324,6 +325,14 @@ $requestJs=<<<JS
          $.get('{$updateLinkUrl}',{id:link_id,modal:'modal'}, function(form) {
             $('.modal-lg').css('width','70%');
             $('.modal-body').html(form).css('min-height','370px'); 
+        });
+         
+    }).on('change', '.link-sort', function() {
+        var id = $(this).attr('data-id'),
+            data = {value:$(this).val()};
+        
+        $.post('{$updateLinkUrl}' + '&field=sort&id=' + id,data, function() {
+             layer.msg('{$success}');
         });
     });
 
