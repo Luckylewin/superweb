@@ -18,9 +18,11 @@ class AccessControl extends \yii\filters\AccessControl {
         $user = $this->user;
         $actionId = $action->getUniqueId();
 
-        $permissions = Yii::$app->cache->getOrSet('sys-permissions', function() {
+        $userId = $user->id;
+        $permissions = Yii::$app->cache->getOrSet($userId . '-sys-permissions', function() {
             return Yii::$app->authManager->getPermissions();
-        });
+        }, 1800);
+
         $allLimitedPermission = ArrayHelper::getColumn($permissions, 'ruleName');
 
         foreach ($this->rules as $i => $rule) {
