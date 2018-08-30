@@ -41,7 +41,7 @@ use dosamigos\fileupload\FileUploadUI;
             'accept' => 'apk'
         ],
         'clientOptions' => [
-            'maxFileSize' => 50000000
+            'maxFileSize' => 200000000
         ],
         // ...
         'clientEvents' => [
