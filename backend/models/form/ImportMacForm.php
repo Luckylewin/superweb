@@ -111,18 +111,23 @@ class ImportMacForm extends Model
     {
         $this->validate();
         $macData = [];
-        $macDetailData = [];
 
-        $macFields = ['MAC', 'SN', 'contract_time', 'regtime'];
-        $macDetailFields = ['MAC', 'client_id'];
+
+        $macFields = ['MAC', 'SN', 'contract_time', 'regtime', 'client_id'];
+
 
         foreach ($this->importData as $value) {
-            $macData[] = [$value['mac'], $value['sn'], $this->contract_time . " " . $this->unit, date('Y-m-d H:i:s')];
-            $macDetailData[] = [$value['mac'], $this->client_id];
+            if (Mac::find()->where(['MAC' => $value, 'SN' => $value['sn']])->exists() == false) {
+                $macData[] = [$value['mac'], $value['sn'], $this->contract_time . " " . $this->unit, date('Y-m-d H:i:s'), $this->client_id];
+            }
+
         }
 
-        $total = Yii::$app->db->createCommand()->batchInsert('mac', $macFields, $macData)->execute();
-        Yii::$app->db->createCommand()->batchInsert('mac_detail', $macDetailFields, $macDetailData)->execute();
+        try {
+            $total = Yii::$app->db->createCommand()->batchInsert('mac', $macFields, $macData)->execute();
+        } catch (\Exception $e) {
+            $total = 0;
+        }
 
         return $total;
     }
