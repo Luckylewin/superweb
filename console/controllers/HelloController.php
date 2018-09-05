@@ -8,28 +8,19 @@
 namespace console\controllers;
 
 use backend\models\Cache;
-use backend\models\LinkToScheme;
 use backend\models\Mac;
-use backend\models\MacDetail;
 use backend\models\MiddleParade;
 use backend\models\Parade;
-use backend\models\Scheme;
 use common\models\MainClass;
 use common\models\OttChannel;
 use common\models\OttLink;
 use common\models\SubClass;
-use common\models\Vod;
-use common\models\Vodlink;
-use common\models\VodList;
 use console\components\MySnnopy;
-use console\models\movie\IMDB;
-use console\models\movie\OMDB;
-use console\models\profile;
 use Symfony\Component\DomCrawler\Crawler;
 use yii\console\Controller;
 use yii\console\ExitCode;
 use yii\db\Query;
-
+use Yii;
 /**
  * This command echoes the first argument that you have entered.
  *
@@ -151,6 +142,36 @@ class HelloController extends Controller
 
     }
 
+    public function actionCopyUser()
+    {
+        $total = Yii::$app->db2->createCommand('select count(*) as total from mac')->queryOne();
+        $total = $total['total'];
+        $this->stdout("新系统总条数{$total}");
+        sleep(2);
+        $cal = ceil($total / 100 + 1);
+
+        for ($i=0; $i< $cal; $i++) {
+            $offset = $i * 100;
+            $this->stdout("同步数据中{$offset}" . PHP_EOL);
+            $oldData = Yii::$app->db2->createCommand("select * from mac limit {$offset},100")->queryAll();
+            foreach ($oldData as $data) {
+                if (Mac::find()->where(['MAC' => $data['MAC'], 'SN' => $data['SN']])->exists() === false) {
+                     $mac = new Mac();
+                     $mac->MAC = $data['MAC'];
+                     $mac->SN = $data['SN'];
+                     $mac->client_id = 54;
+                     $mac->contract_time =  $data['contract_time'];
+                     $mac->regtime = $data['regtime'];
+                     $mac->use_flag = $data['use_flag'];
+                     $mac->save(false);
+                }
+            }
+        }
+
+        $count = Mac::find()->count('*');
+        $this->stdout("新系统总条数{$count}");
+
+    }
 
     public function actionTest()
     {
