@@ -4,7 +4,7 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model app\models\RechargeCard */
+/* @var $model backend\models\RechargeCard */
 
 $this->title = 'Create Recharge Card';
 $this->params['breadcrumbs'][] = ['label' => 'Recharge Cards', 'url' => ['index']];

@@ -3,9 +3,11 @@
 namespace backend\controllers;
 
 use backend\models\Admin;
+use backend\models\form\LockerSwitchForm;
 use Yii;
 use backend\models\ApkList;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Url;
 use yii\web\NotFoundHttpException;
 use backend\models\search\ApkListSearch;
 
@@ -15,10 +17,6 @@ use backend\models\search\ApkListSearch;
 class ApkListController extends BaseController
 {
 
-    /**
-     * Lists all ApkList models.
-     * @return mixed
-     */
     public function actionIndex()
     {
         $searchModel = new ApkListSearch();
@@ -30,12 +28,6 @@ class ApkListController extends BaseController
         ]);
     }
 
-    /**
-     * Displays a single ApkList model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     public function actionView($id)
     {
         return $this->render('view', [
@@ -60,11 +52,6 @@ class ApkListController extends BaseController
         ]);
     }
 
-    /**
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
@@ -79,6 +66,29 @@ class ApkListController extends BaseController
         ]);
     }
 
+    public function actionDelete($id)
+    {
+        $this->findModel($id)->delete();
+        $this->setFlash('success', Yii::t('backend', 'Success'));
+        return $this->redirect(['index']);
+    }
+
+
+    protected function findModel($id)
+    {
+        if (($model = ApkList::findOne($id)) !== null) {
+            return $model;
+        }
+
+        throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    /**
+     * 设置方案号
+     * @param $id
+     * @return string|\yii\web\Response
+     * @throws NotFoundHttpException
+     */
     public function actionSetScheme($id)
     {
         $model = $this->findModel($id);
@@ -98,29 +108,20 @@ class ApkListController extends BaseController
         ]);
     }
 
-    /**
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionDelete($id)
+    public function actionLockerSwitch($id)
     {
-        $this->findModel($id)->delete();
-        Yii::$app->session->setFlash('success', Yii::t('backend', 'Success'));
-        return $this->redirect(['index']);
-    }
+        $model = $this->findModel($id);
+        $form = new LockerSwitchForm();
+        $form->app_name = $model->typeName;
 
-    /**
-     * @param integer $id
-     * @return ApkList the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    protected function findModel($id)
-    {
-        if (($model = ApkList::findOne($id)) !== null) {
-            return $model;
+        if ($form->load(Yii::$app->request->post()) && $total = $form->deal()) {
+            $this->setFlash('success', "deal {$total} items");
+            return $this->redirect(Url::to(['apk-list/index']));
         }
 
-        throw new NotFoundHttpException('The requested page does not exist.');
+        return $this->render('locker-switch', [
+            'model' => $form
+        ]);
     }
+
 }

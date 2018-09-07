@@ -1,5 +1,5 @@
 <?php
-defined('YII_DEBUG') or define('YII_DEBUG', true);
+defined('YII_DEBUG') or define('YII_DEBUG', false);
 defined('YII_ENV') or define('YII_ENV', 'dev');
 
 require __DIR__ . '/vendor/autoload.php';
@@ -14,18 +14,12 @@ $config = yii\helpers\ArrayHelper::merge(
     require __DIR__ . '/backend/config/main-local.php'
 );
 
-//定义
-$config['components']['view'] = [
-    'theme' => [
-        'basePath' => '@statics/themes/default-admin',
-        'baseUrl' => '@statics/themes/default-admin',
-        'pathMap' => [
-            '@backend/views' => [
-                '@statics/themes/' . 'default-admin' . '/views',
-            ],
-        ],
-    ],
-];
-
+if(YII_DEBUG){
+    $config['bootstrap'][] = 'gii';
+    $config['modules']['gii'] = [
+        'class' => 'yii\gii\Module',
+        'allowedIPs' => ['127.0.0.1']
+    ];
+}
 
 (new yii\web\Application($config))->run();

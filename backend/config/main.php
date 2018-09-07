@@ -12,16 +12,20 @@ return [
     'sourceLanguage' => 'en-US',
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
+    'timeZone'=>'Asia/Shanghai', //指定时区
+    'defaultRoute' => 'index/frame',
+    'layout' => 'main',//布局文件 优先级: 控制器>配置文件>系统默认
     'bootstrap' => [
         'log',
         'queue',
     ],
+     // 模块
     'modules' => [
         'db-manager' => [
             'class' => 'bs\dbManager\Module',
-            // path to directory for the dumps
+            // 备份文件保存文件
             'path' => '@storage/backups',
-            // list of registerd db-components
+            // 数据库组件列表
             'dbList' => ['db'],
             'as access' => [
                 'class' => 'yii\filters\AccessControl',
@@ -34,7 +38,20 @@ return [
             ],
         ],
     ],
+    // 组件
     'components' => [
+        'view' => [
+            // 模版设置
+            'theme' => [
+                'basePath' => '@statics/themes/default-admin',
+                'baseUrl' => '@statics/themes/default-admin',
+                'pathMap' => [
+                    '@backend/views' => [
+                        '@statics/themes/' . 'default-admin' . '/views',
+                    ],
+                ],
+            ],
+        ],
         'request' => [
             'csrfParam' => '_csrf-backend',
             'cookieValidationKey' => 'EJBy8WRohzpqJY7BTurjQaft2NV-g1cA',
@@ -89,7 +106,7 @@ return [
             'password' => '12345678',
             'charset' => 'utf8',
             'tablePrefix' => 'yii2_',
-            'enableSchemaCache' => true
+            'enableSchemaCache' => false
         ],
 
         //阿里云组件
@@ -120,19 +137,16 @@ return [
             'path' => '@storage/runtime/queue',
         ],
 
+        // 缓存组件
         'cache' => [
             'class' => 'yii\caching\FileCache',
             'cachePath' => '@webroot/storage/runtime/cache'
         ],
     ],
 
-     //指定时区
-    'timeZone'=>'Asia/Shanghai',
-    'defaultRoute' => 'index/frame',
-    'layout' => 'main',//布局文件 优先级: 控制器>配置文件>系统默认
     'params' => $params,
     'on beforeRequest' => function ($event) {
-
+        // 语言设置
         Yii::$app->i18n->translations['dbManager'] = [
             'class' => 'yii\i18n\PhpMessageSource',
             'sourceLanguage' => 'en-US',
@@ -142,6 +156,6 @@ return [
         $cookies = Yii::$app->request->cookies;//注意此处是request
         $language = $cookies->get('language', 'en-US');//设置默认值
         Yii::$app->language = $language;
-        return;
+        return true;
     },
 ];
