@@ -22,6 +22,10 @@ use yii\helpers\ArrayHelper;
  * @property string $is_charge 是否收费
  * @property string $price 价格
  * @property string $use_flag 开关
+ * @property string one_month_price 一个月价格
+ * @property string three_month_price 三个月价格
+ * @property string six_month_price 六个月价格
+ * @property string one_year_price 十二个月价格
  */
 class MainClass extends \yii\db\ActiveRecord
 {
@@ -47,7 +51,8 @@ class MainClass extends \yii\db\ActiveRecord
             ['use_flag', 'safe'],
             ['use_flag', 'default', 'value' => '1'],
             ['price', 'default', 'value' => '0.00'],
-            ['is_charge', 'default', 'value' => 0]
+            ['is_charge', 'default', 'value' => 0],
+            [['one_month_price', 'three_month_price', 'six_month_price', 'one_year_price'], 'string']
         ];
     }
 
@@ -69,7 +74,11 @@ class MainClass extends \yii\db\ActiveRecord
             'is_charge' => Yii::t('backend', 'Is Charge'),
             'price' => Yii::t('backend', 'Price'),
             'use_flag' => Yii::t('backend', 'Switch'),
-            'list_name' => Yii::t('backend', 'List name')
+            'list_name' => Yii::t('backend', 'List name'),
+            'one_month_price' => Yii::t('backend', 'one month price'),
+            'three_month_price' => Yii::t('backend', 'three month price'),
+            'six_month_price' => Yii::t('backend', 'six month price'),
+            'one_year_price' => Yii::t('backend', 'one year price'),
         ];
     }
 

@@ -19,29 +19,45 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
+    <div>
+        <div class="col-md-6">
+            <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+        </div>
+
+        <div class="col-md-6">
+            <?= $form->field($model, 'list_name')->textInput(['maxlength' => true]) ?>
+        </div>
+
+        <div class="col-md-6">
+            <?= $form->field($model, 'zh_name')->textInput(['maxlength' => true]) ?>
+        </div>
+
+        <div class="col-md-6">
+            <?= $form->field($model, 'is_charge')->dropDownList([Yii::t('backend', 'Free'), Yii::t('backend', 'Charge')]) ?>
+        </div>
+    </div>
+
+
     <div class="col-md-6">
-        <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'one_month_price'); ?>
     </div>
 
     <div class="col-md-6">
-        <?= $form->field($model, 'list_name')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'three_month_price'); ?>
     </div>
 
     <div class="col-md-6">
-        <?= $form->field($model, 'zh_name')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'six_month_price'); ?>
     </div>
 
     <div class="col-md-6">
-        <?= $form->field($model, 'is_charge')->dropDownList([Yii::t('backend', 'Free'), Yii::t('backend', 'Charge')]) ?>
+        <?= $form->field($model, 'one_year_price'); ?>
     </div>
 
-    <div class="col-md-6">
-        <?= $form->field($model, 'price'); ?>
-    </div>
+
+
 
     <div class="col-md-12">
-
-
 
         <?= $form->field($model, 'sort')->textInput(['maxlength' => true]) ?>
 
@@ -184,6 +200,7 @@ use yii\widgets\ActiveForm;
             ],
         ]); ?>
     </div>
+
 
     <div class="col-md-12">
         <div class="form-group">

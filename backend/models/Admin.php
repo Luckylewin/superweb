@@ -89,21 +89,24 @@ class Admin extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * 获取账号信息
-     * @param  [int] $id [后台用户id]
+     *  获取账号信息
+     * @param int|string $id
+     * @return Admin|null|IdentityInterface
      */
     public static function findIdentity($id)
     {
         return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
     }
 
-    public static function findIdentityByAccessToken($token, $type = null) {
+    public static function findIdentityByAccessToken($token, $type = null)
+    {
         throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
     }
 
     /**
      * 获取账号信息
-     * @param  [string] $username [用户名]
+     * @param $username
+     * @return Admin|null
      */
     public static function findByUsername($username) {
         return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
@@ -125,7 +128,8 @@ class Admin extends ActiveRecord implements IdentityInterface
 
     /**
      * 验证auth_key
-     * @param  [string] $authKey [auth key]
+     * @param string $authKey
+     * @return bool
      */
     public function validateAuthKey($authKey) {
         return $this->getAuthKey() === $authKey;
@@ -133,7 +137,8 @@ class Admin extends ActiveRecord implements IdentityInterface
 
     /**
      * 验证用户密码
-     * @param  [string] $password [用户密码]
+     * @param $password
+     * @return bool
      */
     public function validatePassword($password) {
         return Yii::$app->security->validatePassword($password, $this->password_hash);
@@ -141,7 +146,8 @@ class Admin extends ActiveRecord implements IdentityInterface
 
     /**
      * 生成加密后的密码
-     * @param [string] $password [用户密码]
+     * @param $password
+     * @throws \yii\base\Exception
      */
     public function setPassword($password) {
         $this->password_hash = Yii::$app->security->generatePasswordHash($password);
@@ -149,7 +155,7 @@ class Admin extends ActiveRecord implements IdentityInterface
 
     /**
      * 生成auth_key
-     * @return [type] [description]
+     * @throws \yii\base\Exception
      */
     public function generateAuthKey() {
         $this->auth_key = Yii::$app->security->generateRandomString();
@@ -193,7 +199,8 @@ class Admin extends ActiveRecord implements IdentityInterface
         return $role;
     }
 
-    public function beforeSave($insert) {
+    public function beforeSave($insert)
+    {
         if($this->isNewRecord) {
             $this->generateAuthKey();
             $this->reg_ip = ip2long(Yii::$app->getRequest()->getUserIP());
