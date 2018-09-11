@@ -41,7 +41,7 @@ class OttChannel extends \yii\db\ActiveRecord
             [['sub_class_id', 'name', 'zh_name', 'keywords'], 'required'],
             [['sub_class_id', 'sort', 'use_flag', 'channel_number'], 'integer'],
             [['name', 'zh_name', 'keywords'], 'string', 'max' => 255],
-            [['image'], 'string', 'max' => 50],
+            [['image'], 'string', 'max' => 255],
             [['alias_name'], 'string', 'max' => 100],
             [['sort','is_recommend'], 'default', 'value' => '0'],
             ['use_flag', 'default', 'value' => '1']
