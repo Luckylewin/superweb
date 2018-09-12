@@ -315,8 +315,7 @@ class Vod extends \yii\db\ActiveRecord implements Linkable
     {
        return [
            Link::REL_SELF => Url::to(['vod/view', 'id' => $this->vod_id, 'expand' => 'vodLinks'], true),
-           'recommend' => Url::to(['recommend/view', 'id' => $this->vod_id], true),
-           'vod-links' => Url::to(['link', 'id' => $this->vod_id, 'access-token' => ''], true)
+           'recommend' => Url::to(['recommend/view', 'id' => $this->vod_id], true)
        ];
     }
 
