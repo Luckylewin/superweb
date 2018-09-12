@@ -51,11 +51,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
 
                 [
-                    'attribute' => 'online_status',
+                    'attribute' => 'is_online',
                     'format' => 'raw',
                     'label' => Yii::t('backend', 'Online Status'),
-                    'value' => function() use($searchModel) {
-                        return $searchModel->getOnlineWithLabel();
+                    'value' => function($model) {
+                        return $model->getOnlineWithLabel($model->is_online);
                     },
                     'options' => [ 'style' => 'width:56px;']
                 ],
@@ -172,11 +172,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 'url' => \yii\helpers\Url::to(['mac/batch-delete'])
         ]) ?>
 
+        <?= Html::a(Yii::t('backend', 'Sync online-state'), \yii\helpers\Url::to(['mac/sync-online']), ['class' => 'btn btn-default']) ?>
+
         <?= Html::a(Yii::t('backend', 'Batch Creation'), ['batch-create'], ['class' => 'btn btn-default']) ?>
 
         <?= Html::a(Yii::t('backend', 'Export Mac-Sn'), \yii\helpers\Url::to(['mac/export', 'queryParams' => $queryParams]), ['class' => 'btn btn-default']) ?>
 
         <?= Html::a(Yii::t('backend', 'Import Mac-Sn'), \yii\helpers\Url::to(['mac/import']), ['class' => 'btn btn-default']) ?>
+
 
     </div>
     </div>

@@ -24,6 +24,7 @@ use yii\web\IdentityInterface;
  * @property string $access_token_expire 有效期
  * @property int $identity_type 会员类型
  * @property int $client_id 关联的客户id
+ * @property string $is_online 是否在线
  */
 class Mac extends \yii\db\ActiveRecord implements IdentityInterface
 {
@@ -75,7 +76,7 @@ class Mac extends \yii\db\ActiveRecord implements IdentityInterface
             [['MAC', 'SN'], 'string', 'max' => 64],
             [['contract_time'], 'string', 'max' => 8],
 
-            [['ver', 'identity_type', 'client_id'], 'default', 'value' => 0],
+            [['ver', 'identity_type', 'client_id', 'is_online'], 'default', 'value' => 0],
             [['regtime'], 'default', 'value' => date('Y-m-d H:i:s', time())],
             [['logintime'], 'default', 'value' => '']
         ];
@@ -97,7 +98,8 @@ class Mac extends \yii\db\ActiveRecord implements IdentityInterface
             'type' => Yii::t('backend', 'Type'),
             'duetime' => Yii::t('backend', 'Expire Time'),
             'contract_time' => Yii::t('backend', 'Validity Period'),
-            'client_name' => Yii::t('backend', 'Associated Client')
+            'client_name' => Yii::t('backend', 'Associated Client'),
+            'is_online' => Yii::t('backend', 'is online')
         ];
     }
 
@@ -179,9 +181,7 @@ class Mac extends \yii\db\ActiveRecord implements IdentityInterface
 
     public function getOnlineWithLabel()
     {
-        $value = $this->getOnLine();
-        $label = $value ? ['info', Yii::t('backend', 'Online')] : ['default', Yii::t('backend', 'Offline')];
-
+        $label = $this->is_online ? ['info', Yii::t('backend', 'Online')] : ['default', Yii::t('backend', 'Offline')];
         return "<label class='label label-{$label[0]}'>{$label[1]}</label>";
     }
 

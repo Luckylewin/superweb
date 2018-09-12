@@ -92,4 +92,9 @@ class BaseController extends Controller
         return Yii::$app->session;
     }
 
+    public function getReferer()
+    {
+        return Yii::$app->request->referrer;
+    }
+
 }

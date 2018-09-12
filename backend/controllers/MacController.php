@@ -6,6 +6,7 @@ namespace backend\controllers;
 
 use backend\models\form\ImportMacForm;
 use backend\models\SysClient;
+use console\jobs\SyncOnlineStateJob;
 use Yii;
 
 use yii\bootstrap\ActiveForm;
@@ -24,10 +25,7 @@ use yii\web\NotFoundHttpException;
 class MacController extends BaseController
 {
 
-    /**
-     * Lists all Mac models.
-     * @return mixed
-     */
+
     public function actionIndex()
     {
         $searchModel = new MacSearch();
@@ -46,12 +44,7 @@ class MacController extends BaseController
         ]);
     }
 
-    /**
-     * Displays a single Mac model.
-     * @param string $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+
     public function actionView($id)
     {
         return $this->render('view', [
@@ -59,11 +52,7 @@ class MacController extends BaseController
         ]);
     }
 
-    /**
-     * Creates a new Mac model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
+
     public function actionCreate()
     {
         $model = new Mac();
@@ -78,13 +67,7 @@ class MacController extends BaseController
         ]);
     }
 
-    /**
-     * Updates an existing Mac model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param string $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
@@ -106,13 +89,7 @@ class MacController extends BaseController
         ]);
     }
 
-    /**
-     * Deletes an existing Mac model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param string $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+
     public function actionDelete($id)
     {
         // 删除关联数据
@@ -169,13 +146,7 @@ class MacController extends BaseController
     }
 
 
-    /**
-     * Finds the Mac model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param string $id
-     * @return Mac the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+
     protected function findModel($id)
     {
         if (($model = Mac::findOne($id)) !== null) {
@@ -216,5 +187,13 @@ class MacController extends BaseController
             'model' => $model,
             'clients' => $clients
         ]);
+    }
+
+    public function actionSyncOnline()
+    {
+        SyncOnlineStateJob::start();
+
+        $this->setFlash('info', 'Success');
+        return $this->redirect($this->getReferer());
     }
 }

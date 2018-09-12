@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'MAC',
             'SN',
-
+            'is_online',
             'ver',
             'regtime',
             'logintime',

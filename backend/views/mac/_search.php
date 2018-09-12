@@ -62,6 +62,16 @@ use \backend\models\Search\MacSearch;
                 ]); ?>
             </div>
 
+            <div class="col-md-3">
+
+                <?= $form->field($model, 'is_online')->dropDownList([
+                        '0' => 'offline',
+                        '1' => 'online',
+                ], [
+                    'prompt' => Yii::t('backend', 'please choose')
+                ]); ?>
+            </div>
+
         </div>
     </div>
 

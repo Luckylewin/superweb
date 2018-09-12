@@ -18,7 +18,7 @@ class MacSearch extends Mac
     public function rules()
     {
         return [
-            [['MAC', 'SN', 'ver', 'regtime', 'logintime', 'duetime', 'contract_time','client_name', 'client_id'], 'safe'],
+            [['MAC', 'SN', 'ver', 'regtime', 'logintime', 'duetime', 'contract_time','client_name', 'client_id', 'is_online'], 'safe'],
             [['use_flag', 'type'], 'integer'],
         ];
     }
@@ -83,7 +83,8 @@ class MacSearch extends Mac
             'logintime' => $this->logintime,
             'type' => $this->type,
             'duetime' => $this->duetime,
-            'client_id' => $this->client_name
+            'client_id' => $this->client_name,
+            'is_online' => $this->is_online
         ]);
 
         $this->MAC = trim($this->MAC);
