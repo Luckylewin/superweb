@@ -39,7 +39,22 @@ use \backend\models\Search\MacSearch;
             </div>
 
             <div class="col-md-3">
-                <?= $form->field($model, 'ver') ?>
+                <?php $client = SysClient::find()->asArray()->all(); ?>
+                <?php $client = is_null($client) ? [] : ArrayHelper::map($client, 'id', 'name'); ?>
+                <?= $form->field($model, 'client_name')->dropDownList($client, [
+                    'prompt' => Yii::t('backend', 'please choose')
+                ]); ?>
+            </div>
+
+            <div class="col-md-3">
+
+                <?= $form->field($model, 'is_online')->dropDownList([
+                    '1' => Yii::t('backend', 'Online'),
+                    '0' => Yii::t('backend', 'Offline')
+
+                ], [
+                    'prompt' => Yii::t('backend', 'please choose')
+                ]); ?>
             </div>
 
             <div class="col-md-3">
@@ -54,23 +69,9 @@ use \backend\models\Search\MacSearch;
                 ])?>
             </div>
 
-            <div class="col-md-3">
-                <?php $client = SysClient::find()->asArray()->all(); ?>
-                <?php $client = is_null($client) ? [] : ArrayHelper::map($client, 'id', 'name'); ?>
-                <?= $form->field($model, 'client_name')->dropDownList($client, [
-                    'prompt' => Yii::t('backend', 'please choose')
-                ]); ?>
-            </div>
 
-            <div class="col-md-3">
 
-                <?= $form->field($model, 'is_online')->dropDownList([
-                        '0' => 'offline',
-                        '1' => 'online',
-                ], [
-                    'prompt' => Yii::t('backend', 'please choose')
-                ]); ?>
-            </div>
+
 
         </div>
     </div>

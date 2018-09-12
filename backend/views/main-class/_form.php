@@ -33,10 +33,17 @@ use yii\widgets\ActiveForm;
         </div>
 
         <div class="col-md-6">
-            <?= $form->field($model, 'is_charge')->dropDownList([Yii::t('backend', 'Free'), Yii::t('backend', 'Charge')]) ?>
+            <?= $form->field($model, 'sort')->textInput(['maxlength' => true]) ?>
         </div>
     </div>
 
+    <div class="col-md-6">
+        <?= $form->field($model, 'is_charge')->dropDownList([Yii::t('backend', 'Free'), Yii::t('backend', 'Charge')]) ?>
+    </div>
+
+    <div class="col-md-6">
+        <?= $form->field($model, 'free_trail_days'); ?>
+    </div>
 
     <div class="col-md-6">
         <?= $form->field($model, 'one_month_price'); ?>
@@ -59,7 +66,7 @@ use yii\widgets\ActiveForm;
 
     <div class="col-md-12">
 
-        <?= $form->field($model, 'sort')->textInput(['maxlength' => true]) ?>
+
 
         <?= $form->field($model, 'description')->textarea(['rows' => 6]) ?>
     </div>

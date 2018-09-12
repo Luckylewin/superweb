@@ -26,6 +26,7 @@ use yii\helpers\ArrayHelper;
  * @property string three_month_price 三个月价格
  * @property string six_month_price 六个月价格
  * @property string one_year_price 十二个月价格
+ * @property integer free_trail_days 免费试用天数
  */
 class MainClass extends \yii\db\ActiveRecord
 {
@@ -52,7 +53,8 @@ class MainClass extends \yii\db\ActiveRecord
             ['use_flag', 'default', 'value' => '1'],
             ['price', 'default', 'value' => '0.00'],
             ['is_charge', 'default', 'value' => 0],
-            [['one_month_price', 'three_month_price', 'six_month_price', 'one_year_price'], 'string']
+            [['one_month_price', 'three_month_price', 'six_month_price', 'one_year_price'], 'string'],
+            ['free_trail_days', 'default', 'value' => 7]
         ];
     }
 
@@ -79,6 +81,7 @@ class MainClass extends \yii\db\ActiveRecord
             'three_month_price' => Yii::t('backend', 'three month price'),
             'six_month_price' => Yii::t('backend', 'six month price'),
             'one_year_price' => Yii::t('backend', 'one year price'),
+            'free_trail_days' => Yii::t('backend', 'free trail days'),
         ];
     }
 

@@ -554,6 +554,8 @@ return [
     "Export Channel's Images" => '导出频道台标',
     "Generate Cache" => '生成缓存',
     'Switch language successfully' => '已切换语言',
-    'List name' => '取列表名称'
+    'List name' => '取列表名称',
+    'is online' => '在线状态',
+    'free trail days' => '免费试看天数',
 
 ];
