@@ -83,8 +83,6 @@ class VodController extends ActiveController
         $fields = Vod::getFields();
         unset($fields[array_search('vod_url', $fields)]);
 
-
-
         if ($cid) {
             $query = Vod::find()->select($fields)->filterWhere([
                     'vod_cid' => $cid,

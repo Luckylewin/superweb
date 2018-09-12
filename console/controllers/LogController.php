@@ -37,23 +37,25 @@ class LogController extends Controller
         $this->stdout("php yii log/daily-log : 统计每日接口日志数据" . PHP_EOL, Console::FG_YELLOW);
     }
 
-    //日志实时统计
+    //日志实时统计（单独开进程运行）
     public function actionAnalyse()
     {
         //读取redis
         $this->redis = Yii::$app->redis;
         $this->redis->select($this->db);
 
-        //每次获取长度
-        $length = $this->redis->llen('log');
-        $start = time();
-        while ($length) {
-            $this->deal();
-            $length--;
-        }
-        $end = time();
+        while (true) {
+            //每次获取长度
+            $length = $this->redis->llen('log');
 
-        echo $end - $start;
+            while ($length) {
+                $this->deal();
+                $length--;
+            }
+
+            sleep(15);
+        }
+
     }
 
 
@@ -63,11 +65,6 @@ class LogController extends Controller
     private function deal()
     {
         $log = $this->redis->lpop('log');
-
-        if (class_exists('SeasLog', false)) {
-            \SeasLog::setLogger("app/" . date('Y/m'));
-            \SeasLog::info($log);
-        }
 
         if ($log) {
             $log = explode('|', $log);
