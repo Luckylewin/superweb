@@ -19,8 +19,8 @@ class SyncOnlineStateJob
         $redis = MyRedis::init(MyRedis::REDIS_DEVICE_STATUS);
 
         foreach (Mac::find()->select('MAC')->asArray()->each() as $mac) {
-            $onLineState =  $redis->hget($mac['MAC'], 'token') ? true : false;
-            if ($onLineState) {
+            $onLineState =  $redis->hmget($mac['MAC'], ['token', 'logintime']) ? true : false;
+            if ($onLineState && strtotime($onLineState['logintime']) > strtotime('today')) {
                 Mac::updateAll(['is_online' => 1], ['MAC' => $mac['MAC']]);
             }
         }

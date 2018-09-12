@@ -7,6 +7,7 @@ namespace backend\controllers;
 use backend\models\form\ImportMacForm;
 use backend\models\SysClient;
 use console\jobs\SyncOnlineStateJob;
+use console\queues\SyncJob;
 use Yii;
 
 use yii\bootstrap\ActiveForm;
@@ -191,8 +192,7 @@ class MacController extends BaseController
 
     public function actionSyncOnline()
     {
-        SyncOnlineStateJob::start();
-
+        Yii::$app->queue->push(new SyncJob());
         $this->setFlash('info', 'Success');
         return $this->redirect($this->getReferer());
     }
