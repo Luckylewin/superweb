@@ -10,12 +10,18 @@ namespace console\controllers;
 
 use backend\models\Mac;
 use backend\models\MacDetail;
+use console\jobs\SyncOnlineStateJob;
 use Yii;
 use yii\console\Controller;
 use yii\helpers\Console;
 
 class MacController extends Controller
 {
+
+    public function actionSync()
+    {
+        SyncOnlineStateJob::start();
+    }
 
     public function actionImport()
     {

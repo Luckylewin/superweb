@@ -22,7 +22,7 @@ class SyncOnlineStateJob
         foreach (Mac::find()->select('MAC')->asArray()->each() as $mac) {
             $logintime =  $redis->hget($mac['MAC'], 'logintime');
             if ($logintime && time() - strtotime($logintime) <= 6 * 3600 ) {
-                Mac::updateAll(['is_online' => 1], ['MAC' => $mac['MAC']]);
+                Mac::updateAll(['is_online' => 1, 'logintime' => time()], ['MAC' => $mac['MAC']]);
             }
         }
 
