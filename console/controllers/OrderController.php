@@ -28,7 +28,7 @@ class OrderController extends Controller
      */
     public function actionClearOrder()
     {
-        $orders = Order::find()->where(['order_ispay' => 0])->andWhere(['<','order_addtime', time() - 86400])->all();
+        $orders = Order::find()->where(['order_ispay' => 0])->andWhere(['<','order_addtime', time() - 2700])->all();
 
         if (!empty($orders)) {
             foreach ($orders as $order) {
