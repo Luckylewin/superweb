@@ -151,7 +151,7 @@ class Order extends \yii\db\ActiveRecord
 
     public function getPayType()
     {
-        return self::$payType[$this->order_paytype];
+        return self::$payType[$this->order_paytype] ?? '未定义';
     }
 
     /**

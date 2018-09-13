@@ -23,7 +23,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'order_sign',
             // 'user.username',
             // 'order_total',
-             'order_money',
+             [
+                     'attribute' => 'order_money',
+                     'headerOptions' => ['class' => 'col-md-1']
+             ],
             'order_addtime:datetime',
             'order_paytime:datetime',
             'order_confirmtime:datetime',
@@ -39,8 +42,11 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                     'attribute' => 'order_ispay',
                     'filter' => \common\models\Order::$payStatus,
+                    'format' => 'raw',
                     'value' => function($model) {
-                        return $model->payStatus;
+                        $text = $model->payStatus;
+                        $class = $model->order_ispay ? 'label label-success' : 'label label-default';
+                        return Html::tag('span', $text, ['class' => $class]);
                     }
             ],
 
