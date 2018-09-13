@@ -27,6 +27,9 @@ class BaseController extends Controller
                         'roles' => ['@'],
                     ]
                 ],
+                'denyCallback'  => function ($rule, $action) {
+                    Yii::$app->user->loginRequired();
+                },
             ],
             'verbs' => [
                 /**
@@ -34,11 +37,13 @@ class BaseController extends Controller
                  */
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    //'logout' => ['post'],
-                    //'delete' => ['get'],
+
                     'delete-all' => ['post']
                 ],
             ],
+
+
+
         ];
     }
 

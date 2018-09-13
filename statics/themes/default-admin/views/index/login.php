@@ -20,7 +20,9 @@ $this->title = '管理员登录';
     <link href="/statics/themes/default-admin/css/login.css?v=1" rel="stylesheet">
 </head>
 <style>
-    #captcha{border-radius: 3px;}
+    input{font-size: 20px;font-weight: bold;color: #0d8ddb}
+    #captcha{border-radius: 3px;height: 42px;margin-right: 10px;}
+
 </style>
 <body class="login-body">
 <?php $this->beginBody() ?>
@@ -37,6 +39,8 @@ $this->title = '管理员登录';
         <img src="/statics/themes/default-admin/images/login-logo.png" alt=""/>
     </div>
     <div class="login-wrap">
+
+
         <?= $form->field($model, 'username', ['template' => '<div class="form-group field-loginform-password required">{input}{hint}{error}</div>'])->textInput(['autofocus' => true, 'placeholder' => '用户名']) ?>
         <?= $form->field($model, 'password', ['template' => '<div class="form-group field-loginform-password required">{input}{hint}{error}</div>'])->passwordInput(['placeholder' => '密码']) ?>
 
@@ -47,7 +51,7 @@ $this->title = '管理员登录';
             'options'       => [
                     'placeholder'=>'验证码',
                     'class' => 'form-control',
-                    'style' => 'width:130px;display:inline'
+                    'style' => 'width:130px;display:inline;font-size:14px;font-weight:bold;text-align:center'
             ],
             'imageOptions'  => ['id'=>'captcha'],
             'template'      => '{image}{input}',

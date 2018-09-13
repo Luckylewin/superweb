@@ -70,8 +70,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 'card_contracttime',
                 [
                         'attribute' => 'is_valid',
+                        'format' => 'raw',
                         'value' => function($model) {
-                            return $model->is_valid ? Yii::t('backend', 'Valid') : Yii::t('backend', 'Write off');
+                            $class = $model->is_valid ? 'label label-success' : 'label label-default';
+                            $content = $model->is_valid ? Yii::t('backend', 'Valid') : Yii::t('backend', 'Write off');
+                            return Html::tag('span', $content, ['class' => $class]);
                         }
                 ],
 

@@ -7,6 +7,7 @@ namespace backend\components;
 use Yii;
 use yii\filters\AccessRule;
 use yii\helpers\ArrayHelper;
+use yii\web\UnauthorizedHttpException;
 
 //class AccessControl extends \yii\base\ActionFilter {
 class AccessControl extends \yii\filters\AccessControl {
@@ -28,13 +29,19 @@ class AccessControl extends \yii\filters\AccessControl {
         foreach ($this->rules as $i => $rule) {
 
             if (in_array($action->id, $rule->actions)) break;
-            if(!Yii::$app->user->isGuest && Yii::$app->user->identity->username == 'admin') {
+
+            if (Yii::$app->user->isGuest) {
+                $this->rules[] = Yii::createObject(array_merge($this->ruleConfig, [
+                    'actions' => [$action->id],
+                    'allow' => false,
+                ]));
+            } else if(Yii::$app->user->identity->username == 'admin') {
                 try {
                     $this->rules[] = Yii::createObject(array_merge($this->ruleConfig, [
                         'actions' => [$action->id],
                         'allow' => true,
                     ]));
-                }catch (\Exception $e) {
+                } catch (\Exception $e) {
 
                 }
 
