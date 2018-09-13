@@ -15,6 +15,12 @@ use Yii;
  */
 class OttAccess extends \yii\db\ActiveRecord
 {
+
+    public static function primaryKey()
+    {
+        return ['mac', 'genre'];
+    }
+
     /**
      * @inheritdoc
      */
