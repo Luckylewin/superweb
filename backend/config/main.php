@@ -76,15 +76,6 @@ return [
             'errorAction' => 'site/error',
         ],
 
-        /*
-        'urlManager' => [
-            'enablePrettyUrl' => true,
-            'showScriptName' => false,
-            'rules' => [
-            ],
-        ],
-        */
-
         //用户认证组件
         'user' => [
             'class' => 'yii\web\User',

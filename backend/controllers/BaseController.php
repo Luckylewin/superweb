@@ -18,7 +18,7 @@ class BaseController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'except' => ['error','login'], //except是除了以外
+                'except' => ['error','login'],
                 'rules' => [
                     [
                         //表示只允许认证过的用户执行 其roles用@表示 游客用?表示
@@ -32,32 +32,14 @@ class BaseController extends Controller
                 },
             ],
             'verbs' => [
-                /**
-                 * 过滤http请求的行为过滤器
-                 */
                 'class' => VerbFilter::className(),
                 'actions' => [
-
                     'delete-all' => ['post']
                 ],
             ],
-
-
-
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function actions()
-    {
-        return [
-            'error' => [
-                'class' => 'yii\web\ErrorAction',
-            ],
-        ];
-    }
 
     /**
      * 初始化配置信息

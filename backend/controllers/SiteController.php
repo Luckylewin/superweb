@@ -2,10 +2,12 @@
 namespace backend\controllers;
 
 use Yii;
+use yii\base\UserException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\models\LoginForm;
+use yii\web\HttpException;
 
 /**
  * Site controller
@@ -47,9 +49,6 @@ class SiteController extends Controller
     public function actions()
     {
         return [
-            'error' => [
-                'class' => 'yii\web\ErrorAction',
-            ],
             'captcha' => [
                 'class' => 'yii\captcha\CaptchaAction',
                 'height'    => 39,
@@ -111,5 +110,46 @@ class SiteController extends Controller
         Yii::$app->user->logout();
 
         return $this->goHome();
+    }
+
+    public function actionError()
+    {
+        if (($exception = Yii::$app->getErrorHandler()->exception)== null) {
+            $exception = new HttpException(404, Yii::t('yii', 'Page not found.'));
+        }
+
+        if ($exception instanceof HttpException) {
+            $code = $exception->statusCode;
+        } else {
+            $code = $exception->getCode();
+        }
+        if ($exception instanceof \Exception) {
+            $name = $exception->getName();
+        } else {
+            $name = Yii::t('yii', 'Error');
+        }
+        if ($code) {
+            $name .= " (#$code)";
+        }
+
+        if ($exception instanceof UserException) {
+            $message = $exception->getMessage();
+        } else {
+            $message = Yii::t('yii', 'An internal server error occurred.');
+        }
+
+        if (Yii::$app->getRequest()->getIsAjax()) {
+            return "$name: $message";
+        } else {
+            if ($code == 404) {
+                return $this->render('error-404');
+            } else {
+                return $this->render('error', [
+                    'name' => $name,
+                    'message' => $message,
+                    'exception' => $exception,
+                ]);
+            }
+        }
     }
 }
