@@ -94,6 +94,7 @@ class LogController extends Controller
             // 按小时进行统计(全部)
             $key = "interface:" . date('m-d:') . 'hour';
             $this->hincyby($key, date('H'));
+            $this->redis->expire($key, '96400');
 
             if (
                 $header &&
@@ -103,10 +104,12 @@ class LogController extends Controller
                 // 全部接口按小时进行统计
                 $key = "interface:" . date('m-d:H');
                 $this->hincyby($key, $header);
+                $this->redis->expire($key, '96400');
 
                 // 接口按天数进行统计
                 $key = "interface:" . date('m-d:') . "day";
                 $this->hincyby($key, $header);
+                $this->redis->expire($key, '96400');
             }
 
             // 按节目进行统计
@@ -115,14 +118,18 @@ class LogController extends Controller
                 if ($name) {
                     $key = "program:" . date('m-d:') . 'day' ;
                     $this->hincyby($key, $name);
+                    $this->redis->expire($key, '96400');
                 }
 
                 // 所有节目按小时统计
                 $key = "program:" . date('m-d:') . 'hour';
                 $this->hincyby($key, date('H'));
+                $this->redis->expire($key, '96400');
 
                 // 每个节目每天的观看次数
-                $this->redis->hincrby("program:" . date('m-d:') . 'set', $name, 1);
+                $key = "program:" . date('m-d:') . 'set';
+                $this->redis->hincrby($key, $name, 1);
+                $this->redis->expire($key, '96400');
             }
 
         }
@@ -155,9 +162,9 @@ class LogController extends Controller
             $log->date = date('Y-m-d');
         }
 
+       
         $log->all_program_sum = $log->server_program = json_encode($data);
         $log->save(false);
-
     }
 
     private function getTodayInterfaceData()
