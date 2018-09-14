@@ -12,23 +12,8 @@ use yii\filters\VerbFilter;
 /**
  * OrderController implements the CRUD actions for Order model.
  */
-class OrderController extends Controller
+class OrderController extends BaseController
 {
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
-            ],
-        ];
-    }
-
     /**
      * Lists all Order models.
      * @return mixed
@@ -104,8 +89,11 @@ class OrderController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        $model->del_flag = Order::SOFT_DEL;
+        $model->save(false);
 
+        $this->success('success');
         return $this->redirect(['index']);
     }
 

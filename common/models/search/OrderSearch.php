@@ -42,12 +42,18 @@ class OrderSearch extends Order
      */
     public function search($params)
     {
-        $query = Order::find();
+        $query = Order::find()->where(['del_flag' => 0]);
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' => [
+                'defaultOrder' => [
+                    'order_addtime' => SORT_DESC,
+                    'order_ispay' => SORT_DESC
+                ]
+            ]
         ]);
 
         $this->load($params);

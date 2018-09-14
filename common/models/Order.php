@@ -21,9 +21,11 @@ use backend\models\Mac;
  * @property string $order_info 订单信息
  * @property string $order_paytype 支付类型
  * @property string $order_type 物品类型
+ * @property string $del_flag 软删除标志
  */
 class Order extends \yii\db\ActiveRecord
 {
+    const SOFT_DEL = 1;
 
     public static $payType = [
         'alipay' => 'Alipay',
@@ -66,7 +68,7 @@ class Order extends \yii\db\ActiveRecord
             [['order_sign'], 'required'],
             [['order_uid', 'order_total', 'order_addtime', 'order_paytime', 'order_confirmtime'], 'integer'],
             [['order_money'], 'number'],
-            [['order_info'], 'string'],
+            [['order_info','del_flag'], 'string'],
             [['order_sign'], 'string', 'max' => 32],
             [['order_status', 'order_ispay'], 'string', 'max' => 1],
             [['order_paytype'], 'string', 'max' => 64],
