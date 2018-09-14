@@ -28,8 +28,26 @@ $this->params['breadcrumbs'][] = $this->title;
                      'headerOptions' => ['class' => 'col-md-1']
              ],
             'order_addtime:datetime',
-            'order_paytime:datetime',
-            'order_confirmtime:datetime',
+            [
+                'attribute' => 'order_paytime',
+                'value' => function($model) {
+                    if ($model->order_paytime) {
+                        return date('Y-m-d', $model->order_paytime);
+                    }
+                    return '-';
+                }
+            ],
+
+            [
+                'attribute' => 'order_confirmtime',
+                'value' => function($model) {
+                    if ($model->order_paytime) {
+                        return date('Y-m-d', $model->order_confirmtime);
+                    }
+                    return '-';
+                }
+            ],
+           
             'order_info:ntext',
             [
                    'attribute' => 'order_paytype',
