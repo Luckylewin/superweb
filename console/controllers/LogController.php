@@ -153,7 +153,8 @@ class LogController extends Controller
         $data = $this->redis->hgetall($key);
 
         $data = $this->_map($data);
-        asort($data);
+        arsort($data);
+        
         $data = array_slice($data, 0, 20);
 
         $log = ProgramLog::find()->where(['date' => date('Y-m-d')])->one();
@@ -162,7 +163,7 @@ class LogController extends Controller
             $log->date = date('Y-m-d');
         }
 
-       
+
         $log->all_program_sum = $log->server_program = json_encode($data);
         $log->save(false);
     }
