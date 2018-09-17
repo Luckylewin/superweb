@@ -32,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'order_paytime',
                 'value' => function($model) {
                     if ($model->order_paytime) {
-                        return date('Y-m-d', $model->order_paytime);
+                        return date('Y-m-d H:i', $model->order_paytime);
                     }
                     return '-';
                 }
@@ -42,12 +42,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'order_confirmtime',
                 'value' => function($model) {
                     if ($model->order_paytime) {
-                        return date('Y-m-d', $model->order_confirmtime);
+                        return date('Y-m-d H:i', $model->order_confirmtime);
                     }
                     return '-';
                 }
             ],
-           
+
             'order_info:ntext',
             [
                    'attribute' => 'order_paytype',
