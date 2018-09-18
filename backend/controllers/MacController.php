@@ -97,14 +97,10 @@ class MacController extends BaseController
         $model = $this->findModel($id);
 
         try {
-            $detail = $model->detail;
-            if ($detail) {
-                $detail->delete();
-            }
             $model->delete();
-            Yii::$app->session->setFlash('success', Yii::t('backend', 'Success'));
+            $this->setFlash('success', Yii::t('backend', 'Success'));
         } catch (\Exception $e) {
-            Yii::$app->session->setFlash('success', Yii::t('backend', 'operation failed'));
+            $this->setFlash('success', Yii::t('backend', 'operation failed'));
         }
 
         return $this->redirect(['index']);

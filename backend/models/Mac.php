@@ -118,10 +118,16 @@ class Mac extends \yii\db\ActiveRecord implements IdentityInterface
     public function beforeDelete()
     {
         if (parent::beforeDelete()) {
+            // 删除续费记录
             $logs = $this->getRenewLog()->all();
             foreach ($logs as $log) {
                 $log->delete();
             }
+            // 删除redis缓存
+
+            $redis = Yii::$app->redis;
+            $redis->select(MyRedis::REDIS_DEVICE_STATUS);
+            $redis->del($this->MAC);
         }
         return true;
     }
