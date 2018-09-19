@@ -2,12 +2,10 @@
 
 namespace backend\controllers;
 
+use backend\models\search\OttAccessSearch;
 use Yii;
 use backend\models\OttAccess;
-use yii\data\ActiveDataProvider;
-use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * OttAccessController implements the CRUD actions for OttAccess model.
@@ -21,11 +19,11 @@ class OttAccessController extends BaseController
      */
     public function actionIndex()
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => OttAccess::find(),
-        ]);
+        $searchModel = new OttAccessSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
+            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
