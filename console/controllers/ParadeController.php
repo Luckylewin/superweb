@@ -22,6 +22,7 @@ use console\models\parade\sportnet;
 use console\models\parade\tsn;
 use console\models\parade\vn;
 use yii\console\Controller;
+use yii\helpers\ArrayHelper;
 
 class ParadeController extends Controller
 {
@@ -78,6 +79,7 @@ class ParadeController extends Controller
         $this->actionEuro();
         $this->actionBegin();
         $this->actionCctv5();
+
     }
 
     public function actionVn()

@@ -169,7 +169,7 @@ class ParadeController extends BaseController
                 $key = "ALL_" . strtoupper($class->name) . "_PARADE_LIST";
                 $redis->del($key);
                 if ($class->name != $class->list_name) {
-                    $key = "ALL_" . strtoupper($class->name) . "_PARADE_LIST";
+                    $key = "ALL_" . strtoupper($class->list_name) . "_PARADE_LIST";
                     $redis->del($key);
                 }
 
