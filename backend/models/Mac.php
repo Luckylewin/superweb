@@ -2,7 +2,6 @@
 
 namespace backend\models;
 
-
 use Yii;
 use backend\components\MyRedis;
 use yii\web\IdentityInterface;
@@ -25,6 +24,7 @@ use yii\web\IdentityInterface;
  * @property int $identity_type 会员类型
  * @property int $client_id 关联的客户id
  * @property string $is_online 是否在线
+ * @property string is_hide 隐藏内容状态
  */
 class Mac extends \yii\db\ActiveRecord implements IdentityInterface
 {
@@ -32,6 +32,9 @@ class Mac extends \yii\db\ActiveRecord implements IdentityInterface
     const NORMAL     = 1;
     const EXPIRED    = 2;
     const FORBIDDEN  = 3;
+
+    const HIDE = 1;
+    const SHOW = 0;
 
     public $client_name;
     public $unit;
@@ -72,7 +75,7 @@ class Mac extends \yii\db\ActiveRecord implements IdentityInterface
 
             [['contract_time'],'integer','min' => 1],
             [['use_flag', 'type'], 'integer'],
-            [['regtime', 'logintime', 'duetime', 'unit', 'client_name'], 'safe'],
+            [['regtime', 'logintime', 'duetime', 'unit', 'client_name', 'is_hide'], 'safe'],
             [['MAC', 'SN'], 'string', 'max' => 64],
             [['contract_time'], 'string', 'max' => 8],
 
@@ -99,7 +102,8 @@ class Mac extends \yii\db\ActiveRecord implements IdentityInterface
             'duetime' => Yii::t('backend', 'Expire Time'),
             'contract_time' => Yii::t('backend', 'Validity Period'),
             'client_name' => Yii::t('backend', 'Associated Client'),
-            'is_online' => Yii::t('backend', 'is online')
+            'is_online' => Yii::t('backend', 'is online'),
+            'is_hide' => Yii::t('backend', 'is hide')
         ];
     }
 
@@ -143,6 +147,18 @@ class Mac extends \yii\db\ActiveRecord implements IdentityInterface
            self::NORMAL     => Yii::t('backend', 'Available'),
            self::EXPIRED    => Yii::t('backend', 'Expired'),
            self::FORBIDDEN  => Yii::t('backend', 'Disable')
+        ];
+    }
+
+    /**
+     * 获取状态
+     * @return array
+     */
+    public static function getIsHiDEList()
+    {
+        return [
+            self::SHOW => Yii::t('backend', 'Show'),
+            self::HIDE => Yii::t('backend', 'Hide'),
         ];
     }
 

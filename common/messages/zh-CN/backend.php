@@ -557,5 +557,7 @@ return [
     'List name' => '取列表名称',
     'is online' => '在线状态',
     'free trail days' => '免费试看天数',
-
+    'Hide' => '隐藏',
+    'Show' => '显示',
+    'is hide' => '隐藏内容状态',
 ];

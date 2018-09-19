@@ -108,20 +108,4 @@ class ApkListController extends BaseController
         ]);
     }
 
-    public function actionLockerSwitch($id)
-    {
-        $model = $this->findModel($id);
-        $form = new LockerSwitchForm();
-        $form->app_name = $model->typeName;
-
-        if ($form->load(Yii::$app->request->post()) && $total = $form->deal()) {
-            $this->setFlash('success', "deal {$total} items");
-            return $this->redirect(Url::to(['apk-list/index']));
-        }
-
-        return $this->render('locker-switch', [
-            'model' => $form
-        ]);
-    }
-
 }

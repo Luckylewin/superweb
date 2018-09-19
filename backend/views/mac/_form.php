@@ -34,6 +34,8 @@ MyAppAsset::register($this);
 
     <?php $form->field($model, 'use_flag')->dropDownList(Mac::getUseFlagList()) ?>
 
+    <?= $form->field($model, 'is_hide')->dropDownList(Mac::getIsHiDEList()) ?>
+
     <?= $form->field($model, 'client_name')->dropDownList(SysClient::getAll(), ['prompt' => Yii::t('backend', 'Not specified')]); ?>
 
     <?= $form->field($model, 'contract_time',[

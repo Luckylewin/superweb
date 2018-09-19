@@ -84,7 +84,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'headerOptions' => ['class' => 'col-md-6'],
                     'header' => Yii::t('backend', 'Operation'),
                     'size' => 'btn-sm',
-                    'template' => '{child} {set-scheme} {locker-switch} {view} {update} {delete}',
+                    'template' => '{child} {set-scheme} {view} {update} {delete}',
                     'buttons' => [
                         'child' => function($url,$model, $key) {
                             return Html::a(Yii::t('backend', 'Version List'), \yii\helpers\Url::to(['apk-detail/index','id' => $model->ID]), [
@@ -99,12 +99,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             }
                             return '';
                         },
-                        'locker-switch' => function($url, $model, $key) {
-                            $icon = Html::tag('i', ' ', ['class' => 'fa fa-lock']);
-                            return Html::a( $icon . Yii::t('backend', 'locker switch'), \yii\helpers\Url::to(['apk-list/locker-switch','id' => $model->ID]), [
-                                'class' => 'btn btn-default btn-sm'
-                            ]);
-                        }
+
 
                 ],
             ],
