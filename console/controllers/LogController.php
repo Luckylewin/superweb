@@ -68,6 +68,11 @@ class LogController extends Controller
 
         if ($log) {
             $log = explode('|', $log);
+            
+            if (class_exists('SeasLog', false)) {
+                \SeasLog::setLogger("ApiLog/" . date('Y/m'));
+                \SeasLog::info($log);
+            }
 
             $time = isset($log[0]) ? $log[0] : false;
             $ip = isset($log[1]) ? $log[1] : false;

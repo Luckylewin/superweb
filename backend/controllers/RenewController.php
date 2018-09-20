@@ -17,23 +17,22 @@ class RenewController extends BaseController
 {
     public function actionRenew($mac)
     {
-
         if (Yii::$app->request->isPost) {
             $mac = Yii::$app->request->get('mac');
             $mac = Mac::findOne(['MAC' => $mac]);
 
             $error = false;
             if ($mac->use_flag === Mac::NOT_ACTIVE) {
-                Yii::$app->session->setFlash('error', Yii::t('backend', 'This account is not activated'));
+                $this->setFlash('error', Yii::t('backend', 'This account is not activated'));
                 $error = true;
             } else if (strtotime($mac->duetime) == strtotime('1970')) {
-                Yii::$app->session->setFlash('error', Yii::t('backend', 'This account is indefinite'));
+                $this->setFlash('error', Yii::t('backend', 'This account is indefinite'));
                 $error = true;
             } else if (is_null($mac)) {
-                Yii::$app->session->setFlash('error', Yii::t('backend', 'Data not found'));
+                $this->setFlash('error', Yii::t('backend', 'Data not found'));
                 $error = true;
             } else if (Yii::$app->request->post('contract_time') <= 0) {
-                Yii::$app->session->setFlash('error', Yii::t('backend', 'Wrong time value'));
+                $this->setFlash('error', Yii::t('backend', 'Wrong time value'));
                 $error = true;
             }
 
@@ -42,8 +41,6 @@ class RenewController extends BaseController
             }
 
             $renewTime = Yii::$app->request->post('contract_time') . " ". Yii::$app->request->post('unit');
-
-
 
             //判断是否已经过期了
             if ($mac->use_flag == Mac::NORMAL) {
@@ -57,8 +54,9 @@ class RenewController extends BaseController
             $mac->contract_time = $renewTime;
             //更新数据库,缓存
             $mac->save(false);
-            MyRedis::init(MyRedis::REDIS_DEVICE_STATUS);
-            Yii::$app->session->setFlash('success', Yii::t('backend', 'Success'));
+            $redis = MyRedis::init(MyRedis::REDIS_DEVICE_STATUS);
+            $redis->del($mac->MAC);
+            $this->setFlash('success', Yii::t('backend', 'Success'));
 
             //记录日志
             $renewLog = new RenewLog();
@@ -73,7 +71,6 @@ class RenewController extends BaseController
         }
 
         $mac = Mac::findOne(['MAC' => $mac]);
-
         $renewRecord = ArrayHelper::toArray(RenewLog::find()->where(['mac' => $mac->MAC])->all());
 
         return $this->render('renew',[
