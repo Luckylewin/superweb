@@ -67,13 +67,13 @@ class LogController extends Controller
         $log = $this->redis->lpop('log');
 
         if ($log) {
-            $log = explode('|', $log);
-            
+
             if (class_exists('SeasLog', false)) {
                 \SeasLog::setLogger("ApiLog/" . date('Y/m'));
                 \SeasLog::info($log);
             }
-
+            $log = explode('|', $log);
+            
             $time = isset($log[0]) ? $log[0] : false;
             $ip = isset($log[1]) ? $log[1] : false;
             $json = isset($log[2]) ? $log[2] : '';
