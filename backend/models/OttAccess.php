@@ -19,7 +19,7 @@ class OttAccess extends \yii\db\ActiveRecord
 
     public static function primaryKey()
     {
-        return ['mac', 'genre'];
+        return ['access_key'];
     }
 
     /**
