@@ -50,7 +50,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return Html::tag('span', $text, $class);
                 }
             ],
-            'access_key',
+
             [
                     'attribute' => 'deny_msg',
                     'headerOptions' => [

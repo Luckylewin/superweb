@@ -29,6 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'mac',
+            'access_key',
             'genre',
             [
                 'attribute' => 'is_valid',
