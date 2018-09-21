@@ -1,6 +1,6 @@
 <?php
 $this->registerJsFile('/statics/themes/default-admin/plugins/laydate/laydate.js', ['depends'=>'yii\web\JqueryAsset', 'position'=>\yii\web\View::POS_HEAD] );
-$this->registerJsFile('/statics/themes/default-admin/plugins/echarts/echarts.simple.min.js', ['depends'=>'yii\web\JqueryAsset', 'position'=>\yii\web\View::POS_HEAD]);
+$this->registerJsFile('https://cdn.bootcss.com/echarts/4.1.0/echarts.common.js', ['depends'=>'yii\web\JqueryAsset', 'position'=>\yii\web\View::POS_HEAD]);
 
 $this->title = Yii::t('backend', 'Real-time statistics');;
 $this->params['breadcrumbs'][] = $this->title;
