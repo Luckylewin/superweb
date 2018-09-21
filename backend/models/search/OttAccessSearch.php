@@ -41,7 +41,7 @@ class OttAccessSearch extends OttAccess
      */
     public function search($params)
     {
-        $query = OttAccess::find();
+        $query = OttAccess::find()->with('order');
 
         // add conditions that should always apply here
 

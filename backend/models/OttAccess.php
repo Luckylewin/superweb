@@ -12,6 +12,7 @@ use Yii;
  * @property int $is_valid 是否有权限
  * @property string $deny_msg 拒绝原因
  * @property int $expire_time 过期时间
+ * @property int $access_key 密钥
  */
 class OttAccess extends \yii\db\ActiveRecord
 {
@@ -53,5 +54,10 @@ class OttAccess extends \yii\db\ActiveRecord
             'deny_msg' => '拒绝原因',
             'expire_time' => '过期时间',
         ];
+    }
+
+    public function getOrder()
+    {
+        return $this->hasOne(OttOrder::className(), ['access_key' => 'access_key']);
     }
 }

@@ -14,6 +14,7 @@ use Yii;
  * @property string $order_num 订单id
  * @property int $expire_time 过期时间
  * @property int $is_valid 是否有效
+ * @property int $access_key access_key
  */
 class OttOrder extends \yii\db\ActiveRecord
 {

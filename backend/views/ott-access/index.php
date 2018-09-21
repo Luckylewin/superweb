@@ -27,6 +27,9 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
             [
                     'attribute' => 'mac',
+                'headerOptions' => [
+                    'class' => 'col-md-1'
+                ]
             ],
             [
                     'attribute' => 'genre',
@@ -35,19 +38,31 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]
             ],
             [
-                    'attribute' => 'is_valid',
-                    'format' => 'raw',
-                     'headerOptions' => [
-                            'class' => 'col-md-1'
-                    ],
-                    'value' => function($model) {
-                        $text = $model->is_valid ? Yii::t('backend', 'Yes') : Yii::t('backend', 'Yes');
-                        $class = $model->is_valid ? ['class' => 'label label-success'] : ['class' => 'label label-default'];
+                'attribute' => 'is_valid',
+                'format' => 'raw',
+                'headerOptions' => [
+                    'class' => 'col-md-1'
+                ],
+                'value' => function($model) {
+                    $text = $model->is_valid ? Yii::t('backend', 'Yes') : Yii::t('backend', 'Yes');
+                    $class = $model->is_valid ? ['class' => 'label label-success'] : ['class' => 'label label-default'];
 
-                        return Html::tag('span', $text, $class);
+                    return Html::tag('span', $text, $class);
+                }
+            ],
+            'access_key',
+            [
+                    'attribute' => 'deny_msg',
+                    'headerOptions' => [
+                        'class' => 'col-md-1'
+                    ]
+            ],
+            [
+                    'label' => Yii::t('backend', 'Order number'),
+                    'value' => function($model) {
+                        return $model->order['order_num'];
                     }
             ],
-            'deny_msg',
             'expire_time:datetime',
 
             [
