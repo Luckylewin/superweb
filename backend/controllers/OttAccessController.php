@@ -28,32 +28,22 @@ class OttAccessController extends BaseController
         ]);
     }
 
-    /**
-     * Displays a single OttAccess model.
-     * @param string $mac
-     * @param string $genre
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionView($mac, $genre)
+    
+    public function actionView($id)
     {
         return $this->render('view', [
-            'model' => $this->findModel($mac, $genre),
+            'model' => $this->findModel($id),
         ]);
     }
 
-    /**
-     * Creates a new OttAccess model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
+
     public function actionCreate()
     {
         $model = new OttAccess();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $this->success('success');
-            return $this->redirect(['view', 'mac' => $model->mac, 'genre' => $model->genre]);
+            return $this->redirect(['view', $model->id]);
         }
 
         return $this->render('create', [
@@ -61,21 +51,14 @@ class OttAccessController extends BaseController
         ]);
     }
 
-    /**
-     * Updates an existing OttAccess model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param string $mac
-     * @param string $genre
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionUpdate($mac, $genre)
+
+    public function actionUpdate($id)
     {
-        $model = $this->findModel($mac, $genre);
+        $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $this->success('success');
-            return $this->redirect(['view', 'mac' => $model->mac, 'genre' => $model->genre]);
+            return $this->redirect(['view', $id]);
         }
 
         return $this->render('update', [
@@ -83,24 +66,17 @@ class OttAccessController extends BaseController
         ]);
     }
 
-    public function actionDelete($mac, $genre)
+    public function actionDelete($id)
     {
-        $this->findModel($mac, $genre)->delete();
+        $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
     }
 
-    /**
-     * Finds the OttAccess model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param string $mac
-     * @param string $genre
-     * @return OttAccess the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    protected function findModel($mac, $genre)
+
+    protected function findModel($id)
     {
-        if (($model = OttAccess::findOne(['mac' => $mac, 'genre' => $genre])) !== null) {
+        if (($model = OttAccess::findOne($id)) !== null) {
             return $model;
         }
 

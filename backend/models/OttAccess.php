@@ -7,6 +7,7 @@ use Yii;
 /**
  * This is the model class for table "ott_access".
  *
+ * @property string $id 主键
  * @property string $mac mac地址
  * @property string $genre 列表名称
  * @property int $is_valid 是否有权限
@@ -16,11 +17,6 @@ use Yii;
  */
 class OttAccess extends \yii\db\ActiveRecord
 {
-
-    public static function primaryKey()
-    {
-        return ['access_key'];
-    }
 
     /**
      * @inheritdoc
