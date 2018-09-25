@@ -58,7 +58,7 @@ class OttAccessController extends BaseController
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $this->success('success');
-            return $this->redirect(['view', $id]);
+            return $this->redirect(['view', $model->id]);
         }
 
         return $this->render('update', [
