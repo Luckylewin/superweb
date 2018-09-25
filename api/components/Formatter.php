@@ -20,6 +20,7 @@ class Formatter
     const NOT_FOUND = 404;
     const SERVER_ERROR = 500;
 
+    const INVALID_REQUEST = 400;
 
     const ITEM_NOT_FOUND = 800;
 
@@ -38,6 +39,7 @@ class Formatter
     const USERNAME_EXIST_ERROR = 1004;
     const PASSWORD_TOO_SHORT_ERROR = 1005;
 
+
     //app升级
     const NO_NEED_UPDATE = 1010;
 
@@ -51,6 +53,8 @@ class Formatter
     {
         switch ($errorCode)
         {
+            case self::INVALID_REQUEST:
+                return 'invalid Request';break;
             case self::SERVER_ERROR:
                 return '服务器暂不可用';break;
             case self::NOT_FOUND:

@@ -8,6 +8,7 @@
 
 namespace api\controllers;
 
+use api\components\Response;
 use Yii;
 use api\models\MacLoginForm;
 use api\components\Formatter;
@@ -49,7 +50,7 @@ class AuthController extends ActiveController
             $timestamp = $request->post('timestamp');
 
             if ( $sign != md5(md5($username . $timestamp) . md5('topthinker' . $timestamp)) ) {
-                throw new ForbiddenHttpException('invalid request');
+                throw new ForbiddenHttpException('invalid request', Formatter::INVALID_REQUEST);
             }
         }
 
