@@ -153,7 +153,7 @@ class LogController extends Controller
 
         // 新增数据库数据
         // 查找昨天数据是否存在
-        $exist = LogStatics::find()->where(['date' => date('Y-m-d', strtotime('yesterday'))])->exists();
+        $exist = LogStatics::find()->where(['date' => date('Y-m-d', $timestamp)])->exists();
 
         if ($exist == false) {
             $model = new LogStatics();
