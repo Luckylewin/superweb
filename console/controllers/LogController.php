@@ -61,18 +61,90 @@ class LogController extends Controller
 
     }
 
+
     public function actionOfflineAll()
     {
         $start = strtotime("2018-01-01");
         $end = strtotime("2018-09-25");
 
         for ($i=$start; $i<=$end;) {
-            $this->actionImport($i);
-            $this->actionStatics($i);
+            $this->actionStaticHour($i);
             $i += 86400;
         }
 
         echo "任务执行结束";
+    }
+    
+    // 24小时统计
+    public function actionStaticHour($timestamp)
+    {
+        $filePaths = [
+            '/var/www/log/ApiLog/' . date('Y', $timestamp) . '/' . date('m', $timestamp) . '/' . date('Ymd', $timestamp) . '.log',
+            '/var/www/log/app/' . date('m', $timestamp) . '/' . date('Ymd', $timestamp) . '.log'
+        ];
+
+        $data = [];
+
+        // 遍历24小时
+        for ($i=0; $i<=23; $i++) {
+            $hour = sprintf('%02d', $i);
+
+            $data['total'][$i] = 0;
+            $data['getClientToken'][$i] = 0;
+            $data['watch'][$i] = 0;
+            $data['getOttNewList'][$i] = 0;
+            $data['getIptvList'][$i] = 0;
+            $data['getNewApp'][$i] = 0;
+
+            foreach ($filePaths as $filePath) {
+                if (file_exists($filePath) == false) continue;
+                foreach (self::readLine($filePath) as $line) {
+
+                    $result = preg_match("/\|{$hour}(?=:)/", $line);
+                    if ($result) {
+                        $data['total'][$i]++;
+
+                        //匹配header
+                        preg_match("/{.*}/", $line, $header);
+                        if ($header) {
+                            $header = json_decode($header[0], true);
+                            if (isset($header['header'])) {
+                                $header = $header['header'];
+                                if ($header == 'getClientToken') {
+                                    $data['getClientToken'][$i]++;
+                                } elseif ($header == 'getOttNewList') {
+                                    $data['getOttNewList'][$i]++;
+                                } elseif ($header == 'vods') {
+                                    $data['getIptvList'][$i]++;
+                                } elseif (in_array($header, ['getApp', 'getNewApp'])) {
+                                    $data['getNewApp'][$i]++;
+                                } elseif (in_array($header, ['tvnet','viettel','sohatv','thvl','hoabinhtv','v4live','migu','sohulive','hplus','newmigu','haoqu','tencent','vtv','ott','local'])) {
+                                    $data['watch'][$i]++;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            //echo "{$hour}时请求数为{$data['total'][$i]}次" ,PHP_EOL;
+
+        }
+
+        if (LogInterface::findOne(['date' => date('Y-m-d', $timestamp)]) == false) {
+            $logInterface = new LogInterface();
+            $logInterface->total = json_encode($data['total']);
+            $logInterface->getOttNewList = json_encode($data['getOttNewList']);
+            $logInterface->getIptvList = json_encode($data['getIptvList']);
+            $logInterface->getNewApp = json_encode($data['getNewApp']);
+            $logInterface->getClientToken = json_encode($data['getClientToken']);
+            $logInterface->watch = json_encode($data['watch']);
+            $logInterface->date = date('Y-m-d', $timestamp);
+            $logInterface->save();
+
+            $this->stdout("处理" . date('Y-m-d', $timestamp) . '成功' . PHP_EOL);
+        }
+
     }
 
     /**
