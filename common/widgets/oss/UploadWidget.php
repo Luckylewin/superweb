@@ -78,7 +78,10 @@ class UploadWidget extends Widget
             if (empty($this->maxSize)) {
                 $this->maxSize = $this->defaultMaxSize;
             }
-            if (empty($this->dir)) {
+            
+            if ($this->model->dir) {
+                $this->dir = $this->model->dir;
+            } elseif (empty($this->dir)) {
                 $this->dir = 'user-dir/' . date('Ymd') . '/';
             }
         }

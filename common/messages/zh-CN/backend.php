@@ -560,4 +560,7 @@ return [
     'Hide' => '隐藏',
     'Show' => '显示',
     'is hide' => '隐藏内容状态',
+    'Local' => '服务器',
+    'OSS' => 'OSS对象',
+    'Save Position' => '保存位置',
 ];

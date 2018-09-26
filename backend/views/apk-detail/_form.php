@@ -2,9 +2,8 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use common\widgets\OssUploader;
 use dosamigos\fileupload\FileUploadUI;
-
+use common\widgets\oss\UploadWidget;
 /* @var $this yii\web\View */
 /* @var $model backend\models\ApkDetail */
 /* @var $form yii\widgets\ActiveForm */
@@ -28,10 +27,22 @@ use dosamigos\fileupload\FileUploadUI;
     <?= $form->field($model, 'ver')->textInput(['maxlength' => true]) ?>
 
 
+    <?= $form->field($model, 'position')->dropDownList(\backend\models\ApkDetail::$postionOptions, [
+            'id' => 'position'
+    ]); ?>
 
+    <div class="oss">
+        <?= UploadWidget::widget([
+            'model' => $model,
+            'form' => $form,
+            'field' => 'url',
+            'allowExtension' => [
+                'image file' => 'apk'
+            ]
+        ]); ?>
+    </div>
 
-    <?= $form->field($model, 'url')->textInput() ?>
-
+    <div class="local well" style="display: none">
     <?=  FileUploadUI::widget([
         'model' => new \backend\models\UploadForm(),
         'attribute' => 'apk',
@@ -59,23 +70,37 @@ use dosamigos\fileupload\FileUploadUI;
                             }',
         ],
     ]); ?>
+    </div>
+
 
     <?= $form->field($model, 'md5')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'content')->textarea(['rows' => 3]) ?>
 
-
-
     <?= $form->field($model, 'force_update')->dropDownList(['0' => Yii::t('backend', 'No'), '1' => Yii::t('backend', 'Yes')]) ?>
 
     <div class="form-group">
         <?= Html::submitButton(\Yii::t('backend','Save'), ['class' => 'btn btn-success']) ?>
-
-            <?= Html::a(Yii::t('backend','Go Back'), \yii\helpers\Url::to(['apk-list/index']), ['class' => 'btn btn-default']) ?>
-
-
+        <?= Html::a(Yii::t('backend','Go Back'), \yii\helpers\Url::to(['apk-list/index']), ['class' => 'btn btn-default']) ?>
     </div>
-
     <?php ActiveForm::end(); ?>
-
 </div>
+
+<?php
+
+$js = <<<JS
+    $('#position').change(function() {
+        var val = $(this).val();
+        if (val == 1) {
+           $('.local').hide();
+           $('.oss').show();
+        } else {
+           $('.local').show();
+           $('.oss').hide();
+        }
+    });
+JS;
+
+$this->registerJs($js);
+
+?>
