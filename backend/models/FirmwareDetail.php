@@ -19,6 +19,8 @@ use Yii;
  */
 class FirmwareDetail extends \yii\db\ActiveRecord
 {
+    public $dir = 'firmware/';
+    
     /**
      * @inheritdoc
      */
