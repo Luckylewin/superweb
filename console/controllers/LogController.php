@@ -9,6 +9,8 @@
 namespace console\controllers;
 
 use backend\models\LogInterface;
+use backend\models\LogStatics;
+use backend\models\LogTmp;
 use backend\models\ProgramLog;
 use Yii;
 use yii\console\Controller;
@@ -35,6 +37,7 @@ class LogController extends Controller
     {
         $this->stdout("php yii log/analyse : 实时统计接口日志数据" . PHP_EOL, Console::FG_YELLOW);
         $this->stdout("php yii log/daily-log : 统计每日接口日志数据" . PHP_EOL, Console::FG_YELLOW);
+        $this->stdout("php yii log/offline : 离线统计昨天接口日志数据" . PHP_EOL, Console::FG_YELLOW);
     }
 
     //日志实时统计（单独开进程运行）
@@ -58,6 +61,109 @@ class LogController extends Controller
 
     }
 
+    /**
+     * 离线统计活跃用户/接口使用情况
+     */
+    public function actionOffline()
+    {
+        $this->actionImport();
+        $this->actionStatics();
+    }
+
+    // 从日志导入数据到mysql
+    public function actionImport()
+    {
+        Yii::$app->db->createCommand("truncate " . LogTmp::tableName())->execute();
+
+        $filePaths = [
+            '/var/www/log/ApiLog/' . date('Y') . '/' . date('m') . '/' . date('Ymd', strtotime('yesterday')) . '.log',
+            '/var/www/log/app/' . date('m') . '/' . date('Ymd', strtotime('yesterday')) . '.log'
+            ];
+
+        foreach ($filePaths as $filePath) {
+            $this->stdout("正在读取文件{$filePath}" . PHP_EOL);
+
+            foreach (self::readLine($filePath) as $i => $line) {
+                preg_match('/{.*}/', $line, $result);
+                if (isset($result[0])) {
+                    $interface = json_decode($result[0], true);
+                    if (isset($interface['header'])) {
+                        if (!isset($interface['uid'])) {
+                            $interface['uid'] = '00000';
+                        }
+
+                        $rows[] = [
+                            'header' => $interface['header'],
+                            'mac' => $interface['uid'],
+                        ];
+
+                        if (count($rows) >= 1000) {
+                            Yii::$app->db->createCommand()->batchInsert(LogTmp::tableName(), ['header', 'mac'], $rows)->execute();
+                            $rows = [];
+                        }
+                    }
+
+                }
+            }
+        }
+
+        $this->stdout("任务执行结束");
+    }
+
+    // 利用mysql 统计接口数据
+    public function actionStatics()
+    {
+        $data['active_user'] = LogTmp::find()->select('mac')->distinct()->count();
+        $data['total'] = LogTmp::find()->count();
+        $data['token'] = LogTmp::find()->where(['header' => 'getClientToken'])->count();
+        $data['ott_list'] = LogTmp::find()->where(['header' => 'getOttNewList'])->count();
+        $data['iptv_list'] = LogTmp::find()->where(['header' => 'vods'])->count();
+        $data['karaoke_list'] = LogTmp::find()->where(['header' => 'getKaraokeList'])->count();
+        $data['epg'] = LogTmp::find()->where(['in','header',['getParadeList','getEPG']])->count();
+        $data['app_upgrade'] = LogTmp::find()->where(['IN', 'header', ['getNewApp', 'getApp', 'upgrade']])->count();
+        $data['firmware_upgrade'] = LogTmp::find()->where(['header' => 'getFirmware'])->count();
+        $data['renew'] = LogTmp::find()->where(['header' => 'renew'])->count();
+        $data['dvb_register'] = LogTmp::find()->where(['header' => 'register'])->count();
+        $data['ott_charge'] = LogTmp::find()->where(['header' => 'ottCharge'])->count();
+        $data['pay'] = LogTmp::find()->where(['header' => 'pay'])->count();
+        $data['activateGenre'] = LogTmp::find()->where(['header' => 'activateGenre'])->count();
+        $data['paypal_callback'] = LogTmp::find()->where(['header' => 'paypalCallback'])->count();
+        $data['dokypay_callback'] = LogTmp::find()->where(['header' => 'return/dokypay'])->count();
+        $data['getServerTime'] = LogTmp::find()->where(['header' => 'getServerTime'])->count();
+        $data['play'] = LogTmp::find()->where(['in', 'header', [
+            'local', 'sohatv', 'hplus'
+        ]])->count();
+
+        // 新增数据库数据
+        // 查找昨天数据是否存在
+        $exist = LogStatics::find()->where(['date' => date('Y-m-d', strtotime('yesterday'))])->exists();
+
+        if ($exist == false) {
+            $model = new LogStatics();
+            $model->date = date('Y-m-d', strtotime('yesterday'));
+            $model->active_user = $data['active_user'];
+            $model->total = $data['total'];
+            $model->token = $data['token'];
+            $model->ott_list = $data['ott_list'];
+            $model->iptv_list = $data['iptv_list'];
+            $model->karaoke_list = $data['karaoke_list'];
+            $model->epg = $data['epg'];
+            $model->app_upgrade = $data['app_upgrade'];
+            $model->renew = $data['renew'];
+            $model->dvb_register = $data['dvb_register'];
+            $model->ott_charge = $data['ott_charge'];
+            $model->pay = $data['pay'];
+            $model->activateGenre = $data['activateGenre'];
+            $model->paypal_callback = $data['paypal_callback'];
+            $model->dokypay_callback = $data['dokypay_callback'];
+            $model->getServerTime = $data['getServerTime'];
+            $model->play = $data['play'];
+
+            $model->save();
+        }
+        $this->stdout("-----昨日数据分析----" . PHP_EOL);
+        print_r($data);
+    }
 
     /**
      * 实时处理日志统计
@@ -278,5 +384,23 @@ class LogController extends Controller
             $this->redis->hincrby($key, $field, 1);
         }
     }
+
+
+    /**
+     * 生成器逐行读取大文件
+     * @param $file
+     * @return \Generator
+     */
+    public static function readLine($file)
+    {
+        $handle = fopen($file, 'r');
+
+        while (!feof($handle)) {
+            yield trim(fgets($handle));
+        }
+
+        fclose($handle);
+    }
+
 
 }

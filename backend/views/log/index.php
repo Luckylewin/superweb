@@ -2,6 +2,7 @@
 
 /**
  * @var $model \backend\models\LogInterface
+ * @var $statics \backend\models\LogStatics
  */
 $this->registerJsFile('/statics/themes/default-admin/plugins/laydate/laydate.js', ['depends'=>'yii\web\JqueryAsset', 'position'=>\yii\web\View::POS_HEAD] );
 $this->registerJsFile('https://cdn.bootcss.com/echarts/4.1.0/echarts.common.js', ['depends'=>'yii\web\JqueryAsset', 'position'=>\yii\web\View::POS_HEAD]);
@@ -48,6 +49,257 @@ $this->params['breadcrumbs'][] = $this->title;
 
 </div>
 
+<div style="margin: 0 60px auto;margin-bottom: 10px;">
+    <div class="col-md-2">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    请求总数
+                </h3>
+            </div>
+            <div class="panel-body">
+                <h3><?= $statics->total??0 ?></h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    活动用户
+                </h3>
+            </div>
+            <div class="panel-body">
+                <h3><?= $statics->active_user??0 ?></h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    token请求
+                </h3>
+            </div>
+            <div class="panel-body">
+                <h3><?= $statics->token??0 ?></h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    token请求
+                </h3>
+            </div>
+            <div class="panel-body">
+                <h3><?= $statics->token??0 ?></h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    直播列表
+                </h3>
+            </div>
+            <div class="panel-body">
+                <h3><?= $statics->ott_list??0 ?></h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    点播列表
+                </h3>
+            </div>
+            <div class="panel-body">
+                <h3><?= $statics->iptv_list??0 ?></h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    播放
+                </h3>
+            </div>
+            <div class="panel-body">
+                <h3><?= $statics->play??0 ?></h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    卡拉ok列表
+                </h3>
+            </div>
+            <div class="panel-body">
+                <h3><?= $statics->karaoke_list??0 ?></h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    预告列表
+                </h3>
+            </div>
+            <div class="panel-body">
+                <h3><?= $statics->epg??0 ?></h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    APK升级
+                </h3>
+            </div>
+            <div class="panel-body">
+                <h3><?= $statics->app_upgrade??0 ?></h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    固件升级
+                </h3>
+            </div>
+            <div class="panel-body">
+                <h3><?= $statics->firmware_upgrade??0 ?></h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    会员续费
+                </h3>
+            </div>
+            <div class="panel-body">
+                <h3><?= $statics->renew??0 ?></h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    dvb注册
+                </h3>
+            </div>
+            <div class="panel-body">
+                <h3><?= $statics->dvb_register??0 ?></h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    直播分类下单
+                </h3>
+            </div>
+            <div class="panel-body">
+                <h3><?= $statics->ott_charge??0 ?></h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    发起支付
+                </h3>
+            </div>
+            <div class="panel-body">
+                <h3><?= $statics->pay??0 ?></h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    激活卡分类
+                </h3>
+            </div>
+            <div class="panel-body">
+                <h3><?= $statics->activateGenre??0 ?></h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    paypal通知
+                </h3>
+            </div>
+            <div class="panel-body">
+                <h3><?= $statics->paypal_callback??0 ?></h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    dokypay通知
+                </h3>
+            </div>
+            <div class="panel-body">
+                <h3><?= $statics->paypal_callback??0 ?></h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    服务器时间
+                </h3>
+            </div>
+            <div class="panel-body">
+                <h3><?= $statics->getServerTime??0 ?></h3>
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
 
 <?php
 

@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use backend\models\AppLog;
 use backend\models\LogInterface;
+use backend\models\LogStatics;
 use backend\models\ProgramLog;
 use backend\models\TimelineLog;
 use yii\helpers\ArrayHelper;
@@ -21,11 +22,12 @@ class LogController extends BaseController
     public function actionIndex()
     {
         $type = \Yii::$app->request->get('type');
-        $value = \Yii::$app->request->get('value', date('Y-m-d', strtotime('yesterday')));
-
+        $date = \Yii::$app->request->get('value', date('Y-m-d', strtotime('yesterday')));
+        $date = str_replace('/', '-', $date);
         // 查询
-        $model = LogInterface::findByDate($value);
-        $programLog = ProgramLog::findByDate($value);
+        $model = LogInterface::findByDate($date);
+        $programLog = ProgramLog::findByDate($date);
+        $statics = LogStatics::findByDate($date);
 
         if (empty($model)) {
             $this->setFlash('warning', Yii::t('backend', "No yesterday's log"));
@@ -33,6 +35,7 @@ class LogController extends BaseController
 
         return $this->render('index', [
             'programLog' => $programLog,
+            'statics' => $statics,
             'model' => $model
         ]);
     }
