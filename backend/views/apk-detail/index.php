@@ -44,7 +44,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
             ],
             'content:ntext',
-
+            [
+                    'attribute' => 'save_position',
+                    'headerOptions' => ['class' => 'col-md-1'],
+            ],
             [
                     'attribute' => 'force_update',
                     'headerOptions' => ['class' => 'col-md-2'],
@@ -61,7 +64,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'class' => 'common\grid\MyActionColumn',
                     'size' => 'btn-sm',
                     'header' => Yii::t('backend', 'Operate'),
-                    'headerOptions' => ['class' => 'col-md-4']
+                    'headerOptions' => ['class' => 'col-md-3']
             ],
         ],
     ]); ?>

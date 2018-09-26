@@ -20,11 +20,10 @@ use yii\helpers\ArrayHelper;
  * @property int $sort
  * @property string $force_update
  * @property string $is_newest
+ * @property string $save_position
  */
 class ApkDetail extends \yii\db\ActiveRecord
 {
-    public $position = 1;
-
     public $dir = 'Android/apk/';
 
     /**
@@ -47,7 +46,7 @@ class ApkDetail extends \yii\db\ActiveRecord
             [['type', 'ver', 'md5'], 'string', 'max' => 255],
             [['force_update'], 'string', 'max' => 1],
             [['type','sort'],'default','value' => 1],
-            ['position', 'safe']
+            ['save_position', 'safe']
         ];
     }
 
@@ -58,7 +57,7 @@ class ApkDetail extends \yii\db\ActiveRecord
     {
         return [
             'ID' => 'ID',
-            'position' => Yii::t('backend', 'Save Position'),
+            'save_position' => Yii::t('backend', 'Save Position'),
             'apk_ID' => Yii::t('backend', 'APK Type'),
             'type' => Yii::t('backend', 'Type'),
             'ver' => Yii::t('backend', 'Version number'),
@@ -95,8 +94,8 @@ class ApkDetail extends \yii\db\ActiveRecord
     public static function getPositionOptions()
     {
         return [
-           Yii::t('backend', 'Local'),
-           Yii::t('backend', 'OSS'),
+          'local' => Yii::t('backend', 'Local'),
+           'oss' => Yii::t('backend', 'OSS'),
         ];
     }
 

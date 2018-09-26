@@ -28,11 +28,11 @@ use backend\models\ApkDetail;
     <?= $form->field($model, 'ver')->textInput(['maxlength' => true]) ?>
 
 
-    <?= $form->field($model, 'position')->dropDownList(ApkDetail::getPositionOptions(), [
+    <?= $form->field($model, 'save_position')->dropDownList(ApkDetail::getPositionOptions(), [
             'id' => 'position'
     ]); ?>
 
-    <div class="oss">
+    <div class="oss" style="<?php if($model->save_position =='local')  echo "display:none;"?>">
         <?= UploadWidget::widget([
             'model' => $model,
             'form' => $form,
@@ -43,7 +43,7 @@ use backend\models\ApkDetail;
         ]); ?>
     </div>
 
-    <div class="local well" style="display: none">
+    <div class="local well" style="<?php if($model->save_position =='oss')  echo "display:none;"?>">
     <?=  FileUploadUI::widget([
         'model' => new \backend\models\UploadForm(),
         'attribute' => 'apk',
@@ -92,7 +92,7 @@ use backend\models\ApkDetail;
 $js = <<<JS
     $('#position').change(function() {
         var val = $(this).val();
-        if (val == 1) {
+        if (val == 'oss') {
            $('.local').hide();
            $('.oss').show();
         } else {
