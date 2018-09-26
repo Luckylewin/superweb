@@ -74,7 +74,7 @@ class LogController extends Controller
 
         echo "任务执行结束";
     }
-    
+
     // 24小时统计
     public function actionStaticHour($timestamp)
     {
@@ -131,19 +131,21 @@ class LogController extends Controller
 
         }
 
-        if (LogInterface::findOne(['date' => date('Y-m-d', $timestamp)]) == false) {
-            $logInterface = new LogInterface();
-            $logInterface->total = json_encode($data['total']);
-            $logInterface->getOttNewList = json_encode($data['getOttNewList']);
-            $logInterface->getIptvList = json_encode($data['getIptvList']);
-            $logInterface->getNewApp = json_encode($data['getNewApp']);
-            $logInterface->getClientToken = json_encode($data['getClientToken']);
-            $logInterface->watch = json_encode($data['watch']);
-            $logInterface->date = date('Y-m-d', $timestamp);
-            $logInterface->save();
-
-            $this->stdout("处理" . date('Y-m-d', $timestamp) . '成功' . PHP_EOL);
+        if ($log = LogInterface::findOne(['date' => date('Y-m-d', $timestamp)])) {
+            $log->delete();
         }
+
+        $logInterface = new LogInterface();
+        $logInterface->total = json_encode($data['total']);
+        $logInterface->getOttNewList = json_encode($data['getOttNewList']);
+        $logInterface->getIptvList = json_encode($data['getIptvList']);
+        $logInterface->getNewApp = json_encode($data['getNewApp']);
+        $logInterface->getClientToken = json_encode($data['getClientToken']);
+        $logInterface->watch = json_encode($data['watch']);
+        $logInterface->date = date('Y-m-d', $timestamp);
+        $logInterface->save();
+
+        $this->stdout("处理" . date('Y-m-d', $timestamp) . '成功' . PHP_EOL);
 
     }
 
