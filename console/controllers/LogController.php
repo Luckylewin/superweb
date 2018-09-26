@@ -68,20 +68,63 @@ class LogController extends Controller
         $end = strtotime("2018-09-25");
 
         for ($i=$start; $i<=$end;) {
-            $this->actionStaticHour($i);
+            $this->actionStaticProgram($i);
             $i += 86400;
         }
 
         echo "任务执行结束";
     }
 
-    // 24小时统计
+    public function actionStaticProgram($timestamp)
+    {
+        $filePaths = $this->getLogPaths($timestamp);
+
+        $programs = [];
+
+        foreach ($filePaths as $filePath) {
+            if (file_exists($filePath) == false) continue;
+            foreach (self::readLine($filePath) as $line) {
+                //匹配header
+                preg_match("/{.*}/", $line, $header);
+                if ($header) {
+                    $json = json_decode($header[0], true);
+                    if (isset($json['header'])) {
+                        $header = $json['header'];
+
+                        if (in_array($header, ['tvnet','viettel','sohatv','thvl','hoabinhtv','v4live','migu','sohulive','hplus','newmigu','haoqu','tencent','vtv','ott','local'])) {
+
+                            if (isset($json['name'])) {
+
+                                if (isset($programs[$json['name']])) {
+                                    $programs[$json['name']]++;
+                                } else {
+                                    $programs[$json['name']] = 1;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if (!empty($programs)) {
+            arsort($programs);
+            $programs = array_slice($programs,0,20);
+
+            if (ProgramLog::find()->where(['date' => date('Y-m-d', $timestamp)])->exists() == false) {
+                $log = new ProgramLog();
+                $log->date = date('Y-m-d', $timestamp);
+                $log->server_program = $log->all_program = json_encode($programs);
+                $log->save(false);
+            }
+        }
+
+    }
+
+    // 按24小时统计接口调用
     public function actionStaticHour($timestamp)
     {
-        $filePaths = [
-            '/var/www/log/ApiLog/' . date('Y', $timestamp) . '/' . date('m', $timestamp) . '/' . date('Ymd', $timestamp) . '.log',
-            '/var/www/log/app/' . date('m', $timestamp) . '/' . date('Ymd', $timestamp) . '.log'
-        ];
+        $filePaths = $this->getLogPaths($timestamp);
 
         $data = [];
 
@@ -164,10 +207,7 @@ class LogController extends Controller
     {
         Yii::$app->db->createCommand("truncate " . LogTmp::tableName())->execute();
 
-        $filePaths = [
-            '/var/www/log/ApiLog/' . date('Y', $timestamp) . '/' . date('m', $timestamp) . '/' . date('Ymd', $timestamp) . '.log',
-            '/var/www/log/app/' . date('m', $timestamp) . '/' . date('Ymd', $timestamp) . '.log'
-            ];
+        $filePaths = $this->getLogPaths($timestamp);
 
         foreach ($filePaths as $filePath) {
             $this->stdout("正在读取文件{$filePath}" . PHP_EOL);
@@ -199,6 +239,14 @@ class LogController extends Controller
         }
 
         $this->stdout("任务执行结束");
+    }
+
+    protected function getLogPaths($timestamp)
+    {
+        return [
+            '/var/www/log/ApiLog/' . date('Y', $timestamp) . '/' . date('m', $timestamp) . '/' . date('Ymd', $timestamp) . '.log',
+            '/var/www/log/app/' . date('m', $timestamp) . '/' . date('Ymd', $timestamp) . '.log'
+        ];
     }
 
     // 利用mysql 统计接口数据
