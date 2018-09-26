@@ -61,28 +61,45 @@ class LogController extends Controller
 
     }
 
+    public function actionOfflineAll()
+    {
+        $start = strtotime("2018-01-01");
+        $end = strtotime("2018-09-25");
+
+        for ($i=$start; $i<=$end;) {
+            $this->actionImport($i);
+            $this->actionStatics($i);
+            $i += 86400;
+        }
+
+        echo "任务执行结束";
+    }
+
     /**
      * 离线统计活跃用户/接口使用情况
      */
     public function actionOffline()
     {
-        $this->actionImport();
-        $this->actionStatics();
+        $timestamp = strtotime('yesterday');
+        $this->actionImport($timestamp);
+        $this->actionStatics($timestamp);
     }
 
     // 从日志导入数据到mysql
-    public function actionImport()
+    public function actionImport($timestamp)
     {
         Yii::$app->db->createCommand("truncate " . LogTmp::tableName())->execute();
 
         $filePaths = [
-            '/var/www/log/ApiLog/' . date('Y') . '/' . date('m') . '/' . date('Ymd', strtotime('yesterday')) . '.log',
-            '/var/www/log/app/' . date('m') . '/' . date('Ymd', strtotime('yesterday')) . '.log'
+            '/var/www/log/ApiLog/' . date('Y', $timestamp) . '/' . date('m', $timestamp) . '/' . date('Ymd', $timestamp) . '.log',
+            '/var/www/log/app/' . date('m', $timestamp) . '/' . date('Ymd', $timestamp) . '.log'
             ];
 
         foreach ($filePaths as $filePath) {
             $this->stdout("正在读取文件{$filePath}" . PHP_EOL);
-
+            if (file_exists($filePath) == false) {
+                continue;
+            }
             foreach (self::readLine($filePath) as $i => $line) {
                 preg_match('/{.*}/', $line, $result);
                 if (isset($result[0])) {
@@ -111,7 +128,7 @@ class LogController extends Controller
     }
 
     // 利用mysql 统计接口数据
-    public function actionStatics()
+    public function actionStatics($timestamp)
     {
         $data['active_user'] = LogTmp::find()->select('mac')->distinct()->count();
         $data['total'] = LogTmp::find()->count();
@@ -140,7 +157,7 @@ class LogController extends Controller
 
         if ($exist == false) {
             $model = new LogStatics();
-            $model->date = date('Y-m-d', strtotime('yesterday'));
+            $model->date = date('Y-m-d', $timestamp);
             $model->active_user = $data['active_user'];
             $model->total = $data['total'];
             $model->token = $data['token'];
