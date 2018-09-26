@@ -21,6 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             'order_sign',
+            'order_uid',
             // 'user.username',
             // 'order_total',
              [
@@ -33,16 +34,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function($model) {
                     if ($model->order_paytime) {
                         return date('Y-m-d H:i', $model->order_paytime);
-                    }
-                    return '-';
-                }
-            ],
-
-            [
-                'attribute' => 'order_confirmtime',
-                'value' => function($model) {
-                    if ($model->order_paytime) {
-                        return date('Y-m-d H:i', $model->order_confirmtime);
                     }
                     return '-';
                 }
