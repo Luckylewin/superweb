@@ -561,6 +561,6 @@ return [
     'Show' => '显示',
     'is hide' => '隐藏内容状态',
     'Local' => '服务器',
-    'OSS' => 'OSS对象',
+    'OSS' => '阿里云OSS',
     'Save Position' => '保存位置',
 ];

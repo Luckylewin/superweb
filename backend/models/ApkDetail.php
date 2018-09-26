@@ -25,11 +25,6 @@ class ApkDetail extends \yii\db\ActiveRecord
 {
     public $position = 1;
 
-    public static $postionOptions = [
-        'Local',
-        'OSS'
-    ];
-
     public $dir = 'Android/apk/';
 
     /**
@@ -97,5 +92,12 @@ class ApkDetail extends \yii\db\ActiveRecord
         self::updateAll(['is_newest' => '1'], ['ID' => $data[0]['ID']]);
     }
 
+    public static function getPositionOptions()
+    {
+        return [
+           Yii::t('backend', 'Local'),
+           Yii::t('backend', 'OSS'),
+        ];
+    }
 
 }

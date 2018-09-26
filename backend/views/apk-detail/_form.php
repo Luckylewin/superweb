@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use dosamigos\fileupload\FileUploadUI;
 use common\widgets\oss\UploadWidget;
+use backend\models\ApkDetail;
 /* @var $this yii\web\View */
 /* @var $model backend\models\ApkDetail */
 /* @var $form yii\widgets\ActiveForm */
@@ -27,7 +28,7 @@ use common\widgets\oss\UploadWidget;
     <?= $form->field($model, 'ver')->textInput(['maxlength' => true]) ?>
 
 
-    <?= $form->field($model, 'position')->dropDownList(\backend\models\ApkDetail::$postionOptions, [
+    <?= $form->field($model, 'position')->dropDownList(ApkDetail::getPositionOptions(), [
             'id' => 'position'
     ]); ?>
 
