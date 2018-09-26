@@ -75,6 +75,24 @@ class LogController extends Controller
         echo "任务执行结束";
     }
 
+
+    /**
+     * 离线统计活跃用户/接口使用情况
+     */
+    public function actionOffline()
+    {
+        $timestamp = strtotime('yesterday');
+        $this->actionImport($timestamp);
+        $this->actionStatics($timestamp);
+        $this->actionStaticProgram($timestamp);
+        $this->actionStaticHour($timestamp);
+        $this->stdout("任务执行结束");
+    }
+
+    /**
+     * 统计节目播放情况
+     * @param $timestamp
+     */
     public function actionStaticProgram($timestamp)
     {
         $filePaths = $this->getLogPaths($timestamp);
@@ -192,15 +210,7 @@ class LogController extends Controller
 
     }
 
-    /**
-     * 离线统计活跃用户/接口使用情况
-     */
-    public function actionOffline()
-    {
-        $timestamp = strtotime('yesterday');
-        $this->actionImport($timestamp);
-        $this->actionStatics($timestamp);
-    }
+
 
     // 从日志导入数据到mysql
     public function actionImport($timestamp)
@@ -210,7 +220,6 @@ class LogController extends Controller
         $filePaths = $this->getLogPaths($timestamp);
 
         foreach ($filePaths as $filePath) {
-            $this->stdout("正在读取文件{$filePath}" . PHP_EOL);
             if (file_exists($filePath) == false) {
                 continue;
             }
@@ -238,15 +247,6 @@ class LogController extends Controller
             }
         }
 
-        $this->stdout("任务执行结束");
-    }
-
-    protected function getLogPaths($timestamp)
-    {
-        return [
-            '/var/www/log/ApiLog/' . date('Y', $timestamp) . '/' . date('m', $timestamp) . '/' . date('Ymd', $timestamp) . '.log',
-            '/var/www/log/app/' . date('m', $timestamp) . '/' . date('Ymd', $timestamp) . '.log'
-        ];
     }
 
     // 利用mysql 统计接口数据
@@ -302,6 +302,14 @@ class LogController extends Controller
         }
         $this->stdout("-----昨日数据分析----" . PHP_EOL);
         print_r($data);
+    }
+
+    protected function getLogPaths($timestamp)
+    {
+        return [
+            '/var/www/log/ApiLog/' . date('Y', $timestamp) . '/' . date('m', $timestamp) . '/' . date('Ymd', $timestamp) . '.log',
+            '/var/www/log/app/' . date('m', $timestamp) . '/' . date('Ymd', $timestamp) . '.log'
+        ];
     }
 
     /**
