@@ -4,7 +4,6 @@ namespace backend\models;
 
 use common\components\Func;
 use Yii;
-use common\oss\Aliyunoss;
 use yii\helpers\ArrayHelper;
 
 /**

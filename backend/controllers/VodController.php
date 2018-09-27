@@ -3,6 +3,9 @@
 namespace backend\controllers;
 
 use backend\blocks\VodBlock;
+use backend\models\form\BindVodSchemeForm;
+use backend\models\Scheme;
+use backend\models\VodToScheme;
 use common\models\VodList;
 use Yii;
 use common\models\Vod;
@@ -179,5 +182,36 @@ class VodController extends BaseController
         return ['status' => 'success', 'data' => [
             'sort' => $sort
         ]];
+    }
+
+    public function actionBindScheme($id)
+    {
+        $model = new BindVodSchemeForm();
+        $model->vod_id = $id;
+
+        if (Yii::$app->request->isPost) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                return [
+                    'status' => true,
+                ];
+            }
+
+            return ['status' => false];
+
+        } else {
+            // 查询没有绑定的方案号
+            $scheme_id = VodToScheme::findByVodId($id);
+            $supportedSchemeID = Scheme::getSupportedSchemeByNotIn($scheme_id);
+            $schemeOptions = Scheme::getOptions();
+
+            $model->scheme_id = $supportedSchemeID;
+
+            return $this->renderAjax('bind-scheme', [
+                'model' => $model,
+                'schemeOptions' => $schemeOptions
+            ]);
+        }
+
     }
 }

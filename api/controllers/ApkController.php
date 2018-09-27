@@ -10,10 +10,10 @@ namespace api\controllers;
 
 
 use api\components\Formatter;
-use backend\models\ApkList;
 use common\components\Func;
 use common\oss\Aliyunoss;
 use yii\rest\ActiveController;
+
 
 class ApkController extends  ActiveController
 {
@@ -28,7 +28,12 @@ class ApkController extends  ActiveController
                 foreach ($apk['newest'] as $field => $value) {
                     $apk[$field] = $value;
                 }
-                $apk['url'] = Func::getAccessUrl($apk['url'], 3600);
+                if ($apk->save_position == 'oss') {
+                    $oss = new Aliyunoss();
+                    $apk['url'] = $oss->getDownloadUrl($apk['url'], 1000);
+                } else {
+                    $apk['url'] = Func::getAccessUrl($apk['url'], 3600);
+                }
         }
 
         if ($apk['newest']) {

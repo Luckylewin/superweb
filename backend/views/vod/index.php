@@ -6,6 +6,8 @@ use yii\widgets\Pjax;
 use common\models\Vod;
 use yii\helpers\ArrayHelper;
 use \common\models\VodList;
+use \yii\bootstrap\Modal;
+use \yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\search\VodSearch */
@@ -70,7 +72,7 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js'
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a(Yii::t('backend', 'Create'), \yii\helpers\Url::to(['create','vod_cid' => Yii::$app->request->get('VodSearch')['vod_cid']]), ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('backend', 'Create'), Url::to(['create','vod_cid' => Yii::$app->request->get('VodSearch')['vod_cid']]), ['class' => 'btn btn-success']) ?>
 
         <?php if(strpos(Yii::$app->request->referrer, 'vod-list') !== false): ?>
             <?= Html::a(Yii::t('backend','Go Back'), null, [
@@ -163,10 +165,10 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js'
                     'attribute' => 'vod_price',
                     'options' => ['style' => 'width:60px;']
             ],*/
-             [
+            /* [
                   'attribute' => 'vod_gold',
                   'headerOptions' => ['class' => 'col-xs-1'],
-              ],
+              ],*/
             /*[
                 'attribute' => 'vod_hits',
                 'options' => ['style' => 'width:100px;']
@@ -213,7 +215,7 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js'
             ],
             [
                     'class' => 'common\grid\MyActionColumn',
-                    'headerOptions' => ['class' => 'col-md-2'],
+                'headerOptions' => ['class' => 'col-md-2'],
                     'template' => '{push-home}&nbsp;{banner-create}',
                     'buttons' => [
                         'banner-create' => function($url, $model, $key) {
@@ -234,9 +236,9 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js'
 
             [
                     'class' => 'common\grid\MyActionColumn',
-                    'headerOptions' => ['class' => 'col-md-3'],
+                    'headerOptions' => ['class' => 'col-md-4'],
                     'size' => 'btn-sm',
-                    'template' => '{link-index} {view} {update} {delete}',
+                    'template' => '{link-index} {scheme-setting} {view} {update} {delete}',
 
                     'buttons' => [
 
@@ -244,10 +246,18 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js'
                                 return Html::a('<i class="glyphicon glyphicon-link"></i> 链接 ', ['link/index', 'vod_id' => $model->vod_id], [
                                     'class' => 'btn btn-success btn-sm'
                                 ]);
+                            },
+                            'scheme-setting' => function($url, $model) {
+                                return Html::button('<i class="glyphicon glyphicon-cog"></i> 方案号 ', [
+                                    'class' => 'btn btn-default btn-sm bind' ,
+                                    'data-toggle' => 'modal',
+                                    'data-target' => '#setting-scheme-modal',
+                                    'data-id' => $model->vod_id,
+                                ]);
                             }
 
                     ],
-                    'options' => ['style' => 'width:280px;'],
+
                     'header' => Yii::t('backend', 'Operate')
             ],
             //'vod_title',
@@ -325,6 +335,30 @@ $this->registerJs($requestJs);
 ?>
 
 
+<?php
+
+//绑定方案号
+Modal::begin([
+    'id' => 'setting-scheme-modal',
+    'size' => Modal::SIZE_DEFAULT,
+    'header' => '<h4 class="modal-title">设置方案号</h4>',
+    'footer' => '<a href="#" class="btn btn-default" data-dismiss="modal">关闭</a>',
+]);
+$requestUrl = Url::to(['vod/bind-scheme']);
+$requestJs=<<<JS
+     $(document).on('click', '.bind', function() {
+                var id = $(this).attr('data-id');
+                $.get('{$requestUrl}', {'id':id},
+                    function (data) {
+                        $('.modal-body').css('min-height', '200px').html(data);
+                    }
+                )
+            })
+JS;
+$this->registerJs($requestJs);
+Modal::end();
+
+?>
 
 <?php
 

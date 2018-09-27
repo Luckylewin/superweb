@@ -10,6 +10,7 @@ namespace backend\models;
 
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "iptv_scheme".
@@ -58,6 +59,16 @@ class Scheme extends \yii\db\ActiveRecord
     public static function getAll()
     {
         return self::find()->asArray()->all();
+    }
+
+    public static function getOptions()
+    {
+        return ArrayHelper::map(self::getAll(), 'id', 'schemeName');
+    }
+
+    public static function getSupportedSchemeByNotIn($scheme_id)
+    {
+        return self::find()->where(['not in', 'id', $scheme_id])->select('id')->column();
     }
 
 }

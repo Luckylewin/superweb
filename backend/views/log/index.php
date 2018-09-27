@@ -279,7 +279,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 </h3>
             </div>
             <div class="panel-body">
-                <h3><?= $statics->paypal_callback??0 ?></h3>
+                <h3><?= $statics->dokypay_callback??0 ?></h3>
             </div>
         </div>
     </div>

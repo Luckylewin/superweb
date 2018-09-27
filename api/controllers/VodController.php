@@ -12,6 +12,8 @@ use api\components\Formatter;
 use api\components\Response;
 use backend\models\IptvType;
 use backend\models\IptvTypeItem;
+use backend\models\Scheme;
+use backend\models\VodToScheme;
 use common\models\BuyRecord;
 use common\models\User;
 use common\models\Vod;
@@ -79,6 +81,16 @@ class VodController extends ActiveController
         $vod_year = $request->get('vod_year', null);
         $vod_area = $request->get('vod_area', null);
         $vod_language = $request->get('vod_language', null);
+        $scheme = $request->get('scheme', null);
+
+        // 查询 scheme_id
+        if ($scheme) {
+            $scheme = Scheme::findOne(['schemeName' => $scheme]);
+            if ($scheme) {
+                // 查询不支持影片
+                $nonSupportVodIds = VodToScheme::findBySchemeId($scheme->id);
+            }
+        }
 
         $fields = Vod::getFields();
         unset($fields[array_search('vod_url', $fields)]);
@@ -98,6 +110,10 @@ class VodController extends ActiveController
                     'vod_language' => $vod_language
                 ]
             );;
+        }
+
+        if (isset($nonSupportVodIds) && !empty($nonSupportVodIds)) {
+            $query->andWhere(['NOT IN', 'vod_id', $nonSupportVodIds]);
         }
 
         $query->andFilterWhere(['like', 'vod_name', $vod_name])
