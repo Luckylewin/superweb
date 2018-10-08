@@ -234,6 +234,14 @@ class AnnaIptv extends base
 
         foreach ($data as $key => $val) {
             $vod = $this->getVod($vodList->list_id,  $val['tvg-name'],  $val['group-title'], $val['tvg-logo'], $lang);
+
+            // 如果更改了类别 则更新
+            if ($vod->vod_type != $val['group-title'] || $vod->vod_keywords != $val['group-title']) {
+                $vod->vod_type = $val['group-title'];
+                $vod->vod_keywords = $val['group-title'];
+                $vod->save(false);
+            }
+
             if ($vod->sort != 0) {
                 $vod->sort = $key + 1;
                 $vod->save(false);
