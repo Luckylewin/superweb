@@ -124,7 +124,7 @@ class VodController extends ActiveController
             'sort' => [
                 'defaultOrder' => [
                     'vod_addtime' => SORT_DESC,
-                    'sort' => SORT_ASC
+                    'sort' => SORT_DESC
                 ]
             ],
             'pagination' => [
