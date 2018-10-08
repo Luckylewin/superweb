@@ -10,6 +10,7 @@ namespace console\controllers;
 
 use backend\models\Parade;
 use console\jobs\ParadeJob;
+use console\models\event\NBA;
 use console\models\event\sportsmediawatch;
 use console\models\event\zhiboba;
 use console\models\parade\beginsport;
@@ -53,7 +54,8 @@ class ParadeController extends Controller
     {
         try {
 
-            $live = new sportsmediawatch();
+            //$live = new sportsmediawatch();
+            $live = new NBA();
             $live->start();
 
         } catch (\Exception $e) {}
