@@ -123,13 +123,7 @@ class OttChannelController extends BaseController
         ]);
     }
 
-    /**
-     * Updates an existing OttChannel model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
@@ -180,13 +174,7 @@ class OttChannelController extends BaseController
         ]);
     }
 
-    /**
-     * Deletes an existing OttChannel model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
@@ -198,10 +186,12 @@ class OttChannelController extends BaseController
     public function actionBatchDelete()
     {
         $id = Yii::$app->request->get('id');
-        OttChannel::deleteAll(['in', 'id', $id]);
+        if ($id) {
+            $id = explode(',', $id);
+            OttChannel::deleteAll(['in', 'id', $id]);
 
-        $this->setFlash('info', "批量删除成功");
-
+            $this->setFlash('info', "批量删除成功");
+        }
         return $this->redirect(Yii::$app->request->referrer);
     }
 

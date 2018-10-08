@@ -36,7 +36,7 @@
 
     <div class="col-md-4">
         <div class="well"  title="php yii queue/listen &">
-            <i class="fa fa-file-text" style="font-size: 20px;"></i> 队列服务:
+            <i class="fa fa-arrow-circle-right" style="font-size: 20px;"></i> 队列服务:
             <?php if ($data['queueService']['running']): ?>
                 <span class="text-success font-bold">正在运行</span>
             <?php else: ?>

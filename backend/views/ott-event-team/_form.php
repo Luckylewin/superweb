@@ -89,7 +89,7 @@ use \common\widgets\country\CountryWidget;
     <div class="col-md-12">
         <?= $form->field($model, 'team_alias_name')->textInput(['maxlength' => true]) ?>
         <div class="form-group">
-            <?= Html::submitButton('新增', ['class' => 'btn btn-success']) ?>
+            <?= Html::submitButton(Yii::t('backend', 'Save'), ['class' => 'btn btn-success']) ?>
             <?= Html::a(Yii::t('backend','Go Back'), ['ott-event-team/index', 'event_id' => $model->event_id], ['class' => 'btn btn-default']) ?>
         </div>
     </div>
