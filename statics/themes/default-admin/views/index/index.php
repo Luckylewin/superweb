@@ -1,3 +1,4 @@
+
 <div class="container">
     <div class="jumbotron">
         <h1> <i class="fa fa-tv"></i> <?php echo isset(Yii::$app->params['basic']['sitename'])? Yii::t('backend', Yii::$app->params['basic']['sitename'] ): Yii::t('backend', 'Welcome') ?></h1>
@@ -7,6 +8,41 @@
                 'class' => 'btn btn-primary btn-lg'
             ]) ?>
         </p>
+    </div>
+</div>
+
+<div>
+    <div class="col-md-4">
+        <div class="well" title="php start.php restart -d">
+            <i class="fa fa-server" style="font-size: 20px;" ></i> API服务:
+            <?php if ($data['apiService']['running']): ?>
+                <span class="text-success font-bold">正在运行</span>
+            <?php else: ?>
+                <span class="text-danger font-bold">停止运行</span>
+            <?php endif; ?>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="well" title="php yii log/analyse &">
+            <i class="fa fa-file-text" style="font-size: 20px;" ></i> 日志服务:
+            <?php if ($data['logService']['running']): ?>
+                <span class="text-success font-bold">正在运行</span>
+            <?php else: ?>
+                <span class="text-danger font-bold">停止运行</span>
+            <?php endif; ?>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="well"  title="php yii queue/listen &">
+            <i class="fa fa-file-text" style="font-size: 20px;"></i> 队列服务:
+            <?php if ($data['queueService']['running']): ?>
+                <span class="text-success font-bold">正在运行</span>
+            <?php else: ?>
+                <span class="text-danger font-bold">停止运行</span>
+            <?php endif; ?>
+        </div>
     </div>
 </div>
 

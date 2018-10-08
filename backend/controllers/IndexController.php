@@ -20,12 +20,15 @@ class IndexController extends BaseController
 
     public function actionIndex()
     {
-        return $this->render('index');
+        $data = $this->getServiceData();
+
+        return $this->render('index', [
+            'data' => $data
+        ]);
     }
 
     /**
-     * 设定语言： 1) 设置cookie,2) 跳转回原来的页面
-     * 访问网址 - http://.../site/language?locale=zh-CN
+     * 设定语言
      */
     public function actionLanguage($lang)
     {
@@ -40,4 +43,34 @@ class IndexController extends BaseController
         $this->setFlash('success', 'Switch language successfully');
         $this->goBack(Yii::$app->request->headers['Referer']);
     }
+
+    public function actionCheck()
+    {
+
+    }
+
+    public function getServiceData()
+    {
+        $data = [
+            'apiService' => ['key' => 'start.php','running' => false],
+            'logService' => ['key' => 'log/analyse','running' => false],
+            'queueService' => ['key' => 'queue/listen','running' => false],
+        ];
+
+        foreach ($data as $service => $value) {
+            // 日志服务
+            $fp = popen("ps -aux | grep {$value['key']} | grep -v grep", "r");
+            $result = "";
+            while (!feof($fp)) {
+                $result .= fread($fp, 1024);
+            }
+            pclose($fp);
+            if (strlen($result) > 1) {
+                $data[$service]['running'] = true;
+            }
+        }
+
+        return  $data;
+    }
+
 }
