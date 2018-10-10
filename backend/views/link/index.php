@@ -8,17 +8,10 @@ use yii\helpers\Url;
 
 $this->title = '链接列表';
 $this->params['breadcrumbs'][] = ['label' => '视频列表', 'url' => ['vod/index']];
-$this->params['breadcrumbs'][] = $vod->vod_name;
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="vodlink-index">
 
-    <h1><?= Html::encode($vod->vod_name) ?></h1>
-
-
-    <p>
-        <?= Html::a('创建链接', Url::to(['link/create', 'vod_id'=>$vod->vod_id]), ['class' => 'btn btn-success']) ?>
-    </p>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -31,7 +24,13 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             //'id',
             //'video_id',
-            'url:url',
+            [
+                    'attribute' => 'url',
+                    'format' => 'url',
+                    'headerOptions' => [
+                            'class' => 'col-md-6'
+                    ]
+            ],
             //'hd_url:url',
             'episode',
             [

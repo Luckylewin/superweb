@@ -7,7 +7,7 @@ use yii\helpers\Html;
 /* @var $model common\models\Vodlink */
 
 $this->title = 'Create Vodlink';
-$this->params['breadcrumbs'][] = ['label' => 'Vodlinks', 'url' => ['index','vod_id' => $vod->vod_id]];
+$this->params['breadcrumbs'][] = ['label' => 'Vodlinks', 'url' => ['index','group_id' => $model->group_id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="vodlink-create">
@@ -15,7 +15,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= $this->render('_form', [
         'model' => $model,
-        'vod' => $vod
     ]) ?>
 
 </div>

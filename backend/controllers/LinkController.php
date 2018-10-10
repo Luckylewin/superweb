@@ -2,7 +2,9 @@
 
 namespace backend\controllers;
 
+use backend\models\PlayGroup;
 use common\models\Vod;
+use http\Url;
 use Yii;
 use common\models\Vodlink;
 use yii\data\ActiveDataProvider;
@@ -14,121 +16,79 @@ use yii\web\Response;
  */
 class LinkController extends BaseController
 {
-    public $vod;
 
-    public function beforeAction($action)
-    {
-        $vod_id = Yii::$app->request->get('vod_id', false);
-        if (in_array($action->id, ['index', 'view'])) {
-            if ($vod_id == false) {
-                throw new NotFoundHttpException('发生了错误');
-            }
-        }
-        $this->vod = Vod::findOne($vod_id);
-
-        return parent::beforeAction($action);
-    }
-
-    /**
-     * Lists all Vodlink models.
-     * @return mixed
-     * @throws NotFoundHttpException if the vod_id cannot be found
-     */
     public function actionIndex()
     {
-
+        $group_id = Yii::$app->request->get('group_id', false);
         $dataProvider = new ActiveDataProvider([
-            'query' => Vodlink::find()->where(['video_id' => $this->vod->vod_id]),
+            'query' => Vodlink::find()->where(['group_id' => $group_id]),
+            'pagination' => [
+                'pageSize' => 10,
+            ],
         ]);
 
         return $this->render('index', [
-            'dataProvider' => $dataProvider,
-            'vod' => $this->vod
+            'dataProvider' => $dataProvider
         ]);
     }
 
-    /**
-     * Displays a single Vodlink model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+
     public function actionView($id)
     {
         return $this->render('view', [
-            'model' => $this->findModel($id),
-            'vod' => $this->vod
+            'model' => $this->findModel($id)
         ]);
     }
 
-    /**
-     * Creates a new Vodlink model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
+
     public function actionCreate()
     {
         $model = new Vodlink();
+        $model->group_id = Yii::$app->request->get('group_id', false);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index', 'vod_id' => $this->vod->vod_id]);
+            $playGroup = PlayGroup::findOne(['id' => $model->group_id]);
+            $this->success();
+            return $this->redirect(['play-group/index', 'vod_id' => $playGroup->vod_id]);
         }
 
-        $model->episode = $model->getNextEpisode($this->vod->vod_id);
+        $model->episode = $model->getNextEpisode($model->group_id);
         $model->hasErrors() && Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
 
-
         return $this->render('create', [
-            'model' => $model,
-            'vod' => $this->vod
+            'model' => $model
         ]);
     }
 
-    /**
-     * Updates an existing Vodlink model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $this->setFlash('success', Yii::t('backend', 'Success'));
-            return $this->redirect(['index', 'vod_id' => $model->video_id]);
+            $playGroup = PlayGroup::findOne($model->group_id);
+            if (!empty($playGroup)) {
+                return $this->redirect(['play-group/index', 'vod_id' => $playGroup->vod_id]);
+            }
+
         }
 
         return $this->render('update', [
-            'model' => $model,
-            'vod' => $this->vod
+            'model' => $model
         ]);
     }
 
-    /**
-     * Deletes an existing Vodlink model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     public function actionDelete($id)
     {
         $model = $this->findModel($id);
-        $vod_id = $model->video_id;
+        $group_id = $model->group_id;
         $model->delete();
 
-        return $this->redirect(['index','vod_id' => $vod_id]);
+        return $this->redirect(['index','vod_id' => $group_id]);
     }
 
-    /**
-     * Finds the Vodlink model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Vodlink the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+
     protected function findModel($id)
     {
         if (($model = Vodlink::findOne($id)) !== null) {

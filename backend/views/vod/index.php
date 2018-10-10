@@ -243,7 +243,7 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js'
                     'buttons' => [
 
                             'link-index' => function($url, $model) {
-                                return Html::a('<i class="glyphicon glyphicon-link"></i> 链接 ', ['link/index', 'vod_id' => $model->vod_id], [
+                                return Html::a('<i class="glyphicon glyphicon-link"></i> 链接 ', ['play-group/index', 'vod_id' => $model->vod_id], [
                                     'class' => 'btn btn-success btn-sm'
                                 ]);
                             },

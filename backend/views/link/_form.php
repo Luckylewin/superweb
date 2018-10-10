@@ -118,7 +118,7 @@ $this->registerJs($uploadJS, $this::POS_END);
     <div class="col-md-12">
 
         <?php if($model->isNewRecord): ?>
-           <?= $form->field($model, 'video_id')->dropDownList([$vod->vod_id => $vod->vod_name]); ?>
+           <?= $form->field($model, 'group_id')->textInput(); ?>
         <?php endif; ?>
 
         <?= $form->field($model, 'episode')->textInput() ?>
@@ -132,15 +132,9 @@ $this->registerJs($uploadJS, $this::POS_END);
         <div class="form-group">
             <?= Html::submitButton(\Yii::t('backend','Save'), ['class' => 'btn btn-success']) ?>
 
-            <?php if($model->isNewRecord): ?>
-                <?= Html::a(Yii::t('backend','Go Back'), Yii::$app->request->referrer, [
-                        'class' => 'btn btn-default'
-                ]) ?>
-            <?php else: ?>
-                <?= Html::a(Yii::t('backend','Go Back'), \yii\helpers\Url::to(['link/index', 'vod_id' => $model->vodInfo->vod_id]), [
-                    'class' => 'btn btn-default'
-                ]) ?>
-            <?php endif; ?>
+            <?= Html::a(Yii::t('backend','Go Back'), Yii::$app->request->referrer, [
+                'class' => 'btn btn-default'
+            ]) ?>
 
         </div>
 

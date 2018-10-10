@@ -265,7 +265,7 @@ class Vod extends \yii\db\ActiveRecord implements Linkable
         return [
             'vodLinks' => function() {
 
-                $items = Vodlink::find()->where(['video_id' => $this->vod_id])->select(['id', 'episode', 'plot' ])->asArray()->all();
+                $items = Vodlink::find()->where(['video_id' => $this->vod_id])->select(['id', 'episode', 'plot','flag' ])->asArray()->all();
 
                 array_walk($items, function(&$v, $k) {
                     $v['_links']['self']['href'] = Url::to(["vod-links/{$v['id']}", 'access-token' => '' ], true);

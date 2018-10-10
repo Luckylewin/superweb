@@ -2,7 +2,7 @@
 /yii
 /yii_test
 /yii_test.bat
-
+storage/uploads/
 # phpstorm project files
 .idea
 

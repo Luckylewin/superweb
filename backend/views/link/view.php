@@ -7,7 +7,6 @@ use yii\widgets\DetailView;
 /* @var $model common\models\Vodlink */
 
 $this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Vodlinks', 'url' => ['index','vod_id'=>$vod->vod_id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="vodlink-view">

@@ -11,10 +11,13 @@ use backend\models\Cache;
 use backend\models\Mac;
 use backend\models\MiddleParade;
 use backend\models\Parade;
+use backend\models\PlayGroup;
 use common\models\MainClass;
 use common\models\OttChannel;
 use common\models\OttLink;
 use common\models\SubClass;
+use common\models\Vod;
+use common\models\Vodlink;
 use console\components\MySnnopy;
 use Symfony\Component\DomCrawler\Crawler;
 use yii\console\Controller;
@@ -173,6 +176,17 @@ class HelloController extends Controller
 
     }
 
+    public function actionShell()
+    {
+        $fp = popen('ps -aux | grep log/analyse | grep -v grep', "r");
+        $rs = "";
+        while (!feof($fp)) {
+            $rs .= fread($fp, 1024);
+        }
+        pclose($fp);
+        var_dump($rs);
+    }
+
     public function actionTest()
     {
         $snnopy = MySnnopy::init();
@@ -189,6 +203,24 @@ class HelloController extends Controller
                 echo $node->text();
             })
         ;
+    }
 
+    public function actionGroup()
+    {
+        //为每个影片建立一个默认分组
+        $vods = Vod::find()->all();
+        foreach ($vods as $vod) {
+            if (PlayGroup::find()->where(['vod_id' => $vod->vod_id, 'group_name' => 'default'])->exists() == false) {
+                $playGroup = new PlayGroup();
+                $playGroup->vod_id = $vod->vod_id;
+                $playGroup->sort = 0;
+                $playGroup->group_name = 'default';
+                $playGroup->save(false);
+
+                Vodlink::updateAll(['group_id' => $playGroup->id], ['video_id' => $vod->vod_id]);
+            }
+        }
+
+        echo "工作完成了";
     }
 }

@@ -1,11 +1,8 @@
 <?php
 
 namespace common\models;
+use backend\models\PlayGroup;
 
-use Yii;
-use yii\helpers\Url;
-use yii\web\Link;
-use yii\web\Linkable;
 
 /**
  * This is the model class for table "iptv_vodlink".
@@ -17,6 +14,7 @@ use yii\web\Linkable;
  * @property int $episode 剧集
  * @property string $plot 剧情
  * @property string $season 第几季
+ * @property string $group_id 链接分组id
  */
 class Vodlink extends \yii\db\ActiveRecord
 {
@@ -35,7 +33,7 @@ class Vodlink extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['video_id', 'episode'], 'integer'],
+            [['video_id', 'episode', 'group_id'], 'integer'],
             [['url'], 'required'],
             [['url', 'hd_url'], 'string', 'max' => 255],
             [['plot'], 'string', 'max' => 1000],
@@ -70,6 +68,15 @@ class Vodlink extends \yii\db\ActiveRecord
     {
         parent::beforeSave($insert);
         if ($insert) {
+
+            // 添加video_id
+            if (empty($this->video_id)) {
+                $playGroup = PlayGroup::findOne($this->group_id);
+                if ($playGroup) {
+                    $this->video_id = $playGroup->vod_id;
+                }
+            }
+
             $count = self::find()->where(['video_id' => $this->video_id])->count('id');
             if ($count >= 1) {
                 $vodInfo = $this->vodInfo;
@@ -101,22 +108,24 @@ class Vodlink extends \yii\db\ActiveRecord
 
     /**
      * 获取最大集数
-     * @param $vod_id
+     * @param $group_id
      * @return mixed
      */
-    public function getMaxEpisode($vod_id)
+    public function getMaxEpisode($group_id)
     {
-        return self::find()->where(['video_id' => $vod_id])->max('episode');
+        return self::find()->where(['group_id' => $group_id])->max('episode');
     }
 
     /**
      * 获取下一集数
-     * @param $vod_id
+     * @param $group_id
      * @return int|mixed
      */
-    public function getNextEpisode($vod_id)
+    public function getNextEpisode($group_id)
     {
-        $maxEpisode = $this->getMaxEpisode($vod_id);
+
+        $maxEpisode = $this->getMaxEpisode($group_id);
+
         if (is_null($maxEpisode)) {
             return 1;
         }
