@@ -62,20 +62,6 @@ class LogController extends Controller
     }
 
 
-    public function actionOfflineAll()
-    {
-        $start = strtotime("2018-01-01");
-        $end = strtotime("2018-09-25");
-
-        for ($i=$start; $i<=$end;) {
-            $this->actionStaticProgram($i);
-            $i += 86400;
-        }
-
-        echo "任务执行结束";
-    }
-
-
     /**
      * 离线统计活跃用户/接口使用情况
      */
@@ -245,6 +231,10 @@ class LogController extends Controller
 
                 }
             }
+        }
+
+        if (!empty($rows)) {
+            Yii::$app->db->createCommand()->batchInsert(LogTmp::tableName(), ['header', 'mac'], $rows)->execute();
         }
 
     }
