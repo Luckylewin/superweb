@@ -72,7 +72,7 @@ class ApkList extends \yii\db\ActiveRecord implements Linkable
     public function getNewest()
     {
         return $this->hasOne(ApkDetail::className(), ['apk_ID' => 'ID'])
-                    ->select(['ver', 'url', 'content', 'force_update'])
+                    ->select(['ver', 'url', 'content', 'force_update', 'save_position'])
                     ->orderBy('apk_detail.ID desc')
                     ->limit(1);
     }

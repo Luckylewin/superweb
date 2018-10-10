@@ -28,8 +28,8 @@ class ApkController extends  ActiveController
                 foreach ($apk['newest'] as $field => $value) {
                     $apk[$field] = $value;
                 }
-                
-                if ($apk['newest']['save_position'] == 'oss') {
+
+                if ($apk['save_position'] == 'oss') {
                     $oss = new Aliyunoss();
                     $apk['url'] = $oss->getDownloadUrl($apk['url'], 1000);
                 } else {
