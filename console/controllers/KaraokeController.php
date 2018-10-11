@@ -121,7 +121,7 @@ class KaraokeController extends Controller
     {
         $data = Karaoke::findOne(['albumName' => $searchResult['snippet']['title']]);
 
-        if (!empty($data)) {
+        if (empty($data)) {
             $searchResult['snippet']['title'] = trim($searchResult['snippet']['title']);
             $karaoke = new Karaoke();
             if (!empty($searchResult['snippet']['title']) && !empty($searchResult['snippet']['title'])) {
