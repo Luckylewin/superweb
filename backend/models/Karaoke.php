@@ -140,7 +140,23 @@ class Karaoke extends \yii\db\ActiveRecord
         ];
     }
 
+    public function getTrueUrl()
+    {
+        if ($this->source == 'Youtube') {
+           return "https://www.youtube.com/watch?v=" . $this->url;
+        } else {
+            return \common\components\Func::getAccessUrl($this->url);
+        }
+    }
 
+    public function getImage()
+    {
+        if ($this->source == 'Youtube') {
+            return $this->albumImage;
+        } else {
+            return \common\components\Func::getAccessUrl($this->albumImage);
+        }
+    }
 
     public function getStatus()
     {

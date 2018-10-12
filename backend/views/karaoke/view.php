@@ -30,11 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'albumImage',
                 'format' => ['image', ['width' => 100]],
                 'value' => function($model) {
-                    if ($model->source == 'Youtube') {
-                        return $model->albumImage;
-                    } else {
-                        return \common\components\Func::getAccessUrl($model->albumImage);
-                    }
+                    return $model->image;
                 }
             ],
             //'tid',
@@ -59,15 +55,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     'attribute' => 'url',
                     'format' => 'raw',
                     'value' => function($model) {
-                        if ($model->source == 'Youtube') {
-                            return Html::a($model->url, "https://www.youtube.com/watch?v=" . $model->url, [
-                                'target' => '_blank'
-                            ]);
-                        } else {
-                            return Html::a($model->url, \common\components\Func::getAccessUrl($model->url), [
-                                'target' => '_blank'
-                            ]);
-                        }
+                        return Html::a($model->url, $model->trueUrl, [
+                            'target' => '_blank'
+                        ]);
                     }
             ],
             [
@@ -84,6 +74,5 @@ $this->params['breadcrumbs'][] = $this->title;
             'updatetime',
         ],
     ]) ?>
-
 </div>
 
