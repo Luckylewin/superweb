@@ -8,6 +8,7 @@
 
 namespace console\script;
 
+use backend\models\PlayGroup;
 use Yii;
 use yii\console\Controller;
 use yii\helpers\ArrayHelper;
@@ -206,9 +207,10 @@ class AnnaIptv extends base
 
         foreach ($data as $val) {
             $vod = $this->getVod($vodList->list_id,  $val['tvg-name'],  $val['group-title'], $val['tvg-logo'], $lang, '电视剧');
+            $group = $this->attachGroup($vod);
             $url = $val['ts'];
             $episode = isset($val['episode']) ? $val['episode'] : 0;
-            $this->attachLink($vod, $url, $episode);
+            $this->attachLink($vod, $group, $url, $episode);
         }
 
     }
@@ -234,6 +236,7 @@ class AnnaIptv extends base
 
         foreach ($data as $key => $val) {
             $vod = $this->getVod($vodList->list_id,  $val['tvg-name'],  $val['group-title'], $val['tvg-logo'], $lang);
+            $group = $this->attachGroup($vod);
 
             // 如果更改了类别 则更新
             if ($vod->vod_type != $val['group-title'] || $vod->vod_keywords != $val['group-title']) {
@@ -247,7 +250,7 @@ class AnnaIptv extends base
                 $vod->save(false);
             }
             //$this->fillWithMovieProfile($vod);
-            $this->attachLink($vod, $val['ts']);
+            $this->attachLink($vod,$group, $val['ts']);
         }
 
         return true;
@@ -433,15 +436,32 @@ class AnnaIptv extends base
         return $vod;
     }
 
+    protected function attachGroup(Vod $vod)
+    {
+        // 查找是否存在一个default分组
+        $playGroup = PlayGroup::find()->where(['vod_id' => $vod->vod_id, 'group_name' => 'default'])->limit(1)->one();
+        if (is_null($playGroup)) {
+            $playGroup = new PlayGroup();
+            $playGroup->vod_id = $vod->vod_id;
+            $playGroup->group_name = 'default';
+            $playGroup->sort = 0;
+            $playGroup->save(false);
+        }
+
+        return $playGroup;
+    }
+
     /**
      * 关联链接
      * @param Vod $vod
+     * @param PlayGroup $group
      * @param $url
      * @param int $episode
      */
-    private function attachLink(Vod $vod, $url, $episode = 1)
+    private function attachLink(Vod $vod,PlayGroup $group, $url, $episode = 1)
     {
         $baseName = basename($url);
+
         // 查找是否存在
         $link =  Vodlink::find()->where(['video_id' => $vod->vod_id])->andWhere(['LIKE', 'url', $baseName])->one();
 
@@ -455,6 +475,7 @@ class AnnaIptv extends base
             $link = new Vodlink();
             $link->url = $url;
             $link->episode = $episode;
+            $link->group_id = $group->id;
             $vod->link('vodLinks', $link);
 
             $this->stdout("新增链接{$url}" . PHP_EOL, Console::FG_GREEN);

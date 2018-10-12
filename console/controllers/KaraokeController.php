@@ -14,28 +14,31 @@ use yii\console\Controller;
 
 class KaraokeController extends Controller
 {
+    public $area;
+
     public function actionSearch()
     {
+        $query = 'karaoke beat chuẩn';
+        $this->area = Karaoke::LANG_VN;
+
         $nextPage = true;
         while (!is_null($nextPage)) {
             if (isset($pageToken) && $pageToken) {
                 $optPara = array(
-                    'q' => 'karaoke beat chuẩn',//
+                    'q' => $query,//
                     'maxResults' => 50,
                     'pageToken' => $pageToken,
                     'type' => 'video',
                     'order' => 'relevance',
                     //'videoDuration' => 'short',
-
                 );
             } else {
                 $optPara = array(
-                    'q' => 'karaoke beat chuẩn',//
+                    'q' => $query,//
                     'maxResults' => 50,
                     //'type' => 'video',
                     'order' => 'relevance',
                     //'videoDuration' => 'short',
-
                 );
             }
             $searchResponse = $this->listSearch($optPara);
@@ -129,6 +132,7 @@ class KaraokeController extends Controller
                 $karaoke->albumName = $searchResult['snippet']['title'];
                 $karaoke->albumImage = $searchResult['snippet']['thumbnails']['high']['url'];
                 $karaoke->info = $searchResult['snippet']['description'];
+                $karaoke->area = $this->area;
                 $karaoke->save(false);
                 $this->stdout("新增" . $searchResult['snippet']['title'] . PHP_EOL);
             }

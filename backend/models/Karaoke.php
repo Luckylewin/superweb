@@ -43,6 +43,12 @@ class Karaoke extends \yii\db\ActiveRecord
 
     public static $delStatus = ['Valid', 'Invalid'];
 
+    const LANG_VN = 'Vietnamese';
+    const LANG_ZH = 'Chinese';
+    const LANG_EN = 'English';
+    const LANG_KR = 'Korean';
+    const LANG_FR = 'French';
+
     /**
      * @inheritdoc
      */
