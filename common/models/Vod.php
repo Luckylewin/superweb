@@ -2,10 +2,9 @@
 
 namespace common\models;
 
-use backend\models\IptvType;
+use backend\models\PlayGroup;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
-use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use yii\web\Link;
 use yii\web\Linkable;
@@ -78,6 +77,9 @@ class Vod extends \yii\db\ActiveRecord implements Linkable
     public $pic;
     public $pic_bg;
     public $pic_slide;
+
+    const LINK_RECOMMEND = 'recommend';
+    const LINK_GROUPLINK = 'groupLinks';
 
     /**
      * @inheritdoc
@@ -247,7 +249,6 @@ class Vod extends \yii\db\ActiveRecord implements Linkable
             'vod_ispay',
             'vod_price',
             'vod_trysee',
-            'vod_url',
             'vod_gold',
             'vod_length',
             'vod_multiple',
@@ -263,10 +264,24 @@ class Vod extends \yii\db\ActiveRecord implements Linkable
     {
 
         return [
+             // 分组
+            'groups',
+             // 分组链接
+            'groupLinks' => function() {
+                $groups = PlayGroup::find()->where(['vod_id' => $this->vod_id])->with('links')->asArray()->all();
+                array_walk($groups, function(&$group) {
+                    array_walk($group['links'], function(&$v, $k) {
+                        unset($v['season'], $v['hd_url'], $v['url'], $v['video_id']);
+
+                        $v['_links']['self']['href'] = Url::to(["vod-links/{$v['id']}", 'access-token' => '' ], true);
+                    });
+                });
+
+                return $groups;
+             },
+
             'vodLinks' => function() {
-
                 $items = Vodlink::find()->where(['video_id' => $this->vod_id])->select(['id', 'episode', 'plot' ])->asArray()->all();
-
                 array_walk($items, function(&$v, $k) {
                     $v['_links']['self']['href'] = Url::to(["vod-links/{$v['id']}", 'access-token' => '' ], true);
                 });
@@ -311,11 +326,22 @@ class Vod extends \yii\db\ActiveRecord implements Linkable
         return $this->hasMany(Vodlink::className(), ['video_id' => 'vod_id']);
     }
 
+    public function getGroups()
+    {
+        return $this->hasMany(PlayGroup::className(), ['vod_id' => 'vod_id']);
+    }
+
+    public function getGroupLinks()
+    {
+        return $this->hasMany(Vodlink::className(), ['group_id' => 'id'])->via('groups');
+    }
+
     public function getLinks()
     {
        return [
            Link::REL_SELF => Url::to(['vod/view', 'id' => $this->vod_id, 'expand' => 'vodLinks'], true),
-           'recommend' => Url::to(['recommend/view', 'id' => $this->vod_id], true)
+           self::LINK_GROUPLINK => Url::to(['vod/view', 'id' => $this->vod_id, 'expand' => self::LINK_GROUPLINK], true),
+           self::LINK_RECOMMEND => Url::to(['recommend/view', 'id' => $this->vod_id], true)
        ];
     }
 

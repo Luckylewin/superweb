@@ -2,6 +2,7 @@
 
 namespace backend\models;
 
+use common\models\Vod;
 use common\models\Vodlink;
 use Yii;
 
@@ -45,6 +46,11 @@ class PlayGroup extends \yii\db\ActiveRecord
             'group_name' => 'Group Name',
             'sort' => 'Sort',
         ];
+    }
+
+    public function getVod()
+    {
+        return $this->hasOne(Vod::className(), ['vod_id' => 'vod_id']);
     }
 
     /**
