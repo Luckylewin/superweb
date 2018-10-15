@@ -61,13 +61,13 @@ class Movie extends Vod
                 $link = new Vodlink();
                 $link->url = $url;
                 $link->episode = 1;
-
-                $link->link('group', $playGroup);
+                $link->group_id = $playGroup->id;
 
                 echo $title . "新增" . PHP_EOL;
             } else {
                 echo $title . "存在" . PHP_EOL;
             }
+            
         } catch (\Exception $e) {
             $transaction->rollback();
             echo $e->getMessage() . PHP_EOL;
