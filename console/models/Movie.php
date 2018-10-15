@@ -58,7 +58,7 @@ class Movie extends Vod
             $link->episode = 1;
             $link->group_id = $playGroup->id;
             $link->save(false);
-            
+
             echo $title . "新增" . PHP_EOL;
         } else {
             echo $title . "存在" . PHP_EOL;
