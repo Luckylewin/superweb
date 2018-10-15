@@ -28,7 +28,7 @@ class CollectController extends Controller
     {
         $search = new Searcher(new Movie());
         $search->setQueryOption(
-            'Karaoke', Karaoke::LANG_VN, 'long'
+            'Vietnam movie', Karaoke::LANG_VN, 'long'
         );
         $search->start();
     }

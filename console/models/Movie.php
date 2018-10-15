@@ -60,6 +60,7 @@ class Movie extends Vod
             }
         } catch (\Exception $e) {
             $transaction->rollback();
+            echo "错误回滚";
         }
 
         return false;
