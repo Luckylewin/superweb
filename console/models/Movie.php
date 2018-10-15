@@ -42,6 +42,7 @@ class Movie extends Vod
             $movie->vod_pic_bg = $image;
             $movie->vod_content = $info;
             $movie->vod_area = $area;
+            $movie->vod_language = $area;
             $movie->vod_cid = $genre->list_id;
             $movie->vod_trysee = 0;
             $movie->save(false);
