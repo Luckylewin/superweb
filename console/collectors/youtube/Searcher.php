@@ -44,6 +44,7 @@ class Searcher
         $query = $this->query;
         $type = $this->type;
         $order = $this->order;
+        $duration = $this->videoDuration;
 
         $nextPage = true;
         while (!is_null($nextPage)) {
@@ -54,15 +55,15 @@ class Searcher
                     'pageToken' => $pageToken,
                     'type' => $type,
                     'order' => $order,
-                    //'videoDuration' => 'short',
+                    'videoDuration' => $duration,
                 );
             } else {
                 $optPara = array(
                     'q' => $query,//
                     'maxResults' => 50,
-                    'type' => 'video',
-                    'order' => 'relevance',
-                    //'videoDuration' => 'short',
+                    'type' =>  $type,
+                    'order' => $order,
+                    'videoDuration' => $duration,
                 );
             }
             $searchResponse = $this->listSearch($optPara);
@@ -146,6 +147,7 @@ class Searcher
 
     protected function collectVideo($searchResult)
     {
+        print_r($searchResult);
        $data['title'] = trim($searchResult['snippet']['title']);
        if (!empty($title)) {
             $data['url'] = $searchResult['id']['videoId'];
