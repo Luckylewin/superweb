@@ -40,11 +40,12 @@ $dataProvider = new \yii\data\ActiveDataProvider([
                         if (strtolower($model->group_name) == 'youtube') {
                             return "https://www.youtube.com/watch?v=" . $mod->url;
                         }
-                        
+
                         return $mod->url;
                     },
                     'headerOptions' => [
-                        'class' => 'col-md-8'
+                        'class' => 'col-md-8',
+                        'target' => '_blank'
                     ]
                 ],
                 'episode',
