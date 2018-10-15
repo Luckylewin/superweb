@@ -152,9 +152,9 @@ class Searcher
             $image = $searchResult['snippet']['thumbnails']['high']['url'];
             $info = $searchResult['snippet']['description'];
             $area = $this->area;
-
+            
             if (method_exists($this->model, 'collect')) {
-                $this->model->collect($url, $image, $info, $area);
+                $this->model->collect($title, $url, $image, $info, $area);
             }
        }
     }
