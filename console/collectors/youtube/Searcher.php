@@ -33,7 +33,7 @@ class Searcher
     public function setQueryOption($query, $area, $order = 'relevance', $videoDuration = 'short', $type = 'video')
     {
         $this->query = $query;
-        $this->query = $area;
+        $this->area = $area;
         $this->order = $order;
         $this->videoDuration = $videoDuration;
         $this->type = $type;
@@ -152,7 +152,7 @@ class Searcher
             $image = $searchResult['snippet']['thumbnails']['high']['url'];
             $info = $searchResult['snippet']['description'];
             $area = $this->area;
-            
+
             if (method_exists($this->model, 'collect')) {
                 $this->model->collect($title, $url, $image, $info, $area);
             }
