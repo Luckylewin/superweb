@@ -146,15 +146,15 @@ class Searcher
 
     protected function collectVideo($searchResult)
     {
-       $title = trim($searchResult['snippet']['title']);
+       $data['title'] = trim($searchResult['snippet']['title']);
        if (!empty($title)) {
-            $url = $searchResult['id']['videoId'];
-            $image = $searchResult['snippet']['thumbnails']['high']['url'];
-            $info = $searchResult['snippet']['description'];
-            $area = $this->area;
+            $data['url'] = $searchResult['id']['videoId'];
+            $data['image'] = $searchResult['snippet']['thumbnails']['high']['url'];
+            $data['info'] = $searchResult['snippet']['description'];
+            $data['area'] = $this->area;
 
             if (method_exists($this->model, 'collect')) {
-                $this->model->collect($title, $url, $image, $info, $area);
+                $this->model->collect($data, 'Youtube');
             }
        }
     }
