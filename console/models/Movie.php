@@ -11,6 +11,7 @@ namespace console\models;
 use backend\models\PlayGroup;
 use common\models\Vod;
 use common\models\Vodlink;
+use common\models\VodList;
 use Yii;
 
 class Movie extends Vod
@@ -25,13 +26,21 @@ class Movie extends Vod
         $groupName = $playGroup;
 
         $title = trim($title);
-        $data = Vod::findOne(['albumName' => $title]);
+        $data = Vod::findOne(['vod_name' => $title]);
 
         $db = Yii::$app->db;
         $transaction = $db->beginTransaction();  //开启事务
 
         try {
             if (empty($data)) {
+
+                $genre = VodList::findOne(['list_dir' => 'Movie']);
+
+                if (empty($genre)) {
+                    echo "请新增Movie分类" , PHP_EOL;
+                    return false;
+                }
+
                 $movie = new Vod();
 
                 $movie->vod_name = $title;
@@ -39,6 +48,7 @@ class Movie extends Vod
                 $movie->vod_pic_bg = $image;
                 $movie->vod_content = $info;
                 $movie->vod_area = $area;
+                $movie->vod_cid = $genre->list_id;
                 $movie->save(false);
 
                 // 新增一个播放分组
@@ -60,7 +70,8 @@ class Movie extends Vod
             }
         } catch (\Exception $e) {
             $transaction->rollback();
-            echo "错误回滚";
+            echo $e->getMessage() . PHP_EOL;
+            sleep(5);
         }
 
         return false;
