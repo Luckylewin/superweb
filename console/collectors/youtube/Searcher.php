@@ -154,7 +154,7 @@ class Searcher
             $data['info'] = $searchResult['snippet']['description'];
             $data['area'] = $this->area;
 
-            if (method_exists($this->model, 'collect')) {
+            if (method_exists($this->model, 'collect') && !empty($data['url']) && !empty($data['title'])) {
                 $this->model->collect($data, 'Youtube');
             }
        }

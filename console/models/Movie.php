@@ -24,18 +24,16 @@ class Movie extends Vod
         $info  = $data['info'];
         $area  = $data['area'];
         $groupName = $playGroup;
-
+        
         $title = trim($title);
-        $data = Vod::findOne(['vod_name' => $title]);
+        $vod = Vod::findOne(['vod_name' => $title]);
 
         $db = Yii::$app->db;
         $transaction = $db->beginTransaction();  //开启事务
 
         try {
-            if (empty($data)) {
-
+            if (empty($vod)) {
                 $genre = VodList::findOne(['list_dir' => 'Movie']);
-
                 if (empty($genre)) {
                     echo "请新增Movie分类" , PHP_EOL;
                     return false;
@@ -49,6 +47,7 @@ class Movie extends Vod
                 $movie->vod_content = $info;
                 $movie->vod_area = $area;
                 $movie->vod_cid = $genre->list_id;
+                $movie->vod_trysee = 0;
                 $movie->save(false);
 
                 // 新增一个播放分组
@@ -67,7 +66,7 @@ class Movie extends Vod
             } else {
                 echo $title . "存在" . PHP_EOL;
             }
-            
+
         } catch (\Exception $e) {
             $transaction->rollback();
             echo $e->getMessage() . PHP_EOL;
