@@ -6,13 +6,8 @@
  * Time: 9:27
  */
 
-namespace console\models\event;
+namespace console\collectors\event;
 
-use backend\models\MajorEvent;
-use backend\models\OttEvent;
-use backend\models\OttEventTeam;
-use common\components\BaiduTranslator;
-use Yii;
 use Symfony\Component\DomCrawler\Crawler;
 use console\models\parade\collector;
 
@@ -70,6 +65,8 @@ class zhiboba extends common implements collector
 
         return $events;
     }
+
+
 
     /**
      * 世界杯

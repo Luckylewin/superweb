@@ -6,7 +6,7 @@
  * Time: 16:20
  */
 
-namespace console\models\event;
+namespace console\collectors\event;
 
 
 use backend\models\MajorEvent;

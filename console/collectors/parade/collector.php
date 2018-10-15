@@ -6,7 +6,7 @@
  * Time: 15:45
  */
 
-namespace console\models\parade;
+namespace console\collectors\parade;
 
 
 interface collector

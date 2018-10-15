@@ -6,7 +6,7 @@
  * Time: 11:04
  */
 
-namespace console\models\parade;
+namespace console\collectors\parade;
 
 use console\components\MySnnopy;
 use Symfony\Component\DomCrawler\Crawler;

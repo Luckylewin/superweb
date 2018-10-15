@@ -6,7 +6,7 @@
  * Time: 17:14
  */
 
-namespace console\models\parade;
+namespace console\collectors\parade;
 
 
 use console\components\MySnnopy;

@@ -6,7 +6,7 @@
  * Time: 14:33
  */
 
-namespace console\models\event;
+namespace console\collectors\event;
 use common\components\BaiduTranslator;
 use console\models\parade\collector;
 use Symfony\Component\DomCrawler\Crawler;

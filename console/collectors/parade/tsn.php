@@ -6,7 +6,7 @@
  * Time: 18:16
  */
 
-namespace console\models\parade;
+namespace console\collectors\parade;
 
 use console\components\MySnnopy;
 use yii\helpers\Json;

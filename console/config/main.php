@@ -40,13 +40,6 @@ return [
             'charset' => 'utf8',
             'tablePrefix' => 'yii2_',
         ],
-        'db2' => [
-            'class' => 'yii\db\Connection',
-            'dsn' => 'mysql:host=127.0.0.1;dbname=iptv',
-            'username' => 'root',
-            'password' => '12345678',
-            'charset' => 'utf8'
-        ],
         //redis组件
         'redis' => [
             'class' => 'yii\redis\Connection',

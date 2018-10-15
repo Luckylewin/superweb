@@ -2,45 +2,67 @@
 /**
  * Created by PhpStorm.
  * User: lychee
- * Date: 2018/4/18
- * Time: 15:20
+ * Date: 2018/10/15
+ * Time: 11:02
  */
 
-namespace console\controllers;
+namespace console\collectors\youtube;
 
-use backend\models\Karaoke;
-use Google_Client;
+use Yii;
 use Google_Service_YouTube;
+use Google_Client;
 use Google_Service_Exception;
 use Google_Exception;
-use yii\console\Controller;
+use yii\base\Model;
 
-class YoutubeController extends Controller
+class Searcher
 {
+    public $query;
+    public $area;
+    public $type;
+    public $order;
+    public $videoDuration;
 
-    public function actionSearch()
+    protected $model;
+
+    public function __construct(Model $model)
     {
+       $this->model = $model;
+    }
+
+    public function setQueryOption($query, $area, $order = 'relevance', $videoDuration = 'short', $type = 'video')
+    {
+        $this->query = $query;
+        $this->query = $area;
+        $this->order = $order;
+        $this->videoDuration = $videoDuration;
+        $this->type = $type;
+    }
+
+    public function start()
+    {
+        $query = $this->query;
+        $type = $this->type;
+        $order = $this->order;
 
         $nextPage = true;
         while (!is_null($nextPage)) {
             if (isset($pageToken) && $pageToken) {
                 $optPara = array(
-                    'q' => 'karaoke',//
+                    'q' => $query,//
                     'maxResults' => 50,
                     'pageToken' => $pageToken,
-                    //'type' => 'video',
-                    'order' => 'relevance',
+                    'type' => $type,
+                    'order' => $order,
                     //'videoDuration' => 'short',
-
                 );
             } else {
                 $optPara = array(
-                    'q' => 'karaoke',//
+                    'q' => $query,//
                     'maxResults' => 50,
-                    //'type' => 'video',
+                    'type' => 'video',
                     'order' => 'relevance',
                     //'videoDuration' => 'short',
-
                 );
             }
             $searchResponse = $this->listSearch($optPara);
@@ -49,7 +71,7 @@ class YoutubeController extends Controller
         }
     }
 
-    public function token($limit, $page)
+    protected function token($limit, $page)
     {
         $start = 1 + ($page - 1) * $limit;
         $third_chars = array_merge(
@@ -62,7 +84,7 @@ class YoutubeController extends Controller
             'QAA';
     }
 
-    public function collectChannel($channelId)
+    protected function collectChannel($channelId)
     {
         $optPara = array(
             'channelId' => $channelId,//
@@ -73,14 +95,12 @@ class YoutubeController extends Controller
     }
 
 
-    public function listSearch($optPara)
+    protected function listSearch($optPara)
     {
-        $DEVELOPER_KEY = 'AIzaSyAZ4FSwFjVndaMgRy2OkCxqNvmHgYhIwB4';
+        $DEVELOPER_KEY = Yii::$app->params['YOUTUBE'];
 
         $client = new Google_Client();
         $client->setDeveloperKey($DEVELOPER_KEY);
-
-        // Define an object that will be used to make all API requests.
         $youtube = new Google_Service_YouTube($client);
 
         $htmlBody = '';
@@ -99,7 +119,7 @@ class YoutubeController extends Controller
                 //print_r($searchResult);
                 switch ($searchResult['id']['kind']) {
                     case 'youtube#video':
-                        $result = $this->collectVideo($searchResult);
+                        $this->collectVideo($searchResult);
                         break;
                     case 'youtube#channel':
                         $channels .= sprintf('<li>%s (%s)</li>',
@@ -123,27 +143,19 @@ class YoutubeController extends Controller
         }
     }
 
-    public function collectVideo($searchResult)
+
+    protected function collectVideo($searchResult)
     {
+       $title = trim($searchResult['snippet']['title']);
+       if (!empty($title)) {
+            $url = $searchResult['id']['videoId'];
+            $image = $searchResult['snippet']['thumbnails']['high']['url'];
+            $info = $searchResult['snippet']['description'];
+            $area = $this->area;
 
-        $karaoke = Karaoke::findOne(['albumName' => $searchResult['snippet']['title']]);
-        if (is_null($karaoke)) {
-            $searchResult['snippet']['title'] = trim($searchResult['snippet']['title']);
-            if (!empty($searchResult['snippet']['title'])) {
-                $karaoke = new Karaoke();
-                $karaoke->url = $searchResult['id']['videoId'];
-                $karaoke->albumName = $searchResult['snippet']['title'];
-                $karaoke->albumImage = $searchResult['snippet']['thumbnails']['high']['url'];
-                $karaoke->info = $searchResult['snippet']['description'];
+            if (method_exists($this->model, 'collect')) {
+                $this->model->collect($url, $image, $info, $area);
             }
-            $karaoke->save(false);
-            echo "插入数据 " . $karaoke->albumName . PHP_EOL;
-        } else {
-            //echo $searchResult['snippet']['title'] . "已经存在\n";
-        }
-
-        return false;
+       }
     }
-
-
 }

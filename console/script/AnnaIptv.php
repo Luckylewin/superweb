@@ -16,12 +16,12 @@ use yii\helpers\Console;
 use backend\models\IptvType;
 use backend\models\IptvTypeItem;
 use common\components\BaiduTranslator;
+use console\collectors\profile\OMDB;
 use common\models\Vod;
 use common\models\Vodlink;
 use common\models\VodList;
 use console\models\common;
-use console\models\profile;
-use console\models\movie\OMDB;
+use console\collectors\profile\profile;
 
 /**
  * 安娜IPTV处理脚本

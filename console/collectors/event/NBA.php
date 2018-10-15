@@ -6,7 +6,7 @@
  * Time: 11:12
  */
 
-namespace console\models\event;
+namespace console\collectors\event;
 
 use console\models\parade\collector;
 use Symfony\Component\DomCrawler\Crawler;

@@ -6,7 +6,7 @@
  * Time: 9:27
  */
 
-namespace console\models\parade;
+namespace console\collectors\parade;
 
 use Yii;
 use Symfony\Component\DomCrawler\Crawler;

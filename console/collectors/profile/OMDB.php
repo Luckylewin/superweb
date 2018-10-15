@@ -6,7 +6,7 @@
  * Time: 10:46
  */
 
-namespace console\models\movie;
+namespace console\collectors\profile;
 
 // http://www.omdbapi.com
 class OMDB

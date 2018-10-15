@@ -6,7 +6,8 @@
  * Time: 10:37
  */
 
-namespace console\models;
+namespace console\collectors\profile;
+
 use yii\helpers\ArrayHelper;
 
 /**

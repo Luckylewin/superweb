@@ -6,7 +6,7 @@
  * Time: 15:44
  */
 
-namespace console\models\parade;
+namespace console\collectors\parade;
 
 use backend\models\Parade;
 use common\models\OttChannel;
