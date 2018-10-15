@@ -19,7 +19,7 @@ class CollectController extends Controller
     {
         $search = new Searcher(new Karaoke());
         $search->setQueryOption(
-            'karaoke beat chuẩ', Karaoke::LANG_VN
+            'karaoke beat chuẩ', Karaoke::LANG_VN, 'short'
         );
         $search->start();
     }
