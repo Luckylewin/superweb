@@ -147,9 +147,8 @@ class Searcher
 
     protected function collectVideo($searchResult)
     {
-        print_r($searchResult);
        $data['title'] = trim($searchResult['snippet']['title']);
-       if (!empty($title)) {
+       if (!empty($data['title'])) {
             $data['url'] = $searchResult['id']['videoId'];
             $data['image'] = $searchResult['snippet']['thumbnails']['high']['url'];
             $data['info'] = $searchResult['snippet']['description'];
