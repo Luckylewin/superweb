@@ -109,20 +109,21 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js'
 
             [
                 'class' => 'yii\grid\SerialColumn',
+
             ],
 
             [
                 "class" => "yii\grid\CheckboxColumn",
-
                 "name" => "id",
             ],
 
             [
                   'attribute' => 'vod_name',
-                  'headerOptions' => ['class' => 'col-md-2'],
+                  'headerOptions' => ['class' => 'col-md-3'],
                   'filterInputOptions' => [
                     'placeholder' => Yii::t('backend', "Enter movie's name"),
-                    'class' => 'form-control'
+                    'class' => 'form-control',
+                      'style' => 'word-break:break-all'
                   ],
             ],
             //'vod_id',
@@ -213,7 +214,7 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js'
                         return $model->vod_addtime;
                     }
             ],
-            [
+           /* [
                     'class' => 'common\grid\MyActionColumn',
                 'headerOptions' => ['class' => 'col-md-2'],
                     'template' => '{push-home}&nbsp;{banner-create}',
@@ -232,7 +233,7 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js'
                     ],
 
                     'header' => Yii::t('backend', 'Push')
-            ],
+            ],*/
 
             [
                     'class' => 'common\grid\MyActionColumn',
