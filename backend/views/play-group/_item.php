@@ -23,8 +23,6 @@ $dataProvider = new \yii\data\ActiveDataProvider([
     </div>
     <div class="panel-body">
 
-
-
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
             "options" => ["class" => "grid-view","style"=>"overflow:auto", "id" => "grid"],
@@ -38,6 +36,13 @@ $dataProvider = new \yii\data\ActiveDataProvider([
                 [
                     'attribute' => 'url',
                     'format' => 'url',
+                    'value' => function($mod) use ($model) {
+                        if (strtolower($model->group_name) == 'youtube') {
+                            return "https://www.youtube.com/watch?v=" . $mod->url;
+                        }
+                        
+                        return $mod->url;
+                    },
                     'headerOptions' => [
                         'class' => 'col-md-8'
                     ]
