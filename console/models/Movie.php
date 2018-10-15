@@ -16,15 +16,15 @@ use Yii;
 
 class Movie extends Vod
 {
-    public function collect($data, $playGroup = 'default')
+    public function collect($data, $playGroupName = 'default')
     {
         $title = $data['title'];
         $url   = $data['url'];
         $image = $data['image'];
         $info  = $data['info'];
         $area  = $data['area'];
-        $groupName = $playGroup;
-        
+        $groupName = $playGroupName;
+
         $title = trim($title);
         $vod = Vod::findOne(['vod_name' => $title]);
 
@@ -54,13 +54,15 @@ class Movie extends Vod
                 $playGroup = new PlayGroup();
                 $playGroup->vod_id = $movie->vod_id;
                 $playGroup->group_name = $groupName;
-                $playGroup->save(false);
+                $result = $playGroup->save(false);
+                var_dump($result);
 
                 // 新增播放链接
                 $link = new Vodlink();
                 $link->url = $url;
                 $link->episode = 1;
                 $link->group_id = $playGroup->id;
+                $link->save(false);
 
                 echo $title . "新增" . PHP_EOL;
             } else {
