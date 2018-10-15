@@ -35,17 +35,21 @@ $dataProvider = new \yii\data\ActiveDataProvider([
                 ],
                 [
                     'attribute' => 'url',
-                    'format' => 'url',
+                    'format' => 'raw',
                     'value' => function($mod) use ($model) {
                         if (strtolower($model->group_name) == 'youtube') {
-                            return "https://www.youtube.com/watch?v=" . $mod->url;
+                            $href = "https://www.youtube.com/watch?v=" . $mod->url;
+                        } else {
+                            $href = $mod->url;
                         }
 
-                        return $mod->url;
+                        return Html::a($href, $href, [
+                                'class' => 'btn btn-link',
+                                'target' => '_blank'
+                        ]);
                     },
                     'headerOptions' => [
                         'class' => 'col-md-8',
-                        'target' => '_blank'
                     ]
                 ],
                 'episode',
