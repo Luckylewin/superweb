@@ -10,6 +10,7 @@ namespace console\controllers;
 
 use console\collectors\youtube\Searcher;
 use console\models\Karaoke;
+use console\models\Movie;
 use yii\console\Controller;
 
 class CollectController extends Controller
@@ -18,14 +19,18 @@ class CollectController extends Controller
     {
         $search = new Searcher(new Karaoke());
         $search->setQueryOption(
-            'Vietnamese Movie', Karaoke::LANG_VN
+            'karaoke beat chuẩ', Karaoke::LANG_VN
         );
         $search->start();
     }
 
     public function actionMovie()
     {
-
+        $search = new Searcher(new Movie());
+        $search->setQueryOption(
+            'Karaoke', Karaoke::LANG_VN, 'long'
+        );
+        $search->start();
     }
 
     public function actionTv()

@@ -30,7 +30,7 @@ class Searcher
        $this->model = $model;
     }
 
-    public function setQueryOption($query, $area, $order = 'relevance', $videoDuration = 'short', $type = 'video')
+    public function setQueryOption($query, $area,  $videoDuration = 'short', $type = 'video' ,$order = 'relevance')
     {
         $this->query = $query;
         $this->area = $area;

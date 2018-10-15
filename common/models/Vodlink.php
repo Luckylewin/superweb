@@ -101,6 +101,11 @@ class Vodlink extends \yii\db\ActiveRecord
         return true;
     }
 
+    public function getGroup()
+    {
+        return $this->hasOne(PlayGroup::className(), ['id' => 'group_id']);
+    }
+
     public function getVodInfo()
     {
         return $this->hasOne(Vod::className(), ['vod_id' => 'video_id']);
