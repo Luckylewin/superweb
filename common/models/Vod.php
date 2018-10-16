@@ -221,10 +221,8 @@ class Vod extends \yii\db\ActiveRecord implements Linkable
             [
                 'class' => TimestampBehavior::className(),
                 'createdAtAttribute' => 'vod_addtime',
-                'updatedAtAttribute' => 'vod_addtime',
                 'attributes' => [
                     ActiveRecord::EVENT_BEFORE_INSERT => ['vod_addtime'],
-                    ActiveRecord::EVENT_BEFORE_UPDATE => ['vod_addtime'],
                 ],
                 'value' => time()
             ]
