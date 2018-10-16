@@ -111,19 +111,13 @@ class VodController extends BaseController
         return $this->redirect(Yii::$app->request->referrer);
     }
 
-    /**
-     * Deletes an existing Vod model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+   
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
         $this->setFlash('success', Yii::t('backend', 'Success'));
 
-        return $this->redirect(['index']);
+        return $this->redirect(Yii::$app->request->referrer);
     }
 
     /**
