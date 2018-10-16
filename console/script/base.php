@@ -26,10 +26,15 @@ class base
 
     protected function stdout($str, $color = Console::FG_GREEN, $background = null)
     {
-        if ($background) {
-            return $this->controller->stdout($str, $color, $background);
-        } else {
-            return $this->controller->stdout($str, $color);
-        }
+       if ($this->controller instanceof Controller) {
+           if ($background) {
+               return $this->controller->stdout($str, $color, $background);
+           } else {
+               return $this->controller->stdout($str, $color);
+           }
+       }
+
+       echo $str;
     }
+
 }

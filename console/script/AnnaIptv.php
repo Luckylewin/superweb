@@ -327,8 +327,6 @@ class AnnaIptv extends base
             // 判断是否为电视剧
             $isProgram = preg_match('/\s*S\d+\s*E\d+\s*/', self::get($tvg_name));
 
-
-
             if ($mode == 'movie' && $isProgram) {
                 continue;
             } else if($mode == 'program' && !$isProgram) {

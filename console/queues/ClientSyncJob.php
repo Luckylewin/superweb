@@ -12,6 +12,7 @@ use yii\base\BaseObject;
 use console\script\AnnaIptv;
 use console\script\AnnaOtt;
 use console\script\AnnaParade;
+use yii\console\Controller;
 
 class ClientSyncJob extends BaseObject implements \yii\queue\JobInterface
 {
@@ -52,8 +53,10 @@ class ClientSyncJob extends BaseObject implements \yii\queue\JobInterface
      */
     private function annaIptv()
     {
+        echo 'start';
         $annaIptv = new AnnaIptv($this);
         $annaIptv->dealIPTV();
+        echo 'end';
     }
 
 }
