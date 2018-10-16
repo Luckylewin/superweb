@@ -72,7 +72,7 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js'
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a(Yii::t('backend', 'Create'), Url::to(['create','vod_cid' => Yii::$app->request->get('VodSearch')['vod_cid']]), ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('backend', 'Create'), Url::to(['create','vod_cid' => isset(Yii::$app->request->get('VodSearch')['vod_cid']) ? Yii::$app->request->get('VodSearch')['vod_cid'] : '1']), ['class' => 'btn btn-success']) ?>
 
         <?php if(strpos(Yii::$app->request->referrer, 'vod-list') !== false): ?>
             <?= Html::a(Yii::t('backend','Go Back'), null, [
