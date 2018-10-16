@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use console\queues\ClientSyncJob;
 use Yii;
 use backend\models\Admin;
 use backend\models\Crontab;
@@ -146,23 +147,10 @@ class ClientController extends BaseController
 
     public function actionAnnaIptv()
     {
-        // 查找点播
-        $task = Crontab::find()->where(['route' => 'client/anna-iptv'])->one();
-
-        if (is_null($task)) {
-            $this->setFlash('error', '请添加该任务到定时任务');
-            return $this->redirect(Yii::$app->request->referrer);
-        }
-
-        if ($task->status == Crontab::RUNNING || $task->status == Crontab::READY) {
-            $this->setFlash('info', '任务正在运行, 更新数据需要时间');
-            return $this->redirect(Yii::$app->request->referrer);
-        }
-
-        $task->last_rundate = date('Y-m-d H:i:s');
-        $task->next_rundate = date('Y-m-d H:i:s', time() + 10);
-        $task->status = Crontab::READY;
-        $task->save(false);
+        Yii::$app->queue->push(new ClientSyncJob([
+            'type' => 'iptv',
+            'client' => 'anna'
+        ]));
 
         $this->setFlash('success', '开始更新数据');
         return $this->redirect(Yii::$app->request->referrer);

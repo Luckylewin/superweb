@@ -111,7 +111,7 @@ class VodController extends BaseController
         return $this->redirect(Yii::$app->request->referrer);
     }
 
-   
+
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();

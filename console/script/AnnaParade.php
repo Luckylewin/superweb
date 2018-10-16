@@ -9,7 +9,6 @@
 namespace console\script;
 
 use backend\components\MyRedis;
-use backend\models\ChannelIptv;
 use backend\models\Parade;
 use common\models\OttChannel;
 use Yii;
