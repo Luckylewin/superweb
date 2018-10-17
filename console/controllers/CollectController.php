@@ -15,6 +15,7 @@ use yii\console\Controller;
 
 class CollectController extends Controller
 {
+    // 采集kalaoke
     public function actionKaraoke()
     {
         $search = new Searcher(new Karaoke());
@@ -23,7 +24,7 @@ class CollectController extends Controller
         );
         $search->start();
     }
-
+    // 采集Youtube电影
     public function actionMovie()
     {
         $search = new Searcher(new Movie());

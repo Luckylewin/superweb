@@ -26,10 +26,10 @@ class MajorEventController extends BaseController
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => MajorEvent::find(),
+            'query' => MajorEvent::find()->where(['>', 'time', time()]),
             'sort' => [
                 'defaultOrder' => [
-                    'time' => SORT_DESC,
+                    'time' => SORT_ASC,
                     'sort' => SORT_ASC
                 ]
             ],

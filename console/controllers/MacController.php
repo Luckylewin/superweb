@@ -25,8 +25,8 @@ class MacController extends Controller
 
     public function actionImport()
     {
-        $start = '28799400305a';
-        $end = '2879940093af';
+        $start = '';
+        $end = '';
         $contractTime = '1 year';
 
         $connection = Yii::$app->db;
@@ -48,13 +48,8 @@ class MacController extends Controller
                      $mac->contract_time = $contractTime;
                      $mac->use_flag = 0;
 
-                     $detail = new MacDetail();
-                     $detail->MAC = $mac->SN;
-                     $detail->client_id = 0;
-
                      try {
                          $mac->save(false);
-                         $detail->save(false);
                          $this->stdout("增加 {$value}-{$value}".PHP_EOL, Console::FG_BLUE);
                      } catch (\Exception $e) {}
 

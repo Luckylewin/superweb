@@ -53,7 +53,6 @@ class ParadeController extends Controller
     public function actionNba()
     {
         try {
-
             //$live = new sportsmediawatch();
             $live = new NBA();
             $live->start();
@@ -162,10 +161,5 @@ class ParadeController extends Controller
         } catch (\Exception $e) {}
     }
 
-    public function actionTest()
-    {
-        $kan = new manmankan();
-        echo $kan->convertTimeZone('2018-06-15 10:38', 'timestamp', 9, 8);
-    }
 
 }

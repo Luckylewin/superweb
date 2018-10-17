@@ -563,4 +563,5 @@ return [
     'Local' => '服务器',
     'OSS' => '阿里云OSS',
     'Save Position' => '保存位置',
+    'Create Group' => '创建分组',
 ];

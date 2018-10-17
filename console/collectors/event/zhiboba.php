@@ -9,7 +9,7 @@
 namespace console\collectors\event;
 
 use Symfony\Component\DomCrawler\Crawler;
-use console\models\parade\collector;
+use console\collectors\parade\collector;
 
 //美国时间
 class zhiboba extends common implements collector

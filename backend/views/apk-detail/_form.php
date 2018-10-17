@@ -90,15 +90,23 @@ use backend\models\ApkDetail;
 <?php
 
 $js = <<<JS
-    $('#position').change(function() {
-        var val = $(this).val();
-        if (val == 'oss') {
+    function displayUploadForm(val)
+    {
+      if (val == 'oss') {
            $('.local').hide();
            $('.oss').show();
         } else {
            $('.local').show();
            $('.oss').hide();
         }
+    }
+    
+    $(function(){
+          displayUploadForm($('#position').val())
+    });
+
+    $('#position').change(function() {
+        displayUploadForm($(this).val())
     });
 JS;
 

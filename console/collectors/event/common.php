@@ -13,7 +13,7 @@ use backend\models\MajorEvent;
 use backend\models\OttEvent;
 use backend\models\OttEventTeam;
 use common\components\BaiduTranslator;
-use console\models\parade\CommonParade;
+use console\collectors\parade\CommonParade;
 
 class common extends CommonParade
 {
