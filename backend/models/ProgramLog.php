@@ -50,7 +50,7 @@ class ProgramLog extends \yii\db\ActiveRecord
         ];
     }
 
-    static public function findByDate($date)
+    public static function findByDate($date)
     {
         $model = self::find()->where(['date' => $date])->one();
 
@@ -60,6 +60,42 @@ class ProgramLog extends \yii\db\ActiveRecord
         }
 
         return $model;
+    }
+
+    public static function findByMonth($year, $month)
+    {
+        $items = self::find()->where(['LIKE', 'date', $year.'-'.$month])->asArray()->all();
+        $data['all_program']    = [];
+        $data['server_program'] = [];
+
+        foreach ($items as $item) {
+            $all_programs = json_decode($item['all_program'], true);
+            foreach ($all_programs as $program => $total) {
+                if (isset($data['all_program'][$program])) {
+                    $data['all_program'][$program] += $total;
+                } else {
+                    $data['all_program'][$program] = $total;
+                }
+            }
+
+            $server_program = json_decode($item['server_program'], true);
+            foreach ($server_program as $program => $total) {
+                if (isset($data['server_program'][$program])) {
+                    $data['server_program'][$program] += $total;
+                } else {
+                    $data['server_program'][$program] = $total;
+                }
+            }
+        }
+
+        arsort($data['all_program']);
+        arsort($data['server_program']);
+        $programs = ['all_program' => '', 'server_program' => ''];
+        $programs = json_decode(json_encode($programs));
+        $programs->all_program = array_slice($data['all_program'], 0, 20);
+        $programs->server_program = array_slice($data['server_program'], 0 , 20);
+
+        return $programs;
     }
 
 }

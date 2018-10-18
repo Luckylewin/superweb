@@ -23,10 +23,21 @@ class LogController extends BaseController
         $type = Yii::$app->request->get('type');
         $date = Yii::$app->request->get('value', date('Y-m-d', strtotime('yesterday')));
         $date = str_replace('/', '-', $date);
-        // 查询
-        $model = LogInterface::findByDate($date);
-        $programLog = ProgramLog::findByDate($date);
-        $statics = LogStatics::findByDate($date);
+
+        // 按日期查询
+        if ($type == 'date') {
+            $model = LogInterface::findByDate($date);
+            $programLog = ProgramLog::findByDate($date);
+
+            $statics = LogStatics::findByDate($date);
+        } else {
+            // 按 月份进行查询
+            list($year, $month) = explode('-', $date);
+            $model = LogInterface::findByMonth($year, $month);
+            $programLog = ProgramLog::findByMonth($year, $month);
+            $statics = LogStatics::findByMonth($year, $month);
+        }
+
 
         if (empty($model)) {
             $this->setFlash('warning', Yii::t('backend', "No yesterday's log"));
@@ -178,5 +189,6 @@ class LogController extends BaseController
 
         return $x;
     }
+
 
 }

@@ -80,8 +80,33 @@ class LogStatics extends \yii\db\ActiveRecord
         ];
     }
 
+    // 按日期查询
     public static function findByDate($date)
     {
         return self::find()->where(['date' => $date])->limit(1)->one();
+    }
+
+    // 按月份查询
+    public static function findByMonth($year, $month)
+    {
+        $interfaces = ['active_user', 'valid_user', 'total', 'token', 'ott_list', 'iptv_list', 'karaoke_list', 'epg', 'app_upgrade', 'firmware_upgrade', 'renew', 'dvb_register', 'ott_charge', 'pay', 'activateGenre', 'paypal_callback', 'dokypay_callback', 'getServerTime', 'play'];
+        $items = self::find()->where(['like', 'date', $year.'-'.$month])->asArray()->all();
+
+        $interfaceData = [];
+        if (!empty($items)) {
+            foreach ($interfaces as $interface) {
+                foreach ($items as $item) {
+                    if (isset($interfaceData[$interface])) {
+                        $interfaceData[$interface] += $item[$interface];
+                    } else {
+                        $interfaceData[$interface] = $item[$interface];
+                    }
+                }
+
+                $interfaceData[$interface] = ceil($interfaceData[$interface]/30);
+            }
+        }
+
+        return json_decode(json_encode($interfaceData));
     }
 }

@@ -76,6 +76,7 @@ class LogInterface extends \yii\db\ActiveRecord
         ];
     }
 
+    // 日期统计
     static public function findByDate($date)
     {
         $data = self::find()->where(['date' => $date])->one();
@@ -87,8 +88,37 @@ class LogInterface extends \yii\db\ActiveRecord
             }
         }
 
-
         return $data;
+    }
+
+    // 月份统计
+    public static function findByMonth($year, $month)
+    {
+        $data = self::find()->where(['year' => $year])->andWhere(['like','date',"{$month}-"])->asArray()->all();
+
+        $fields = ['watch', 'total', 'notify', 'getCountryList', 'getOttRecommend', 'getMajorEvent', 'register', 'ottCharge', 'getNewApp', 'renew', 'getAppMarket', 'getIptvList', 'getOttNewList', 'getClientToken'];
+
+        array_walk($data, function(&$item) use ($fields) {
+            foreach ($fields as $field) {
+                $item[$field] = json_decode($item[$field], true);
+            }
+        });
+
+        $monthData = [];
+
+        foreach ($fields as $field) {
+                for ($h=0; $h<=23; $h++) {
+                    $hourTotal = 0;
+                    foreach ($data as $key => $item) {
+                        $hourTotal += $item[$field][$h];
+                    }
+                    $monthData[$field][$h] = floor($hourTotal/30);
+                }
+
+            $monthData[$field] = implode(',', $monthData[$field]);
+        }
+
+        return json_decode(json_encode($monthData));
     }
 
 }
