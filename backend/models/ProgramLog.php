@@ -70,20 +70,24 @@ class ProgramLog extends \yii\db\ActiveRecord
 
         foreach ($items as $item) {
             $all_programs = json_decode($item['all_program'], true);
-            foreach ($all_programs as $program => $total) {
-                if (isset($data['all_program'][$program])) {
-                    $data['all_program'][$program] += $total;
-                } else {
-                    $data['all_program'][$program] = $total;
+            if (!empty($all_programs)) {
+                foreach ($all_programs as $program => $total) {
+                    if (isset($data['all_program'][$program])) {
+                        $data['all_program'][$program] += $total;
+                    } else {
+                        $data['all_program'][$program] = $total;
+                    }
                 }
             }
 
             $server_program = json_decode($item['server_program'], true);
-            foreach ($server_program as $program => $total) {
-                if (isset($data['server_program'][$program])) {
-                    $data['server_program'][$program] += $total;
-                } else {
-                    $data['server_program'][$program] = $total;
+            if (!empty($server_program)) {
+                foreach ($server_program as $program => $total) {
+                    if (isset($data['server_program'][$program])) {
+                        $data['server_program'][$program] += $total;
+                    } else {
+                        $data['server_program'][$program] = $total;
+                    }
                 }
             }
         }
