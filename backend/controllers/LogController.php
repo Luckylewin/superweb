@@ -20,7 +20,7 @@ class LogController extends BaseController
 
     public function actionIndex()
     {
-        $type = Yii::$app->request->get('type');
+        $type = Yii::$app->request->get('type', 'date');
         $date = Yii::$app->request->get('value', date('Y-m-d', strtotime('yesterday')));
         $date = str_replace('/', '-', $date);
 
@@ -38,15 +38,15 @@ class LogController extends BaseController
             $statics = LogStatics::findByMonth($year, $month);
         }
 
-
         if (empty($model)) {
             $this->setFlash('warning', Yii::t('backend', "No yesterday's log"));
         }
 
         return $this->render('index', [
             'programLog' => $programLog,
-            'statics' => $statics,
-            'model' => $model
+            'statics'    => $statics,
+            'model'      => $model,
+            'date'       => $date
         ]);
     }
 

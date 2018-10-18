@@ -7,22 +7,29 @@
 $this->registerJsFile('/statics/themes/default-admin/plugins/laydate/laydate.js', ['depends'=>'yii\web\JqueryAsset', 'position'=>\yii\web\View::POS_HEAD] );
 $this->registerJsFile('https://cdn.bootcss.com/echarts/4.1.0/echarts.common.js', ['depends'=>'yii\web\JqueryAsset', 'position'=>\yii\web\View::POS_HEAD]);
 
+/**@var $date string */
+
 ?>
 
+
 <div class="col-md-12 well-sm well">
-    <div class="col-md-12" style="margin-top: 40px;">
+    <h1 class="text-center">
+        <?= $date; ?>
+    </h1>
+    <hr>
+    <div class="col-md-12">
         <div class="col-md-7 col-md-offset-2">
             <div class="col-md-2">
                 <label style="line-height: 30px;height: 30px;">时间选择:</label>
             </div>
             <form action="" id="myform2">
                 <div class="col-md-4">
-                    <input type="text" placeholder="按月份统计" value="<?= Yii::$app->request->get('type') == 'month' ? Yii::$app->request->get('value') : '' ?>"  name="ym" id="test13" class="form-control">
+                    <input type="text" autocomplete="off" placeholder="按月份统计" value="<?= Yii::$app->request->get('type') == 'month' ? Yii::$app->request->get('value') : '' ?>"  name="ym" id="test13" class="form-control">
                 </div>
             </form>
 
             <div class="col-md-4">
-                <input type="text" placeholder="按日期统计" value="<?= Yii::$app->request->get('type') == 'date' ? Yii::$app->request->get('value') : '' ?>"  name="date" id="test12" class="form-control">
+                <input type="text" autocomplete="off" placeholder="按日期统计" value="<?= Yii::$app->request->get('type') == 'date' ? Yii::$app->request->get('value') : '' ?>"  name="date" id="test12" class="form-control">
             </div>
 
             <?php if(!Yii::$app->request->get('ym')): ?>
@@ -258,27 +265,20 @@ $this->registerJsFile('https://cdn.bootcss.com/echarts/4.1.0/echarts.common.js',
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">
-                    paypal通知
+                    支付回调
                 </h3>
             </div>
             <div class="panel-body">
-                <h3><?= $statics->paypal_callback??0 ?></h3>
+                <h3><?php
+                    $paypal = $statics->paypal_callback??0;
+                    $doky = $statics->dokypay_callback??0;
+                    echo $paypal+$doky;
+                    ?></h3>
             </div>
         </div>
     </div>
 
-    <div class="col-md-2">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">
-                    dokypay通知
-                </h3>
-            </div>
-            <div class="panel-body">
-                <h3><?= $statics->dokypay_callback??0 ?></h3>
-            </div>
-        </div>
-    </div>
+
 
     <div class="col-md-2">
         <div class="panel panel-default">
