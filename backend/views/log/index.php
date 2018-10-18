@@ -61,7 +61,12 @@ $this->registerJsFile('https://cdn.bootcss.com/echarts/4.1.0/echarts.common.js',
                 </h3>
             </div>
             <div class="panel-body">
-                <h3><?= $statics->total??0 ?></h3>
+
+                <h3>
+                    <a href="<?= \yii\helpers\Url::to(['log/change', 'type' => 'date', 'attribute' => 'total']) ?>">
+                        <?= $statics->total??0 ?>
+                    </a>
+                </h3>
             </div>
         </div>
     </div>
@@ -70,12 +75,16 @@ $this->registerJsFile('https://cdn.bootcss.com/echarts/4.1.0/echarts.common.js',
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h3 class="panel-title">
-                    活动用户
-                </h3>
+                    活动用户</h3>
             </div>
             <div class="panel-body">
-                <h3><?= $statics->active_user??0 ?></h3>
+                <h3>
+                    <a href="<?= \yii\helpers\Url::to(['log/change', 'type' => 'date', 'attribute' => 'active_user']) ?>">
+                    <?= $statics->active_user??0 ?>
+                    </a>
+                </h3>
             </div>
+
         </div>
     </div>
 

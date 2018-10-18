@@ -127,12 +127,28 @@ class LogController extends BaseController
         ]);
     }
 
+    public function actionChange($type = 'date', $attribute)
+    {
+        $year = 2018;
+        $month = 10;
+
+        if ($type == 'date') {
+           $data = LogStatics::getAttributeChangeDataWithMonth($attribute, '2018',10);
+        }
+
+        return $this->render('change', [
+            'data'  => $data,
+            'title' => (new LogStatics())->attributeLabels()[$attribute],
+            'time'  => $year . '年' . $month . '月'
+        ]);
+    }
+
     /**
      * hgetall 关联数组
      * @param $data
      * @return array|bool
      */
-    private function hgetallMap($data)
+    protected function hgetallMap($data)
     {
         $return = [];
 
@@ -157,7 +173,7 @@ class LogController extends BaseController
      * 小时数组
      * @return array
      */
-    public function generateHour()
+    protected function generateHour()
     {
         $currentDay = date('m-d:');
         $currentHour = date('H');

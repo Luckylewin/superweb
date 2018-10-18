@@ -3,6 +3,7 @@
 namespace backend\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "log_statics".
@@ -108,5 +109,15 @@ class LogStatics extends \yii\db\ActiveRecord
         }
 
         return json_decode(json_encode($interfaceData));
+    }
+
+    public static function getAttributeChangeDataWithMonth($field, $year, $month)
+    {
+        $start = $year.'-'.$month.'-01';
+        $end = $month != 12 ? $year.'-'.($month+1).'-01' : ($year+1).'-01-01';
+
+        $items = self::find()->select(['date', $field])->where(['>=', 'date', $start])->andWhere(['<', 'date', $end])->asArray()->all();
+
+        return $items = ArrayHelper::map($items, 'date', $field);
     }
 }
