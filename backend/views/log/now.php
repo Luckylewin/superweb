@@ -2,22 +2,16 @@
 $this->registerJsFile('/statics/themes/default-admin/plugins/laydate/laydate.js', ['depends'=>'yii\web\JqueryAsset', 'position'=>\yii\web\View::POS_HEAD] );
 $this->registerJsFile('https://cdn.bootcss.com/echarts/4.1.0/echarts.common.js', ['depends'=>'yii\web\JqueryAsset', 'position'=>\yii\web\View::POS_HEAD]);
 
-$this->title = Yii::t('backend', 'Real-time statistics');;
-$this->params['breadcrumbs'][] = $this->title;
 ?>
 
-<div class="col-md-12">
+<div class="col-md-12 well">
+    <div id="main" style="height:400px;border:1px dashed #ccc;margin-bottom: 30px;"></div>
+</div>
 
-    <div class="col-md-11" style="margin: 0 50px auto">
-        <div id="main" style="height:400px;border:1px dashed #ccc;margin: 0 auto;margin-bottom: 30px;"></div>
+<div class="col-md-12 well" style="margin-bottom: 30px;">
+    <div id="program" style="height: 400px;border:1px dashed #ccc;">
+
     </div>
-
-    <div class="col-md-11 center" style="margin: 0 50px auto;margin-bottom: 30px;">
-        <div id="program" style="height: 400px;border:1px dashed #ccc;">
-
-        </div>
-    </div>
-
 </div>
 
 <?php

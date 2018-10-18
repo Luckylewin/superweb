@@ -2,18 +2,17 @@
 
 namespace backend\controllers;
 
+use Yii;
+use yii\redis\Connection;
 use backend\models\AppLog;
 use backend\models\LogInterface;
 use backend\models\LogStatics;
 use backend\models\ProgramLog;
 use backend\models\TimelineLog;
 use yii\helpers\ArrayHelper;
-use \Yii;
-use yii\redis\Connection;
 
 class LogController extends BaseController
 {
-
     /**
      * @var Connection
      */
@@ -21,8 +20,8 @@ class LogController extends BaseController
 
     public function actionIndex()
     {
-        $type = \Yii::$app->request->get('type');
-        $date = \Yii::$app->request->get('value', date('Y-m-d', strtotime('yesterday')));
+        $type = Yii::$app->request->get('type');
+        $date = Yii::$app->request->get('value', date('Y-m-d', strtotime('yesterday')));
         $date = str_replace('/', '-', $date);
         // 查询
         $model = LogInterface::findByDate($date);
@@ -47,7 +46,6 @@ class LogController extends BaseController
     {
         $this->redis = Yii::$app->redis;
         $this->redis->select(14);
-
         $data = [];
 
         //全部接口的调用情况
@@ -95,7 +93,6 @@ class LogController extends BaseController
             }
             $data[$interface] = $interfaceData;
         }
-
 
         //节目收看排行
         $key = "program:" . date('m-d:') . 'set';
@@ -171,7 +168,7 @@ class LogController extends BaseController
      * 实时x轴
      * @return array
      */
-    public function getCurrentX()
+    protected function getCurrentX()
     {
         $currentHour = date('H');
         $x = [];

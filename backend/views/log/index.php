@@ -7,49 +7,45 @@
 $this->registerJsFile('/statics/themes/default-admin/plugins/laydate/laydate.js', ['depends'=>'yii\web\JqueryAsset', 'position'=>\yii\web\View::POS_HEAD] );
 $this->registerJsFile('https://cdn.bootcss.com/echarts/4.1.0/echarts.common.js', ['depends'=>'yii\web\JqueryAsset', 'position'=>\yii\web\View::POS_HEAD]);
 
-$this->title = Yii::t('backend', 'Interface statics');
-$this->params['breadcrumbs'][] = $this->title;
 ?>
 
-<div class="col-md-12">
-            <div class="col-md-12" style="margin-bottom: 50px;margin-top: 40px;">
-                <div class="col-md-6 col-md-offset-3">
-                    <form action="" id="myform2">
-                        <div class="col-md-3">
-                            <input type="text" placeholder="月统计" value="<?= Yii::$app->request->get('type') == 'month' ? Yii::$app->request->get('value') : '' ?>"  name="ym" id="test13" class="form-control">
-                        </div>
-                    </form>
+<div class="col-md-12 well-sm well">
+    <div class="col-md-12" style="margin-top: 40px;">
+        <div class="col-md-7 col-md-offset-2">
+            <div class="col-md-2">
+                <label style="line-height: 30px;height: 30px;">时间选择:</label>
+            </div>
+            <form action="" id="myform2">
+                <div class="col-md-4">
+                    <input type="text" placeholder="按月份统计" value="<?= Yii::$app->request->get('type') == 'month' ? Yii::$app->request->get('value') : '' ?>"  name="ym" id="test13" class="form-control">
+                </div>
+            </form>
 
+            <div class="col-md-4">
+                <input type="text" placeholder="按日期统计" value="<?= Yii::$app->request->get('type') == 'date' ? Yii::$app->request->get('value') : '' ?>"  name="date" id="test12" class="form-control">
+            </div>
 
-                    <div class="col-md-3">
-                            <input type="text" placeholder="日统计" value="<?= Yii::$app->request->get('type') == 'date' ? Yii::$app->request->get('value') : '' ?>"  name="date" id="test12" class="form-control">
-                    </div>
-
-
-                    <?php if(!Yii::$app->request->get('ym')): ?>
-    <div class="col-md-2" style="margin-bottom: 30px;">
-        <a class="btn btn-default" href=""><?= Yii::t('backend','View Detail'); ?></a>
-
-    </div>
-<?php endif; ?>
-
+            <?php if(!Yii::$app->request->get('ym')): ?>
+                <div class="col-md-2" style="margin-bottom: 30px;">
+                    <a class="btn btn-primary" href=""><?= Yii::t('backend','View'); ?></a>
+                </div>
+            <?php endif; ?>
+        </div>
+        </div>
 </div>
 
+<div class="col-md-12 well">
+    <div id="main" style="height:400px;border:1px dashed #ccc;margin-bottom: 30px;"></div>
 </div>
 
-<div class="col-md-11" style="margin: 0 50px auto">
-    <div id="main" style="height:400px;border:1px dashed #ccc;margin: 0 auto;margin-bottom: 30px;"></div>
-</div>
-
-<div class="col-md-11 center" style="margin: 0 50px auto;margin-bottom: 30px;">
+<div class="col-md-12 well">
     <div id="program" style="height: 400px;border:1px dashed #ccc;">
 
     </div>
 </div>
 
-</div>
 
-<div style="margin: 0 60px auto;margin-bottom: 10px;">
+<div>
     <div class="col-md-2">
         <div class="panel panel-default">
             <div class="panel-heading">

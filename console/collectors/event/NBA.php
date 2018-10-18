@@ -9,7 +9,6 @@
 namespace console\collectors\event;
 
 use console\collectors\parade\collector;
-use Symfony\Component\DomCrawler\Crawler;
 
 class NBA extends common implements collector
 {
@@ -25,7 +24,7 @@ class NBA extends common implements collector
     {
         $start = strtotime('today');
         $end = strtotime('2018-12-15');
-        
+
         for ($i = $start; $i <= $end;) {
             $data = [];
             $date = date('Y-m-d', $i);
@@ -60,8 +59,5 @@ class NBA extends common implements collector
             $i += 86400 * 2;
             sleep(2);
         }
-
-
-
     }
 }

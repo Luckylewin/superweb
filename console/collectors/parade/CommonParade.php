@@ -11,10 +11,8 @@ namespace console\collectors\parade;
 use backend\models\Parade;
 use backend\components\MyRedis;
 use common\models\OttChannel;
-use Yii;
 use console\components\MySnnopy;
 use Symfony\Component\DomCrawler\Crawler;
-use yii\db\Exception;
 use yii\helpers\ArrayHelper;
 
 class CommonParade

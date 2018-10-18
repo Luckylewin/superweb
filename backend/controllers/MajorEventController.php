@@ -2,19 +2,13 @@
 
 namespace backend\controllers;
 
-use backend\models\OttEvent;
-use backend\models\OttEventTeam;
-use common\models\OttChannel;
 use Yii;
 use backend\models\MajorEvent;
 use yii\data\ActiveDataProvider;
-use yii\helpers\Json;
-use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
- * MajorEventController implements the CRUD actions for MajorEvent model.
+ * 主要赛事
  */
 class MajorEventController extends BaseController
 {
@@ -43,12 +37,7 @@ class MajorEventController extends BaseController
         ]);
     }
 
-    /**
-     * Displays a single MajorEvent model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+
     public function actionView($id)
     {
         return $this->render('view', [
@@ -56,18 +45,10 @@ class MajorEventController extends BaseController
         ]);
     }
 
-    /**
-     * Creates a new MajorEvent model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
     public function actionCreate()
     {
         $model = new MajorEvent();
-
         $post = Yii::$app->request->post();
-
-
         if ($model->load($post) && $model->initData($post) && $model->save()) {
             $this->setFlash('success', Yii::t('backend', 'Success'));
             return $this->redirect(['index']);
@@ -78,13 +59,7 @@ class MajorEventController extends BaseController
         ]);
     }
 
-    /**
-     * Updates an existing MajorEvent model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
@@ -108,27 +83,14 @@ class MajorEventController extends BaseController
         ]);
     }
 
-    /**
-     * Deletes an existing MajorEvent model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
         $this->setFlash('info', Yii::t('backend', 'Success'));
-        return $this->redirect(['index']);
+        return $this->redirect(Yii::$app->request->referrer);
     }
 
-    /**
-     * Finds the MajorEvent model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return MajorEvent the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+
     protected function findModel($id)
     {
         if (($model = MajorEvent::findOne($id)) !== null) {
@@ -146,10 +108,10 @@ class MajorEventController extends BaseController
             $ids = explode(',', $ids);
             MajorEvent::deleteAll(['in', 'id', $ids]);
             $this->setFlash('success', Yii::t('backend', 'Success'));
-            return $this->redirect(['major-event/index']);
+            return $this->redirect(Yii::$app->request->referrer);
         }
         $this->setFlash('error', Yii::t('backend', 'operation failed'));
-        return $this->redirect(['major-event/index']);
+        return $this->redirect(Yii::$app->request->referrer);
     }
 
 }
