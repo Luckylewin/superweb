@@ -12,10 +12,17 @@ $this->registerJsFile('https://cdn.bootcss.com/echarts/4.1.0/echarts.common.js',
 ?>
 
 <div class="col-md-12 text-center">
-    <h1><?= $time . $title . '统计图' ?></h1>
+    <h2><?= $time . '<font color="#1e90ff">'.$title.'</font>' . '统计图' ?></h2>
 </div>
+
 <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
 <div id="main" class="col-md-12" style="height: 400px"></div>
+
+<div class="col-md-12 text-center">
+    <?= \yii\helpers\Html::a(Yii::t('backend', 'Go Back'),Yii::$app->request->referrer, [
+        'class' => 'btn btn-default'
+    ]); ?>
+</div>
 
 <?php
 $xAxis = "'".implode("','", array_keys($data))."'";
@@ -74,7 +81,7 @@ var option = {
     ],
     series : [
         {
-            name:'活跃人数',
+            name:'{$title}',
             type:'bar',
             barWidth: '60%',
             data:[{$yAxis}]

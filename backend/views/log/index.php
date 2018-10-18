@@ -96,20 +96,11 @@ $this->registerJsFile('https://cdn.bootcss.com/echarts/4.1.0/echarts.common.js',
                 </h3>
             </div>
             <div class="panel-body">
-                <h3><?= $statics->token??0 ?></h3>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-2">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">
-                    token请求
+                <h3>
+                    <a href="<?= \yii\helpers\Url::to(['log/change', 'type' => 'date', 'attribute' => 'token']) ?>">
+                        <?= $statics->token??0 ?>
+                    </a>
                 </h3>
-            </div>
-            <div class="panel-body">
-                <h3><?= $statics->token??0 ?></h3>
             </div>
         </div>
     </div>
@@ -122,7 +113,11 @@ $this->registerJsFile('https://cdn.bootcss.com/echarts/4.1.0/echarts.common.js',
                 </h3>
             </div>
             <div class="panel-body">
-                <h3><?= $statics->ott_list??0 ?></h3>
+                <h3>
+                    <a href="<?= \yii\helpers\Url::to(['log/change', 'type' => 'date', 'attribute' => 'ott_list']) ?>">
+                        <?= $statics->ott_list??0 ?>
+                    </a>
+                </h3>
             </div>
         </div>
     </div>
@@ -135,7 +130,11 @@ $this->registerJsFile('https://cdn.bootcss.com/echarts/4.1.0/echarts.common.js',
                 </h3>
             </div>
             <div class="panel-body">
-                <h3><?= $statics->iptv_list??0 ?></h3>
+                <h3>
+                    <a href="<?= \yii\helpers\Url::to(['log/change', 'type' => 'date', 'attribute' => 'iptv_list']) ?>">
+                        <?= $statics->iptv_list??0 ?>
+                    </a>
+                </h3>
             </div>
         </div>
     </div>
@@ -148,7 +147,11 @@ $this->registerJsFile('https://cdn.bootcss.com/echarts/4.1.0/echarts.common.js',
                 </h3>
             </div>
             <div class="panel-body">
-                <h3><?= $statics->play??0 ?></h3>
+                <h3>
+                    <a href="<?= \yii\helpers\Url::to(['log/change', 'type' => 'date', 'attribute' => 'play']) ?>">
+                        <?= $statics->play??0 ?>
+                    </a>
+                </h3>
             </div>
         </div>
     </div>
@@ -161,7 +164,11 @@ $this->registerJsFile('https://cdn.bootcss.com/echarts/4.1.0/echarts.common.js',
                 </h3>
             </div>
             <div class="panel-body">
-                <h3><?= $statics->karaoke_list??0 ?></h3>
+                <h3>
+                    <a href="<?= \yii\helpers\Url::to(['log/change', 'type' => 'date', 'attribute' => 'karaoke_list']) ?>">
+                        <?= $statics->karaoke_list??0 ?>
+                    </a>
+                </h3>
             </div>
         </div>
     </div>
@@ -174,7 +181,11 @@ $this->registerJsFile('https://cdn.bootcss.com/echarts/4.1.0/echarts.common.js',
                 </h3>
             </div>
             <div class="panel-body">
-                <h3><?= $statics->epg??0 ?></h3>
+                <h3>
+                    <a href="<?= \yii\helpers\Url::to(['log/change', 'type' => 'date', 'attribute' => 'epg']) ?>">
+                        <?= $statics->epg??0 ?>
+                    </a>
+                </h3>
             </div>
         </div>
     </div>
@@ -187,7 +198,12 @@ $this->registerJsFile('https://cdn.bootcss.com/echarts/4.1.0/echarts.common.js',
                 </h3>
             </div>
             <div class="panel-body">
-                <h3><?= $statics->app_upgrade??0 ?></h3>
+
+                <h3>
+                    <a href="<?= \yii\helpers\Url::to(['log/change', 'type' => 'date', 'attribute' => 'app_upgrade']) ?>">
+                        <?= $statics->app_upgrade??0 ?>
+                    </a>
+                </h3>
             </div>
         </div>
     </div>
@@ -200,7 +216,11 @@ $this->registerJsFile('https://cdn.bootcss.com/echarts/4.1.0/echarts.common.js',
                 </h3>
             </div>
             <div class="panel-body">
-                <h3><?= $statics->firmware_upgrade??0 ?></h3>
+                <h3>
+                    <a href="<?= \yii\helpers\Url::to(['log/change', 'type' => 'date', 'attribute' => 'firmware_upgrade']) ?>">
+                        <?= $statics->firmware_upgrade??0 ?>
+                    </a>
+                </h3>
             </div>
         </div>
     </div>
