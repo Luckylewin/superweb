@@ -81,7 +81,35 @@ class BaseController extends Controller
 
     public function getReferer()
     {
-        return Yii::$app->request->referrer;
+        return empty(Yii::$app->request->referrer) ? '/' : Yii::$app->request->referrer;
+    }
+
+    public function getRequest()
+    {
+        return Yii::$app->request;
+    }
+
+    public function getLastPage()
+    {
+        $cookies = $this->getRequest()->cookies;
+
+        return $cookies->has('referer') ? $cookies->getValue('referer') :  $this->getReferer();
+    }
+
+    public function rememberReferer($url = null)
+    {
+        if (is_null($url)) {
+            $referer = $this->getRequest()->referrer;
+            $url = empty($referer) ? '/' : $referer;
+        }
+
+        $cookie = new \yii\web\Cookie();
+        $cookie->name = 'referer';                //cookie名
+        $cookie->value = $url;              //cookie值
+        $cookie->expire = time() + 3600;       //过期时间
+        $cookie->httpOnly = true;
+
+        \Yii::$app->response->getCookies()->add($cookie);
     }
 
 }

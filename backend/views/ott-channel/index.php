@@ -17,6 +17,7 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js'
 ?>
 
 <style>
+    .grid-view th{text-align: center;}
     .grid-view td {
         text-align: center;
         vertical-align: middle !important;
@@ -52,8 +53,9 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js'
 
                     [
                         'attribute' => 'image',
+                        'filter' => false,
                         'format' => ['image',['width'=>80,'height'=>60]],
-                        'options' => ['style' => 'width:100px;'],
+                        'options' => ['style' => 'width:85px;'],
                         'value' => function($model) {
                             return \common\components\Func::getAccessUrl($model->image);
                         }
@@ -108,8 +110,9 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js'
                     ],
                     [
                         'attribute' => 'sort',
+                        'filter' => false,
                         'contentOptions' => ['class' => 'ajax-td'],
-                        'options' => ['style' => 'width:70px;'],
+                        'options' => ['style' => 'width:60px;'],
                         'format' => 'raw',
                         'value' => function($model) {
                             return \yii\bootstrap\Html::textInput('sort', $model->sort, [
@@ -122,6 +125,8 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js'
                     ],
                     [
                         'attribute' => 'use_flag',
+                        'headerOptions' =>['class' => 'col-md-1'],
+                        'filter' => false,
                         'contentOptions' => ['class' => 'ajax-td'],
                         'format' => 'raw',
                         'value' => function($model) {
@@ -136,7 +141,11 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js'
                             return $str = "<div class='text'>{$icon}</div>" . "<div class='input' style='display: none'>{$dropDownList}</div>";
                         }
                     ],
-                    'channel_number',
+                    [
+                            'attribute' => 'channel_number',
+                            'headerOptions' =>['class' => 'col-md-1'],
+                            'filter' => false
+                    ],
                     //'alias_name',
 
                     [
@@ -180,7 +189,7 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js'
 
 <?= Html::a(Yii::t('backend', 'Rearrange channel numbers'), ['sub-class/reset-number','main_class_id' => $mainClass->id], ['class' => 'btn btn-primary']) ?>
 
-<?= Html::button(Yii::t('backend', 'Batch Deletion'),['class' => 'gridview btn btn-danger']) ?>
+<?= Html::button(Yii::t('backend', 'Batch Deletion'),['class' => 'gridview btn btn-danger' ]) ?>
 
 <?= Html::a(Yii::t('backend', 'Go Back'), Url::to(['sub-class/index', 'main-id' => $mainClass->id]), ['class' => 'btn btn-default']) ?>
 
@@ -354,14 +363,16 @@ $confirm_Text = Yii::t('backend', 'Are you sure to save your changes?');
 $yes = Yii::t('backend', 'Yes');
 $cancel = Yii::t('backend', 'Cancel');
 $success = Yii::t('backend', 'Success');
+$delete_text = Yii::t('backend', 'Are you sure?');
 
 $requestJs=<<<JS
     
     $(document).on("click", ".gridview", function () {
-                var keys = $("#grid").yiiGridView("getSelectedRows");
-                var url = '{$batchDelete}' + '&id=' + keys.join(',');
-                window.location.href = url;
-            });
+                if (confirm('{$delete_text}')) {
+                   var keys = $("#grid").yiiGridView("getSelectedRows");
+                   window.location.href = '{$batchDelete}' + '&id=' + keys.join(',');
+                }
+    });
     
    var commonJS = {
        'callback':function(obj,value) {

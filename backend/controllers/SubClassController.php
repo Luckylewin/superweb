@@ -99,15 +99,10 @@ class SubClassController extends BaseController
         return ActiveForm::validate($model);
     }
 
-    /**
-     * Updates an existing SubClass model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+
     public function actionUpdate($id)
     {
+        $this->rememberReferer();
         $model = $this->findModel($id);
 
         if (Yii::$app->request->isAjax) {
@@ -124,7 +119,7 @@ class SubClassController extends BaseController
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $this->setFlash('info', Yii::t('backend', 'Success'));
-            return $this->redirect(['index', 'main-id' => $model->mainClass->id]);
+            return $this->redirect($this->getLastPage());
         }
 
         return $this->render('update', [
@@ -132,13 +127,7 @@ class SubClassController extends BaseController
         ]);
     }
 
-    /**
-     * Deletes an existing SubClass model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+
     public function actionDelete($id)
     {
         $subClass = $this->findModel($id);

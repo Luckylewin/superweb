@@ -54,11 +54,6 @@ class OttBannerController extends BaseController
         ]);
     }
 
-    /**
-     * Creates a new OttBanner model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
     public function actionCreate()
     {
         $model = new OttBanner();
@@ -67,7 +62,7 @@ class OttBannerController extends BaseController
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            $this->setFlash('success', '发布banner成功');
+            $this->setFlash('success', Yii::t('backend', 'Success'));
             return $this->redirect(['ott-banner/index']);
         }
 
@@ -76,13 +71,7 @@ class OttBannerController extends BaseController
         ]);
     }
 
-    /**
-     * Updates an existing OttBanner model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);

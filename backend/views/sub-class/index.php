@@ -181,11 +181,15 @@ $batchDelete = Url::to(['sub-class/batch-delete']);
 $requestUrl = Url::toRoute(['sub-class/create', 'main_id' => $mainClass->id]);
 $updateUrl = Url::to(['sub-class/update', 'field' => 'sort', 'id'=>'']);
 $csrfToken = Yii::$app->request->csrfToken;
+$confirmText = Yii::t('backend', 'Are you sure?');
 
 $requestJs=<<<JS
         $(document).on("click", ".gridview", function () {
-                    var keys = $("#grid").yiiGridView("getSelectedRows");
-                    window.location.href = '{$batchDelete}' + '&id=' + keys.join(',');
+          if (confirm('{$confirmText}')) {
+              var keys = $("#grid").yiiGridView("getSelectedRows");
+              window.location.href = '{$batchDelete}' + '&id=' + keys.join(',');
+          } 
+                    
         });
         $(document).on('click', '#create', function() {
                 $.get('{$requestUrl}', {},
