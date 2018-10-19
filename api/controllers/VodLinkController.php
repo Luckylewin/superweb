@@ -9,6 +9,7 @@
 namespace api\controllers;
 
 
+use common\components\Func;
 use common\models\Vodlink;
 use yii\data\ActiveDataProvider;
 use yii\filters\auth\QueryParamAuth;
@@ -59,6 +60,9 @@ class VodLinkController extends ActiveController
     public function actionView($id)
     {
         $link = Vodlink::findOne($id);
+        if($link->save_type == Vodlink::FILE_SERVER) {
+           $link->url = Func::getAccessUrl($link->url, 2 * 3600);
+        }
 
         return $link;
     }
