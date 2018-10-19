@@ -92,9 +92,14 @@ class PlayGroupController extends BaseController
 
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $group = $this->findModel($id);
+        if ($vod = $group->vod) {
+            PlayGroup::deleteAll(['id' => $group->id]);
+            $this->setFlash('info', Yii::t('backend', 'Success'));
+            return $this->redirect(['play-group/index', 'vod_id' => $vod->vod_id]);
+        }
 
-        return $this->redirect(['index']);
+        return $this->redirect(['/']);
     }
 
     /**

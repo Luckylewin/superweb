@@ -81,7 +81,7 @@ class BaseController extends Controller
 
     public function getReferer()
     {
-        return empty(Yii::$app->request->referrer) ? '/' : Yii::$app->request->referrer;
+        return empty(Yii::$app->request->referrer) ? '/admin.php' : Yii::$app->request->referrer;
     }
 
     public function getRequest()
@@ -100,7 +100,7 @@ class BaseController extends Controller
     {
         if (is_null($url)) {
             $referer = $this->getRequest()->referrer;
-            $url = empty($referer) ? '/' : $referer;
+            $url = empty($referer) ? '/admin.php' : $referer;
         }
 
         $cookie = new \yii\web\Cookie();

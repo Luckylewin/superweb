@@ -15,9 +15,20 @@ use backend\models\PlayGroup;
  * @property string $plot 剧情
  * @property string $season 第几季
  * @property string $group_id 链接分组id
+ * @property string $save_type 链接类型
  */
 class Vodlink extends \yii\db\ActiveRecord
 {
+
+    const FILE_SERVER = 'server';
+    const FILE_OSS    = 'oss';
+    const FILE_LINK   = 'external';
+
+    public static $saveTypeMap = [
+        self::FILE_SERVER => '服务器',
+       // self::FILE_OSS => '阿里云OSS',
+        self::FILE_LINK => '外部资源',
+    ];
 
     /**
      * @inheritdoc
@@ -35,7 +46,7 @@ class Vodlink extends \yii\db\ActiveRecord
         return [
             [['video_id', 'episode', 'group_id'], 'integer'],
             [['url'], 'required'],
-            [['url', 'hd_url'], 'string', 'max' => 255],
+            [['url', 'hd_url', 'save_type'], 'string', 'max' => 255],
             [['plot'], 'string', 'max' => 1000],
             ['episode', 'filter', 'filter' => 'intval'],
 
@@ -54,6 +65,7 @@ class Vodlink extends \yii\db\ActiveRecord
             'hd_url' => '高清URl',
             'episode' => '剧集',
             'plot' => '剧情',
+            'save_type' => '资源位置'
         ];
     }
 

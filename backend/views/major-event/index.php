@@ -119,14 +119,15 @@ $this->params['breadcrumbs'][] = $this->title;
   echo Html::button("批量删除",[
       'class' => 'gridview btn btn-danger',
   ]);
+  $confirmText = Yii::t('backend', 'Are you sure?');
 
   $batchDelete = \yii\helpers\Url::to(['major-event/batch-delete', 'ids' => '']);
   $js =<<<JS
     $(document).on('click', '.gridview', function () {
-    var keys = $("#grid").yiiGridView("getSelectedRows");
-    var url = '{$batchDelete}' + keys;
-    
-    window.location.href = url;
+    if (confirm('{$confirmText}')) {
+      var keys = $("#grid").yiiGridView("getSelectedRows");
+      window.location.href = '{$batchDelete}' + keys;
+    }
 })
 JS;
 

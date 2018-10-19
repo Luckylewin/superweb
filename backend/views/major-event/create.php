@@ -6,7 +6,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model backend\models\MajorEvent */
 
-$this->title = 'Create Major Event';
+$this->title = '';
 $this->params['breadcrumbs'][] = ['label' => 'Major Events', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

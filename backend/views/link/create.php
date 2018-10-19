@@ -11,10 +11,7 @@ $this->params['breadcrumbs'][] = ['label' => 'Vodlinks', 'url' => ['index','grou
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="vodlink-create">
-
-
     <?= $this->render('_form', [
         'model' => $model,
     ]) ?>
-
 </div>

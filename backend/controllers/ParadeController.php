@@ -22,10 +22,7 @@ class ParadeController extends BaseController
 
     public $version = 'parade:version';
 
-    /**
-     * Lists all Parade models.
-     * @return mixed
-     */
+
     public function actionIndex()
     {
         $searchModel = new ParadeSearch();
@@ -38,12 +35,7 @@ class ParadeController extends BaseController
         ]);
     }
 
-    /**
-     * Displays a single Parade model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+
     public function actionView($id)
     {
         return $this->render('view', [
@@ -71,11 +63,7 @@ class ParadeController extends BaseController
         return $this->redirect(Yii::$app->request->referrer);
     }
 
-    /**
-     * Creates a new Parade model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
+
     public function actionCreate()
     {
         $model = new Parade();
@@ -109,19 +97,13 @@ class ParadeController extends BaseController
         ]);
     }
 
-    /**
-     * Updates an existing Parade model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     public function actionUpdate($id)
     {
+        $this->rememberReferer();
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect($this->getLastPage());
         }
 
         return $this->render('update', [
@@ -129,13 +111,7 @@ class ParadeController extends BaseController
         ]);
     }
 
-    /**
-     * Deletes an existing Parade model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
@@ -143,13 +119,7 @@ class ParadeController extends BaseController
         return $this->redirect(['index']);
     }
 
-    /**
-     * Finds the Parade model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Parade the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+
     protected function findModel($id)
     {
         if (($model = Parade::findOne($id)) !== null) {
@@ -203,6 +173,7 @@ class ParadeController extends BaseController
             }
         }
 
+        return $this->renderAjax('bind');
     }
 
     /**

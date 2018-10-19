@@ -70,10 +70,12 @@ class KaraokeController extends BaseController
      */
     public function actionUpdate($id)
     {
+        $this->rememberReferer();
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->ID]);
+            $this->setFlash('success', Yii::t('backend', 'Success'));
+            return $this->redirect($this->getLastPage());
         }
 
         return $this->render('update', [

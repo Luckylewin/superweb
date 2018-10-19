@@ -12,7 +12,7 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'vod_id')->textInput() ?>
+    <?= $form->field($model, 'vod_id')->hiddenInput()->label(false) ?>
 
     <?= $form->field($model, 'group_name')->textInput(['maxlength' => true]) ?>
 

@@ -564,4 +564,7 @@ return [
     'OSS' => '阿里云OSS',
     'Save Position' => '保存位置',
     'Create Group' => '创建分组',
+    'Group Name' => '分组来源名称(英文)',
+    'Create Major Event' => '添加主要赛事',
+    'Create Play Group' => '添加来源分组',
 ];

@@ -23,7 +23,9 @@ $this->params['breadcrumbs'][] = $this->title;
         ]
     ]) ?>
 
-    <?= Html::hiddenInput('alias_name', $alias_name); ?>
+    <?php
+//    Html::hiddenInput('alias_name', $alias_name);
+    ?>
     <div class="form-group">
         <label class="sr-only" for="main-class">一级分类</label>
         <?= Html::dropDownList('main-class', null, $mainClass, ['class' => 'form-control', 'id' => 'main-class', 'prompt' => '请选择', 'required' => true]); ?>

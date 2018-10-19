@@ -82,10 +82,12 @@ class UploadController extends BaseController
         $isLastChunk = $_REQUEST['isLastChunk'];
         //是否是第一次上传
         $isFirstUpload = $_REQUEST['isFirstUpload'];
-        //相对路径
-        $basicPath = "storage/uploads/vod-movie/" . $fileName;
+
         //绝对路径
-        $fileSavePath = Yii::getAlias('@' . $basicPath);
+        $basicPath = '/vod/'.$fileName;
+        $fileSavePath = $this->storagePath . $basicPath;
+
+
         if (!is_dir(dirname($fileSavePath))) {
             FileHelper::createDirectory(dirname($fileSavePath));
         }
@@ -97,6 +99,7 @@ class UploadController extends BaseController
             if ($isFirstUpload == '1' && file_exists($fileSavePath) && filesize($fileSavePath) == $totalSize) {
                 unlink($fileSavePath);
             }
+
             // 否则继续追加文件数据
             if (!file_put_contents($fileSavePath, file_get_contents($_FILES['theFile']['tmp_name']), FILE_APPEND)) {
                 $status = 501;

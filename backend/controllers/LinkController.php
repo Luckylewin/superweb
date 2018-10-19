@@ -53,6 +53,7 @@ class LinkController extends BaseController
         }
 
         $model->episode = $model->getNextEpisode($model->group_id);
+        $model->save_type = Vodlink::FILE_LINK;
         $model->hasErrors() && Yii::$app->session->setFlash('error', $model->getErrorSummary(true));
 
         return $this->render('create', [
@@ -63,15 +64,12 @@ class LinkController extends BaseController
 
     public function actionUpdate($id)
     {
+        $this->rememberReferer();
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            $this->setFlash('success', Yii::t('backend', 'Success'));
-            $playGroup = PlayGroup::findOne($model->group_id);
-            if (!empty($playGroup)) {
-                return $this->redirect(['play-group/index', 'vod_id' => $playGroup->vod_id]);
-            }
-
+            $this->setFlash('info', Yii::t('backend', 'Success'));
+            return $this->redirect($this->getLastPage());
         }
 
         return $this->render('update', [
@@ -81,11 +79,8 @@ class LinkController extends BaseController
 
     public function actionDelete($id)
     {
-        $model = $this->findModel($id);
-        $group_id = $model->group_id;
-        $model->delete();
-
-        return $this->redirect(['index','vod_id' => $group_id]);
+        $this->findModel($id)->delete();
+        return $this->redirect($this->getReferer());
     }
 
 

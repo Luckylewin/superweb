@@ -4,6 +4,7 @@ namespace backend\models;
 
 use common\models\Vod;
 use common\models\Vodlink;
+use common\models\VodList;
 use Yii;
 
 /**
@@ -30,6 +31,7 @@ class PlayGroup extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            ['group_name','unique'],
             [['vod_id', 'sort'], 'integer'],
             [['group_name'], 'string', 'max' => 32],
         ];
@@ -43,14 +45,20 @@ class PlayGroup extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'vod_id' => 'Vod ID',
-            'group_name' => 'Group Name',
-            'sort' => 'Sort',
+            'group_name' => Yii::t('backend', 'Group Name'),
+            'sort' => Yii::t('backend', 'Sort'),
         ];
     }
 
     public function getVod()
     {
         return $this->hasOne(Vod::className(), ['vod_id' => 'vod_id']);
+    }
+
+    public function getVodList()
+    {
+        return $this->hasOne(VodList::className(), ['list_id' => 'vod_cid'])
+                    ->via('vod');
     }
 
     /**

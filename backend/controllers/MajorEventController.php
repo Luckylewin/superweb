@@ -20,7 +20,7 @@ class MajorEventController extends BaseController
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => MajorEvent::find()->where(['>', 'time', time()]),
+            'query' => MajorEvent::find()->where(['>', 'time', strtotime('today')]),
             'sort' => [
                 'defaultOrder' => [
                     'time' => SORT_ASC,
@@ -62,6 +62,7 @@ class MajorEventController extends BaseController
 
     public function actionUpdate($id)
     {
+        $this->rememberReferer();
         $model = $this->findModel($id);
 
         //初始化日期
@@ -71,7 +72,7 @@ class MajorEventController extends BaseController
             $post = Yii::$app->request->post();
             if ($model->load($post) && $model->initData($post) && $model->save()) {
                 $this->setFlash('success', Yii::t('backend', 'Success'));
-                return $this->redirect(['index']);
+                return $this->redirect($this->getLastPage());
             }
 
             return $this->redirect(Yii::$app->request->referrer);

@@ -34,16 +34,28 @@ $dataProvider = new \yii\data\ActiveDataProvider([
                     "name" => "id",
                 ],
                 [
+                    'attribute' => 'save_type',
+                    'value' => function($model) {
+                        return Vodlink::$saveTypeMap[$model->save_type];
+                    }
+                ],
+                [
                     'attribute' => 'url',
                     'format' => 'raw',
                     'value' => function($mod) use ($model) {
-                        if (strtolower($model->group_name) == 'youtube') {
-                            $href = "https://www.youtube.com/watch?v=" . $mod->url;
-                        } else {
-                            $href = $mod->url;
+                        if ($mod->save_type == Vodlink::FILE_LINK) {
+                            if (strtolower($model->group_name) == 'youtube') {
+                                $href = "https://www.youtube.com/watch?v=" . $mod->url;
+                            } else {
+                                $href = $mod->url;
+                            }
+                            $text = $href;
+                        } else if ($mod->save_type == Vodlink::FILE_SERVER) {
+                            $href = \common\components\Func::getAccessUrl($mod->url, 1800);
+                            $text = $mod->url;
                         }
 
-                        return Html::a($href, $href, [
+                        return Html::a($text, $href, [
                                 'class' => 'btn btn-link',
                                 'target' => '_blank'
                         ]);
@@ -53,6 +65,7 @@ $dataProvider = new \yii\data\ActiveDataProvider([
                     ]
                 ],
                 'episode',
+
                 [
                     'class' => 'common\grid\MyActionColumn',
                     'template' => '{update} {delete}',
@@ -60,16 +73,23 @@ $dataProvider = new \yii\data\ActiveDataProvider([
                         'class' => 'col-md-2'
                     ],
                     'buttons' => [
+                        'view' => function($url, $model) {
+                            return Html::a(Yii::t('backend', 'View'),Url::to(['link/view','vod_id'=>$model->video_id, 'id' => $model->id]),[
+                                'class' => 'btn btn-success btn-xs'
+                            ]);
+                        },
                         'update' => function($url, $model) {
-                            return Html::a('编辑',Url::to(['link/update','vod_id'=>$model->video_id, 'id' => $model->id]),[
+                            return Html::a(Yii::t('backend', 'Edit'),Url::to(['link/update','vod_id'=>$model->video_id, 'id' => $model->id]),[
                                 'class' => 'btn btn-info btn-xs'
                             ]);
                         },
-                        'view' => function($url, $model) {
-                            return Html::a('查看',Url::to(['link/view','vod_id'=>$model->video_id, 'id' => $model->id]),[
-                                'class' => 'btn btn-success btn-xs'
+                        'delete' => function($url, $model) {
+                            return Html::a(Yii::t('backend', 'Delete'),Url::to(['link/delete','vod_id' => $model->video_id, 'id' => $model->id]),[
+                                'class' => 'btn btn-danger btn-xs',
+                                'data-confirm' => Yii::t('backend', 'Are you sure?')
                             ]);
-                        }
+                        },
+
                     ]
                 ],
             ],
@@ -78,7 +98,7 @@ $dataProvider = new \yii\data\ActiveDataProvider([
     </div>
     <div class="panel-footer text-right">
         <?= \yii\helpers\Html::a('增加链接', \yii\helpers\Url::to(['link/create', 'group_id' => $model->id]), ['class' => 'btn btn-success btn-sm']) ?>
-        <?= \yii\helpers\Html::a('删除此组', \yii\helpers\Url::to(['play-group/delete', 'id' => $model->id]), ['class' => 'btn btn-danger btn-sm']) ?>
+        <?= \yii\helpers\Html::a('删除此组', \yii\helpers\Url::to(['play-group/delete', 'id' => $model->id]), ['class' => 'btn btn-danger btn-sm', 'data-confirm' => Yii::t('backend', 'Are you sure?')]) ?>
     </div>
 </div>
 
