@@ -148,6 +148,7 @@ return [
     'Normal' => '正常',
     'Ready' => '就绪',
     'Running' => '正在运行',
+    'Stopped' => '停止运行',
     'Error' => '错误',
     'Product Name' => '产品名称',
     'Order Number' => '订单号',
@@ -567,4 +568,11 @@ return [
     'Group Name' => '分组来源名称(英文)',
     'Create Major Event' => '添加主要赛事',
     'Create Play Group' => '添加来源分组',
+
+    'Online terminal' => '在线终端',
+    'within {t} hours' => '{t}小时内',
+    'API Service' => 'API服务',
+    'Log Service' => '日志服务',
+    'Queue Service' => '队列服务',
+
 ];

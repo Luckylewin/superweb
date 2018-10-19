@@ -15,40 +15,42 @@
 
     <div class="col-md-3">
         <div class="well" title="php start.php restart -d">
-            <i class="fa fa-user" style="font-size: 20px;" ></i> 在线终端:
-                <span class="text-success font-bold"><?= $online ?></span> <i>(3小时内)</i>
+            <i class="fa fa-user" style="font-size: 20px;" ></i> <?= Yii::t('backend', 'Online terminal') ?>:
+                <span class="text-success font-bold"><?= $online ?></span> <i>(<?= Yii::t('backend', '3小时内',[
+                        't' => 3
+                ]) ?>)</i>
         </div>
     </div>
 
     <div class="col-md-3">
         <div class="well" title="php start.php restart -d">
-            <i class="fa fa-server" style="font-size: 20px;" ></i> API服务:
+            <i class="fa fa-server" style="font-size: 20px;" ></i> <?= Yii::t('backend', 'API Service') ?>:
             <?php if ($data['apiService']['running']): ?>
-                <span class="text-success font-bold">正在运行</span>
+                <span class="text-success font-bold"><?= Yii::t('backend', 'Running') ?></span>
             <?php else: ?>
-                <span class="text-danger font-bold">停止运行</span>
+                <span class="text-danger font-bold"><?= Yii::t('backend', 'Stopped') ?></span>
             <?php endif; ?>
         </div>
     </div>
 
     <div class="col-md-3">
         <div class="well" title="php yii log/analyse &">
-            <i class="fa fa-file-text" style="font-size: 20px;" ></i> 日志服务:
+            <i class="fa fa-file-text" style="font-size: 20px;" ></i> <?= Yii::t('backend', 'Log Service') ?>:
             <?php if ($data['logService']['running']): ?>
-                <span class="text-success font-bold">正在运行</span>
+                <span class="text-success font-bold"><?= Yii::t('backend', 'Running') ?></span>
             <?php else: ?>
-                <span class="text-danger font-bold">停止运行</span>
+                <span class="text-danger font-bold"><?= Yii::t('backend', 'Stopped') ?></span>
             <?php endif; ?>
         </div>
     </div>
 
     <div class="col-md-3">
         <div class="well"  title="php yii queue/listen &">
-            <i class="fa fa-arrow-circle-right" style="font-size: 20px;"></i> 队列服务:
+            <i class="fa fa-arrow-circle-right" style="font-size: 20px;"></i> <?= Yii::t('backend', 'Queue Service') ?>:
             <?php if ($data['queueService']['running']): ?>
-                <span class="text-success font-bold">正在运行</span>
+                <span class="text-success font-bold"><?= Yii::t('backend', 'Running') ?></span>
             <?php else: ?>
-                <span class="text-danger font-bold">停止运行</span>
+                <span class="text-danger font-bold"><?= Yii::t('backend', 'Stopped') ?></span>
             <?php endif; ?>
         </div>
     </div>
