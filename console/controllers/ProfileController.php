@@ -5,18 +5,19 @@
  * Date: 2018/5/4
  * Time: 10:15
  */
-
 namespace console\controllers;
-
 
 use common\models\Vod;
 use console\components\MySnnopy;
-use console\models\common;
-use console\models\profile;
 use Symfony\Component\DomCrawler\Crawler;
 use yii\console\Controller;
 use yii\helpers\Console;
 
+/**
+ * 影片信息抓取控制器
+ * Class ProfileController
+ * @package console\controllers
+ */
 class ProfileController extends Controller
 {
     private $url;

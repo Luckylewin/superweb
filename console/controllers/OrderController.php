@@ -13,6 +13,11 @@ use backend\models\OttOrder;
 use common\models\Order;
 use yii\console\Controller;
 
+/**
+ * 订单维护控制器
+ * Class OrderController
+ * @package console\controllers
+ */
 class OrderController extends Controller
 {
 
@@ -24,7 +29,6 @@ class OrderController extends Controller
 
     /**
      * 删除过期没支付的订单
-     * @return bool
      */
     public function actionClearOrder()
     {

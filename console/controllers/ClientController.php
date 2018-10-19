@@ -14,7 +14,11 @@ use console\script\AnnaOtt;
 use console\script\AnnaParade;
 use yii\console\Controller;
 
-
+/**
+ * 处理公司合作的其他客户的额外需求
+ * Class ClientController
+ * @package console\controllers
+ */
 class ClientController extends Controller
 {
     /**

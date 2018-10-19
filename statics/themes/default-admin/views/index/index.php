@@ -2,7 +2,7 @@
 <div class="container">
     <div class="jumbotron">
         <h1> <i class="fa fa-tv"></i> <?php echo isset(Yii::$app->params['basic']['sitename'])? Yii::t('backend', Yii::$app->params['basic']['sitename'] ): Yii::t('backend', 'Welcome') ?></h1>
-        <p id="localtime"></p>
+        <p><span id="localtime"></span> </p>
         <p>
             <?=  \yii\helpers\Html::a('<i class="fa-bar-chart fa"></i>' . Yii::t('backend', 'Interface statics'), \yii\helpers\Url::to(['log/now']), [
                 'class' => 'btn btn-primary btn-lg'
@@ -12,7 +12,15 @@
 </div>
 
 <div>
-    <div class="col-md-4">
+
+    <div class="col-md-3">
+        <div class="well" title="php start.php restart -d">
+            <i class="fa fa-user" style="font-size: 20px;" ></i> 在线终端:
+                <span class="text-success font-bold"><?= $online ?></span> <i>(3小时内)</i>
+        </div>
+    </div>
+
+    <div class="col-md-3">
         <div class="well" title="php start.php restart -d">
             <i class="fa fa-server" style="font-size: 20px;" ></i> API服务:
             <?php if ($data['apiService']['running']): ?>
@@ -23,7 +31,7 @@
         </div>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-3">
         <div class="well" title="php yii log/analyse &">
             <i class="fa fa-file-text" style="font-size: 20px;" ></i> 日志服务:
             <?php if ($data['logService']['running']): ?>
@@ -34,7 +42,7 @@
         </div>
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-3">
         <div class="well"  title="php yii queue/listen &">
             <i class="fa fa-arrow-circle-right" style="font-size: 20px;"></i> 队列服务:
             <?php if ($data['queueService']['running']): ?>

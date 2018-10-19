@@ -287,6 +287,7 @@ class Mac extends \yii\db\ActiveRecord implements IdentityInterface
     /**
      * API access_token 与IP绑定在一起
      * @return string
+     * @throws \yii\base\Exception
      */
     public function generateAccessToken()
     {
@@ -310,6 +311,12 @@ class Mac extends \yii\db\ActiveRecord implements IdentityInterface
             'access_token',
             'access_token_expire'
         ];
+    }
+
+    public static function getOnlineNum($hour = 1)
+    {
+        $time = date('Y-m-d H:i:s', time() - $hour * 3600);
+        return self::find()->where(['>=', 'logintime', $time])->count('*');
     }
 
 }

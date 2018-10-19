@@ -38,7 +38,7 @@ class CrontabController extends Controller
                 continue;
             }
 
-            // 判断运行时间到了没
+            // 判断是否到了运行时间
             if ($task->next_rundate <= date('Y-m-d H:i:s')) {
                 $tasks[] = $task;
             }

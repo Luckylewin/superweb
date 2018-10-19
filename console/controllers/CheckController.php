@@ -16,6 +16,11 @@ use yii\console\ExitCode;
 use yii\db\Query;
 use yii\helpers\Console;
 
+/**
+ * 检查可播放性
+ * Class CheckController
+ * @package console\controllers
+ */
 class CheckController extends Controller
 {
     public $date;

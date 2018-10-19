@@ -25,6 +25,11 @@ use console\collectors\parade\vn;
 use yii\console\Controller;
 use yii\helpers\ArrayHelper;
 
+/**
+ * 预告控制器
+ * Class ParadeController
+ * @package console\controllers
+ */
 class ParadeController extends Controller
 {
 

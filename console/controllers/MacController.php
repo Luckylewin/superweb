@@ -23,6 +23,10 @@ class MacController extends Controller
         SyncOnlineStateJob::start();
     }
 
+    /**
+     * 批量导入MAC地址
+     * @throws \Throwable
+     */
     public function actionImport()
     {
         $start = '';

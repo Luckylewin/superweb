@@ -8,6 +8,7 @@
 
 namespace backend\controllers;
 
+use backend\models\Mac;
 use Yii;
 
 class IndexController extends BaseController
@@ -20,15 +21,18 @@ class IndexController extends BaseController
 
     public function actionIndex()
     {
-        $data = $this->getServiceData();
+        $services  = $this->getServiceData();
+        $onlineNum = Mac::getOnlineNum(3);
 
         return $this->render('index', [
-            'data' => $data
+            'data' => $services,
+            'online' => $onlineNum
         ]);
     }
 
     /**
      * 设定语言
+     * @param $lang
      */
     public function actionLanguage($lang)
     {
@@ -46,7 +50,7 @@ class IndexController extends BaseController
 
     public function actionCheck()
     {
-
+        //To Do 系统检查
     }
 
     public function getServiceData()

@@ -13,6 +13,11 @@ use console\models\Karaoke;
 use console\models\Movie;
 use yii\console\Controller;
 
+/**
+ * 采集控制器
+ * Class CollectController
+ * @package console\controllers
+ */
 class CollectController extends Controller
 {
     // 采集kalaoke

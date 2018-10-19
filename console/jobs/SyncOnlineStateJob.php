@@ -18,7 +18,7 @@ class SyncOnlineStateJob
     {
         $redis = MyRedis::init(MyRedis::REDIS_DEVICE_STATUS);
         Mac::updateAll(['is_online' => 0], ['is_online' => 1]);
-
+        
         foreach (Mac::find()->select('MAC')->asArray()->each() as $mac) {
             $logintime =  $redis->hget($mac['MAC'], 'logintime');
             if ($logintime && time() - strtotime($logintime) <= 6 * 3600 ) {
