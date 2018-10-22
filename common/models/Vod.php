@@ -266,16 +266,19 @@ class Vod extends \yii\db\ActiveRecord implements Linkable
             'groups',
              // 分组链接
             'groupLinks' => function() {
+
                 $groups = PlayGroup::find()->where(['vod_id' => $this->vod_id])->with('links')->asArray()->all();
-                array_walk($groups, function(&$group) {
+                $data = [];
+                $data['total'] = count($groups);
+                    array_walk($groups, function(&$group) {
                     array_walk($group['links'], function(&$v, $k) {
                         unset($v['season'], $v['hd_url'], $v['url'], $v['video_id']);
 
                         $v['_links']['self']['href'] = Url::to(["vod-links/{$v['id']}", 'access-token' => '' ], true);
                     });
                 });
-
-                return $groups;
+                $data['items'] = $groups;
+                return $data;
              },
 
             'vodLinks' => function() {

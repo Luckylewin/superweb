@@ -31,7 +31,7 @@ class PlayGroup extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            ['group_name','unique'],
+            ['group_name','safe'],
             [['vod_id', 'sort'], 'integer'],
             [['group_name'], 'string', 'max' => 32],
         ];
