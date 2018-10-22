@@ -13,6 +13,7 @@ use common\models\MainClass;
 use common\models\OttChannel;
 use common\models\OttLink;
 use common\models\SubClass;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Console;
 
 class AnnaOtt extends base
@@ -40,6 +41,7 @@ class AnnaOtt extends base
             "http://www.hdboxtv.net:8000/get.php?username=287994000099&password=287994000099&type=m3u_plus&output=ts",
         ];
 
+        $allData = [];
         foreach ($accounts as $url) {
             self::$data = $this->download($url);
             $data = $this->initData();
@@ -47,19 +49,25 @@ class AnnaOtt extends base
             // 基本数据录入
             foreach ($data as $value) {
 
+                $allData[] = $value;
                 // 普通数据
                 $mainClassID  = $this->_mainClass($value);
                 $subClassID = $this->_subClass($value, $mainClassID);
                 $channelID = $this->_channel($value, $subClassID);
                 $this->_link($value, $channelID);
+            }
+        }
 
+        if (!empty($allData)) {
+            ArrayHelper::multisort($allData, 'tvg-name', SORT_ASC);
+            foreach ($allData as $key => $value) {
                 // A-Z 数据
-                $this->attachAZ($value);
+                $this->attachAZ($value, $key);
                 // HD SD
                 $this->attachHDAndSD($value);
             }
-
         }
+        
     }
 
     private function dealMiTV()
@@ -84,9 +92,10 @@ class AnnaOtt extends base
     /**
      * a-z
      * @param $value
+     * @param $channel_number
      * @return bool
      */
-    private function attachAZ($value)
+    private function attachAZ($value, $channel_number)
     {
         $className = explode('|',$value['group-title']);
         if (!isset($className[1])) {
@@ -98,7 +107,7 @@ class AnnaOtt extends base
         if ($mainClass && $mainClass->name == 'br') {
             $tmp['group-title'] = 'A-Z|br';
             $subClassID = $this->_subClass($tmp, $mainClass->id);
-            $channelID = $this->_channel($value, $subClassID);
+            $channelID = $this->_channel($value, $subClassID, $channel_number);
             $this->_link($value, $channelID);
         }
 
@@ -197,9 +206,10 @@ class AnnaOtt extends base
      * 增加频道号
      * @param $value
      * @param $subClassID
+     * @param $channel_number
      * @return bool|int
      */
-    private function _channel($value, $subClassID)
+    private function _channel($value, $subClassID, $channel_number = null)
     {
         if ($subClassID == false)  return false;
 
@@ -216,6 +226,8 @@ class AnnaOtt extends base
            $channel->name = $value['tvg-name'];
            $channel->zh_name = $value['tvg-name'];
            $channel->keywords = $value['tvg-name'];
+           $channel->channel_number = is_null($channel_number) ? '' : $channel_number;
+
            if ($value['tvg-logo']) $channel->image = $value['tvg-logo'];
            // 判断是否有HD 有的话去掉
            $alias = preg_replace('/\s*HD/', '', $value['tvg-name']);
@@ -227,6 +239,9 @@ class AnnaOtt extends base
             $channel->image = $value['tvg-logo'];
             $channel->save(false);
             $this->stdout("更新直播频道：" . $value['tvg-name'].PHP_EOL, Console::FG_BLUE);
+        } else if(!is_null($channel_number) && $channel->channel_number != $channel_number) {
+            $channel->channel_number = $channel_number;
+            $channel->save(false);
         }
 
         return $channel->id;

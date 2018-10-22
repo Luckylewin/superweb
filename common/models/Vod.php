@@ -9,6 +9,7 @@ use yii\helpers\Url;
 use yii\web\Link;
 use yii\web\Linkable;
 use Yii;
+
 /**
  * This is the model class for table "iptv_vod".
  *
@@ -118,13 +119,13 @@ class Vod extends \yii\db\ActiveRecord implements Linkable
 
     public function beforeDelete()
     {
-        $data = $this->getVodLinks();
+        $data = $this->getGroupLinks();
 
         if ($data) {
-            $links = $data->all();
-            if ($links) {
-                foreach ($links as $link) {
-                    $link->delete();
+            $groups = $data->all();
+            if ($groups) {
+                foreach ($groups as $group) {
+                    $group->delete();
                 }
             }
         }

@@ -87,7 +87,7 @@ class OttChannel extends \yii\db\ActiveRecord
     {
         parent::beforeSave($insert);
         //处理最大值
-        if ($this->isNewRecord) {
+        if ($this->isNewRecord && empty($this->channel_number)) {
             $this->channel_number = self::find()->where(['sub_class_id' => $this->sub_class_id])->max('channel_number') + 1;
         }
 
