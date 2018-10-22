@@ -60,14 +60,35 @@ class AnnaOtt extends base
 
         if (!empty($allData)) {
             ArrayHelper::multisort($allData, 'tvg-name', SORT_ASC);
+
             foreach ($allData as $key => $value) {
                 // A-Z 数据
-                $this->attachAZ($value, $key);
+                $this->attachAZ($value);
                 // HD SD
                 $this->attachHDAndSD($value);
             }
+
+            // 给A-Z重新排列频道好
+            $this->sortAZ($allData);
         }
-        
+
+    }
+
+    protected function sortAZ($data)
+    {
+        if (!empty($data)) {
+            $subClass = SubClass::findOne(['name' => 'A-Z']);
+            if ($subClass) {
+                $channels = OttChannel::find()->where(['sub_class_id' => $subClass->id])->orderBy(['name' => SORT_ASC])->all();
+                if (!empty($channels)) {
+                    $channelNumber = 1;
+                    foreach ($channels as $channel) {
+                        $channel->channel_number = $channelNumber++;
+                        $channel->save(false);
+                    }
+                }
+            }
+        }
     }
 
     private function dealMiTV()
@@ -92,10 +113,9 @@ class AnnaOtt extends base
     /**
      * a-z
      * @param $value
-     * @param $channel_number
      * @return bool
      */
-    private function attachAZ($value, $channel_number)
+    private function attachAZ($value)
     {
         $className = explode('|',$value['group-title']);
         if (!isset($className[1])) {
@@ -107,7 +127,7 @@ class AnnaOtt extends base
         if ($mainClass && $mainClass->name == 'br') {
             $tmp['group-title'] = 'A-Z|br';
             $subClassID = $this->_subClass($tmp, $mainClass->id);
-            $channelID = $this->_channel($value, $subClassID, $channel_number);
+            $channelID = $this->_channel($value, $subClassID);
             $this->_link($value, $channelID);
         }
 
@@ -206,10 +226,9 @@ class AnnaOtt extends base
      * 增加频道号
      * @param $value
      * @param $subClassID
-     * @param $channel_number
      * @return bool|int
      */
-    private function _channel($value, $subClassID, $channel_number = null)
+    private function _channel($value, $subClassID)
     {
         if ($subClassID == false)  return false;
 
@@ -226,7 +245,6 @@ class AnnaOtt extends base
            $channel->name = $value['tvg-name'];
            $channel->zh_name = $value['tvg-name'];
            $channel->keywords = $value['tvg-name'];
-           $channel->channel_number = is_null($channel_number) ? '' : $channel_number;
 
            if ($value['tvg-logo']) $channel->image = $value['tvg-logo'];
            // 判断是否有HD 有的话去掉
@@ -239,9 +257,6 @@ class AnnaOtt extends base
             $channel->image = $value['tvg-logo'];
             $channel->save(false);
             $this->stdout("更新直播频道：" . $value['tvg-name'].PHP_EOL, Console::FG_BLUE);
-        } else if(!is_null($channel_number) && $channel->channel_number != $channel_number) {
-            $channel->channel_number = $channel_number;
-            $channel->save(false);
         }
 
         return $channel->id;
