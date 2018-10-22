@@ -156,4 +156,15 @@ class ClientController extends BaseController
         return $this->redirect(Yii::$app->request->referrer);
     }
 
+    public function actionAnnaOtt()
+    {
+        Yii::$app->queue->push(new ClientSyncJob([
+            'type' => 'ott',
+            'client' => 'anna'
+        ]));
+
+        $this->setFlash('success', '开始更新数据');
+        return $this->redirect(Yii::$app->request->referrer);
+    }
+
 }

@@ -125,6 +125,13 @@ $this->params['breadcrumbs'][] = $this->title;
     
 </div>
 
+<?php if(strpos(Yii::$app->request->hostInfo, '207.38.90.29') !== false || strpos(Yii::$app->request->hostInfo, 'vitvbox.net') !== false): ?>
+    <p>
+        <?= Html::a('更新直播数据', \yii\helpers\Url::to(['client/anna-ott']), ['class' => 'btn btn-info']) ?>
+    </p>
+<?php endif; ?>
+
+
 <?php
 
 Modal::begin([
