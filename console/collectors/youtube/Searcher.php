@@ -132,13 +132,13 @@ class Searcher
 
         $links = [];
         foreach ($searchResponse['items'] as $key => $searchResult) {
-           
+
             $data['title'] = trim($searchResult['snippet']['title']);
             $data['title'] = empty($data['title']) ? $searchResult['snippet']['channelTitle'] : $data['title'];
             if (isset($searchResult['snippet']['resourceId']['videoId'])) {
                 $links[] = [
                     'episode' => $key + 1,
-                    'link' => $searchResult['snippet']['resourceId']['videoId'],
+                    'url' => $searchResult['snippet']['resourceId']['videoId'],
                     'plot' => $searchResult['snippet']['description'],
                 ];
             }
