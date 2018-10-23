@@ -36,7 +36,7 @@ class CollectController extends Controller
     {
         $search = new Searcher(new Tv());
         $search->setQueryOption(
-            $query, Karaoke::LANG_ZH, 'long', 'playlist'
+            $query, Karaoke::LANG_ZH, 'long'
         );
         $search->start();
     }

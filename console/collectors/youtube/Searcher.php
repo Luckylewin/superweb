@@ -115,9 +115,6 @@ class Searcher
     {
         $youtube = $this->getService();
 
-        $htmlBody = '';
-
-
         try {
 
             $searchResponse = $youtube->search->listSearch('id,snippet', $optPara);
@@ -130,12 +127,13 @@ class Searcher
                 //print_r($searchResult);
                 switch ($searchResult['id']['kind']) {
                     case 'youtube#video':
-                        $this->collectVideo($searchResult);
+                        if ($this->type == 'video')  $this->collectVideo($searchResult);
                         break;
                     case 'youtube#channel':
                         echo  $searchResult['snippet']['title'], $searchResult['id']['channelId'] , PHP_EOL;
                         break;
                     case 'youtube#playlist':
+                        if ($this->type == 'playlist')  $this->collectVideo($searchResult);
                         echo $searchResult['snippet']['title'], $searchResult['id']['playlistId'] ,PHP_EOL;
                         break;
                 }
@@ -144,11 +142,9 @@ class Searcher
             return $searchResponse;
 
         } catch (Google_Service_Exception $e) {
-            echo $htmlBody .= sprintf('<p>A service error occurred: <code>%s</code></p>',
-                htmlspecialchars($e->getMessage()));
+            echo $e->getMessage(),PHP_EOL;
         } catch (Google_Exception $e) {
-            echo $htmlBody .= sprintf('<p>An client error occurred: <code>%s</code></p>',
-                htmlspecialchars($e->getMessage()));
+            echo $e->getMessage(),PHP_EOL;
         }
     }
 
