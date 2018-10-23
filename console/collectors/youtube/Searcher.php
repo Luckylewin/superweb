@@ -113,6 +113,7 @@ class Searcher
                 }
             }
 
+            sleep(5);
             return $searchResponse;
 
         } catch (Google_Service_Exception $e) {
@@ -129,10 +130,19 @@ class Searcher
 
         $searchResponse = $youtube->playlistItems->listPlaylistItems('id,snippet', $optPara);
 
-        foreach ($searchResponse['items'] as $searchResult) {
-            print_r($searchResult);
+        $links = [];
+        foreach ($searchResponse['items'] as $key => $searchResult) {
+            $data['title'] = trim($searchResult['snippet']['title']);
+            if (isset($searchResult['id']['videoId'])) {
+                $links[] = [
+                    'episode' => $key + 1,
+                    'link' => $searchResult['id']['videoId'],
+                    'plot' => $searchResult['snippet']['description'],
+                ];
+            }
         }
-        exit;
+
+        return $links;
     }
 
     protected function collectPlaylist($searchResult)
@@ -147,8 +157,8 @@ class Searcher
             if (method_exists($this->model, 'collect') && method_exists($this->model, 'judgeIsExist') && !empty($data['title'])) {
                 $exist = $this->model->judgeIsExist($data['title']);
                 if ($exist == false) {
-                    $this->getPlaylistItems($data['playlistId']);exit;
-                    //$this->model->collect($data, 'Youtube');
+                    $data['links'] = $this->getPlaylistItems($data['playlistId']);
+                    $this->model->collect($data, 'Youtube');
                 }
             }
 

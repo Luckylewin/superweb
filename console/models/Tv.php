@@ -25,19 +25,17 @@ class Tv extends Vod
     public function collect($data, $playGroupName = 'default')
     {
         $title = $data['title'];
-        $url   = $data['url'];
         $image = $data['image'];
         $info  = $data['info'];
-        $area  = $data['area'];
         $groupName = $playGroupName;
 
         $title = trim($title);
         $vod = Vod::findOne(['vod_name' => $title]);
 
         if (empty($vod)) {
-            $genre = VodList::findOne(['list_dir' => 'Movie']);
+            $genre = VodList::findOne(['list_dir' => 'Serial']);
             if (empty($genre)) {
-                echo "请新增Movie分类" , PHP_EOL;
+                echo "请新增Serial分类" , PHP_EOL;
                 return false;
             }
 
@@ -47,8 +45,6 @@ class Tv extends Vod
             $movie->vod_pic = $image;
             $movie->vod_pic_bg = $image;
             $movie->vod_content = $info;
-            $movie->vod_area = $area;
-            $movie->vod_language = $area;
             $movie->vod_cid = $genre->list_id;
             $movie->vod_trysee = 0;
             $movie->save(false);
@@ -60,11 +56,15 @@ class Tv extends Vod
             $playGroup->save(false);
 
             // 新增播放链接
-            $link = new Vodlink();
-            $link->url = $url;
-            $link->episode = 1;
-            $link->group_id = $playGroup->id;
-            $link->save(false);
+            if (!empty($data['links'])) {
+                foreach ($data['links'] as $_link) {
+                    $link = new Vodlink();
+                    $link->url = $_link['url'];
+                    $link->episode = $_link['episode'];
+                    $link->group_id = $playGroup->id;
+                    $link->save(false);
+                }
+            }
 
             echo $title . "新增" . PHP_EOL;
         } else {
