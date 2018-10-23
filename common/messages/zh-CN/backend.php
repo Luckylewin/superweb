@@ -575,5 +575,6 @@ return [
     'Log Service' => '日志服务',
     'Queue Service' => '队列服务',
     'Sync online-state' => '同步用户在线状态',
+    'user' => '用户',
 
 ];

@@ -47,7 +47,7 @@ class OttOrder extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'uid' => Yii::t('backend', 'User'),
+            'uid' => Yii::t('backend', 'user'),
             'genre' => Yii::t('backend', 'Genre'),
             'order_num' => Yii::t('backend', 'Order Number'),
             'expire_time' => Yii::t('backend', 'Duration'),

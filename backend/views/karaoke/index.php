@@ -61,12 +61,16 @@ $this->params['breadcrumbs'][] = $this->title;
                     'filter' => false,
                     'format' => 'raw',
                     'value' => function($model) {
+                        $tag = Html::tag('span', $model->source, [
+                                'class' => 'label label-default'
+                        ]) . '&nbsp|&nbsp';
+
                         if ($model->source == 'Youtube') {
-                            return Html::a($model->url, "https://www.youtube.com/watch?v=" . $model->url, [
+                            return $tag . Html::a($model->url, "https://www.youtube.com/watch?v=" . $model->url, [
                                 'target' => '_blank'
                             ]);
                         } else {
-                            return Html::a($model->url, \common\components\Func::getAccessUrl($model->url), [
+                            return $tag . Html::a($model->url, \common\components\Func::getAccessUrl($model->url), [
                                 'target' => '_blank'
                             ]);
                         }

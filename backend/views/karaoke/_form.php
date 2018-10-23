@@ -62,7 +62,7 @@ use yii\widgets\ActiveForm;
                 'url' => ['upload/karaoke-upload',],
                 'gallery' => false,
                 'fieldOptions' => ['accept' => 'video/*'],
-                'clientOptions' => ['maxFileSize' => 20000000],
+                'clientOptions' => ['maxFileSize' => 200000000],
                 'clientEvents' => [
                     'fileuploaddone' => 'function(e, data) {
                                          var files = data.result.files[0];
