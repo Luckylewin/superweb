@@ -16,6 +16,12 @@ use common\models\VodList;
 
 class Tv extends Vod
 {
+
+    public function judgeIsExist($title)
+    {
+        return Vod::find()->where(['vod_name' => $title])->exists();
+    }
+
     public function collect($data, $playGroupName = 'default')
     {
         $title = $data['title'];

@@ -122,9 +122,36 @@ class Searcher
         }
     }
 
+    protected function getPlaylistItems($playlist_id)
+    {
+        $youtube = $this->getService();
+        $optPara = ['maxResults' => 50, 'playlistId' => $playlist_id];
+        $searchResponse = $youtube->search->listSearch('id,snippet', $optPara);
+
+        foreach ($searchResponse['items'] as $searchResult) {
+            print_r($searchResult);
+        }
+    }
+
     protected function collectPlaylist($searchResult)
     {
-        print_r($searchResult);
+        $data['title'] = trim($searchResult['snippet']['title']);
+        if (!empty($data['title'])) {
+            $data['playlistId'] = $searchResult['id']['playlistId'];
+            $data['image'] = $searchResult['snippet']['thumbnails']['high']['url'];
+            $data['info'] = $searchResult['snippet']['description'];
+
+            // 判断是否存在这个电视剧
+            if (method_exists($this->model, 'collect') && method_exists($this->model, 'judgeIsExist') && !empty($data['url']) && !empty($data['title'])) {
+                $exist = $this->model->judgeIsExist($data['title']);
+                if ($exist == false) {
+                    $this->getPlaylistItems($data['playlistId']);exit;
+                    //$this->model->collect($data, 'Youtube');
+                }
+            }
+
+
+        }
     }
 
     protected function collectVideo($searchResult)
