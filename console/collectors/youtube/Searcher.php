@@ -107,7 +107,7 @@ class Searcher
                         echo  $searchResult['snippet']['title'], $searchResult['id']['channelId'] , PHP_EOL;
                         break;
                     case 'youtube#playlist':
-                        if ($this->type == 'playlist')  $this->collectVideo($searchResult);
+                        if ($this->type == 'playlist')  $this->collectPlaylist($searchResult);
                         echo $searchResult['snippet']['title'], $searchResult['id']['playlistId'] ,PHP_EOL;
                         break;
                 }
@@ -122,6 +122,10 @@ class Searcher
         }
     }
 
+    protected function collectPlaylist($searchResult)
+    {
+        print_r($searchResult);
+    }
 
     protected function collectVideo($searchResult)
     {
@@ -130,7 +134,7 @@ class Searcher
             $data['url'] = $searchResult['id']['videoId'];
             $data['image'] = $searchResult['snippet']['thumbnails']['high']['url'];
             $data['info'] = $searchResult['snippet']['description'];
-            
+
             if (method_exists($this->model, 'collect') && !empty($data['url']) && !empty($data['title'])) {
                 $this->model->collect($data, 'Youtube');
             }

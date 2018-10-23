@@ -43,7 +43,7 @@ class CollectController extends Controller
         $options = [
             'q' => $query,//
             'maxResults' => 50,
-            'type' =>  'video',
+            'type' =>  'playlist',
         ];
         $search->setQueryOption($options);
         $search->start();
