@@ -17,56 +17,30 @@ use yii\base\Model;
 
 class Searcher
 {
-    public $query;
-    public $area;
-    public $type;
-    public $order;
-    public $videoDuration;
+    public $type ;
+    public $options;
 
     protected $model;
 
-    public function __construct(Model $model)
+    public function __construct(Model $model, $type = 'video')
     {
        $this->model = $model;
+       $this->type = $type;
     }
 
-    public function setQueryOption($query, $area,  $videoDuration = 'short', $type = 'video' ,$order = 'relevance')
+    public function setQueryOption($options)
     {
-        $this->query = $query;
-        $this->area = $area;
-        $this->order = $order;
-        $this->type = $type;
-        $this->videoDuration = $videoDuration;
+       $this->options = $options;
     }
 
     public function start()
     {
-        $query = $this->query;
-        $type = $this->type;
-        $order = $this->order;
-        $duration = $this->videoDuration;
-
         $nextPage = true;
         while (!is_null($nextPage)) {
             if (isset($pageToken) && $pageToken) {
-                $optPara = array(
-                    'q' => $query,//
-                    'maxResults' => 50,
-                    'pageToken' => $pageToken,
-                    'type' => $type,
-                    'order' => $order,
-                    'videoDuration' => $duration,
-                );
-            } else {
-                $optPara = array(
-                    'q' => $query,//
-                    'maxResults' => 50,
-                    'type' =>  $type,
-                    'order' => $order,
-                    'videoDuration' => $duration,
-                );
+                $this->options['pageToken'] = $pageToken;
             }
-            $searchResponse = $this->videoSearch($optPara);
+            $searchResponse = $this->videoSearch($this->options);
             $pageToken = $searchResponse['nextPageToken'];
             sleep(2);
         }

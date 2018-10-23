@@ -21,33 +21,46 @@ use yii\console\Controller;
  */
 class CollectController extends Controller
 {
-    // 采集kalaoke
+    // karaoke
     public function actionKaraoke()
     {
         $search = new Searcher(new Karaoke());
-        $search->setQueryOption(
-            'karaoke beat chuẩ', Karaoke::LANG_VN, 'short'
-        );
+        $options = [
+            'q' => 'karaoke beat chuẩ',//
+            'maxResults' => 50,
+            'type' =>  'video',
+            'order' => 'relevance',
+            'videoDuration' => 'short',
+        ];
+        $search->setQueryOption($options);
         $search->start();
     }
 
     // 采集Youtube 电视剧
     public function actionTv($query)
     {
-        $search = new Searcher(new Tv());
-        $search->setQueryOption(
-            $query, Karaoke::LANG_ZH, 'long'
-        );
+        $search = new Searcher(new Tv(), 'playlist');
+        $options = [
+            'q' => $query,//
+            'maxResults' => 50,
+            'type' =>  'video',
+        ];
+        $search->setQueryOption($options);
         $search->start();
     }
 
     // 采集Youtube电影
-    public function actionMovie()
+    public function actionMovie($query)
     {
         $search = new Searcher(new Movie());
-        $search->setQueryOption(
-            'vietnam movie 2018', Karaoke::LANG_VN, 'long'
-        );
+        $options = [
+            'q' => $query,//
+            'maxResults' => 50,
+            'type' =>  'video',
+            'order' => 'relevance',
+            'videoDuration' => 'short',
+        ];
+        $search->setQueryOption($options);
         $search->start();
     }
 
