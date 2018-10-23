@@ -130,8 +130,7 @@ class Searcher
             $data['url'] = $searchResult['id']['videoId'];
             $data['image'] = $searchResult['snippet']['thumbnails']['high']['url'];
             $data['info'] = $searchResult['snippet']['description'];
-            $data['area'] = $this->area;
-
+            
             if (method_exists($this->model, 'collect') && !empty($data['url']) && !empty($data['title'])) {
                 $this->model->collect($data, 'Youtube');
             }
