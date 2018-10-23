@@ -22,7 +22,7 @@ class Movie extends Vod
         $url   = $data['url'];
         $image = $data['image'];
         $info  = $data['info'];
-        $area  = $data['area'];
+        // $area  = $data['area'];
         $groupName = $playGroupName;
 
         $title = trim($title);
@@ -41,8 +41,8 @@ class Movie extends Vod
             $movie->vod_pic = $image;
             $movie->vod_pic_bg = $image;
             $movie->vod_content = $info;
-            $movie->vod_area = $area;
-            $movie->vod_language = $area;
+           // $movie->vod_area = $area;
+           // $movie->vod_language = $area;
             $movie->vod_cid = $genre->list_id;
             $movie->vod_trysee = 0;
             $movie->save(false);
