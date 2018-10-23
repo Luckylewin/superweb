@@ -27,6 +27,9 @@ class Order extends \yii\db\ActiveRecord
 {
     const SOFT_DEL = 1;
 
+    const PAID = 1;
+    const UNPAID = 0;
+
     public static $payType = [
         'alipay' => 'Alipay',
         'wxpay' => 'WeChat payment',
@@ -34,10 +37,20 @@ class Order extends \yii\db\ActiveRecord
         'dokypay'=> 'DokyPay'
     ];
 
-    public static $payStatus = [
-        'Unpaid',
-        'Paid'
-    ];
+
+    public static function getPayStatus($status = null)
+    {
+        $payStatus = [
+            self::PAID => Yii::t('backend', 'Paid'),
+            self::UNPAID => Yii::t('backend', 'Unpaid'),
+        ];
+
+        if (is_null($status)) {
+            return $payStatus;
+        }
+
+        return $payStatus[$status];
+    }
 
     /**
      * @inheritdoc
@@ -118,9 +131,7 @@ class Order extends \yii\db\ActiveRecord
             },
             'order_total',
             'order_money',
-            'order_ispay'=> function($model) {
-                return Yii::t('backend', self::$payStatus[$model->order_ispay]);
-            },
+            'order_ispay',
             'order_addtime'=> function($model) {
                 return date('Y-m-d H:i:s', $model->order_addtime);
             },
@@ -144,11 +155,6 @@ class Order extends \yii\db\ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'order_uid']);
-    }
-
-    public function getPayStatus()
-    {
-        return Yii::t('backend', self::$payStatus[$this->order_ispay]);
     }
 
     public function getPayType()

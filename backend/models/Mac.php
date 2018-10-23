@@ -120,6 +120,8 @@ class Mac extends \yii\db\ActiveRecord implements IdentityInterface
         parent::beforeSave($insert);
         if ($this->isNewRecord == false) {
             $this->contract_time = str_replace(['year', 'month', 'day'], ['','',''], $this->contract_time);
+        } else {
+            $this->regtime = date('Y-m-d H:i:s');
         }
         $this->contract_time .=  (" " . $this->unit);
         unset($this->unit);

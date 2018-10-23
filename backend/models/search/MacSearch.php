@@ -2,7 +2,6 @@
 
 namespace backend\models\Search;
 
-use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use backend\models\Mac;
@@ -79,13 +78,21 @@ class MacSearch extends Mac
         // grid filtering conditions
         $query->andFilterWhere([
             'use_flag' => $this->use_flag,
-            'regtime' => $this->regtime,
-            'logintime' => $this->logintime,
             'type' => $this->type,
             'duetime' => $this->duetime,
             'client_id' => $this->client_name,
             'is_online' => $this->is_online
         ]);
+
+        if ($this->regtime) {
+            $query->andFilterWhere(['>=', 'UNIX_TIMESTAMP(regtime)', strtotime($this->regtime)]);
+            $query->andFilterWhere(['<', 'UNIX_TIMESTAMP(regtime)', strtotime($this->regtime) + 86400]);
+        }
+        
+        if ($this->logintime) {
+            $query->andFilterWhere(['>=', 'UNIX_TIMESTAMP(logintime)', strtotime($this->logintime)]);
+            $query->andFilterWhere(['<', 'UNIX_TIMESTAMP(logintime)', strtotime($this->logintime) + 86400]);
+        }
 
         $this->MAC = trim($this->MAC);
         $this->SN = trim($this->SN);

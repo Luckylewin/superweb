@@ -10,6 +10,8 @@ use yii\grid\GridView;
 $this->title = 'Orders';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<?php $this->registerJsFile('/statics/themes/default-admin/plugins/laydate/laydate.js', ['depends' => 'yii\web\JqueryAsset']) ?>
+
 <div class="order-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
@@ -28,21 +30,30 @@ $this->params['breadcrumbs'][] = $this->title;
                      'attribute' => 'order_money',
                      'headerOptions' => ['class' => 'col-md-1']
              ],
-            'order_addtime:datetime',
-            [
+
+
+             [
+                'attribute' => 'order_addtime',
+                'filterInputOptions' => ['class' => 'form-control range'],
+                'format' => 'datetime'
+             ],
+
+            /*[
                 'attribute' => 'order_paytime',
+                'filterInputOptions' => ['class' => 'form-control range'],
                 'value' => function($model) {
                     if ($model->order_paytime) {
                         return date('Y-m-d H:i', $model->order_paytime);
                     }
                     return '-';
                 }
-            ],
+            ],*/
 
             'order_info:ntext',
             [
                    'attribute' => 'order_paytype',
                    'filter' => \common\models\Order::$payType,
+
                     'value' => function($model) {
                         return $model->payType;
                     }
@@ -50,10 +61,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                     'attribute' => 'order_ispay',
-                    'filter' => \common\models\Order::$payStatus,
+                    'filter' => \common\models\Order::getPayStatus(),
                     'format' => 'raw',
                     'value' => function($model) {
-                        $text = $model->payStatus;
+                        $text = \common\models\Order::getPayStatus($model->order_ispay);
                         $class = $model->order_ispay ? 'label label-success' : 'label label-default';
                         return Html::tag('span', $text, ['class' => $class]);
                     }
@@ -67,3 +78,18 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
 </div>
+
+
+<?php \common\widgets\Jsblock::begin() ?>
+<script>
+  lay('.range').each(function(){
+    laydate.render({
+      elem: this
+      ,trigger: 'click'
+      ,type: 'date'
+      ,range: false
+      ,theme: 'grid'
+    });
+  });
+</script>
+<?php \common\widgets\Jsblock::end() ?>

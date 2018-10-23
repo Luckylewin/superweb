@@ -18,9 +18,10 @@ class OrderSearch extends Order
     public function rules()
     {
         return [
-            [['order_id', 'order_uid', 'order_total', 'order_addtime', 'order_paytime', 'order_confirmtime'], 'integer'],
+            [['order_id', 'order_uid', 'order_total', 'order_paytime', 'order_confirmtime'], 'integer'],
             [['order_sign', 'order_status', 'order_ispay', 'order_info', 'order_paytype'], 'safe'],
             [['order_money'], 'number'],
+            ['order_addtime', 'string']
         ];
     }
 
@@ -66,14 +67,15 @@ class OrderSearch extends Order
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'order_id' => $this->order_id,
             'order_uid' => $this->order_uid,
             'order_total' => $this->order_total,
             'order_money' => $this->order_money,
-            'order_addtime' => $this->order_addtime,
-            'order_paytime' => $this->order_paytime,
-            'order_confirmtime' => $this->order_confirmtime,
         ]);
+
+        if ($this->order_addtime) {
+            $query->andFilterWhere(['>=', 'order_addtime', strtotime($this->order_addtime)]);
+            $query->andFilterWhere(['<', 'order_addtime', strtotime($this->order_addtime) + 86400]);
+        }
 
         $query->andFilterWhere(['like', 'order_sign', $this->order_sign])
             ->andFilterWhere(['like', 'order_status', $this->order_status])

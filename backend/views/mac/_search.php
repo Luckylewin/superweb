@@ -25,11 +25,15 @@ use \backend\models\Search\MacSearch;
                 'method' => 'get'
             ]); ?>
             <div class="col-md-3">
-                <?= $form->field($model, 'MAC') ?>
+                <?= $form->field($model, 'MAC')->textInput([
+                    'autocomplete' => 'off'
+                ]) ?>
             </div>
 
             <div class="col-md-3">
-                <?= $form->field($model, 'SN') ?>
+                <?= $form->field($model, 'SN')->textInput([
+                    'autocomplete' => 'off'
+                ]) ?>
             </div>
 
             <div class="col-md-3">
@@ -59,13 +63,15 @@ use \backend\models\Search\MacSearch;
 
             <div class="col-md-3">
                 <?= $form->field($model, 'regtime')->textInput([
-                    'class' => 'range form-control'
+                    'class' => 'range form-control',
+                    'autocomplete' => 'off'
                 ]) ?>
             </div>
 
             <div class="col-md-3">
                 <?= $form->field($model, 'logintime')->textInput([
-                    'class' => 'range form-control'
+                    'class' => 'range form-control',
+                    'autocomplete' => 'off'
                 ])?>
             </div>
 
@@ -95,7 +101,7 @@ use \backend\models\Search\MacSearch;
             elem: this
             ,trigger: 'click'
             ,type: 'date'
-            ,range: true
+            ,range: false
             ,theme: 'grid'
         });
     });

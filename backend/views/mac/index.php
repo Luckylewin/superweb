@@ -62,9 +62,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 'MAC',
                 'SN',
-
-
-
                 [
                     'attribute' => 'logintime',
                     'value' => function($data) {
@@ -167,8 +164,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 'data-target' => '#create-modal',
         ]) ?>
 
-
-
         <?= Html::a(Yii::t('backend', 'Sync online-state'), \yii\helpers\Url::to(['mac/sync-online']), ['class' => 'btn btn-default']) ?>
 
         <?= Html::a(Yii::t('backend', 'Export Mac-Sn'), \yii\helpers\Url::to(['mac/export', 'queryParams' => $queryParams]), ['class' => 'btn btn-default']) ?>
@@ -185,8 +180,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
 <?php
-
-
 
 Modal::begin([
     'id' => 'create-modal',
