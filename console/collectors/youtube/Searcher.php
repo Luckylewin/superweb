@@ -126,11 +126,13 @@ class Searcher
     {
         $youtube = $this->getService();
         $optPara = ['maxResults' => 50, 'playlistId' => $playlist_id];
-        $searchResponse = $youtube->search->listSearch('id,snippet', $optPara);
+
+        $searchResponse = $youtube->playlistItems->listPlaylistItems('id,snippet', $optPara);
 
         foreach ($searchResponse['items'] as $searchResult) {
             print_r($searchResult);
         }
+        exit;
     }
 
     protected function collectPlaylist($searchResult)
