@@ -142,7 +142,7 @@ class Searcher
             $data['info'] = $searchResult['snippet']['description'];
 
             // 判断是否存在这个电视剧
-            if (method_exists($this->model, 'collect') && method_exists($this->model, 'judgeIsExist') && !empty($data['url']) && !empty($data['title'])) {
+            if (method_exists($this->model, 'collect') && method_exists($this->model, 'judgeIsExist') && !empty($data['title'])) {
                 $exist = $this->model->judgeIsExist($data['title']);
                 if ($exist == false) {
                     $this->getPlaylistItems($data['playlistId']);exit;
