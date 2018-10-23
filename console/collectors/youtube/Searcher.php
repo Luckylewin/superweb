@@ -35,8 +35,8 @@ class Searcher
         $this->query = $query;
         $this->area = $area;
         $this->order = $order;
-        $this->videoDuration = $videoDuration;
         $this->type = $type;
+        $this->videoDuration = $videoDuration;
     }
 
     public function start()

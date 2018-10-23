@@ -11,6 +11,7 @@ namespace console\controllers;
 use console\collectors\youtube\Searcher;
 use console\models\Karaoke;
 use console\models\Movie;
+use console\models\Tv;
 use yii\console\Controller;
 
 /**
@@ -33,7 +34,7 @@ class CollectController extends Controller
     // 采集Youtube 电视剧
     public function actionTv($query)
     {
-        $search = new Searcher(new Karaoke());
+        $search = new Searcher(new Tv());
         $search->setQueryOption(
             $query, Karaoke::LANG_ZH, 'long', 'playlist'
         );
