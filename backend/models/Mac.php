@@ -28,6 +28,7 @@ use yii\web\IdentityInterface;
  */
 class Mac extends \yii\db\ActiveRecord implements IdentityInterface
 {
+    public $model;
     const NOT_ACTIVE = 0;
     const NORMAL     = 1;
     const EXPIRED    = 2;
@@ -55,6 +56,23 @@ class Mac extends \yii\db\ActiveRecord implements IdentityInterface
         return $attributes;
     }
 
+    public function getModel()
+    {
+        if (!$this->model) {
+            $this->model = new Mac();
+        }
+
+        return $this->model;
+    }
+
+    public function scenarios()
+    {
+        return [
+            'update' => ['is_hide', 'client_name'],
+            'create' => ['is_hide', 'client_name', 'MAC', 'SN', 'contract_time'],
+        ];
+    }
+
     /**
      * @inheritdoc
      */
@@ -62,17 +80,7 @@ class Mac extends \yii\db\ActiveRecord implements IdentityInterface
     {
         return [
             [['MAC','SN', 'contract_time'], 'required'],
-
-            [['MAC', 'SN'], 'unique', 'when' => function($model) {
-
-                return ($model->MAC != $this->MAC);
-            }],
-
-            [['MAC', 'SN'], 'unique', 'targetAttribute' => ['MAC', 'SN'],  'when' => function($model) {
-
-                return ($model->MAC != $this->MAC);
-            }],
-
+            [['MAC', 'SN'], 'unique'],
             [['contract_time'],'integer','min' => 1],
             [['use_flag', 'type'], 'integer'],
             [['regtime', 'logintime', 'duetime', 'unit', 'client_name', 'is_hide'], 'safe'],

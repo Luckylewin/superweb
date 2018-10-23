@@ -2,31 +2,21 @@
 
 namespace backend\controllers;
 
-
-
-use backend\models\form\ImportMacForm;
-use backend\models\SysClient;
-use console\jobs\SyncOnlineStateJob;
-use console\queues\SyncJob;
 use Yii;
-
 use yii\bootstrap\ActiveForm;
-use yii\caching\DbDependency;
-use yii\caching\TagDependency;
 use yii\web\Response;
+use yii\web\NotFoundHttpException;
 use backend\models\Mac;
 use backend\models\search\MacSearch;
-use yii\web\NotFoundHttpException;
-
-
+use backend\models\form\ImportMacForm;
+use backend\models\SysClient;
+use console\queues\SyncJob;
 
 /**
  * MacController implements the CRUD actions for Mac model.
  */
 class MacController extends BaseController
 {
-
-
     public function actionIndex()
     {
         $searchModel = new MacSearch();
@@ -57,10 +47,17 @@ class MacController extends BaseController
     public function actionCreate()
     {
         $model = new Mac();
+        $model->setScenario('create');
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            $this->setFlash('success', Yii::t('backend', 'Success'));
-            return $this->redirect(['mac/index']);
+        if ($this->getRequest()->isAjax) {
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                Yii::$app->response->format = Response::FORMAT_JSON;
+                $this->setFlash('success', Yii::t('backend', 'Success'));
+                return [
+                    'status' => 0,
+                    'msg' => Yii::t('backend', 'Success')
+                ];
+            }
         }
 
         return $this->renderAjax('create', [
@@ -72,7 +69,9 @@ class MacController extends BaseController
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $model->setScenario('update');
 
+        $this->rememberReferer();
         if (preg_match('/\d+\s+[year|day|month]/', $model->contract_time) == false) {
             $model->contract_time = '1 month';
             $model->save(false);
@@ -82,7 +81,7 @@ class MacController extends BaseController
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $this->setFlash('info', Yii::t('backend', 'Success'));
-            return $this->redirect(['mac/index']);
+            return $this->redirect($this->getLastPage());
         }
 
         return $this->render('update', [
@@ -142,8 +141,6 @@ class MacController extends BaseController
         exit($string);
     }
 
-
-
     protected function findModel($id)
     {
         if (($model = Mac::findOne($id)) !== null) {
@@ -155,12 +152,15 @@ class MacController extends BaseController
 
     /**
      * Ajax校验
+     * @param string $scenario
      * @return array
      */
-    public function actionValidateForm()
+    public function actionValidateForm($scenario = 'update')
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
         $model = new Mac();
+        $model->setScenario($scenario);
+
         $model->load(Yii::$app->request->post());
 
         return ActiveForm::validate($model);

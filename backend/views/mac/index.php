@@ -167,19 +167,18 @@ $this->params['breadcrumbs'][] = $this->title;
                 'data-target' => '#create-modal',
         ]) ?>
 
-        <?= Html::button(Yii::t('backend', 'Batch Deletion'), [
-                'class' => 'btn btn-danger gridview',
-                'url' => \yii\helpers\Url::to(['mac/batch-delete'])
-        ]) ?>
+
 
         <?= Html::a(Yii::t('backend', 'Sync online-state'), \yii\helpers\Url::to(['mac/sync-online']), ['class' => 'btn btn-default']) ?>
-
-        <?= Html::a(Yii::t('backend', 'Batch Creation'), ['batch-create'], ['class' => 'btn btn-default']) ?>
 
         <?= Html::a(Yii::t('backend', 'Export Mac-Sn'), \yii\helpers\Url::to(['mac/export', 'queryParams' => $queryParams]), ['class' => 'btn btn-default']) ?>
 
         <?= Html::a(Yii::t('backend', 'Import Mac-Sn'), \yii\helpers\Url::to(['mac/import']), ['class' => 'btn btn-default']) ?>
 
+        <?= Html::button(Yii::t('backend', 'Batch Deletion'), [
+            'class' => 'btn btn-danger gridview',
+            'url' => \yii\helpers\Url::to(['mac/batch-delete'])
+        ]) ?>
 
     </div>
     </div>

@@ -9,7 +9,6 @@
 namespace console\controllers;
 
 use backend\models\Mac;
-use backend\models\MacDetail;
 use console\jobs\SyncOnlineStateJob;
 use Yii;
 use yii\console\Controller;
@@ -25,7 +24,6 @@ class MacController extends Controller
 
     /**
      * 批量导入MAC地址
-     * @throws \Throwable
      */
     public function actionImport()
     {

@@ -28,9 +28,9 @@ MyAppAsset::register($this);
         'validationUrl' => Url::toRoute(['mac/validate-form']),
     ]); ?>
 
-    <?= $form->field($model, 'MAC')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'MAC')->textInput(['maxlength' => true, 'readonly' => true]) ?>
 
-    <?= $form->field($model, 'SN')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'SN')->textInput(['maxlength' => true, 'readonly' => true]) ?>
 
     <?php $form->field($model, 'use_flag')->dropDownList(Mac::getUseFlagList()) ?>
 
@@ -38,7 +38,7 @@ MyAppAsset::register($this);
 
     <?= $form->field($model, 'client_name')->dropDownList(SysClient::getAll(), ['prompt' => Yii::t('backend', 'Not specified')]); ?>
 
-    <?= $form->field($model, 'contract_time',[
+    <?php $form->field($model, 'contract_time',[
             'options' => [
                      'style' => 'width:170px'
              ],

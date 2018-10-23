@@ -61,13 +61,7 @@ use yii\widgets\ActiveForm;
         <?= $form->field($model, 'one_year_price'); ?>
     </div>
 
-
-
-
     <div class="col-md-12">
-
-
-
         <?= $form->field($model, 'description')->textarea(['rows' => 6]) ?>
     </div>
 
