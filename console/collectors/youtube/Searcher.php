@@ -66,7 +66,7 @@ class Searcher
                     'videoDuration' => $duration,
                 );
             }
-            $searchResponse = $this->listSearch($optPara);
+            $searchResponse = $this->videoSearch($optPara);
             $pageToken = $searchResponse['nextPageToken'];
             sleep(2);
         }
@@ -92,21 +92,31 @@ class Searcher
             'maxResults' => 50,
         );
 
-        $this->listSearch($optPara);
+        $this->videoSearch($optPara);
     }
 
 
-    protected function listSearch($optPara)
+
+    protected function getService()
     {
         $DEVELOPER_KEY = Yii::$app->params['YOUTUBE'];
 
         $client = new Google_Client();
         $client->setDeveloperKey($DEVELOPER_KEY);
-        $youtube = new Google_Service_YouTube($client);
+        return $youtube = new Google_Service_YouTube($client);
+    }
+
+    /**
+     * 影片搜索
+     * @param $optPara
+     * @return \Google_Service_YouTube_SearchListResponse
+     */
+    protected function videoSearch($optPara)
+    {
+        $youtube = $this->getService();
 
         $htmlBody = '';
-        $channels = '';
-        $playlists = '';
+
 
         try {
 
@@ -123,12 +133,10 @@ class Searcher
                         $this->collectVideo($searchResult);
                         break;
                     case 'youtube#channel':
-                        $channels .= sprintf('<li>%s (%s)</li>',
-                            $searchResult['snippet']['title'], $searchResult['id']['channelId']);
+                        echo  $searchResult['snippet']['title'], $searchResult['id']['channelId'] , PHP_EOL;
                         break;
                     case 'youtube#playlist':
-                        $playlists .= sprintf('<li>%s (%s)</li>',
-                            $searchResult['snippet']['title'], $searchResult['id']['playlistId']);
+                        echo $searchResult['snippet']['title'], $searchResult['id']['playlistId'] ,PHP_EOL;
                         break;
                 }
             }

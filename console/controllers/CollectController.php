@@ -29,6 +29,17 @@ class CollectController extends Controller
         );
         $search->start();
     }
+
+    // 采集Youtube 电视剧
+    public function actionTv($query)
+    {
+        $search = new Searcher(new Karaoke());
+        $search->setQueryOption(
+            $query, Karaoke::LANG_ZH, 'long', 'playlist'
+        );
+        $search->start();
+    }
+
     // 采集Youtube电影
     public function actionMovie()
     {
@@ -39,9 +50,5 @@ class CollectController extends Controller
         $search->start();
     }
 
-    public function actionTv()
-    {
-
-    }
 
 }
