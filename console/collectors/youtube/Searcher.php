@@ -159,7 +159,8 @@ class Searcher
     protected function collectPlaylist($searchResult)
     {
         $data['title'] = str_replace('📺', '', $searchResult['snippet']['title']);
-        $data['title'] = str_replace(['TV版', '电视剧', '(电视剧)', ' '], ['', '', '', ''], $data['title']);
+        $data['title'] = str_replace(['TV版', '电视剧','(',')',' '], ['', '', '', ''], $data['title']);
+        $data['title'] = preg_replace('/[TV版|电视剧|（|）|(|)]/', '', $data['title']);
         $data['title'] = trim($data['title']);
 
         if (!empty($data['title'])) {
