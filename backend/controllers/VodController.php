@@ -135,7 +135,7 @@ class VodController extends BaseController
         }
 
         $this->setFlash('info', Yii::t('backend', 'Success'));
-        return $this->redirect(['index']);
+        return $this->redirect($this->getReferer());
     }
 
     /**
