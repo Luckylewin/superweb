@@ -58,7 +58,7 @@ class CollectController extends Controller
             'maxResults' => 50,
             'type' =>  'video',
             'order' => 'relevance',
-            'videoDuration' => 'short',
+            'videoDuration' => 'long',
         ];
         $search->setQueryOption($options);
         $search->start();
