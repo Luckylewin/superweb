@@ -128,7 +128,7 @@ class Searcher
         $youtube = $this->getService();
         $optPara = ['maxResults' => 50, 'playlistId' => $playlist_id];
         if (!is_null($nextPageToken)) {
-            $optPara['nextPageToken'] = $nextPageToken;
+            $optPara['pageToken'] = $nextPageToken;
         }
 
         $searchResponse = $youtube->playlistItems->listPlaylistItems('id,snippet', $optPara);
