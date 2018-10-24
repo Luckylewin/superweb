@@ -123,13 +123,16 @@ class Searcher
         }
     }
 
-    protected function getPlaylistItems($playlist_id)
+    protected function getPlaylistItems($playlist_id, $nextPageToken = null)
     {
         $youtube = $this->getService();
         $optPara = ['maxResults' => 50, 'playlistId' => $playlist_id];
+        if (!is_null($nextPageToken)) {
+            $optPara['nextPageToken'] = $nextPageToken;
+        }
 
         $searchResponse = $youtube->playlistItems->listPlaylistItems('id,snippet', $optPara);
-
+        
         $links = [];
         foreach ($searchResponse['items'] as $key => $searchResult) {
 
@@ -143,7 +146,11 @@ class Searcher
                 ];
             }
         }
-
+        
+        if ($searchResponse['nextPageToken']) {
+            $links = array_merge($links, $this->getPlaylistItems($playlist_id, $searchResponse['nextPageToken']));
+        }
+        
         return $links;
     }
 

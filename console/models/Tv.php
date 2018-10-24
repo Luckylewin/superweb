@@ -30,6 +30,10 @@ class Tv extends Vod
         $groupName = $playGroupName;
 
         $title = trim($title);
+        if (empty($title)) {
+            return false;
+        }
+
         $vod = Vod::findOne(['vod_name' => $title]);
 
         if (empty($vod)) {
