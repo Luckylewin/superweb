@@ -157,6 +157,8 @@ class Searcher
     protected function collectPlaylist($searchResult)
     {
         $data['title'] = trim($searchResult['snippet']['title']);
+        echo "字符编码为：".  mb_detect_encoding($data['title'], array("ASCII",'UTF-8',"GB2312","GBK",'BIG5')) ,PHP_EOL;
+        
         if (!empty($data['title'])) {
             $data['playlistId'] = $searchResult['id']['playlistId'];
             $data['image'] = $searchResult['snippet']['thumbnails']['high']['url'];
