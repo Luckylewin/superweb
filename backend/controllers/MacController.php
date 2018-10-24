@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use common\components\Func;
 use Yii;
 use yii\bootstrap\ActiveForm;
 use yii\web\Response;
@@ -81,7 +82,7 @@ class MacController extends BaseController
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $this->setFlash('info', Yii::t('backend', 'Success'));
-            return $this->redirect($this->getLastPage());
+            return $this->redirect(Func::getLastPage());
         }
 
         return $this->render('update', [

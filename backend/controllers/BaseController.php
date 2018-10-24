@@ -89,13 +89,6 @@ class BaseController extends Controller
         return Yii::$app->request;
     }
 
-    public function getLastPage()
-    {
-        $cookies = $this->getRequest()->cookies;
-
-        return $cookies->has('referer') ? $cookies->getValue('referer') :  $this->getReferer();
-    }
-
     public function rememberReferer($url = null)
     {
         if (is_null($url)) {

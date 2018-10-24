@@ -3,6 +3,7 @@
 namespace backend\controllers;
 
 
+use common\components\Func;
 use Yii;
 use backend\models\Karaoke;
 use backend\models\search\KaraokeSearch;
@@ -75,7 +76,7 @@ class KaraokeController extends BaseController
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $this->setFlash('success', Yii::t('backend', 'Success'));
-            return $this->redirect($this->getLastPage());
+            return $this->redirect(Func::getLastPage());
         }
 
         return $this->render('update', [

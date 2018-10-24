@@ -1,15 +1,23 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
-
+use \common\components\Func;
+use \common\models\Vod;
+use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Play Groups';
-$this->params['breadcrumbs'][] = $this->title;
 $vod_id = Yii::$app->request->get('vod_id');
-$vod = \common\models\Vod::findOne($vod_id);
+$vod = Vod::find()->where(['vod_id' => $vod_id])->with(['list' => function($query) {
+    $query->select(['list_id', 'list_name']);
+}])->one();
+
+$this->title = Yii::t('backend', 'Play Groups');
+$this->params['breadcrumbs'][] = ['url' => Url::to(['vod-list/index']), 'label' => $vod->list->list_name];
+$this->params['breadcrumbs'][] = ['url' => Func::getLastPage(), 'label' => $vod->vod_name];
+$this->params['breadcrumbs'][] = $this->title;
+
+
 ?>
 
 <div class="play-group-index">

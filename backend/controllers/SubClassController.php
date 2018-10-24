@@ -5,6 +5,7 @@ namespace backend\controllers;
 use backend\components\MyRedis;
 use backend\models\Cache;
 use backend\models\Scheme;
+use common\components\Func;
 use console\queues\CacheOttListJob;
 use phpDocumentor\Reflection\Types\Integer;
 use Yii;
@@ -119,7 +120,7 @@ class SubClassController extends BaseController
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $this->setFlash('info', Yii::t('backend', 'Success'));
-            return $this->redirect($this->getLastPage());
+            return $this->redirect(Func::getLastPage());
         }
 
         return $this->render('update', [

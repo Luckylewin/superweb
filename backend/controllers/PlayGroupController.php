@@ -19,6 +19,7 @@ class PlayGroupController extends BaseController
      */
     public function actionIndex()
     {
+        $this->rememberReferer();
         $vod_id = Yii::$app->request->get('vod_id');
         $dataProvider = new ActiveDataProvider([
             'query' => PlayGroup::find()->where(['vod_id' => $vod_id]),

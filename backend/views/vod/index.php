@@ -13,7 +13,11 @@ use \yii\helpers\Url;
 /* @var $searchModel common\models\search\VodSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
+$cid = Yii::$app->request->get('VodSearch')['vod_cid'];
+$vodList = VodList::findOne($cid);
+
 $this->title = '点播列表';
+$this->params['breadcrumbs'][] = ['url' => Url::to(['vod-list/index']), 'label' => $vodList->list_name];
 $this->params['breadcrumbs'][] = $this->title;
 
 $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js', ['depends' => 'yii\web\JqueryAsset'])

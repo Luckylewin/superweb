@@ -115,4 +115,11 @@ class Func
         header('Content-Length: ' . filesize($filepath));
         readfile($filepath);
     }
+
+    public static function getLastPage()
+    {
+        $cookies = Yii::$app->request->cookies;
+
+        return $cookies->has('referer') ? $cookies->getValue('referer') :  Yii::$app->request->referrer;
+    }
 }

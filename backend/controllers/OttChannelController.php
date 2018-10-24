@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use backend\components\MyRedis;
 use backend\models\OttRecommend;
+use common\components\Func;
 use common\models\SubClass;
 use Yii;
 use common\models\OttChannel;
@@ -104,7 +105,7 @@ class OttChannelController extends BaseController
         $model->sub_class_id = $this->subClass->id;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect($this->getLastPage());
+            return $this->redirect(Func::getLastPage());
         }
 
         return $this->render('create', [
@@ -159,7 +160,7 @@ class OttChannelController extends BaseController
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $this->setFlash('info', Yii::t('backend', 'Success'));
 
-            return $this->redirect($this->getLastPage());
+            return $this->redirect(Func::getLastPage());
         }
 
         return $this->render('update', [

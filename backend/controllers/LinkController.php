@@ -3,6 +3,7 @@
 namespace backend\controllers;
 
 use backend\models\PlayGroup;
+use common\components\Func;
 use common\models\Vod;
 use http\Url;
 use Yii;
@@ -69,7 +70,7 @@ class LinkController extends BaseController
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $this->setFlash('info', Yii::t('backend', 'Success'));
-            return $this->redirect($this->getLastPage());
+            return $this->redirect(Func::getLastPage());
         }
 
         return $this->render('update', [

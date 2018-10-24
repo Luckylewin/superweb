@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use backend\components\MyRedis;
 use backend\models\search\ParadeSearch;
+use common\components\Func;
 use common\models\MainClass;
 use common\models\OttChannel;
 use console\queues\CacheParadeJob;
@@ -103,7 +104,7 @@ class ParadeController extends BaseController
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect($this->getLastPage());
+            return $this->redirect(Func::getLastPage());
         }
 
         return $this->render('update', [

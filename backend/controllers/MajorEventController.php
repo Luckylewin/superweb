@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use common\components\Func;
 use Yii;
 use backend\models\MajorEvent;
 use yii\data\ActiveDataProvider;
@@ -72,7 +73,7 @@ class MajorEventController extends BaseController
             $post = Yii::$app->request->post();
             if ($model->load($post) && $model->initData($post) && $model->save()) {
                 $this->setFlash('success', Yii::t('backend', 'Success'));
-                return $this->redirect($this->getLastPage());
+                return $this->redirect(Func::getLastPage());
             }
 
             return $this->redirect(Yii::$app->request->referrer);

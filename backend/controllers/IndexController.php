@@ -9,6 +9,7 @@
 namespace backend\controllers;
 
 use backend\models\Mac;
+use common\components\Func;
 use Yii;
 
 class IndexController extends BaseController
@@ -75,6 +76,11 @@ class IndexController extends BaseController
         }
 
         return  $data;
+    }
+
+    public function actionGo()
+    {
+        return $this->goBack(Func::getLastPage());
     }
 
 }
