@@ -8,6 +8,7 @@
 
 namespace console\collectors\youtube;
 
+use common\components\Func;
 use Yii;
 use Google_Service_YouTube;
 use Google_Client;
@@ -113,6 +114,7 @@ class Searcher
                 }
             }
 
+            echo "睡眠5秒" ,PHP_EOL;
             sleep(5);
             return $searchResponse;
 
@@ -156,9 +158,10 @@ class Searcher
 
     protected function collectPlaylist($searchResult)
     {
-        $data['title'] = trim($searchResult['snippet']['title']);
-        $data['title'] = str_replace('📺', '', $data['title']);
-        
+        $data['title'] = str_replace('📺', '', $searchResult['snippet']['title']);
+        $data['title'] = str_replace(['TV版', '电视剧', '(电视剧)', ' '], ['', '', '', ''], $data['title']);
+        $data['title'] = trim($data['title']);
+
         if (!empty($data['title'])) {
             $data['playlistId'] = $searchResult['id']['playlistId'];
             $data['image'] = $searchResult['snippet']['thumbnails']['high']['url'];
