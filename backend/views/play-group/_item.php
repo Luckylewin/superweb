@@ -45,7 +45,9 @@ $dataProvider = new \yii\data\ActiveDataProvider([
                     'value' => function($mod) use ($model) {
                         if ($mod->save_type == Vodlink::FILE_LINK) {
                             if (strtolower($model->group_name) == 'youtube') {
-                                $href = "https://www.youtube.com/watch?v=" . $mod->url;
+
+                                //$href = "https://www.youtube.com/watch?v=" . $mod->url;
+                                $href = "http://192.200.112.162/play/" . $mod->url. '?resolve=youtube&noauth=true';
                             } else {
                                 $href = $mod->url;
                             }
