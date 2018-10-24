@@ -47,7 +47,7 @@ $dataProvider = new \yii\data\ActiveDataProvider([
                             if (strtolower($model->group_name) == 'youtube') {
 
                                 //$href = "https://www.youtube.com/watch?v=" . $mod->url;
-                                $href = "http://192.200.112.162/play/" . $mod->url. '?resolve=youtube&noauth=true';
+                                $href = "http://192.200.112.162:12389/play/" . $mod->url. '?resolve=youtube&noauth=true';
                             } else {
                                 $href = $mod->url;
                             }
