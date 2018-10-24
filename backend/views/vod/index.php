@@ -119,6 +119,9 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js'
 
             [
                   'attribute' => 'vod_name',
+                  'value' => function($model) {
+                        return mb_substr($model->vod_name, 0, 20);
+                  },
                   'headerOptions' => ['class' => 'col-md-3'],
                   'filterInputOptions' => [
                     'placeholder' => Yii::t('backend', "Enter movie's name"),
