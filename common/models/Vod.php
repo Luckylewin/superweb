@@ -119,7 +119,7 @@ class Vod extends \yii\db\ActiveRecord implements Linkable
 
     public function beforeDelete()
     {
-        $data = $this->getGroupLinks();
+        $data = $this->getGroups();
 
         if ($data) {
             $groups = $data->all();
