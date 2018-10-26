@@ -62,19 +62,11 @@ class importTextForm extends \yii\base\Model
        ];
     }
 
-    public function getAttributeLabels()
+    public function attributeLabels()
     {
         return [
-            'text' => '文本',
+            'text' => '导入数据',
             'mode' => '模式'
-        ];
-    }
-
-    public static function getMode()
-    {
-        return [
-            'mainClass' => '一级分类,二级分类,频道名称,频道台标,链接,算法',
-            'keywordChannel' => '关键字,频道名称,链接,算法',
         ];
     }
 
@@ -89,7 +81,13 @@ class importTextForm extends \yii\base\Model
 
         foreach ($rows as $row) {
             $row = preg_split('/[,]+/s', $row);
-            if (count($row) >= $this->_getSpiltNumber()) {
+            $columns = [];
+            foreach ($row as $column) {
+                $columns[] = strstr($column, ':', true);
+            }
+            // 判断是否存在一级分类 二级分类 频道名称 链接
+            $diff = array_diff(['一级分类', '二级分类', '频道名称', '链接'], $columns);
+            if (empty($diff)) {
                 $this->importData[] = $row;
             }
         }
@@ -101,100 +99,87 @@ class importTextForm extends \yii\base\Model
         return true;
     }
 
-    private function _getSpiltNumber()
-    {
-        $mode = ['mainClass' => 4, 'subClass' => 3, 'channel'=> 3 , 'keywordChannel'=>3];
-        if (!isset($mode[$this->mode])) {
-            throw new \Exception("导入模式只支持四种 mainClass,subClass,channel,keywordChannel");
-        }
-
-        return $mode[$this->mode];
-    }
 
     private function _setError($attribute)
     {
-        switch ($this->mode)
-        {
-            case 'mainClass' :
-                $this->addError($attribute, '请用类似 “中国(一级分类),CCTV(频道分类),CCTV-1(频道名),http://img.baidu.com/hn1.png(频道台标),http://yf.m.l.cztv.com/channels/lantian/channel15/360p.m3u8(链接),flag1(算法名称[可不加]”的格式');
-                break;
-            case 'subClass' :
-                $this->addError($attribute, '请用类似 “新蓝(频道分类),CCTV-1(频道名),http://yf.m.l.cztv.com/channels/lantian/channel15/360p.m3u8(链接),flag1(算法名称[可不加]”的格式');
-                break;
-            case  'channel':
-                $this->addError($attribute, '请用类似 “新蓝(频道名),CCTV-1(频道名),http://yf.m.l.cztv.com/channels/lantian/channel15/360p.m3u8(链接),flag1(算法名称[可不加]”的格式');
-                break;
-            default:
-                $this->addError($attribute, '请用类似 “新蓝(关键字),CCTV-1(频道名),http://yf.m.l.cztv.com/channels/lantian/channel15/360p.m3u8(链接),flag1(算法名称[可不加])”的格式');
-        }
+        $this->addError($attribute, '请遵循格式，否则无法导入');
     }
 
-
-    /**
-     * @return int
-     */
     public function import()
-    {
-        switch ($this->mode)
-        {
-            case 'mainClass' :
-                return $this->importViaMainClass(); break;
-
-            default:
-                return $this->importViaKeyword();
-        }
-    }
-
-    private function importViaMainClass()
     {
         $total = 0;
 
         foreach ($this->importData as $data)
         {
-            list($mainClassName, $subClassName, $channelName, $channelIcon, $channelSort, $link) = $data;
-            //是否有算法
-            $method = isset($data[6]) ? $data[6] : '';
-            $scheme = isset($data[7]) ? $data[7] : 'all';
-            $use_flag = isset($data[8]) ? $data[8] : OttLink::AVAILABLE;
-            $decode = isset($data[9]) ? $data[9] : OttLink::SOFT_DECODE;
-            $link_sort = isset($data[10]) ? $data[10] : 0;
+            $mainClassName = '';
+            $subClassName  = '';
+            $channelName   = '';
+            $channelIcon   = '';
+            $channelSort   = '0';
+            $link          = '';
+            $method        = 'null';
+            $scheme        = 'all';
+            $use_flag      = 1;
+            $decode        = 1;
+            $link_sort     = 'null';
+
+// 1) 一级分类:vn,二级分类:vn,频道名称:vtv1,频道排序:12,频道可用:1,链接:http://topthinker.oss-cn-hongkong.aliyuncs.com/channel/5b25dd9c859a2.png,解码方式:硬解,链接排序:2,链接可用:1,算法标志:null,指定方案号:rk323|rk324|dvb|6605s
+
+        foreach ($data as $column) {
+                $key   = trim(strstr($column, ':', true));
+                $value = trim(ltrim(strstr($column, ':'), ':'));
+
+                switch ($key)
+                {
+                    case '一级分类':
+                        $mainClassName = $value;
+                        break;
+                    case '二级分类':
+                        $subClassName = $value;
+                        break;
+                    case '频道名称':
+                        $channelName = $value;
+                        break;
+                    case '频道图标':
+                        $channelIcon  = $value;
+                        break;
+                    case '频道排序':
+                        $channelSort = $value;
+                        break;
+                    case '链接':
+                        $link = $value;
+                        break;
+                    case '解码方式':
+                        if (is_numeric($value) == false) {
+                            $value = $value == '硬解' ? 1 : 0;
+                        }
+                        $decode = $value;
+                        break;
+                    case '链接排序':
+                        $link_sort = $value;
+                        break;
+                    case '链接可用':
+                        $use_flag = $value;
+                        break;
+                    case '算法标志':
+                        $method = $value;
+                        break;
+                    case '不支持方案号':
+                        $scheme = $value;
+                        break;
+                }
+            }
 
             $this->createMainClass($mainClassName);
             $this->createSubClass($subClassName);
             $this->createChannel($channelName, $channelIcon, $channelSort);
             $total = $this->createLink($link, $method, $scheme ,$use_flag, $decode,$link_sort, $total);
+
         }
 
         return $total;
     }
 
-    private function importViaKeyword()
-    {
-        $total = 0;
-
-        //查询是否有这个关键字的频道
-        foreach ($this->importData as $data) {
-
-            list($keyword, $name, $link) = $data;
-            //是否有算法
-            $method = isset($data[3]) ? $data[3] : '';
-            $scheme = isset($data[4]) ? $data[4] : '';
-            $use_flag = OttLink::AVAILABLE;
-            $decode = OttLink::SOFT_DECODE;
-            $linkSort = 0;
-
-            $this->subClass = SubClass::find()->where(['keyword' => $keyword])->one();
-
-            if ($this->subClass) {
-                //判断是否已经存在该频道
-                $this->createChannel($name);
-                //存在则判断是否有链接
-                $this->createLink($link, $method, $scheme, $use_flag, $decode, $linkSort,$total);
-            }
-        }
-
-        return $total;
-    }
 
     private function createMainClass($mainClassName)
     {
@@ -235,6 +220,7 @@ class importTextForm extends \yii\base\Model
             $channel->sub_class_id = $this->subClass->id;
             $channel->name = $name;
             $channel->keywords = $name;
+            $channel->zh_name = $name;
             $channel->sort = $channelSort;
             if ($icon && $icon != 'null')  $channel->image = $icon;
             $channel->save(false);
@@ -253,6 +239,8 @@ class importTextForm extends \yii\base\Model
     private function createLink($link, $method, $scheme, $use_flag, $decode, $link_sort ,&$total)
     {
         $ottLink = OttLink::find()->where(['link' => $link, 'channel_id' => $this->channel->id])->one();
+        $max = OttLink::find()->where(['link' => $link, 'channel_id' => $this->channel->id])->max('sort');
+        $link_sort = $link_sort == 'null' ? $max + 1 : $link_sort;
 
         if ($this->channel && is_null($ottLink)) {
             $ottLink = new OttLink();

@@ -233,7 +233,11 @@ class MainClassController extends BaseController
                                      $decode = $link['decode'];
                                      $linkSort = $link['sort'];
 
-                                     $str .= "{$mainClass},{$subClassName},{$channelName},{$channelIcon},{$channelSort},{$url},{$method},{$scheme},{$use_flag},{$decode},{$linkSort}" . PHP_EOL;
+                                     $str .= "一级分类:{$mainClass},二级分类:{$subClassName},频道名称:{$channelName},频道图标:{$channelIcon},频道排序:{$channelSort},链接:{$url},解码方式:{$decode},链接排序:{$linkSort},链接可用:{$use_flag},算法标志:{$method}";
+                                     if ($scheme != 'all') {
+                                        $str .= ",不支持方案号:{$scheme}";
+                                     }
+                                     $str .= PHP_EOL;
                                  }
                              }
                          }

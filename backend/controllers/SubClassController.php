@@ -213,7 +213,7 @@ class SubClassController extends BaseController
 
         if ($importForm->load(Yii::$app->request->post()) && $importForm->validate()) {
             if ($importNum = $importForm->import()) {
-                $this->setFlash('success', Yii::t('backend', 'Successfully imported') . $importNum .' ' . Yii::t('backend', 'item'));
+                $this->setFlash('success', Yii::t('backend', 'Successfully imported {number} items', ['number' => $importNum]));
             } else {
                 $this->setFlash('warning', Yii::t('backend', 'No data imported'));
             }

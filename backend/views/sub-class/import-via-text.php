@@ -14,46 +14,29 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="sub-class-create">
     <div class="sub-class-form">
 
-        <div class="list-group">
-            <a href="#" class="list-group-item active">
-                <h4 class="list-group-item-heading">
-                    模式一 (一级分类,二级分类,频道名称,频道图标,排序,链接,[算法,可用标志,硬软解标志,链接排序])
-                </h4>
-            </a>
-            <a href="#" class="list-group-item">
-                <p class="list-group-item-heading">
-                    1) 不带方案号默认支持全部<br>
-                    vn,vtv,vtv1,http://topthinker.oss-cn-hongkong.aliyuncs.com/channel/5b25dd9c859a2.png,123,http://ott.realplaytv.net:12388/?header=hplus&name=vtv1&cdn=1,null,1,1,2<br>
-                    vn,vtv,vtv1,http://topthinker.oss-cn-hongkong.aliyuncs.com/channel/5b25dd9c859a2.png,123,https://tvplay.vn/truyen-hinh-70.htm,local_tvplay,1,1,2
-                </p>
-                <br/>
-                <p class="list-group-item-heading">
-                    2) 指定支持哪些方案号<br>
-                    vn,vtv,vtv1,http://topthinker.oss-cn-hongkong.aliyuncs.com/channel/5b25dd9c859a2.png,123,http://ott.realplaytv.net:12388/?header=hplus&name=vtv1&cdn=1,null,rk323|rk324|dvb|6605s,1,1
-                </p>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                格式说明(多条以换行符分开)
+            </div>
+            <div class="panel-body">
+                <div>
 
-             </a>
-            <a href="#" class="list-group-item active">
-                <h4 class="list-group-item-heading">
-                    模式二  (关键字,二级分类,频道名称,链接,算法,可用标志,硬软解标志)
-                </h4>
-            </a>
-            <a href="#" class="list-group-item">
-
-                <p class="list-group-item-text">
-                    综合,综合频道,http://ott.realplaytv.net:12388/?header=hplus&name=vtv1&cdn=1,null
-                </p>
-            </a>
+                    <span class="label label-info">1) 最简示例</span><br><br>
+                    <span>一级分类:vn,二级分类:vn,频道名称:vtv1,链接:http://test/channel/test.m3u8</span>
+                </div>
+                <br>
+                <div>
+                    <span class="label label-info">2) 完整示例</span><br><br>
+                    <span>一级分类:vn,二级分类:vn,频道名称:vtv1,频道图标:http://test.com/test.png,频道排序:12,频道可用:1,链接:http://test.com/test.m3u8,解码方式:硬解,链接排序:2,链接可用:1,算法标志:flag1,不支持方案号:rk323|rk324|dvb|6605s</span>
+                </div>
+           </div>
         </div>
-
-
 
         <?php $form = ActiveForm::begin(); ?>
 
-        <?= $form->field($model, 'mode')->dropDownList(\backend\models\importTextForm::getMode()) ?>
-
         <?= $form->field($model, 'text')->textarea([
-            'rows' =>18
+            'rows' =>10,
+            'placeholder' => '请粘贴到这里'
         ]) ?>
 
         <div class="form-group">

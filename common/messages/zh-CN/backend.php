@@ -521,6 +521,7 @@ return [
     'No data imported' => '没有数据导入',
     'No data exported' => '没有数据导出',
     'Successfully imported' => '成功导入',
+    'Successfully imported {number} items' => '成功导入{number}条数据',
     'items' => '项',
     'login successful' => '登录成功',
     'generated' => '生成',
