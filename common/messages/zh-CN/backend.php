@@ -523,6 +523,7 @@ return [
     'Successfully imported' => '成功导入',
     'Successfully imported {number} items' => '成功导入{number}条数据',
     'items' => '项',
+    'Main actor' => '主演',
     'login successful' => '登录成功',
     'generated' => '生成',
     'cache' => '缓存',

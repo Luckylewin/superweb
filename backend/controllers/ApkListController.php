@@ -99,8 +99,9 @@ class ApkListController extends BaseController
             return $this->redirect(['view', 'id' => $model->ID]);
         }
 
+
         if (!empty($model->scheme_id)) {
-            $model->scheme_id = explode(',', $model->scheme_id);
+            $model->scheme_id = ArrayHelper::getColumn($model->getScheme(), 'id');
         }
 
         return $this->render('set-scheme', [

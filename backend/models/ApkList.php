@@ -63,8 +63,12 @@ class ApkList extends \yii\db\ActiveRecord implements Linkable
         ];
     }
 
+
     public function getScheme()
     {
+        if ($this->scheme_id == 'all') {
+            return Scheme::find()->all();
+        }
 
         return Scheme::find()->where("id in ({$this->scheme_id})")->all();
     }

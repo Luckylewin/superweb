@@ -111,12 +111,15 @@ class MacController extends BaseController
         $this->enableCsrfValidation = false;
         if (Yii::$app->request->isAjax) {
             $macs = Yii::$app->request->post('macs');
-            array_walk($macs, function($v, $k) {
-               Mac::findOne(['MAC' => $v])->delete();
-            });
+            $macs = explode(',', $macs);
+            if (!empty($macs)) {
+                array_walk($macs, function($v, $k) {
+                    Mac::findOne(['MAC' => $v])->delete();
+                });
 
-            Yii::$app->session->setFlash('success', Yii::t('backend', 'Success'));
-            Yii::$app->response->format = Response::FORMAT_JSON;
+                Yii::$app->session->setFlash('success', Yii::t('backend', 'Success'));
+                Yii::$app->response->format = Response::FORMAT_JSON;
+            }
             return ['status' => 0];
         }
         return false;

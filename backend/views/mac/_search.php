@@ -87,7 +87,7 @@ use \backend\models\Search\MacSearch;
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton('Reset', ['class' => 'btn btn-default']) ?>
+        <?= Html::a('Reset', ['mac/index'],['class' => 'btn btn-default']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
@@ -105,5 +105,6 @@ use \backend\models\Search\MacSearch;
             ,theme: 'grid'
         });
     });
+
 </script>
 <?php \common\widgets\Jsblock::end() ?>

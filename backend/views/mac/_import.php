@@ -38,8 +38,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'rows' =>15
             ]) ?>
             <div class="form-group">
-                <?= Html::submitButton('提交', ['class' => 'btn btn-success']) ?>
-                <?= Html::a(Yii::t('backend','Go Back'), ['main-class/index'], ['class' => 'btn btn-default']) ?>
+                <?= Html::submitButton(Yii::t('backend', 'Submit'), ['class' => 'btn btn-success']) ?>
+                <?= Html::a(Yii::t('backend','Go Back'), ['mac/index'], ['class' => 'btn btn-default']) ?>
             </div>
         </div>
 

@@ -21,7 +21,12 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'sort')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'field')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'field')->dropDownList([
+            'vod_year' => 'year',
+            'vod_type' => 'type',
+            'vod_language' => 'language',
+            'vod_area' => 'area',
+    ]) ?>
 
     <?php if($model->isNewRecord): ?>
         <?= $form->field($model, 'vod_list_id')->hiddenInput()->label(false); ?>

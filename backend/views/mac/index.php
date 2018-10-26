@@ -31,8 +31,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 'lastPageLabel' => Yii::t('backend', 'Last Page'),
                 'go' => true
             ],
-            "options" => ["class" => "grid-view","style"=>"overflow:auto", "id" => "grid"],
 
+            "options" => ["class" => "grid-view","style"=>"overflow:auto", "id" => "grid"],
+            'rowOptions' => function($model, $key) {
+                $key = $model->MAC;
+            },
             'columns' => [
                 [
                     'class' => 'yii\grid\SerialColumn',
@@ -44,10 +47,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 [
                     'class' => 'yii\grid\CheckboxColumn',
+                    'checkboxOptions' => function($searchModel, $key, $index, $column) {
+                        return ['value' => $searchModel->MAC];
+                    },
                     'name' => 'MAC',
-                    'options' => [
-                        'style' => 'width:30px;'
-                    ],
+                    'options' => ['style' => 'width:30px;'],
                 ],
 
                 [
@@ -189,19 +193,26 @@ Modal::begin([
 ]);
 
 $requestUrl = Url::to(['mac/create']);
+$confirmText = Yii::t('backend', 'Are you sure?');
 
 $requestJs=<<<JS
      $(document).on('click', '.gridview', function () {
-                var keys = $('#grid').yiiGridView('getSelectedRows');
+                var c = confirm('{$confirmText}');
+                var keys = [];
+                $("input[name='MAC[]']:checked").each(function(){
+                    keys.push($(this).val());
+                });
+                keys = keys.join(',');
                 var data = {macs:keys};
                 var url = $(this).attr('url');
                 var _csrf_token = $('#_csrf_token');
-                   
-                $.post(url,data,function(d){
-                    if (d.status === 0) {
-                        window.location.reload();
-                    }    
-                });
+                    if (c) {
+                      $.post(url,data,function(d){
+                        if (d.status === 0) {
+                            window.location.reload();
+                        }    
+                    });
+                } 
      });   
      $(document).on('click', '.create', function() {
                
