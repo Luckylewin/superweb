@@ -12,6 +12,7 @@ use backend\models\LogInterface;
 use backend\models\LogStatics;
 use backend\models\LogTmp;
 use backend\models\ProgramLog;
+use common\components\Func;
 use Yii;
 use yii\console\Controller;
 use yii\helpers\ArrayHelper;
@@ -64,15 +65,26 @@ class LogController extends Controller
 
     /**
      * 离线统计活跃用户/接口使用情况
+     * 调用方式： php yii log/offline
      */
     public function actionOffline()
     {
         $timestamp = strtotime('yesterday');
+        $this->beforeAnalyse($timestamp);
         $this->actionImport($timestamp);
         $this->actionStatics($timestamp);
         $this->actionStaticProgram($timestamp);
         $this->actionStaticHour($timestamp);
         $this->stdout("任务执行结束");
+    }
+
+    protected function beforeAnalyse($timestamp)
+    {
+        // 防止统计重复重复执行log/offline 数据叠加
+        $date = date('Y-m-d', $timestamp);
+        ProgramLog::deleteAll(['date' => $date]);
+        LogStatics::deleteAll(['date' => $date]);
+        LogInterface::deleteAll(['date' => $date]);
     }
 
     /**
@@ -81,6 +93,7 @@ class LogController extends Controller
      */
     public function actionStaticProgram($timestamp)
     {
+        $this->stdout("统计节目播放情况" . PHP_EOL);
         $filePaths = $this->getLogPaths($timestamp);
 
         $programs = [];
@@ -112,15 +125,27 @@ class LogController extends Controller
         }
 
         if (!empty($programs)) {
+
+            $programLog = ProgramLog::findOne(['date' => date('Y-m-d', $timestamp)]);
+
+            if (is_null($programLog)) {
+                $programLog = new ProgramLog();
+                $programLog->date = date('Y-m-d', $timestamp);
+            } else {
+                $server_programs = json_decode($programLog->server_program, true);
+                foreach ($server_programs as $key => $val) {
+                    if (array_key_exists($key, $programs)) {
+                        $programs[$key] = $val + $programs[$key];
+                    } else {
+                        $programs[$key] = $val;
+                    }
+                }
+            }
+
             arsort($programs);
             $programs = array_slice($programs,0,20);
-
-            if (ProgramLog::find()->where(['date' => date('Y-m-d', $timestamp)])->exists() == false) {
-                $log = new ProgramLog();
-                $log->date = date('Y-m-d', $timestamp);
-                $log->server_program = $log->all_program = json_encode($programs);
-                $log->save(false);
-            }
+            $programLog->server_program = $programLog->all_program = json_encode($programs);
+            $programLog->save(false);
         }
 
     }
@@ -128,6 +153,7 @@ class LogController extends Controller
     // 按24小时统计接口调用
     public function actionStaticHour($timestamp)
     {
+        $this->stdout("正在统计24小时接口调用情况" . PHP_EOL);
         $filePaths = $this->getLogPaths($timestamp);
 
         $data = [];
@@ -178,18 +204,25 @@ class LogController extends Controller
 
         }
 
-        if ($log = LogInterface::findOne(['date' => date('Y-m-d', $timestamp)])) {
-            $log->delete();
+        $logInterface = LogInterface::findOne(['date' => date('Y-m-d', $timestamp)]);
+
+        if (is_null($logInterface)) {
+            $logInterface = new LogInterface();
+            $logInterface->total = json_encode($data['total']);
+            $logInterface->getOttNewList = json_encode($data['getOttNewList']);
+            $logInterface->getIptvList = json_encode($data['getIptvList']);
+            $logInterface->getNewApp = json_encode($data['getNewApp']);
+            $logInterface->getClientToken = json_encode($data['getClientToken']);
+            $logInterface->watch = json_encode($data['watch']);
+            $logInterface->date = date('Y-m-d', $timestamp);
+        } else {
+            // 叠加处理
+            $fields = ['total', 'getOttNewList', 'getIptvList', 'getNewApp', 'getClientToken', 'watch'];
+            foreach ($fields as $field) {
+                $logInterface->$field = json_encode(Func::array_value_sum($logInterface->$field, $data[$field]));
+            }
         }
 
-        $logInterface = new LogInterface();
-        $logInterface->total = json_encode($data['total']);
-        $logInterface->getOttNewList = json_encode($data['getOttNewList']);
-        $logInterface->getIptvList = json_encode($data['getIptvList']);
-        $logInterface->getNewApp = json_encode($data['getNewApp']);
-        $logInterface->getClientToken = json_encode($data['getClientToken']);
-        $logInterface->watch = json_encode($data['watch']);
-        $logInterface->date = date('Y-m-d', $timestamp);
         $logInterface->save();
 
         $this->stdout("处理" . date('Y-m-d', $timestamp) . '成功' . PHP_EOL);
@@ -201,15 +234,18 @@ class LogController extends Controller
     // 从日志导入数据到mysql
     public function actionImport($timestamp)
     {
-        Yii::$app->db->createCommand("truncate " . LogTmp::tableName())->execute();
-
+        $this->stdout("从日志导入数据到mysql" . PHP_EOL);
+        $row = 0;
+        $start = time();
         $filePaths = $this->getLogPaths($timestamp);
+        Yii::$app->db->createCommand("truncate " . LogTmp::tableName())->execute();
 
         foreach ($filePaths as $filePath) {
             if (file_exists($filePath) == false) {
                 continue;
             }
             foreach (self::readLine($filePath) as $i => $line) {
+                $row = $i;
                 preg_match('/{.*}/', $line, $result);
                 if (isset($result[0])) {
                     $interface = json_decode($result[0], true);
@@ -223,7 +259,7 @@ class LogController extends Controller
                             'mac' => $interface['uid'],
                         ];
 
-                        if (count($rows) >= 1000) {
+                        if (count($rows) >= 1500) {
                             Yii::$app->db->createCommand()->batchInsert(LogTmp::tableName(), ['header', 'mac'], $rows)->execute();
                             $rows = [];
                         }
@@ -237,61 +273,86 @@ class LogController extends Controller
             Yii::$app->db->createCommand()->batchInsert(LogTmp::tableName(), ['header', 'mac'], $rows)->execute();
         }
 
+        $end = time();
+        $waste = $end - $start;
+        $this->stdout("该文件有{$row}行数据,读取耗时{$waste}秒" . PHP_EOL);
+
     }
 
     // 利用mysql 统计接口数据
     public function actionStatics($timestamp)
     {
-        $data['active_user'] = LogTmp::find()->select('mac')->distinct()->count();
-        $data['total'] = LogTmp::find()->count();
-        $data['token'] = LogTmp::find()->where(['header' => 'getClientToken'])->count();
-        $data['ott_list'] = LogTmp::find()->where(['header' => 'getOttNewList'])->count();
-        $data['iptv_list'] = LogTmp::find()->where(['header' => 'vods'])->count();
-        $data['karaoke_list'] = LogTmp::find()->where(['header' => 'getKaraokeList'])->count();
-        $data['epg'] = LogTmp::find()->where(['in','header',['getParadeList','getEPG']])->count();
-        $data['app_upgrade'] = LogTmp::find()->where(['IN', 'header', ['getNewApp', 'getApp', 'upgrade']])->count();
-        $data['firmware_upgrade'] = LogTmp::find()->where(['header' => 'getFirmware'])->count();
-        $data['renew'] = LogTmp::find()->where(['header' => 'renew'])->count();
-        $data['dvb_register'] = LogTmp::find()->where(['header' => 'register'])->count();
-        $data['ott_charge'] = LogTmp::find()->where(['header' => 'ottCharge'])->count();
-        $data['pay'] = LogTmp::find()->where(['header' => 'pay'])->count();
-        $data['activateGenre'] = LogTmp::find()->where(['header' => 'activateGenre'])->count();
-        $data['paypal_callback'] = LogTmp::find()->where(['header' => 'paypalCallback'])->count();
-        $data['dokypay_callback'] = LogTmp::find()->where(['header' => 'return/dokypay'])->count();
-        $data['getServerTime'] = LogTmp::find()->where(['header' => 'getServerTime'])->count();
-        $data['play'] = LogTmp::find()->where(['in', 'header', [
+        $this->stdout("利用mysql 统计接口数据" . PHP_EOL);
+        $data['active_user']        = LogTmp::find()->select('mac')->distinct()->count();
+        $data['total']              = LogTmp::find()->count();
+        $data['token']              = LogTmp::find()->where(['header' => 'getClientToken'])->count();
+        $data['ott_list']           = LogTmp::find()->where(['header' => 'getOttNewList'])->count();
+        $data['iptv_list']          = LogTmp::find()->where(['header' => 'vods'])->count();
+        $data['karaoke_list']       = LogTmp::find()->where(['header' => 'getKaraokeList'])->count();
+        $data['epg']                = LogTmp::find()->where(['in','header',['getParadeList','getEPG']])->count();
+        $data['app_upgrade']        = LogTmp::find()->where(['IN', 'header', ['getNewApp', 'getApp', 'upgrade']])->count();
+        $data['firmware_upgrade']   = LogTmp::find()->where(['header' => 'getFirmware'])->count();
+        $data['renew']              = LogTmp::find()->where(['header' => 'renew'])->count();
+        $data['dvb_register']       = LogTmp::find()->where(['header' => 'register'])->count();
+        $data['ott_charge']         = LogTmp::find()->where(['header' => 'ottCharge'])->count();
+        $data['pay']                = LogTmp::find()->where(['header' => 'pay'])->count();
+        $data['activateGenre']      = LogTmp::find()->where(['header' => 'activateGenre'])->count();
+        $data['paypal_callback']    = LogTmp::find()->where(['header' => 'paypalCallback'])->count();
+        $data['dokypay_callback']   = LogTmp::find()->where(['header' => 'return/dokypay'])->count();
+        $data['getServerTime']      = LogTmp::find()->where(['header' => 'getServerTime'])->count();
+        $data['play']               = LogTmp::find()->where(['in', 'header', [
             'local', 'sohatv', 'hplus'
         ]])->count();
 
         // 新增数据库数据
         // 查找昨天数据是否存在
-        $exist = LogStatics::find()->where(['date' => date('Y-m-d', $timestamp)])->exists();
+        $model = LogStatics::findOne(['date' => date('Y-m-d', $timestamp)]);
 
-        if ($exist == false) {
+        if (is_null($model)) {
             $model = new LogStatics();
-            $model->date = date('Y-m-d', $timestamp);
-            $model->active_user = $data['active_user'];
-            $model->total = $data['total'];
-            $model->token = $data['token'];
-            $model->ott_list = $data['ott_list'];
-            $model->iptv_list = $data['iptv_list'];
-            $model->karaoke_list = $data['karaoke_list'];
-            $model->epg = $data['epg'];
-            $model->app_upgrade = $data['app_upgrade'];
-            $model->renew = $data['renew'];
-            $model->dvb_register = $data['dvb_register'];
-            $model->ott_charge = $data['ott_charge'];
-            $model->pay = $data['pay'];
-            $model->activateGenre = $data['activateGenre'];
+            $model->date            = date('Y-m-d', $timestamp);
+            $model->active_user     = $data['active_user'];
+            $model->total           = $data['total'];
+            $model->token           = $data['token'];
+            $model->ott_list        = $data['ott_list'];
+            $model->iptv_list       = $data['iptv_list'];
+            $model->karaoke_list    = $data['karaoke_list'];
+            $model->epg             = $data['epg'];
+            $model->app_upgrade     = $data['app_upgrade'];
+            $model->renew           = $data['renew'];
+            $model->dvb_register    = $data['dvb_register'];
+            $model->ott_charge      = $data['ott_charge'];
+            $model->pay             = $data['pay'];
+            $model->activateGenre   = $data['activateGenre'];
             $model->paypal_callback = $data['paypal_callback'];
-            $model->dokypay_callback = $data['dokypay_callback'];
-            $model->getServerTime = $data['getServerTime'];
-            $model->play = $data['play'];
+            $model->dokypay_callback= $data['dokypay_callback'];
+            $model->getServerTime   = $data['getServerTime'];
+            $model->play            = $data['play'];
+        } else {
 
-            $model->save();
+            $model->active_user     += $data['active_user'];
+            $model->total           += $data['total'];
+            $model->token           += $data['token'];
+            $model->ott_list        += $data['ott_list'];
+            $model->iptv_list       += $data['iptv_list'];
+            $model->karaoke_list    += $data['karaoke_list'];
+            $model->epg             += $data['epg'];
+            $model->app_upgrade     += $data['app_upgrade'];
+            $model->renew           += $data['renew'];
+            $model->dvb_register    += $data['dvb_register'];
+            $model->ott_charge      += $data['ott_charge'];
+            $model->pay             += $data['pay'];
+            $model->activateGenre   += $data['activateGenre'];
+            $model->paypal_callback += $data['paypal_callback'];
+            $model->dokypay_callback+= $data['dokypay_callback'];
+            $model->getServerTime   += $data['getServerTime'];
+            $model->play            += $data['play'];
         }
+
+        $model->save();
         $this->stdout("-----昨日数据分析----" . PHP_EOL);
         print_r($data);
+
     }
 
     protected function getLogPaths($timestamp)

@@ -122,4 +122,30 @@ class Func
 
         return $cookies->has('referer') ? $cookies->getValue('referer') :  Yii::$app->request->referrer;
     }
+
+    /**
+     * 键值相同 值叠加
+     *  $arr1 = array(311=>1, 312=>2, 314=>2);
+        $arr2 = array(311=>2, 312=>2, 313=>5, 314=>9);
+        $arr3 = array(314=>10);
+        $newArr = array_value_sum($arr1, $arr2, $arr3);
+        print_r($newArr);
+     * // Array ( [311] => 3 [312] => 4 [314] => 21 [313] => 5 )
+     *
+     * @return array
+     */
+    public static function array_value_sum()
+    {
+        $res = array();
+        foreach (func_get_args() as $arr) {
+            foreach ($arr as $k => $v){
+                if (!isset($res[$k])){
+                    $res[$k] = $v;
+                }else{
+                    $res[$k] += $v;
+                }
+            }
+        }
+        return $res;
+    }
 }
