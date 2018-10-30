@@ -5,7 +5,7 @@ use yii\bootstrap\ActiveForm;
 use common\widgets\Alert;
 
 BootstrapAsset::register($this);
-
+$this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js', ['depends' => 'yii\web\JqueryAsset']);
 $this->title = '管理员登录';
 ?>
 <?php $this->beginPage() ?>
@@ -39,8 +39,6 @@ $this->title = '管理员登录';
         <img src="/statics/themes/default-admin/images/login-logo.png" alt=""/>
     </div>
     <div class="login-wrap">
-
-
         <?= $form->field($model, 'username', ['template' => '<div class="form-group field-loginform-password required">{input}{hint}{error}</div>'])->textInput(['autofocus' => true, 'placeholder' => '用户名']) ?>
         <?= $form->field($model, 'password', ['template' => '<div class="form-group field-loginform-password required">{input}{hint}{error}</div>'])->passwordInput(['placeholder' => '密码']) ?>
 
@@ -68,15 +66,60 @@ $this->title = '管理员登录';
 <?php $this->endBody() ?>
 </body>
 </html>
+
+<?php
+
+$requestUrl = \yii\helpers\Url::to(['site/login']);
+
+$js =<<<JS
+    
+     $("#captcha").click(function(){
+        var url = "<?= \yii\helpers\Url::to(['site/captcha']);?>";
+        $.get(url,{refresh:1},function(data){
+          var object = eval(data);
+          $('#captcha').attr('src',object.url);
+        })
+    });
+  
+    $(document).on('beforeSubmit', 'form#login-form', function () {
+        var form = $(this); 
+        //返回错误的表单信息 
+        if (form.find('.has-error').length) { 
+            return false; 
+        } 
+        //表单提交 
+        $.ajax({ 
+          url  : form.attr('action'), 
+          type  : 'post', 
+          data  : form.serialize(), 
+          beforeSend : function(){
+              var index = layer.load(1, {shade: [0.1,'#fff']});
+          },
+          success: function (response){ 
+             if (response.status === 'success') {
+                 layer.msg(response.status);
+                 window.location.reload(); 
+             } else {
+                 layer.closeAll("loading");
+                 layer.msg(response.msg);
+             }
+          }, 
+          error : function (){ 
+            layer.alert('系统错误', {icon:5}); 
+            return false; 
+          } 
+        }); 
+        return false; 
+  }); 
+JS;
+
+$this->registerJs($js);
+
+?>
+
+
 <?php $this->endPage() ?>
 
-<script>
-  $("#captcha").click(function(){
-    var url = "<?= \yii\helpers\Url::to(['site/captcha']);?>";
-    $.get(url,{refresh:1},function(data){
-      var object = eval(data);
-      $('#captcha').attr('src',object.url);
-    })
-  });
-</script>
+
+
 

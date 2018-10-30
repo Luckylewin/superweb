@@ -8,6 +8,7 @@ use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\models\LoginForm;
 use yii\web\HttpException;
+use yii\web\Response;
 
 /**
  * Site controller
@@ -76,7 +77,7 @@ class SiteController extends Controller
     /**
      * Login action.
      *
-     * @return string
+     * @return array|string
      */
     public function actionLogin()
     {
@@ -87,17 +88,23 @@ class SiteController extends Controller
         }
 
         $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            Yii::$app->session->setFlash('info', Yii::t('backend', 'login successful'));
-            return $this->redirect(['index/frame']);
-        } else {
-            $model->password = '';
-            Yii::$app->session->setFlash('error', $model->getErrorSummary(false));
 
-            return $this->render('@statics/themes/default-admin/views/index/login', [
-                'model' => $model,
-            ]);
+        if (Yii::$app->request->isPost) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            if ($model->load(Yii::$app->request->post()) && $model->login()) {
+                Yii::$app->session->setFlash('info', Yii::t('backend', 'login successful'));
+                return ['status' => 'success'];
+            } else {
+                return ['status' => 'error', 'msg' => $model->getErrorSummary(false)[0]];
+            }
         }
+
+        $model->password = '';
+
+        return $this->render('@statics/themes/default-admin/views/index/login', [
+            'model' => $model,
+        ]);
+
     }
 
     /**
