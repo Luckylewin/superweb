@@ -373,7 +373,7 @@ $requestJs=<<<JS
                 var id = $(this).attr('data-id');
                 $.get('{$requestUrl}', {'id':id},
                     function (data) {
-                        $('.modal-body').css('min-height', '200px').html(data);
+                        $('.modal-body').css('min-width', '700px').css('min-height', '200px').html(data);
                     }
                 )
             })

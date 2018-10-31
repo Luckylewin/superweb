@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h4><?= Html::encode($this->title) ?></h4>
 
-    <table class="table table-bordered">
+    <table class="table table-bordered" style="display: none">
 
         <tbody>
         <tr>
@@ -26,6 +26,10 @@ $this->params['breadcrumbs'][] = $this->title;
             <td> <?= $model->vod_ename ?></td>
         </tr>
         <tr>
+            <th> <?= $model->getAttributeLabel('vod_actor') ?></th>
+            <td colspan="5"> <?= $model->vod_actor ?></td>
+        </tr>
+        <tr>
             <th> <?= $model->getAttributeLabel('vod_title') ?></th>
             <td> <?= $model->vod_title ?></td>
             <th> <?= $model->getAttributeLabel('vod_type') ?></th>
@@ -35,8 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </tr>
 
         <tr>
-            <th> <?= $model->getAttributeLabel('vod_actor') ?></th>
-            <td> <?= $model->vod_actor ?></td>
+
             <th> <?= $model->getAttributeLabel('vod_director') ?></th>
             <td> <?= $model->vod_director ?></td>
             <th> <?= $model->getAttributeLabel('vod_area') ?></th>
@@ -103,9 +106,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <th> <?= $model->getAttributeLabel('vod_douban_id') ?></th>
             <td> <?= $model->vod_douban_id ?></td>
             <th> <?= $model->getAttributeLabel('vod_douban_score') ?></th>
-            <td> <?= $model->vod_douban_score ?></td>
-            <th> <?= $model->getAttributeLabel('vod_scenario') ?></th>
-            <td> <?= $model->vod_scenario ?></td>
+            <td> <?= $model->vod_douban_score ?></td
         </tr>
         <tr>
             <th><?= $model->getAttributeLabel('vod_content') ?></th>
@@ -113,6 +114,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= $model->vod_content ?>
             </td>
         </tr>
+        <tr>
+            <th> <?= $model->getAttributeLabel('vod_scenario') ?></th>
+            <td colspan="5"> <?= $model->vod_scenario ?></td>
+        </tr>
+
 
         </tbody>
     </table>
@@ -120,7 +126,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
     <?php
-   /* DetailView::widget([
+   echo DetailView::widget([
         'model' => $model,
         'template' => "<tr><th style='width: 200px;'>{label}</th><td>{value}</td></tr>",
         'options' => ['class' => 'table table-striped table-bordered detail-view'],
@@ -208,7 +214,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'vod_imdb_score',
             'vod_fill_flag'
         ],
-    ])*/
+    ])
 
     ?>
 
