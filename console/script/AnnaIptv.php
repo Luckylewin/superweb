@@ -321,7 +321,7 @@ class AnnaIptv extends base
             preg_match('/(?<=tvg-name\=")[^"]+/', $item, $tvg_name);
             preg_match('/(?<=tvg-logo\=")[^"]+/', $item, $tvg_logo);
             preg_match('/(?<=group-title\=")[^"]+/i', $item, $group_title);
-            preg_match('/\S+\.(ts|mp4|mkv|rmvb)/', $item, $ts);
+            preg_match('/\S+\.(ts|mp4|mkv|rmvb|avi)/', $item, $ts);
             preg_match('/(?<=",)[^\r\n]+/', $item, $other);
 
             // 判断是否为电视剧
