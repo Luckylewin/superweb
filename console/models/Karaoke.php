@@ -37,7 +37,7 @@ class Karaoke extends Basic
             $karaoke->albumName = $title;
             $karaoke->albumImage = $image;
             $karaoke->info = $info;
-            $karaoke->area = $area;
+            $karaoke->area = $this->area;
 
             $karaoke->save(false);
             echo $title . "新增" . PHP_EOL;

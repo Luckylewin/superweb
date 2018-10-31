@@ -35,7 +35,6 @@ class Movie extends Vod
         $url   = $data['url'];
         $image = $data['image'];
         $info  = $data['info'];
-        // $area  = $data['area'];
         $groupName = $playGroupName;
 
         $title = trim($title);

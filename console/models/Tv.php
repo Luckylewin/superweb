@@ -62,6 +62,8 @@ class Tv extends Vod
             $movie->vod_pic = $image;
             $movie->vod_pic_bg = $image;
             $movie->vod_content = $info;
+            $movie->vod_language = $this->language;
+            $movie->vod_area = $this->area;
             $movie->vod_cid = $genre->list_id;
             $movie->vod_trysee = 0;
             $movie->save(false);
