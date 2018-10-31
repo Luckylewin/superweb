@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
 
         <?= Html::a(Yii::t('backend', 'Create Group'), \yii\helpers\Url::to(['play-group/create', 'vod_id' => Yii::$app->request->get('vod_id')]), ['class' => 'btn btn-success']) ?>
-        <?= Html::a(Yii::t('backend', 'Go Back'), \yii\helpers\Url::to(['vod/index', 'VodSearch[vod_cid]' => $vod->vod_cid]), ['class' => 'btn btn-default']) ?>
+        <?= Html::a(Yii::t('backend', 'Go Back'), Func::getLastPage(), ['class' => 'btn btn-default']) ?>
 
     </p>
 
