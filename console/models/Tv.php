@@ -16,6 +16,19 @@ use common\models\VodList;
 
 class Tv extends Vod
 {
+    public $language;
+    public $area;
+
+    public function setLanguage($language = 'Vietnamese')
+    {
+        $this->language = $language;
+    }
+
+    public function setArea($area = 'Vietnam')
+    {
+        $this->area = $area;
+    }
+
 
     public function judgeIsExist($title)
     {

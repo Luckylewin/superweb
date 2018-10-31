@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use \backend\models\RenewalCard;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\search\RenewalCardSearch */
@@ -12,29 +13,53 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="renewal-card-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+
+
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="parade-search">
+                <?php $form = \yii\widgets\ActiveForm::begin([
+                    'action' => ['index'],
+                ]); ?>
+                <?= $form->field($searchModel, 'card_secret') ?>
+                <div class="form-group">
+                    <?= Html::submitButton(Yii::t('backend', 'Search'), ['class' => 'btn btn-primary']) ?>
+                    <?= Html::resetButton(Yii::t('backend', 'Reset'), ['class' => 'btn btn-default']) ?>
+                </div>
+                <?php \yii\widgets\ActiveForm::end(); ?>
+            </div>
+        </div>
+    </div>
 
     <p>
         <?= Html::a(Yii::t('backend', 'Create Renewal Card'), ['renewal-card/batch-create'], ['class' => 'btn btn-success']) ?>
     </p>
-
-
     <?php if (Yii::$app->request->get('batch_id') == false): ?>
 
     <?php \yii\widgets\Pjax::begin() ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             [
                     'attribute' => 'batch',
+                    'filter' => false,
                     'options' => ['style' => 'width:90px']
             ],
+
             'card_num',
             'card_contracttime',
+
             'created_time:datetime',
+            [
+                'label' => '使用量',
+                'value' => function($model) {
+                    $total = RenewalCard::find()->where(['batch' => $model->batch])->count();
+                    $used  = RenewalCard::find()->where(['batch' => $model->batch, 'is_valid' => 0])->count();
+
+                    return "{$used}/{$total}(". $used/$total*100 . '%)';
+                }
+            ],
             [
                 'class' => 'common\grid\MyActionColumn',
                 'template' => '{see}',

@@ -12,6 +12,19 @@ use backend\models\Karaoke as Basic;
 
 class Karaoke extends Basic
 {
+    public $language;
+    public $area;
+
+    public function setLanguage($language = 'Vietnamese')
+    {
+        $this->language = $language;
+    }
+
+    public function setArea($area = 'Vietnam')
+    {
+        $this->area = $area;
+    }
+
     public function collect($title, $url, $image, $info, $area)
     {
         $data = Karaoke::findOne(['albumName' => $title]);

@@ -22,11 +22,15 @@ use yii\console\Controller;
 class CollectController extends Controller
 {
     // karaoke
-    public function actionKaraoke()
+    public function actionKaraoke($query = 'karaoke beat chuẩ', $area = 'Vietnam', $language = 'Vietnamese')
     {
-        $search = new Searcher(new Karaoke());
+        $karaoke = new Karaoke();
+        $karaoke->setArea($area);
+        $karaoke->setLanguage($language);
+
+        $search  = new Searcher($karaoke);
         $options = [
-            'q' => 'karaoke beat chuẩ',//
+            'q' => $query,//
             'maxResults' => 50,
             'type' =>  'video',
             'order' => 'relevance',
@@ -37,9 +41,13 @@ class CollectController extends Controller
     }
 
     // 采集Youtube 电视剧
-    public function actionTv($query)
+    public function actionTv($query = 'Phim truyền hình', $area = 'Vietnam', $language = 'Vietnamese')
     {
-        $search = new Searcher(new Tv(), 'playlist');
+        $tv = new Tv();
+        $tv->setArea($area);
+        $tv->setLanguage($language);
+
+        $search = new Searcher($tv, 'playlist');
         $options = [
             'q' => $query,//
             'maxResults' => 50,
@@ -50,9 +58,12 @@ class CollectController extends Controller
     }
 
     // 采集Youtube电影
-    public function actionMovie($query)
+    public function actionMovie($query = "Vietnam movie", $area = 'Vietnam', $language = 'Vietnamese')
     {
-        $search = new Searcher(new Movie());
+        $movie  = new Movie();
+        $movie->setArea($area);
+        $movie->setLanguage($language);
+        $search = new Searcher($movie);
         $options = [
             'q' => $query,//
             'maxResults' => 50,
