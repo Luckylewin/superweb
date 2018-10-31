@@ -89,17 +89,17 @@ class IptvType extends \yii\db\ActiveRecord
        return [];
     }
 
-    /**
-     *
-     * @param $list_id
-     * @return array
-     */
-    public static function getTypeItem($list_id, $field)
+
+    public static function getTypeItem($list_id, $field, $orfield = null)
     {
         $type = self::find()->where(['field' => $field, 'vod_list_id' => $list_id])
-                            ->with('items')
-                            ->one();
+                            ->with('items');
 
+        if ($orfield) {
+            $type->orWhere(['field' => 'vod_'.$field]);
+        }
+
+        $type = $type->one();
         if ($type) {
             $items = $type->items;
             return ArrayHelper::map($items, 'name','name');
