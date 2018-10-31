@@ -164,7 +164,7 @@ class Vod extends \yii\db\ActiveRecord implements Linkable
             'vod_keywords' => Yii::t('backend', 'TAG'),
             'vod_type' => Yii::t('backend', 'Extended Genre'),//喜剧 爱情 恐怖 动作 科幻 剧情 战争 警匪 犯罪 动画 奇幻 武侠 冒险 枪战 恐怖 悬疑 惊悚 经典 青春文艺 微电影 古装 历史运动 农村 儿童 网络电影
             'vod_actor' => Yii::t('backend', 'Main actor'),
-            'vod_director' => Yii::t('backend', ''),
+            'vod_director' => Yii::t('backend', 'director'),
             'vod_content' => Yii::t('backend', 'Movie introduction'),
             'vod_pic' => Yii::t('backend', 'Poster stills'),
             'vod_pic_bg' => Yii::t('backend', 'Background picture'),

@@ -51,8 +51,7 @@ class VodController extends BaseController
      */
     public function actionView($id)
     {
-        $this->rememberReferer();
-        return $this->render('view', [
+        return $this->renderAjax('view', [
             'model' => $this->findModel($id),
         ]);
     }

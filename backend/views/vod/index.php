@@ -123,8 +123,15 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js'
 
             [
                   'attribute' => 'vod_name',
+                  'format' => 'raw',
                   'value' => function($model) {
-                        return mb_substr($model->vod_name, 0, 20);
+                      return Html::a(mb_substr($model->vod_name, 0, 20),null, [
+                          'class' => 'btn-show',
+                          'data-toggle' => 'modal',
+                          'data-target' => '#show-modal',
+                          'data-id'     => $model->vod_id,
+                      ]);
+
                   },
                   'headerOptions' => ['class' => 'col-md-3'],
                   'filterInputOptions' => [
@@ -246,10 +253,17 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js'
                     'class' => 'common\grid\MyActionColumn',
                     'headerOptions' => ['class' => 'col-md-4'],
                     'size' => 'btn-sm',
-                    'template' => '{link-index} {scheme-setting} {view} {update} {delete}',
+                    'template' => '{link-index} {scheme-setting} {update} {delete}',
 
                     'buttons' => [
-
+                            'view' => function($url, $model) {
+                                return Html::a('查看',null, [
+                                    'class' => 'btn btn-info btn-sm btn-show',
+                                    'data-toggle' => 'modal',
+                                    'data-target' => '#show-modal',
+                                    'data-id'     => $model->vod_id,
+                                ]);
+                            },
                             'link-index' => function($url, $model) {
                                 return Html::a('<i class="glyphicon glyphicon-link"></i> 链接 ', ['play-group/index', 'vod_id' => $model->vod_id], [
                                     'class' => 'btn btn-success btn-sm'
@@ -344,6 +358,29 @@ $this->registerJs($requestJs);
 
 
 <?php
+
+//绑定方案号
+Modal::begin([
+    'id' => 'show-modal',
+    'size' => Modal::SIZE_LARGE,
+    'header' => '<h4 class="modal-title">详情</h4>',
+    'footer' => '<a href="#" class="btn btn-default" data-dismiss="modal">关闭</a>',
+]);
+$requestUrl = Url::to(['vod/view']);
+$requestJs=<<<JS
+    
+     $(document).on('click', '.btn-show', function() {
+                var id = $(this).attr('data-id');
+                $.get('{$requestUrl}', {'id':id},
+                    function (data) {
+                        $('.modal-body').css('min-height', '200px').html(data);
+                    }
+                )
+            })
+JS;
+$this->registerJs($requestJs);
+Modal::end();
+
 
 //绑定方案号
 Modal::begin([

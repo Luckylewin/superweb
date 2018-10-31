@@ -16,7 +16,6 @@ use yii\filters\VerbFilter;
 class VodListController extends BaseController
 {
 
-
     /**
      * Lists all VodList models.
      * @return mixed

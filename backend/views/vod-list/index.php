@@ -57,16 +57,16 @@ $this->params['breadcrumbs'][] = $this->title;
                         return \backend\blocks\VodBlock::$chargeStatus[$model->list_ispay];
                     }
             ],
-            [
+           /* [
                     'attribute' => 'list_price',
                     'value' => function($model) {
                         return $model->list_price . ' ' . Yii::t('backend', 'gold');
                     }
-            ],
+            ],*/
             [
-                'attribute' => 'list_trysee',
+                'label' => '影片数量',
                 'value' => function($model) {
-                    return $model->list_trysee . ' ' . Yii::t('backend', 'minutes');
+                    return Vod::find()->where(['vod_cid' => $model->list_id])->count();
                 },
                 'options' => ['style' => 'width:140px;']
             ],

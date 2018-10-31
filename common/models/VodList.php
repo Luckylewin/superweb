@@ -128,4 +128,9 @@ class VodList extends \yii\db\ActiveRecord implements Linkable
     {
         return self::find()->select('list_id,list_name')->all();
     }
+
+    public function getVod()
+    {
+        return $this->hasMany(Vod::className(), ['vod_cid' => 'list_id']);
+    }
 }
