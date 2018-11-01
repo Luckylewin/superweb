@@ -48,15 +48,21 @@ class Movie extends Vod
             }
 
             $movie = new Vod();
-
             $movie->vod_name = $title;
             $movie->vod_pic = "http://192.200.112.162:12389/proxy?path=".$image;
             $movie->vod_pic_bg = $movie->vod_pic;
-            $movie->vod_content = $info;
+            $movie->vod_scenario = $movie->vod_content = $info;
             $movie->vod_area = $this->area;
             $movie->vod_language = $this->language;
             $movie->vod_cid = $genre->list_id;
             $movie->vod_trysee = 0;
+            if (isset($data['vod_type'])) $movie->vod_type         = $data['vod_type'];
+            if (isset($data['vod_actor'])) $movie->vod_actor       = $data['vod_actor'];
+            if (isset($data['vod_director'])) $movie->vod_director = $data['vod_director'];
+            if (isset($data['vod_area'])) $movie->vod_area         = $data['vod_area'];
+            if (isset($data['vod_length'])) $movie->vod_length     = $data['vod_length'];
+            if (isset($data['vod_year'])) $movie->vod_year         = $data['vod_year'];
+
             $movie->save(false);
 
             // 新增一个播放分组

@@ -8,6 +8,7 @@
 
 namespace console\controllers;
 
+use console\collectors\hlpus\HplusSearcher;
 use console\collectors\youtube\Searcher;
 use console\models\Cartoon;
 use console\models\Karaoke;
@@ -125,5 +126,11 @@ class CollectController extends Controller
         $search->start();
     }
 
+    public function actionVnMovie()
+    {
+        $movie  = new Movie();
+        $search = new HplusSearcher($movie);
+        $search->collectMovie();
+    }
 
 }
