@@ -31,11 +31,7 @@ class HplusSearcher extends common
         $this->collectMovie();
     }
 
-    /**
-     * 获取待采集的链接
-     * @param $url
-     * @return array|bool
-     */
+
     protected function getHref($url)
     {
         $dom = $this->getDom($url);

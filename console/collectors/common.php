@@ -57,7 +57,7 @@ class common
                 $client = new Client();
                 if ($proxy) {
                     $result = $client->request('GET', $url, [
-                        ['proxy' => 'tcp://localhost:8118']
+                        ['proxy' => 'tcp://127.0.0.1:8118']
                     ]);
                 } else {
                     $result = $client->request('GET', $url);
