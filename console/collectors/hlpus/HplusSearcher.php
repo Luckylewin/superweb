@@ -157,11 +157,17 @@ class HplusSearcher extends common
         }
 
         if (!empty($links)) {
-            foreach ($links as $url) {
-                echo "正在爬取:{$url}>>>>>>>>>>>>>>>>>>>>>>".PHP_EOL;
-                $dom   = $this->getDom($url);
-                $data  = $this->getProfile($dom, $url);
-                $links = $this->getEpisode($dom, $url);
+            $total = count($links);
+            foreach ($links as $key => $url) {
+                echo "正在爬取({$key}/{$total}):{$url}>>>>>>>>>>>>>>>>>>>>".PHP_EOL;
+                try {
+                    $dom   = $this->getDom($url);
+                    $data  = $this->getProfile($dom, $url);
+                    $links = $this->getEpisode($dom, $url);
+                } catch (\Exception $e) {
+                    $this->debug($e);
+                    continue;
+                }
                 $data['links'] = $links;
 
                 if (method_exists($this->model, 'collect')) {
@@ -189,8 +195,9 @@ class HplusSearcher extends common
         }
 
         if (!empty($links)) {
-            foreach ($links as $url) {
-                echo "正在爬取:{$url}>>>>>>>>>>>>>>>>>>>>>>".PHP_EOL;
+            $total = count($links);
+            foreach ($links as $key => $url) {
+                echo "正在爬取({$key}/{$total}):{$url}>>>>>>>>>>>>>>>>>>>>".PHP_EOL;
                 $dom   = $this->getDom($url);
                 $data  = $this->getProfile($dom, $url);
                 $links = $this->getEpisode($dom, $url);
@@ -219,8 +226,9 @@ class HplusSearcher extends common
         }
 
         if (!empty($links)) {
-            foreach ($links as $url) {
-                echo "正在爬取:{$url}>>>>>>>>>>>>>>>>>>>>>>".PHP_EOL;
+            $total = count($links);
+            foreach ($links as $key => $url) {
+                echo "正在爬取({$key}/{$total}):{$url}>>>>>>>>>>>>>>>>>>>>".PHP_EOL;
                 $dom   = $this->getDom($url);
                 $data  = $this->getProfile($dom, $url);
                 $links = $this->getEpisode($dom, $url);

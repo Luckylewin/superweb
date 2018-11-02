@@ -117,7 +117,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ]);
     } catch (\Exception $e) {
-
+        echo $e->getMessage();
     }
 
     ?>

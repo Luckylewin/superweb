@@ -129,6 +129,7 @@ class CollectController extends Controller
     public function actionVnMovie()
     {
         $movie  = new Movie();
+        $movie->setLanguage('Vietnamese');
         $search = new HplusSearcher($movie);
         $search->collectMovie();
     }
@@ -140,9 +141,10 @@ class CollectController extends Controller
         $search->collectTv();
     }
 
-    public function actionVnCarton()
+    public function actionVnCartoon()
     {
         $cartoon = new Cartoon();
+        $cartoon->setLanguage('Vietnamese');
         $search = new HplusSearcher($cartoon);
         $search->collectCarton();
     }
@@ -150,6 +152,7 @@ class CollectController extends Controller
     public function actionVnVariety()
     {
         $variety = new Variety();
+        $variety->setLanguage('Vietnamese');
         $search = new HplusSearcher($variety);
         $search->collectVariety();
     }

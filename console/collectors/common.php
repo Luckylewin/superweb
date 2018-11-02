@@ -42,27 +42,26 @@ class common
      * @param $url
      * @param string $format
      * @param string $charset
-     * @param bool $proxy
      * @return bool|Crawler
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function getDom($url, $format ='html', $charset = "UTF-8", $proxy = true)
+    public function getDom($url, $format ='html', $charset = "UTF-8")
     {
         try {
             if (Yii::$app->cache->exists(md5($url))) {
                 $this->isCached = true;
                 $data = Yii::$app->cache->get(md5($url));
+                Yii::$app->cache->set(md5($url), $data, 186400);
             } else {
                 $this->isCached = false;
                 $client = new Client();
-                if ($proxy) {
-                    $result = $client->request('GET', $url, [
-                        ['proxy' => 'tcp://127.0.0.1:8118']
-                    ]);
-                } else {
-                    $result = $client->request('GET', $url);
-                }
-
+                $result = $client->request('GET', $url, [
+                    'headers' => [
+                        'User-Agent' => 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36',
+                        'Referer'    => 'https://www.google.com/',
+                        'Accept-Language' => 'en-US,en;q=0.5'
+                    ],
+                ]);
                 $data = $result->getBody()->getContents();
 
                 $this->isCached = false;
@@ -71,10 +70,7 @@ class common
                 }
             }
         }catch (\Exception $e) {
-            echo "错误消息:" . $e->getMessage() . PHP_EOL;
-            echo "错误代码"  . $e->getCode() . PHP_EOL;
-            echo "错误文件"  . $e->getFile() . PHP_EOL;
-            echo "错误行号"  . $e->getLine() . PHP_EOL;
+            $this->debug($e);
             $this->goSleep(5);
 
             return false;
@@ -92,5 +88,13 @@ class common
         }
 
         return $dom;
+    }
+
+    public function debug(\Exception $e)
+    {
+        echo "错误消息:" . $e->getMessage() . PHP_EOL;
+        echo "错误代码"  . $e->getCode() . PHP_EOL;
+        echo "错误文件"  . $e->getFile() . PHP_EOL;
+        echo "错误行号"  . $e->getLine() . PHP_EOL;
     }
 }

@@ -35,17 +35,15 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'vod_id',
             'list.list_name',
-            'vod_name',
+           
             'vod_type',
-            'vod_ename',
-            'vod_title',
-            'vod_addtime:date',
+            'vod_year',
             [
                 'attribute' => 'vod_pic',
                 'format' => 'raw',
                 'value' => function($model) {
                     if ($model->vod_pic) {
-                        return '<img width="70" src="'. $model->vod_pic.'">';
+                        return '<div style="width: 200px;min-height: 107px"><img width="170" src="'. $model->vod_pic.'"></div>';
                     }
                     return '';
                 }
