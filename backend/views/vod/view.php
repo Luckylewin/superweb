@@ -30,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
       <?= DetailView::widget([
         'model' => $model,
         'template' => "<tr><th style='width: 200px;'>{label}</th><td>{value}</td></tr>",
-        'options' => ['class' => 'table table-striped table-bordered detail-view','style' => 'margin-top:0px;'],
+        'options' => ['class' => 'table table-striped table-bordered detail-view','style' => 'margin-top:20px;'],
 
         'attributes' => [
             'vod_id',
@@ -60,10 +60,10 @@ $this->params['breadcrumbs'][] = $this->title;
             <?= DetailView::widget([
                 'model' => $model,
                 'template' => "<tr><th style='width: 200px;'>{label}</th><td>{value}</td></tr>",
-                'options' => ['class' => 'table  table-striped table-bordered detail-view','style' => 'margin-top:0px;'],
+                'options' => ['class' => 'table  table-striped table-bordered detail-view','style' => 'margin-top:20px;'],
                 'attributes' => [
-                    'vod_title',
-                    'vod_filmtime:date',
+
+                    'vod_filmtime',
                     'vod_actor',
                     'vod_total',
                     'vod_addtime',
@@ -92,7 +92,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <?= DetailView::widget([
                 'model' => $model,
                 'template' => "<tr><th style='width: 200px;'>{label}</th><td>{value}</td></tr>",
-                'options' => ['class' => 'table table-striped  table-bordered detail-view','style' => 'margin-top:0px;'],
+                'options' => ['class' => 'table table-striped  table-bordered detail-view','style' => 'margin-top:20px;'],
                 'attributes' => [
                     [
                         'attribute' => 'vod_stars',

@@ -133,4 +133,25 @@ class CollectController extends Controller
         $search->collectMovie();
     }
 
+    public function actionVnTv()
+    {
+        $tv  = new Tv();
+        $search = new HplusSearcher($tv);
+        $search->collectTv();
+    }
+
+    public function actionVnCarton()
+    {
+        $cartoon = new Cartoon();
+        $search = new HplusSearcher($cartoon);
+        $search->collectCarton();
+    }
+
+    public function actionVnVariety()
+    {
+        $variety = new Variety();
+        $search = new HplusSearcher($variety);
+        $search->collectVariety();
+    }
+
 }

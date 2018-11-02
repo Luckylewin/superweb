@@ -31,10 +31,10 @@ class Movie extends Vod
 
     public function collect($data, $playGroupName = 'default')
     {
-        $title = $data['title'];
-        $url   = $data['url'];
-        $image = $data['image'];
-        $info  = $data['info'];
+        $title     = $data['title'];
+        $url       = $data['url'];
+        $image     = $data['image'];
+        $info      = $data['info'];
         $groupName = $playGroupName;
 
         $title = trim($title);
@@ -56,12 +56,15 @@ class Movie extends Vod
             $movie->vod_language = $this->language;
             $movie->vod_cid = $genre->list_id;
             $movie->vod_trysee = 0;
+            $movie->vod_total = 1;
+
+
             if (isset($data['vod_type'])) $movie->vod_type         = $data['vod_type'];
             if (isset($data['vod_actor'])) $movie->vod_actor       = $data['vod_actor'];
             if (isset($data['vod_director'])) $movie->vod_director = $data['vod_director'];
             if (isset($data['vod_area'])) $movie->vod_area         = $data['vod_area'];
             if (isset($data['vod_length'])) $movie->vod_length     = $data['vod_length'];
-            if (isset($data['vod_year'])) $movie->vod_year         = $data['vod_year'];
+            if (isset($data['vod_filmtime'])) $movie->vod_filmtime = $data['vod_filmtime'];
 
             $movie->save(false);
 
