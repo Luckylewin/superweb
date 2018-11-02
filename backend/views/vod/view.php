@@ -33,17 +33,19 @@ $this->params['breadcrumbs'][] = $this->title;
         'options' => ['class' => 'table table-striped table-bordered detail-view','style' => 'margin-top:20px;'],
 
         'attributes' => [
-            'vod_id',
-            'list.list_name',
-           
+
+            //'list.list_name',
             'vod_type',
+            'vod_area',
             'vod_year',
             [
                 'attribute' => 'vod_pic',
                 'format' => 'raw',
                 'value' => function($model) {
                     if ($model->vod_pic) {
-                        return '<div style="width: 200px;min-height: 107px"><img width="170" src="'. $model->vod_pic.'"></div>';
+                        return '<div style="width: 200px;min-height: 107px;float: left"><img width="170" src="'. $model->vod_pic.'"></div>'
+                                . '<div >' . $model->vod_content . '</div>'
+                            ;
                     }
                     return '';
                 }
@@ -61,26 +63,30 @@ $this->params['breadcrumbs'][] = $this->title;
                 'options' => ['class' => 'table  table-striped table-bordered detail-view','style' => 'margin-top:20px;'],
                 'attributes' => [
 
-                    'vod_filmtime',
+                    //'vod_filmtime',
                     'vod_actor',
                     'vod_total',
-                    'vod_addtime',
+                    'vod_addtime:datetime',
                     'vod_director',
                     'vod_length',
+                    [
+                            'attribute' => 'vod_multiple',
+                            'value' => function($model) {
+                                return $model->vod_multiple ? '是' :'否';
+                            }
+                    ],
+
                     'vod_continu',
                     'vod_ename',
                     'vod_douban_id',
-                    'vod_weekday',
+                    //'vod_weekday',
                     'vod_pic_bg',
                     'vod_pic_slide',
-                    'vod_reurl',
+                    //'vod_reurl',
                     'vod_keywords',
-                    'vod_series',
-                    'vod_type',
-                    'vod_year',
-                    'vod_area',
+                    //'vod_series',
                     'vod_language',
-                    'vod_version',
+                    //'vod_version',
                     'vod_content'
                 ],
             ])?>
@@ -92,6 +98,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template' => "<tr><th style='width: 200px;'>{label}</th><td>{value}</td></tr>",
                 'options' => ['class' => 'table table-striped  table-bordered detail-view','style' => 'margin-top:20px;'],
                 'attributes' => [
+                    'vod_id',
                     [
                         'attribute' => 'vod_stars',
                         'format' => 'raw',
@@ -121,7 +128,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     'vod_gold',
                     'vod_golder',
                     'vod_length',
-                    'vod_multiple',
                     //'vod_weekday',
                     //'vod_series',
                     //'vod_copyright',
