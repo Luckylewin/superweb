@@ -91,8 +91,10 @@ class Tv extends Vod
             if (!empty($data['links'])) {
                 foreach ($data['links'] as $_link) {
                     $link = new Vodlink();
-                    $link->url = $_link['url'];
-                    $link->episode = $_link['episode'];
+
+                    $link->url      = $_link['url'];
+                    $link->episode  = $_link['episode'];
+                    if (isset($_link['pic'])) $link->pic = $_link['pic'];
                     $link->group_id = $playGroup->id;
                     $link->save(false);
                 }

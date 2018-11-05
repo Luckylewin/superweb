@@ -145,7 +145,7 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js'
             [
                     'attribute' => 'vod_type',
                     'headerOptions' => ['class' => 'col-md-1'],
-                    'filter' => \backend\models\IptvType::getVodType($search['vod_cid']),
+                    'filter' => \backend\models\IptvType::getTypeItem($search['vod_cid'], 'vod_type'),
                     'filterInputOptions' => [
                             'prompt' => Yii::t('backend', 'please choose'),
                             'class' => 'form-control'

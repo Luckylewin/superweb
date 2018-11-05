@@ -70,26 +70,6 @@ class IptvType extends \yii\db\ActiveRecord
         return $this->hasOne(VodList::className(), ['list_id' => 'vod_list_id']);
     }
 
-    /**
-     * vod_type
-     * @param $list_id
-     * @return array
-     */
-    public static function getVodType($list_id)
-    {
-       $type = self::find()->where(['field' => 'vod_type', 'vod_list_id' => $list_id])
-                    ->with('items')
-                    ->one();
-
-       if ($type) {
-          $items = $type->items;
-          return ArrayHelper::map($items, 'name','name');
-       }
-
-       return [];
-    }
-
-
     public static function getTypeItem($list_id, $field)
     {
         $type = self::find()->where(['field' => $field, 'vod_list_id' => $list_id])

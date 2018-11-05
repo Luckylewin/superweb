@@ -28,16 +28,16 @@ $dataProvider = new \yii\data\ActiveDataProvider([
             "options" => ["class" => "grid-view","style"=>"overflow:auto", "id" => "grid"],
             'layout' => '{items}{pager}',
             'columns' => [
-                ['class' => 'yii\grid\SerialColumn'],
+               # ['class' => 'yii\grid\SerialColumn'],
                 [
                     "class" => "yii\grid\CheckboxColumn",
                     "name" => "id",
                 ],
+                'episode',
+
                 [
-                    'attribute' => 'save_type',
-                    'value' => function($model) {
-                        return Vodlink::$saveTypeMap[$model->save_type];
-                    }
+                    'attribute' => 'pic',
+                    'format' => ['image', ['width' => '100']]
                 ],
                 [
                     'attribute' => 'url',
@@ -63,10 +63,16 @@ $dataProvider = new \yii\data\ActiveDataProvider([
                         ]);
                     },
                     'headerOptions' => [
-                        'class' => 'col-md-8',
+                        'class' => 'col-md-6',
                     ]
                 ],
-                'episode',
+                [
+                    'attribute' => 'save_type',
+                    'value' => function($model) {
+                        return Vodlink::$saveTypeMap[$model->save_type];
+                    }
+                ],
+
 
                 [
                     'class' => 'common\grid\MyActionColumn',
@@ -77,17 +83,17 @@ $dataProvider = new \yii\data\ActiveDataProvider([
                     'buttons' => [
                         'view' => function($url, $model) {
                             return Html::a(Yii::t('backend', 'View'),Url::to(['link/view','vod_id'=>$model->video_id, 'id' => $model->id]),[
-                                'class' => 'btn btn-success btn-xs'
+                                'class' => 'btn btn-success btn-sm'
                             ]);
                         },
                         'update' => function($url, $model) {
                             return Html::a(Yii::t('backend', 'Edit'),Url::to(['link/update','vod_id'=>$model->video_id, 'id' => $model->id]),[
-                                'class' => 'btn btn-info btn-xs'
+                                'class' => 'btn btn-info btn-sm'
                             ]);
                         },
                         'delete' => function($url, $model) {
                             return Html::a(Yii::t('backend', 'Delete'),Url::to(['link/delete','vod_id' => $model->video_id, 'id' => $model->id]),[
-                                'class' => 'btn btn-danger btn-xs',
+                                'class' => 'btn btn-danger btn-sm',
                                 'data-confirm' => Yii::t('backend', 'Are you sure?')
                             ]);
                         },

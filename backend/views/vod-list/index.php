@@ -34,9 +34,15 @@ $this->params['breadcrumbs'][] = $this->title;
             //'list_sid',
             [
                     'attribute' => 'list_icon',
-                    'format' => ['image',['width'=>40]],
+                    'format' => 'raw',
+                    'value' => function($model) {
+                        return Html::img(\common\components\Func::getAccessUrl($model->list_icon), [
+                                'width' => '50px',
+                                'style' => "border-radius:50px;"
+                        ]);
+                    },
                     'options' => ['style' => 'width:100px;'],
-                    'value' => 'list_icon'
+
             ],
             [
                     'attribute' => 'list_name',

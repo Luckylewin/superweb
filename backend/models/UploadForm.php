@@ -24,6 +24,9 @@ class UploadForm extends Model
     public $image_big_hover;
 
     public $media;
+
+    public $list_icon;
+
     /**
      * @var UploadedFile
      */

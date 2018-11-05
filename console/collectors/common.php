@@ -42,10 +42,11 @@ class common
      * @param $url
      * @param string $format
      * @param string $charset
+     * @param array $cookies
      * @return bool|Crawler
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function getDom($url, $format ='html', $charset = "UTF-8")
+    public function getDom($url, $format ='html', $charset = "UTF-8", $cookies = null)
     {
         try {
             if (Yii::$app->cache->exists(md5($url))) {
@@ -54,14 +55,20 @@ class common
                 Yii::$app->cache->set(md5($url), $data, 186400);
             } else {
                 $this->isCached = false;
-                $client = new Client();
-                $result = $client->request('GET', $url, [
+                $client  = new Client();
+                $options = [
                     'headers' => [
                         'User-Agent' => 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36',
                         'Referer'    => 'https://www.google.com/',
                         'Accept-Language' => 'en-US,en;q=0.5'
                     ],
-                ]);
+                ];
+
+                if ($cookies) {
+                    $options['cookies'] = $cookies;
+                }
+
+                $result = $client->request('GET', $url, $options);
                 $data = $result->getBody()->getContents();
 
                 $this->isCached = false;

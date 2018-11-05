@@ -178,8 +178,8 @@ class UploadController extends BaseController
                             'name' => $FileInstance->getBaseName(),
                             'size' => $FileInstance->size,
                             'path' => $path,
-                            'url' => $expireUrl,
-                            'md5' => md5_file($filePath),
+                            'url'  => $expireUrl,
+                            'md5'  => md5_file($filePath),
                             'thumbnailUrl' => $thumb ? $thumb : $expireUrl,
                             'deleteUrl' => Url::to(['upload/file-delete', 'path' => $path]),
                             'deleteType' => 'POST',
@@ -189,6 +189,7 @@ class UploadController extends BaseController
             }
 
         }
+
         return ['error' => '上传失败'];
     }
 

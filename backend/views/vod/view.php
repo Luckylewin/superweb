@@ -38,6 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'vod_type',
             'vod_area',
             'vod_year',
+            'vod_length',
             [
                 'attribute' => 'vod_pic',
                 'format' => 'raw',
@@ -68,7 +69,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'vod_total',
                     'vod_addtime:datetime',
                     'vod_director',
-                    'vod_length',
+
                     [
                             'attribute' => 'vod_multiple',
                             'value' => function($model) {

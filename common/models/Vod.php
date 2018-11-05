@@ -97,10 +97,10 @@ class Vod extends \yii\db\ActiveRecord implements Linkable
     {
         return [
             [['vod_cid', 'vod_name'], 'required'],
-            [['vod_cid', 'vod_year', 'vod_total', 'vod_addtime', 'vod_hits', 'vod_hits_day', 'vod_hits_week', 'vod_hits_month', 'vod_up', 'vod_down', 'vod_price', 'vod_trysee', 'vod_golder', 'vod_length', 'vod_copyright', 'vod_douban_id'], 'integer'],
+            [['vod_cid', 'vod_year', 'vod_total', 'vod_addtime', 'vod_hits', 'vod_hits_day', 'vod_hits_week', 'vod_hits_month', 'vod_up', 'vod_down', 'vod_price', 'vod_trysee', 'vod_golder', 'vod_copyright', 'vod_douban_id'], 'integer'],
             [['vod_content', 'vod_url', 'vod_scenario'], 'string'],
             [['vod_gold', 'vod_douban_score'], 'number'],
-            [['vod_name'], 'string', 'max' => 100],
+            [['vod_name', 'vod_length'], 'string', 'max' => 100],
             [['vod_ename', 'vod_title', 'vod_keywords', 'vod_type', 'vod_actor', 'vod_director', 'vod_pic', 'vod_pic_bg', 'vod_pic_slide', 'vod_play', 'vod_server', 'vod_reurl'], 'string', 'max' => 255],
             [['vod_area', 'vod_language'], 'string', 'max' => 10],
             [['vod_continu', 'vod_filmtime'], 'string', 'max' => 20],

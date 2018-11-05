@@ -6,6 +6,7 @@ use backend\blocks\VodBlock;
 use backend\models\form\BindVodSchemeForm;
 use backend\models\Scheme;
 use backend\models\VodToScheme;
+use common\components\Func;
 use common\models\VodList;
 use Yii;
 use common\models\Vod;
@@ -90,10 +91,10 @@ class VodController extends BaseController
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
+        $this->rememberReferer();
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $this->setFlash('info', Yii::t('backend', 'Success'));
-            return $this->redirect(['view', 'id' => $model->vod_id]);
+            return $this->redirect(Func::getLastPage());
         }
 
         return $this->render('update', [
@@ -110,7 +111,6 @@ class VodController extends BaseController
         $this->setFlash('info', Yii::t('backend', 'Success'));
         return $this->redirect(Yii::$app->request->referrer);
     }
-
 
     public function actionDelete($id)
     {

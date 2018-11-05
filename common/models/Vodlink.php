@@ -16,7 +16,9 @@ use backend\models\PlayGroup;
  * @property string $season 第几季
  * @property string $group_id 链接分组id
  * @property string $save_type 链接类型
+ * @property string $pic 图片
  */
+
 class Vodlink extends \yii\db\ActiveRecord
 {
 
@@ -46,7 +48,7 @@ class Vodlink extends \yii\db\ActiveRecord
         return [
             [['video_id', 'episode', 'group_id'], 'integer'],
             [['url'], 'required'],
-            [['url', 'hd_url', 'save_type'], 'string', 'max' => 255],
+            [['url', 'hd_url', 'save_type', 'pic'], 'string', 'max' => 255],
             [['plot'], 'string', 'max' => 1000],
             ['episode', 'filter', 'filter' => 'intval'],
 
@@ -65,6 +67,7 @@ class Vodlink extends \yii\db\ActiveRecord
             'hd_url' => '高清URl',
             'episode' => '剧集',
             'plot' => '剧情',
+            'pic' => '剧集图片',
             'save_type' => '资源位置'
         ];
     }

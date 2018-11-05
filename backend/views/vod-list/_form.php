@@ -43,8 +43,8 @@ $this->registerJsFile('/statics/js/pinyin.js');
 
         <?=  \dosamigos\fileupload\FileUploadUI::widget([
             'model' => new \backend\models\UploadForm(),
-            'attribute' => 'image',
-            'url' => ['upload/image-upload',],
+            'attribute' => 'list_icon',
+            'url' => ['upload/image-upload','field' => 'list_icon'],
             'gallery' => false,
             'fieldOptions' => ['accept' => 'image/*'],
             'clientOptions' => ['maxFileSize' => 2000000],
@@ -55,7 +55,7 @@ $this->registerJsFile('/statics/js/pinyin.js');
                                 console.log(data);
                                 var files = data.result.files[0];
                                 
-                                $("#vodlist-list_icon").val(files.url);
+                                $("#vodlist-list_icon").val(files.path);
                             }',
                 'fileuploadfail' => 'function(e, data) {
                                 console.log(e);

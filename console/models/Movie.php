@@ -64,7 +64,7 @@ class Movie extends Vod
             if (isset($data['vod_director'])) $movie->vod_director = $data['vod_director'];
             if (isset($data['vod_area'])) $movie->vod_area         = $data['vod_area'];
             if (isset($data['vod_length'])) $movie->vod_length     = $data['vod_length'];
-            if (isset($data['vod_filmtime'])) $movie->vod_filmtime = $data['vod_filmtime'];
+            if (isset($data['vod_year'])) $movie->vod_year         = $data['vod_year'];
 
             $movie->save(false);
 

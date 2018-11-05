@@ -50,9 +50,9 @@ class Variety extends Vod
         $vod = Vod::findOne(['vod_name' => $title]);
 
         if (empty($vod)) {
-            $genre = VodList::findOne(['list_dir' => 'Serial']);
+            $genre = VodList::findOne(['list_dir' => 'Variety']);
             if (empty($genre)) {
-                echo "请新增Serial分类" , PHP_EOL;
+                echo "请新增Variety分类" , PHP_EOL;
                 return false;
             }
 
@@ -91,8 +91,9 @@ class Variety extends Vod
             if (!empty($data['links'])) {
                 foreach ($data['links'] as $_link) {
                     $link = new Vodlink();
-                    $link->url = $_link['url'];
+                    $link->url     = $_link['url'];
                     $link->episode = $_link['episode'];
+                    if (isset($_link['pic'])) $link->pic = $_link['pic'];
                     $link->group_id = $playGroup->id;
                     $link->save(false);
                 }
