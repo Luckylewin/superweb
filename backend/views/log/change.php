@@ -1,14 +1,18 @@
 <?php
 
 /**
- * @var $model \backend\models\LogInterface
+ * @var $model \backend\models\form\LogChangedForm
  * @var $statics \backend\models\LogStatics
  */
 $this->registerJsFile('https://cdn.bootcss.com/echarts/4.1.0/echarts.common.js', ['depends'=>'yii\web\JqueryAsset', 'position'=>\yii\web\View::POS_HEAD]);
 
+$this->registerJsFile('/statics/themes/default-admin/plugins/laydate/laydate.js', ['depends'=>'yii\web\JqueryAsset', 'position'=>\yii\web\View::POS_HEAD] );
+
 /**@var $date string */
 /**@var $time string */
-
+$this->title = '统计图';
+$this->params['breadcrumbs'][] = ['label' => '日志统计', 'url' => ['log/index']];
+$this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <div class="col-md-12 text-center">
@@ -18,11 +22,20 @@ $this->registerJsFile('https://cdn.bootcss.com/echarts/4.1.0/echarts.common.js',
 <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
 <div id="main" class="col-md-12" style="height: 400px"></div>
 
-<div class="col-md-12 text-center">
-    <?= \yii\helpers\Html::a(Yii::t('backend', 'Go Back'),Yii::$app->request->referrer, [
-        'class' => 'btn btn-default'
-    ]); ?>
+<?php $form = \yii\bootstrap\ActiveForm::begin([
+    'options' => [
+            'class' => 'form-inline',
+            'id'    => 'my_form'
+    ],
+]) ?>
+
+<div class="text-center">
+    <?= $form->field($model, 'year')->textInput(['autocomplete' => 'off']); ?>
+    <?= $form->field($model, 'month')->textInput(['autocomplete' => 'off']); ?>
+
 </div>
+
+<?php \yii\bootstrap\ActiveForm::end() ?>
 
 <?php
 $xAxis = "'".implode("','", array_keys($data))."'";
@@ -95,3 +108,28 @@ JS;
 
 $this->registerJs($js);
 ?>
+
+
+<script>
+  laydate.render({
+    elem: '#logchangedform-year'
+    ,format: 'yyyy'
+    ,max:'<?= $model->year;?>'
+    ,type: 'year',
+    done: function(value, date){
+      $('#my_form').submit();
+    }
+  });
+
+  //年月选择器
+  laydate.render({
+    elem: '#logchangedform-month'
+    ,format: 'MM'
+    ,type: 'month'
+    ,max:'<?= $model->month;?>',
+    done: function(value, date){
+      $('#my_form').submit();
+    }
+  });
+
+</script>

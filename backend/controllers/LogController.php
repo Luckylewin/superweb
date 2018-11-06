@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\models\form\LogChangedForm;
 use Yii;
 use yii\redis\Connection;
 use backend\models\AppLog;
@@ -129,17 +130,23 @@ class LogController extends BaseController
 
     public function actionChange($type = 'date', $attribute)
     {
-        $year = 2018;
-        $month = 10;
+        $model = new LogChangedForm();
+        $model->year  = date('Y');
+        $model->month = date('m');
+
+        if ($this->getRequest()->isPost) {
+            $model->load($this->getRequest()->post());
+        }
 
         if ($type == 'date') {
-           $data = LogStatics::getAttributeChangeDataWithMonth($attribute, '2018',10);
+           $data = LogStatics::getAttributeChangeDataWithMonth($attribute, $model->year,$model->month);
         }
 
         return $this->render('change', [
+            'model' => $model,
             'data'  => $data,
             'title' => (new LogStatics())->attributeLabels()[$attribute],
-            'time'  => $year . '年' . $month . '月'
+            'time'  => $model->year . '年' . $model->month . '月'
         ]);
     }
 

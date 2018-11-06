@@ -137,6 +137,7 @@ class CollectController extends Controller
     public function actionVnTv()
     {
         $tv  = new Tv();
+        $tv->setLanguage('Vietnamese');
         $search = new HplusSearcher($tv);
         $search->collectTv();
     }
