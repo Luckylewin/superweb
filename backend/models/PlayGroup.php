@@ -14,6 +14,7 @@ use Yii;
  * @property int $vod_id
  * @property string $group_name
  * @property int $sort
+ * @property int $use_flag
  */
 class PlayGroup extends \yii\db\ActiveRecord
 {
@@ -31,7 +32,7 @@ class PlayGroup extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            ['group_name','safe'],
+            [['group_name', 'use_flag'],'safe'],
             [['vod_id', 'sort'], 'integer'],
             [['group_name'], 'string', 'max' => 32],
         ];
@@ -47,6 +48,7 @@ class PlayGroup extends \yii\db\ActiveRecord
             'vod_id' => 'Vod ID',
             'group_name' => Yii::t('backend', 'Group Name'),
             'sort' => Yii::t('backend', 'Sort'),
+            'use_flag' => Yii::t('backend', 'Is Available'),
         ];
     }
 

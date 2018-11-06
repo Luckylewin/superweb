@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use common\components\Func;
 use Yii;
 use backend\models\PlayGroup;
 use yii\data\ActiveDataProvider;
@@ -79,10 +80,11 @@ class PlayGroupController extends BaseController
      */
     public function actionUpdate($id)
     {
+        $this->rememberReferer();
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(Func::getLastPage());
         }
 
         return $this->render('update', [

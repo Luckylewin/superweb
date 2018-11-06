@@ -17,6 +17,10 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'group_name')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'sort')->textInput() ?>
+    <?= $form->field($model, 'use_flag')->dropDownList([
+            '0' => Yii::t('backend', 'off'),
+            '1' => Yii::t('backend', 'on'),
+    ]) ?>
 
     <div class="form-group">
         <?= Html::submitButton(Yii::t('backend', 'Save'), ['class' => 'btn btn-success']) ?>

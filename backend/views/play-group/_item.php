@@ -8,6 +8,11 @@ use yii\helpers\Url;
 $group_id = Yii::$app->request->get('group_id', false);
 $dataProvider = new \yii\data\ActiveDataProvider([
     'query' => Vodlink::find()->where(['group_id' => $model->id]),
+    'sort'  => [
+            'defaultOrder' => [
+                    'episode' => SORT_DESC
+            ]
+    ],
     'pagination' => [
         'pageSize' => 10,
     ],
@@ -18,7 +23,12 @@ $dataProvider = new \yii\data\ActiveDataProvider([
 
 <div class="panel panel-default">
     <div class="panel-heading">
-        <span class="text-dark">播放来源：<b><?= $model->group_name ?></b></span>
+        <span class="text-dark">
+            播放来源：<b><?= $model->group_name ?></b>
+            <?php if($model->use_flag == false): ?>
+            <font color="#dc143c">(不可用)</font>
+            <?php endif; ?>
+        </span>
         <span style="float: right"><?= Html::a('编辑', Url::to(['play-group/update', 'id' => $model->id])) ?></span>
     </div>
     <div class="panel-body">
@@ -26,7 +36,7 @@ $dataProvider = new \yii\data\ActiveDataProvider([
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
             "options" => ["class" => "grid-view","style"=>"overflow:auto", "id" => "grid"],
-            'layout' => '{items}{pager}',
+            'layout' => '{items}{pager}{summary}',
             'columns' => [
                # ['class' => 'yii\grid\SerialColumn'],
                 [
