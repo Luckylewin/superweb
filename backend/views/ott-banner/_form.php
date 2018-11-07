@@ -10,8 +10,8 @@ use common\models\OttChannel;
 /* @var $form yii\widgets\ActiveForm */
 
 $channel = OttChannel::findOne($model->channel_id);
-$model->title = $channel->name;
-$model->desc = $channel->name;
+$model->title = isset($channel->name) ? $channel->name : '已删除';
+$model->desc = isset($channel->name) ? $channel->name : '已删除' ;
 if ($model->isNewRecord) {
     $model->sort = 0;
 }
