@@ -228,32 +228,12 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js'
                         return $model->vod_addtime;
                     }
             ],
-           /* [
-                    'class' => 'common\grid\MyActionColumn',
-                'headerOptions' => ['class' => 'col-md-2'],
-                    'template' => '{push-home}&nbsp;{banner-create}',
-                    'buttons' => [
-                        'banner-create' => function($url, $model, $key) {
-                            return Html::a('banner', ['banner/create','vod_id' => $model->vod_id], [
-                                'class' => 'btn btn-default btn-sm'
-                            ]);
-                        },
-                        'push-home' => function($url, $model, $key) {
-                            $text = $model->vod_home ? Yii::t('backend', 'Cancel') : Yii::t('backend', 'Recommend');
-                            return Html::a($text, ['vod/push-home','id' => $model->vod_id,'action' => $model->vod_home ? '0' : '1' ], [
-                                'class' => 'btn btn-sm ' . ($model->vod_home? 'btn-success' : 'btn-default')
-                            ]);
-                        },
-                    ],
-
-                    'header' => Yii::t('backend', 'Push')
-            ],*/
 
             [
                     'class' => 'common\grid\MyActionColumn',
                     'headerOptions' => ['class' => 'col-md-4'],
                     'size' => 'btn-sm',
-                    'template' => '{link-index} {scheme-setting} {update} {delete}',
+                    'template' => '{link-index} {scheme-setting} {push-home}&nbsp;{banner-create} {update} {delete} ',
 
                     'buttons' => [
                             'view' => function($url, $model) {
@@ -277,6 +257,19 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js'
                                     'data-id' => $model->vod_id,
                                 ]);
                             }
+
+                            ,
+                        'banner-create' => function($url, $model, $key) {
+                            return Html::a(Html::tag('i','', ['class' => 'fa fa-file-picture-o']), ['banner/create','vod_id' => $model->vod_id], [
+                                'class' => 'btn btn-default btn-sm'
+                            ]);
+                        },
+                        'push-home' => function($url, $model, $key) {
+                            $text = $model->vod_home ? Html::tag('i', '', ['class' => 'fa fa-thumbs-up']) : Html::tag('i','', ['class' => 'fa fa-thumbs-o-up']);
+                            return Html::a($text, ['vod/push-home','id' => $model->vod_id,'action' => $model->vod_home ? '0' : '1' ], [
+                                'class' => 'btn btn-sm ' . ($model->vod_home? 'btn-success' : 'btn-default')
+                            ]);
+                        },
 
                     ],
 
