@@ -28,7 +28,7 @@ if ($model->isNewRecord) {
     <?php $form = ActiveForm::begin(); ?>
 
     <div class="col-md-12">
-            <?php if($channel->name): ?>
+            <?php if(isset($channel->name)): ?>
             <?= $form->field($model, 'channel_id')->dropDownList([
                 $model->channel_id => $channel->name
             ]); ?>
