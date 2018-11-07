@@ -28,9 +28,11 @@ if ($model->isNewRecord) {
     <?php $form = ActiveForm::begin(); ?>
 
     <div class="col-md-12">
+            <?php if($channel->name): ?>
             <?= $form->field($model, 'channel_id')->dropDownList([
                 $model->channel_id => $channel->name
             ]); ?>
+            <?php endif; ?>
 
             <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
