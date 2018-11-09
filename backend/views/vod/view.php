@@ -63,10 +63,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'template' => "<tr><th style='width: 200px;'>{label}</th><td>{value}</td></tr>",
                 'options' => ['class' => 'table  table-striped table-bordered detail-view','style' => 'margin-top:20px;'],
                 'attributes' => [
-
                     'vod_origin_url',
                     'vod_actor',
                     'vod_total',
+                    'vod_hits',
                     'vod_addtime:datetime',
                     'vod_director',
 
