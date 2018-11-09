@@ -64,30 +64,20 @@ class Func
      */
     public static function getAccessUrl($path, $expireTime = 300)
     {
-        if (empty($path)) {
-            return 'null';
-        }
-
+        if (empty($path)) return 'null';
         $httpPos = strpos($path,'http');
+        if ($httpPos === 0) return $path;
+        if ($httpPos === false && strpos($path, '/') !== 0)  return Aliyunoss::getDownloadUrl($path, $expireTime);
 
-        if ($httpPos === 0) {
-            return $path;
-        }
-
-        if ($httpPos === false && strpos($path, '/') !== 0) {
-            return Aliyunoss::getDownloadUrl($path, $expireTime);
-        }
-
-        $url = "http://" . self::getServerIp() . ":" . Yii::$app->params['nginx']['media_port'] ."{$path}?";
-
-        $mac = '287994000001';//mac地址
+        $url    = "http://" . self::getServerIp() . ":" . Yii::$app->params['nginx']['media_port'] ."{$path}?";
+        $mac    = '287994000001';//mac地址
         $secret = Yii::$app->params['nginx']['secret']; //加密密钥
-        $expire = time() + $expireTime;//链接有效时间
-        $md5 = md5($secret.$expire, true); //生成密钥与过期时间的十六位二进制MD5数，
-        $md5 = base64_encode($md5);// 对md5进行base64_encode处理
-        $md5 = str_replace(array('=','/','+'), array('','_','-'), $md5); //分别替换字符，去掉'='字符, '/'替换成'_','+'替换成'-'
-        $key = md5($secret.$mac.$path); //对密钥, mac地址,芯片序列号sn,资源路径path进行MD5处理
-        $url .= "st={$md5}&e={$expire}&key={$key}&mac={$mac}";//最后拼接
+        $expire = 2145888000;//链接有效时间
+        $md5    = md5($secret.$expire, true); //生成密钥与过期时间的十六位二进制MD5数，
+        $md5    = base64_encode($md5);// 对md5进行base64_encode处理
+        $md5    = str_replace(array('=','/','+'), array('','_','-'), $md5); //分别替换字符，去掉'='字符, '/'替换成'_','+'替换成'-'
+        $key    = md5($secret.$mac.$path); //对密钥, mac地址,芯片序列号sn,资源路径path进行MD5处理
+        $url    .= "st={$md5}&e={$expire}&key={$key}&mac={$mac}";//最后拼接
 
         return $url;
     }
