@@ -59,12 +59,22 @@ class Movie extends Vod
             $movie->vod_total = 1;
 
 
+
             if (isset($data['vod_type'])) $movie->vod_type         = $data['vod_type'];
             if (isset($data['vod_actor'])) $movie->vod_actor       = $data['vod_actor'];
             if (isset($data['vod_director'])) $movie->vod_director = $data['vod_director'];
             if (isset($data['vod_area'])) $movie->vod_area         = $data['vod_area'];
             if (isset($data['vod_length'])) $movie->vod_length     = $data['vod_length'];
             if (isset($data['vod_year'])) $movie->vod_year         = $data['vod_year'];
+            if (isset($data['vod_year'])) $movie->vod_year             = $data['vod_year'];
+            if (isset($data['vod_hits'])) $movie->vod_hits             = $data['vod_hits'];
+            if (isset($data['vod_up'])) $movie->vod_up                 = $data['vod_up'];
+            if (isset($data['vod_pic_bg'])) $movie->vod_pic_bg         = $data['vod_pic_bg'];
+            if (isset($data['vod_pic_slide'])) $movie->vod_pic_slide   = $data['vod_pic_slide'];
+            if (isset($data['vod_reurl'])) $movie->vod_reurl           = $data['vod_reurl'];
+            if (isset($data['vod_language'])) $movie->vod_language     = $data['vod_language'];
+            if (isset($data['vod_area'])) $movie->vod_area           = $data['vod_area'];
+            if (isset($data['vod_origin_url'])) $movie->vod_origin_url  = $data['vod_origin_url'];
 
             $movie->save(false);
 

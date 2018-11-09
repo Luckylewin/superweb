@@ -64,7 +64,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'options' => ['class' => 'table  table-striped table-bordered detail-view','style' => 'margin-top:20px;'],
                 'attributes' => [
 
-                    //'vod_filmtime',
+                    'vod_origin_url',
                     'vod_actor',
                     'vod_total',
                     'vod_addtime:datetime',

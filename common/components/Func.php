@@ -148,4 +148,15 @@ class Func
         }
         return $res;
     }
+
+    public static function getMemoryUsage($status = null)
+    {
+        return (self::convertSize(memory_get_usage($status)));
+    }
+
+    public static function convertSize($byte)
+    {
+        $unit=array('b','kb','MB','GB','TB','PB');
+        return @round($byte/pow(1024,($i=floor(log($byte,1024)))),2).' '.$unit[$i];
+    }
 }

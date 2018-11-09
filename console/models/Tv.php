@@ -60,7 +60,7 @@ class Tv extends Vod
 
             $tv->vod_name = $title;
             $tv->vod_pic = $image;
-            $tv->vod_pic_bg = $image;
+
             $tv->vod_content = $info;
             $tv->vod_language = $this->language;
             $tv->vod_area = $this->area;
@@ -70,14 +70,22 @@ class Tv extends Vod
             $tv->vod_multiple = 1;
             $tv->vod_isend = 1;
 
-            if (isset($data['vod_keywords'])) $tv->vod_keywords = $data['vod_keywords'];
-            if (isset($data['vod_type'])) $tv->vod_type         = $data['vod_type'];
-            if (isset($data['vod_actor'])) $tv->vod_actor       = $data['vod_actor'];
-            if (isset($data['vod_director'])) $tv->vod_director = $data['vod_director'];
-            if (isset($data['vod_area'])) $tv->vod_area         = $data['vod_area'];
-            if (isset($data['vod_length'])) $tv->vod_length     = $data['vod_length'];
-            if (isset($data['vod_filmtime'])) $tv->vod_filmtime = $data['vod_filmtime'];
-            if (isset($data['vod_year'])) $tv->vod_year         = $data['vod_year'];
+            if (isset($data['vod_keywords'])) $tv->vod_keywords     = $data['vod_keywords'];
+            if (isset($data['vod_type'])) $tv->vod_type             = $data['vod_type'];
+            if (isset($data['vod_actor'])) $tv->vod_actor           = $data['vod_actor'];
+            if (isset($data['vod_director'])) $tv->vod_director     = $data['vod_director'];
+            if (isset($data['vod_area'])) $tv->vod_area             = $data['vod_area'];
+            if (isset($data['vod_length'])) $tv->vod_length         = $data['vod_length'];
+            if (isset($data['vod_filmtime'])) $tv->vod_filmtime     = $data['vod_filmtime'];
+            if (isset($data['vod_year'])) $tv->vod_year             = $data['vod_year'];
+            if (isset($data['vod_hits'])) $tv->vod_hits             = $data['vod_hits'];
+            if (isset($data['vod_up'])) $tv->vod_up                 = $data['vod_up'];
+            if (isset($data['vod_pic_bg'])) $tv->vod_pic_bg         = $data['vod_pic_bg'];
+            if (isset($data['vod_pic_slide'])) $tv->vod_pic_slide   = $data['vod_pic_slide'];
+            if (isset($data['vod_reurl'])) $tv->vod_reurl           = $data['vod_reurl'];
+            if (isset($data['vod_language'])) $tv->vod_language     = $data['vod_language'];
+            if (isset($data['vod_area'])) $tv->vod_area             = $data['vod_area'];
+            if (isset($data['vod_origin_url'])) $tv->vod_origin_url  = $data['vod_origin_url'];
 
             $tv->save(false);
 
@@ -94,8 +102,10 @@ class Tv extends Vod
 
                     $link->url      = $_link['url'];
                     $link->episode  = $_link['episode'];
-                    if (isset($_link['pic'])) $link->pic = $_link['pic'];
                     $link->group_id = $playGroup->id;
+
+                    if (isset($_link['title']))  $link->title = $_link['title'];
+                    if (isset($_link['pic'])) $link->pic = $_link['pic'];
                     $link->save(false);
                 }
             }

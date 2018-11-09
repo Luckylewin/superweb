@@ -78,7 +78,14 @@ class Variety extends Vod
             if (isset($data['vod_length'])) $tvShow->vod_length     = $data['vod_length'];
             if (isset($data['vod_filmtime'])) $tvShow->vod_filmtime = $data['vod_filmtime'];
             if (isset($data['vod_year'])) $tvShow->vod_year         = $data['vod_year'];
-
+            if (isset($data['vod_hits'])) $tvShow->vod_hits         = $data['vod_hits'];
+            if (isset($data['vod_up'])) $tvShow->vod_up             = $data['vod_up'];
+            if (isset($data['vod_pic_bg'])) $tvShow->vod_pic_bg     = $data['vod_pic_bg'];
+            if (isset($data['vod_pic_slide'])) $tvShow->vod_pic_slide   = $data['vod_pic_slide'];
+            if (isset($data['vod_reurl'])) $tvShow->vod_reurl       = $data['vod_reurl'];
+            if (isset($data['vod_language'])) $tvShow->vod_language = $data['vod_language'];
+            if (isset($data['vod_area'])) $tvShow->vod_area         = $data['vod_area'];
+            if (isset($data['vod_origin_url'])) $tvShow->vod_origin_url  = $data['vod_origin_url'];
             $tvShow->save(false);
 
             // 新增一个播放分组
@@ -93,8 +100,11 @@ class Variety extends Vod
                     $link = new Vodlink();
                     $link->url     = $_link['url'];
                     $link->episode = $_link['episode'];
-                    if (isset($_link['pic'])) $link->pic = $_link['pic'];
                     $link->group_id = $playGroup->id;
+
+                    if (isset($_link['title']))  $link->title = $_link['title'];
+                    if (isset($_link['pic']))    $link->pic = $_link['pic'];
+
                     $link->save(false);
                 }
             }

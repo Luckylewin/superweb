@@ -160,6 +160,7 @@ return [
 
 
 
+    'Origin Url' => '原地址',
     'Associated user' => '关联用户',
     'Is Available' => '是否可用',
     'Package names' => '包名',

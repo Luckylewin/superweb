@@ -43,12 +43,14 @@ $dataProvider = new \yii\data\ActiveDataProvider([
                     "class" => "yii\grid\CheckboxColumn",
                     "name" => "id",
                 ],
+
                 'episode',
 
                 [
                     'attribute' => 'pic',
-                    'format' => ['image', ['width' => '100']]
+                    'format' => ['image', ['width' => '90']]
                 ],
+                'title',
                 [
                     'attribute' => 'url',
                     'format' => 'raw',
@@ -57,7 +59,7 @@ $dataProvider = new \yii\data\ActiveDataProvider([
                             if (strtolower($model->group_name) == 'youtube') {
 
                                 //$href = "https://www.youtube.com/watch?v=" . $mod->url;
-                                $href = "http://192.200.112.162:12389/play/" . $mod->url. '?resolve=youtube&noauth=true';
+                                $href = str_replace('sign=','', $mod->url) . 'noauth=true';
                             } else {
                                 $href = $mod->url;
                             }
@@ -67,14 +69,12 @@ $dataProvider = new \yii\data\ActiveDataProvider([
                             $text = $mod->url;
                         }
 
-                        return Html::a($text, $href, [
+                        return Html::a(Html::tag('i',basename($text), ['class' => 'fa fa-link']), $href, [
                                 'class' => 'btn btn-link',
                                 'target' => '_blank'
                         ]);
                     },
-                    'headerOptions' => [
-                        'class' => 'col-md-6',
-                    ]
+
                 ],
                 [
                     'attribute' => 'save_type',

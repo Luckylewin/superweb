@@ -70,15 +70,22 @@ class Cartoon extends Vod
             $cartoon->vod_multiple = 1;
             $cartoon->vod_isend = 1;
 
-            if (isset($data['vod_keywords'])) $cartoon->vod_keywords = $data['vod_keywords'];
-            if (isset($data['vod_type'])) $cartoon->vod_type         = $data['vod_type'];
-            if (isset($data['vod_actor'])) $cartoon->vod_actor       = $data['vod_actor'];
-            if (isset($data['vod_director'])) $cartoon->vod_director = $data['vod_director'];
-            if (isset($data['vod_area'])) $cartoon->vod_area         = $data['vod_area'];
-            if (isset($data['vod_length'])) $cartoon->vod_length     = $data['vod_length'];
-            if (isset($data['vod_filmtime'])) $cartoon->vod_filmtime = $data['vod_filmtime'];
-            if (isset($data['vod_year'])) $cartoon->vod_year         = $data['vod_year'];
-
+            if (isset($data['vod_keywords'])) $cartoon->vod_keywords     = $data['vod_keywords'];
+            if (isset($data['vod_type'])) $cartoon->vod_type             = $data['vod_type'];
+            if (isset($data['vod_actor'])) $cartoon->vod_actor           = $data['vod_actor'];
+            if (isset($data['vod_director'])) $cartoon->vod_director     = $data['vod_director'];
+            if (isset($data['vod_area'])) $cartoon->vod_area             = $data['vod_area'];
+            if (isset($data['vod_length'])) $cartoon->vod_length         = $data['vod_length'];
+            if (isset($data['vod_filmtime'])) $cartoon->vod_filmtime     = $data['vod_filmtime'];
+            if (isset($data['vod_year'])) $cartoon->vod_year             = $data['vod_year'];
+            if (isset($data['vod_hits'])) $cartoon->vod_hits             = $data['vod_hits'];
+            if (isset($data['vod_up'])) $cartoon->vod_up                 = $data['vod_up'];
+            if (isset($data['vod_pic_bg'])) $cartoon->vod_pic_bg         = $data['vod_pic_bg'];
+            if (isset($data['vod_pic_slide'])) $cartoon->vod_pic_slide   = $data['vod_pic_slide'];
+            if (isset($data['vod_reurl'])) $cartoon->vod_reurl           = $data['vod_reurl'];
+            if (isset($data['vod_language'])) $cartoon->vod_language     = $data['vod_language'];
+            if (isset($data['vod_area'])) $cartoon->vod_area           = $data['vod_area'];
+            if (isset($data['vod_origin_url'])) $cartoon->vod_origin_url  = $data['vod_origin_url'];
             $cartoon->save(false);
 
             // 新增一个播放分组
@@ -93,8 +100,11 @@ class Cartoon extends Vod
                     $link = new Vodlink();
                     $link->url      = $_link['url'];
                     $link->episode  = $_link['episode'];
-                    if (isset($_link['pic'])) $link->pic = $_link['pic'];
                     $link->group_id = $playGroup->id;
+
+                    if (isset($_link['pic']))   $link->pic   = $_link['pic'];
+                    if (isset($_link['title'])) $link->title = $_link['title'];
+
                     $link->save(false);
                 }
             }

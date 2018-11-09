@@ -9,6 +9,7 @@
 namespace console\controllers;
 
 use console\collectors\hlpus\HplusSearcher;
+use console\collectors\iptv\thvliSearcher;
 use console\collectors\youtube\Searcher;
 use console\models\Cartoon;
 use console\models\Karaoke;
@@ -126,6 +127,21 @@ class CollectController extends Controller
         $search->start();
     }
 
+    public function actionHplusAll()
+    {
+        $this->actionVnCartoon();
+        $this->actionVnVariety();
+        $this->actionVnTv();
+        $this->actionVnMovie();
+    }
+
+    public function actionThAll()
+    {
+        $this->actionThCartoon();
+        $this->actionThVariety();
+        $this->actionThTv();
+    }
+
     public function actionVnMovie()
     {
         $movie  = new Movie();
@@ -140,6 +156,32 @@ class CollectController extends Controller
         $tv->setLanguage('Vietnamese');
         $search = new HplusSearcher($tv);
         $search->collectTv();
+    }
+
+    public function actionThCartoon()
+    {
+        $tv  = new Cartoon();
+
+        $search = new thvliSearcher($tv);
+        $search->collectCartoon();
+        $search->collectSpecialCartoon();
+    }
+
+    public function actionThVariety()
+    {
+        $tvShow  = new Variety();
+
+        $search = new thvliSearcher($tvShow);
+        $search->collectVariety();
+    }
+
+    public function actionThTv()
+    {
+        $tv  = new Tv();
+
+        $search = new thvliSearcher($tv);
+        $search->collectTv();
+
     }
 
     public function actionVnCartoon()
