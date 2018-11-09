@@ -17,6 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= DetailView::widget([
         'model' => $model,
+        'template' => '<tr><th class="col-md-3">{label}</th><td class="col-md-8" style="word-break: break-all">{value}</td></tr>',
         'attributes' => [
             'MAC',
             'SN',
@@ -36,7 +37,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             'contract_time',
-            'access_token',
+            [
+                    'attribute' => 'access_token',
+
+            ],
             'access_token_expire:datetime'
         ],
     ]) ?>
