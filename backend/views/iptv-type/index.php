@@ -25,7 +25,15 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'name',
             'field',
-
+            [
+                'attribute' => 'image',
+                'format' => 'raw',
+                'value' => function($model) {
+                    return Html::img(\common\components\Func::getAccessUrl($model->image),[
+                            'width' => '40'
+                    ]);
+                }
+            ],
             [
                     'label' => Yii::t('backend', 'options'),
                     'format' => 'raw',

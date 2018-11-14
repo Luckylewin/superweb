@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use dosamigos\fileupload\FileUploadUI;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\IptvType */
@@ -28,6 +29,28 @@ use yii\widgets\ActiveForm;
             'area'      => 'area',
             'hot'       => 'hot',
     ]) ?>
+
+    <?= $form->field($model, 'image')->textInput(['maxlength' => true]) ?>
+
+    <?= FileUploadUI::widget([
+        'model' => new \backend\models\UploadForm(),
+        'attribute' => 'image',
+        'url' => ['upload/image-upload',],
+        'gallery' => false,
+        'fieldOptions' => ['accept' => 'image/*'],
+        'clientOptions' => ['maxFileSize' => 2000000],
+        'clientEvents' => [
+            'fileuploaddone' => 'function(e, data) {
+                                     var files = data.result.files[0];
+                                     $("#iptvtype-image").val(files.path);
+                                 }',
+            'fileuploadfail' => 'function(e, data) {
+                                     console.log(e);
+                                     console.log(data);
+                                 }',
+        ],
+    ]);
+    ?>
 
     <?php if($model->isNewRecord): ?>
         <?= $form->field($model, 'vod_list_id')->hiddenInput()->label(false); ?>

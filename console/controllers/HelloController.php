@@ -8,6 +8,8 @@
 namespace console\controllers;
 
 use backend\models\Cache;
+use backend\models\IptvType;
+use backend\models\IptvTypeItem;
 use backend\models\Mac;
 use backend\models\MiddleParade;
 use backend\models\Parade;
@@ -16,8 +18,10 @@ use common\models\MainClass;
 use common\models\OttChannel;
 use common\models\OttLink;
 use common\models\SubClass;
+use common\models\Type;
 use common\models\Vod;
 use common\models\Vodlink;
+use common\models\VodList;
 use console\components\MySnnopy;
 use Symfony\Component\DomCrawler\Crawler;
 use yii\console\Controller;
@@ -125,102 +129,35 @@ class HelloController extends Controller
         }
     }
 
-    /**
-     * 测试生成缓存
-     */
-    public function actionList()
-    {
-        $mainClass = MainClass::find()
-            ->where(['use_flag' => 1])
-            ->orderBy(['id' => 'asc', 'sort' => 'asc'])
-            ->all();
-
-        $cache = new Cache();
-
-        foreach ($mainClass as $class) {
-            $this->stdout("generate {$class->name}" . PHP_EOL);
-            $cache->createOttCache($class->id, Cache::$XML);
-            $cache->createOttCache($class->id, Cache::$JSON);
-        }
-
-    }
-
-    public function actionCopyUser()
-    {
-        $total = Yii::$app->db2->createCommand('select count(*) as total from mac')->queryOne();
-        $total = $total['total'];
-        $this->stdout("新系统总条数{$total}");
-        sleep(2);
-        $cal = ceil($total / 100 + 1);
-
-        for ($i=0; $i< $cal; $i++) {
-            $offset = $i * 100;
-            $this->stdout("同步数据中{$offset}" . PHP_EOL);
-            $oldData = Yii::$app->db2->createCommand("select * from mac limit {$offset},100")->queryAll();
-            foreach ($oldData as $data) {
-                if (Mac::find()->where(['MAC' => $data['MAC'], 'SN' => $data['SN']])->exists() === false) {
-                     $mac = new Mac();
-                     $mac->MAC = $data['MAC'];
-                     $mac->SN = $data['SN'];
-                     $mac->client_id = 54;
-                     $mac->contract_time =  $data['contract_time'];
-                     $mac->regtime = $data['regtime'];
-                     $mac->use_flag = $data['use_flag'];
-                     $mac->save(false);
-                }
-            }
-        }
-
-        $count = Mac::find()->count('*');
-        $this->stdout("新系统总条数{$count}");
-
-    }
-
-    public function actionShell()
-    {
-        $fp = popen('ps -aux | grep log/analyse | grep -v grep', "r");
-        $rs = "";
-        while (!feof($fp)) {
-            $rs .= fread($fp, 1024);
-        }
-        pclose($fp);
-        var_dump($rs);
-    }
-
     public function actionTest()
     {
-        $snnopy = MySnnopy::init();
-        $snnopy->fetch('https://movie.douban.com/subject/26942674/');
-
-        $crawler = new Crawler();
-        $crawler->addHtmlContent($snnopy->results, "UTF-8");
-
-        $crawler
-           // ->filter('div#subject')
-            ->filterXpath('//div[@id="info"]')
-            ->filterXpath('//span[contains(./text(), "语言:")]/following::text()[1]')
-            ->each(function(Crawler $node) {
-                echo $node->text();
-            })
-        ;
-    }
-
-    public function actionGroup()
-    {
-        //为每个影片建立一个默认分组
-        $vods = Vod::find()->all();
-        foreach ($vods as $vod) {
-            if (PlayGroup::find()->where(['vod_id' => $vod->vod_id, 'group_name' => 'default'])->exists() == false) {
-                $playGroup = new PlayGroup();
-                $playGroup->vod_id = $vod->vod_id;
-                $playGroup->sort = 0;
-                $playGroup->group_name = 'default';
-                $playGroup->save(false);
-
-                Vodlink::updateAll(['group_id' => $playGroup->id], ['video_id' => $vod->vod_id]);
-            }
+        $vodList = vodList::find()->all();
+        foreach ($vodList as $list) {
+            // 判断是否存在 iptv types
+           $typeList = IptvType::find()->where(['vod_list_dir' => $list->list_dir, 'field' => 'type'])->one();
+           if (empty($typeList)) {
+               $fields = ['year', 'type', 'area', 'language'];
+               foreach ($fields as $field) {
+                   $iptvType = new IptvType();
+                   $iptvType->field = $field;
+                   $iptvType->name  = $field;
+                   $iptvType->vod_list_dir = $list->list_dir;
+                   $iptvType->vod_list_id  = $list->list_id;
+                   $iptvType->save(false);
+               }
+           } else {
+               $vods = Vod::find()->where(['vod_cid' => $list->vod_id])->all();
+               foreach ($vods as $vod) {
+                   $typesString = explode(',', $vod->vod_type);
+                   if (!empty($typesString)) {
+                        foreach ($typesString as $type) {
+                            // 判断是否存在于
+                        }
+                   }
+               }
+           }
         }
-
-        echo "工作完成了";
     }
+
+
 }
