@@ -15,6 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?= Html::a(Yii::t('backend', 'Create'), ['create','vod_list_id' => $list->list_id], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('backend', '同步'), ['sync','vod_list_id' => $list->list_id], ['class' => 'btn btn-info']) ?>
     </p>
 
     <?= GridView::widget([
@@ -30,15 +31,23 @@ $this->params['breadcrumbs'][] = $this->title;
                     'format' => 'raw',
                     'options' => ['style' => 'width:55%'],
                     'value' => function($model) {
-                        $data = $model->items;
+                        $data = \backend\models\IptvTypeItem::getTypeItems($model->id);
                         $str = '';
 
                         foreach ($data as $key => $item) {
-                            $str .= Html::button($item->zh_name , [
-                                    'title' => $item->name,
+                            if ($item->exist_num) {
+                                $str .= Html::button($item->name , [
+                                    'title' => $item->exist_num,
+                                    'class' => 'btn btn-info',
+                                    'style' => 'margin:2px;'
+                                ]);
+                            } else {
+                                $str .= Html::button($item->name , [
+                                    'title' => $item->exist_num,
                                     'class' => 'btn btn-default',
                                     'style' => 'margin:2px;'
                                 ]);
+                            }
                         }
                         return $str;
                     }

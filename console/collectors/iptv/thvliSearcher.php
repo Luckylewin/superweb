@@ -85,7 +85,8 @@ class thvliSearcher extends common
                 $this->color("正在爬取({$key}/{$total}):{$link['link']}>>>>>>>>>>>>>>>>>>>>");
                 try {
                     $data  = $this->getProfile($link['link']);
-                    $links = $this->getEpisode($data['episode_id']);
+
+                    $links = $this->getEpisode($data['episode_id'], $data['title']);
 
                     $data['vod_type']     = $link['type'];
                     $data['vod_area']     = $link['area'];
@@ -234,10 +235,10 @@ class thvliSearcher extends common
        return $links;
     }
 
-    protected function setProfile($detail)
+    protected function setProfile($detail, $link)
     {
         $profile = [
-            'id'            => $detail->id,
+            'id'            => isset($detail->id) ? $detail->id : '',
             'title'         => $detail->title,
             'image'         => $detail->images->thumbnail,
             'info'          => $detail->long_description,
@@ -250,7 +251,8 @@ class thvliSearcher extends common
             'episode_id'    => !empty($detail->seasons) ? $detail->seasons[0]->id  : false,
             'vod_director'  => !empty($detail->people)  ? $detail->people[0]->name : '',
             'vod_actor'     => !empty($detail->people) && isset($detail->people[1])  ? $detail->people[1]->name : '',
-            'vod_reurl'     => 'thvli'
+            'vod_reurl'     => 'thvli',
+            'vod_origin_url' => $link
         ];
 
         return $profile;
@@ -259,14 +261,14 @@ class thvliSearcher extends common
     protected function getProfile($link)
     {
         $detail  = $this->getJson($link);
-        $profile = $this->setProfile($detail);
+        $profile = $this->setProfile($detail, $link);
 
         $this->goSleep(2);
 
         return $profile;
     }
 
-    protected function getEpisode($episode_id)
+    protected function getEpisode($episode_id, $title)
     {
         $episodes = [];
         if ($episode_id) {
@@ -275,12 +277,25 @@ class thvliSearcher extends common
 
             if (!empty($json) && !empty($json->episodes)) {
                 foreach ($json->episodes as $item) {
+                    $_title = str_replace($title, '', $item->title);
+                    $_title = trim($_title);
+                    $_title = trim($_title, '-');
+                    $_title = trim($_title);
+
+                    if ($pos   = strpos($_title, 'Phần')) {
+                        $_title = substr($_title, $pos);
+                        $_title = trim($_title);
+                        $_title = trim($_title, '-');
+                        $_title = trim($_title);
+                    }
+
                     $episodes[] = [
-                        'title'   => $item->title,
+                        'title'   => $_title,
                         'episode' => $item->episode,
                         'pic'     => $item->images->thumbnail,
                         'url'     => "https://api.thvli.vn/backend/cm/detail/{$item->id}/",
                     ];
+
                 }
             }
 
@@ -322,7 +337,7 @@ class thvliSearcher extends common
             if (!empty($json)) {
                 foreach ($json->items as $key => $item) {
                      if ($key == 0 && $page == 0) {
-                         $data = array_merge($data, $this->setProfile($item));
+                         $data = array_merge($data, $this->setProfile($item, $link));
                          $data['vod_type'] = 'kids';
                      }
                      preg_match('/\d+/', $item->title, $episode);
@@ -355,7 +370,7 @@ class thvliSearcher extends common
     {
         if (method_exists($this->model, 'collect')) {
             if (!empty($data['links'])) {
-                $this->model->collect($data, 'hplus');
+                $this->model->collect($data, 'thvli');
             }
         }
     }

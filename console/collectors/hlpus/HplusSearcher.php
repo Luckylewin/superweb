@@ -106,18 +106,21 @@ class HplusSearcher extends common
         }
 
         if (!empty($links)) {
+            $links = array_reverse($links);
             $total = count($links);
             foreach ($links as $key => $url) {
                 $this->color("正在爬取({$key}/{$total}):{$url} >>>>>>>>>>>>>>>>>>>>");
 
                 $dom   = $this->getDom($url);
-                $data  = $this->getProfile($dom, $url);
-                $links = $this->getEpisode($dom, $url);
+                if ($dom) {
+                    $data  = $this->getProfile($dom, $url);
+                    $links = $this->getEpisode($dom, $url);
 
-                $data['links'] = $links;
+                    $data['links'] = $links;
 
-                $this->createVod($data);
-                $this->goSleep([3,6]);
+                    $this->createVod($data);
+                    $this->goSleep([3,6]);
+                }
             }
         }
     }
@@ -176,16 +179,20 @@ class HplusSearcher extends common
         if ($dom->filter('#section-tab-1')->count()) {
             $episodes = [];
 
-            $lastPageButton = $dom->filter('.section-articles .last')->first()->html();
-            preg_match("/(?<=ajax_get\(')[^']+/", $lastPageButton, $lastPageLink);
+            if ($dom->filter('.section-articles .last')->count()) {
+                $lastPageButton = $dom->filter('.section-articles .last')->first()->html();
+                preg_match("/(?<=ajax_get\(')[^']+/", $lastPageButton, $lastPageLink);
+            }
 
-            $pageButton = $dom->filter('.section-articles .pagination li')->last()->html();
-            preg_match("/(?<=ajax_get\(')[^']+/", $pageButton, $PageLink);
+            if ($dom->filter('.section-articles .pagination li')->count()) {
+                $pageButton = $dom->filter('.section-articles .pagination li')->last()->html();
+                preg_match("/(?<=ajax_get\(')[^']+/", $pageButton, $PageLink);
+            }
 
-            if (!empty($lastPageLink)) {
+            if (isset($lastPageLink) && !empty($lastPageLink)) {
                 $lastPageLink = explode('/', $lastPageLink[0]);
                 $pageTotal    = end($lastPageLink);
-            } else if (!empty($pageLink)) {
+            } else if (isset($pageLink) && !empty($pageLink)) {
                 $pageLink     = explode('/', $pageLink[0]);
                 $pageTotal    = end($pageLink);
             } else {
@@ -319,11 +326,13 @@ class HplusSearcher extends common
                 $total = count($links);
                 foreach ($links as $key => $value) {
                     $this->color("内存占用:" . Func::getMemoryUsage(), 'info');
-                    $this->color("正在获取链接({$key}/{$total}) .....................", 'info');
+                    $this->color("正在获取链接({$key}/{$total}) {$value['url']}.....................", 'info');
                     $html = $this->getHtml($value['url']);
                     preg_match('/(?<=watch)\?v=[^\?]+/', $html->html(), $videoId);
-                    $videoId = trim($videoId[0], '?v=');
-                    $links[$key]['url'] = "http://ott.topertv.com:12389/play/{$videoId}?resolve=youtube&sign=";
+                    if (!empty($videoId)) {
+                        $videoId = trim($videoId[0], '?v=');
+                        $links[$key]['url'] = "http://ott.topertv.com:12389/play/{$videoId}?resolve=youtube&sign=";
+                    }
 
                     $this->goSleep([1,2]);
                 }

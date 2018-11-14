@@ -75,6 +75,7 @@ class common
                         'Referer'    => 'https://www.google.com/',
                         'Accept-Language' => 'en-US,en;q=0.5'
                     ],
+
                 ];
 
                 $result = $client->request('GET', $url, $options);
@@ -120,6 +121,7 @@ class common
                         'Referer'    => 'https://www.google.com/',
                         'Accept-Language' => 'en-US,en;q=0.5'
                     ],
+
                 ];
 
                 if ($cookies) {
@@ -134,11 +136,15 @@ class common
                     Yii::$app->cache->set(md5($url), $data, 386400);
                 }
             }
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             $this->debug($e);
             $this->goSleep(5);
+            $result = $this->getHttpClient()->request('GET', $url, $options);
+            $data = $result->getBody()->getContents();
+            if (empty($data)) {
+                return false;
+            }
 
-            return false;
         }
 
         if (empty($data)) {

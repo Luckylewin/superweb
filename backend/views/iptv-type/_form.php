@@ -22,10 +22,11 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'sort')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'field')->dropDownList([
-            'year' => 'year',
-            'type' => 'type',
-            'language' => 'language',
-            'area' => 'area',
+            'year'      => 'year',
+            'type'      => 'type',
+            'language'  => 'language',
+            'area'      => 'area',
+            'hot'       => 'hot',
     ]) ?>
 
     <?php if($model->isNewRecord): ?>

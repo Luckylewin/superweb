@@ -6,20 +6,13 @@ use backend\models\IptvType;
 use Yii;
 use backend\models\IptvTypeItem;
 use yii\data\ActiveDataProvider;
-use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * TypeItemController implements the CRUD actions for IptvTypeItem model.
  */
 class TypeItemController extends BaseController
 {
-
-    /**
-     * Lists all IptvTypeItem models.
-     * @return mixed
-     */
     public function actionIndex()
     {
         $type_id = Yii::$app->request->get('type_id');
@@ -47,12 +40,7 @@ class TypeItemController extends BaseController
         ]);
     }
 
-    /**
-     * Displays a single IptvTypeItem model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+
     public function actionView($id)
     {
         return $this->render('view', [
@@ -60,11 +48,7 @@ class TypeItemController extends BaseController
         ]);
     }
 
-    /**
-     * Creates a new IptvTypeItem model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
+
     public function actionCreate()
     {
         $model = new IptvTypeItem();
@@ -80,13 +64,7 @@ class TypeItemController extends BaseController
         ]);
     }
 
-    /**
-     * Updates an existing IptvTypeItem model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
@@ -100,13 +78,6 @@ class TypeItemController extends BaseController
         ]);
     }
 
-    /**
-     * Deletes an existing IptvTypeItem model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
@@ -114,13 +85,7 @@ class TypeItemController extends BaseController
         return $this->redirect(['index', 'type_id' => $this->session()->get('type_id')]);
     }
 
-    /**
-     * Finds the IptvTypeItem model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return IptvTypeItem the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+
     protected function findModel($id)
     {
         if (($model = IptvTypeItem::findOne($id)) !== null) {
@@ -130,10 +95,7 @@ class TypeItemController extends BaseController
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    /**
-     * @param $model IptvTypeItem
-     * @return \yii\web\Response
-     */
+
     protected function jump($model, $status)
     {
         if ($this->session()->has('type_id')) {
@@ -143,4 +105,5 @@ class TypeItemController extends BaseController
 
         return $this->redirect(['view', 'id' => $model->id]);
     }
+
 }

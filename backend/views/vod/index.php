@@ -141,15 +141,15 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js'
                   ],
             ],
             //'vod_id',
-
             [
-                    'attribute' => 'vod_type',
-                    'headerOptions' => ['class' => 'col-md-1'],
-                    'filter' => \backend\models\IptvType::getTypeItem($search['vod_cid'], 'vod_type'),
-                    'filterInputOptions' => [
-                            'prompt' => Yii::t('backend', 'please choose'),
-                            'class' => 'form-control'
-                    ],
+                'attribute' => 'vod_type',
+                'headerOptions' => ['class' => 'col-md-2'],
+                'contentOptions' => ['style' => 'width:200px;word-break:break-all'],
+                'filter' => \backend\models\IptvType::getTypeItem($search['vod_cid'], 'vod_type'),
+                'filterInputOptions' => [
+                    'prompt' => Yii::t('backend', 'please choose'),
+                    'class' => 'form-control'
+                ],
             ],
 
             [

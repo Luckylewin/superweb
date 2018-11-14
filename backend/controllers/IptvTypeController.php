@@ -2,6 +2,10 @@
 
 namespace backend\controllers;
 
+use backend\models\IptvTypeItem;
+use common\components\Func;
+use common\models\Type;
+use common\models\Vod;
 use common\models\VodList;
 use Yii;
 use backend\models\IptvType;
@@ -16,11 +20,6 @@ class IptvTypeController extends BaseController
 {
     public $list;
 
-    /**
-     * Lists all IptvType models.
-     * @return mixed
-     * @throws
-     */
     public function actionIndex()
     {
         $vod_list_id = Yii::$app->request->get('list_id');
@@ -52,12 +51,6 @@ class IptvTypeController extends BaseController
         ]);
     }
 
-    /**
-     * Displays a single IptvType model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     public function actionView($id)
     {
         return $this->render('view', [
@@ -65,17 +58,13 @@ class IptvTypeController extends BaseController
         ]);
     }
 
-    /**
-     * Creates a new IptvType model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
     public function actionCreate()
     {
+        $this->rememberReferer();
         $model = new IptvType();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(Func::getLastPage());
         }
 
         $model->vod_list_id = Yii::$app->request->get('vod_list_id');
@@ -110,13 +99,6 @@ class IptvTypeController extends BaseController
         return $this->redirect(['index']);
     }
 
-    /**
-     * Finds the IptvType model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return IptvType the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     protected function findModel($id)
     {
         if (($model = IptvType::findOne($id)) !== null) {
@@ -125,4 +107,27 @@ class IptvTypeController extends BaseController
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+
+    public function actionSync()
+    {
+        $vod_list_id = Yii::$app->request->get('vod_list_id');
+        $items = IptvType::find()->with('items')->where(['vod_list_id' => $vod_list_id])->asArray()->all();
+        foreach ($items as $item) {
+            $items = $item['items'];
+            foreach ($items as $val) {
+                if (strtolower($item['field']) == 'hot') $item['field'] = 'type';
+
+                $count = Vod::find()->where(['like', 'vod_'.$item['field'], $val['name']])->count();
+                IptvTypeItem::updateAll(['exist_num' => $count], ['id' => $val['id']]);
+            }
+        }
+
+
+        $this->success();
+
+        return $this->redirect($this->getReferer());
+    }
+
+
 }

@@ -75,6 +75,18 @@ $this->registerJsFile('/statics/js/miniUtils.js')
                     </div>
 
                     <div class="col-md-12">
+
+                        <!-- 扩展分类  -->
+                        <?= $form->field($model, 'vod_type', [
+
+                            'template' => '{label}<div class="row">
+                                                    <div class="col-sm-3">{input}{error}{hint}</div>
+                                                  </div>
+                                                  <div class="row multi-select">
+                                                    <div class="col-sm-12">'.$model->getTypeItems('vod_type') .'</div>' .
+                                '</div>'
+
+                        ])->textInput(['maxlength' => true]) ?>
                         <!-- 海报剧照文件上传  -->
                         <?= $form->field($model, 'vod_pic')->textInput(); ?>
                         <?=  FileUploadUI::widget([
@@ -226,17 +238,7 @@ $this->registerJsFile('/statics/js/miniUtils.js')
                         <?= $form->field($model, 'vod_keywords')->textInput(['maxlength' => true]) ?>
                         <!-- 影片系列  -->
                         <?= $form->field($model, 'vod_series')->textInput(['maxlength' => true]) ?>
-                        <!-- 扩展分类  -->
-                        <?= $form->field($model, 'vod_type', [
 
-                            'template' => '{label}<div class="row">
-                                                    <div class="col-sm-3">{input}{error}{hint}</div>
-                                                  </div>
-                                                  <div class="row multi-select">
-                                                    <div class="col-sm-12">'.$model->getTypeItems('vod_type') .'</div>' .
-                                '</div>'
-
-                        ])->textInput(['maxlength' => true]) ?>
                         <!-- 发行年份  -->
                         <?= $form->field($model, 'vod_year', [
 

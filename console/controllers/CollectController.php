@@ -181,7 +181,6 @@ class CollectController extends Controller
 
         $search = new thvliSearcher($tv);
         $search->collectTv();
-
     }
 
     public function actionVnCartoon()

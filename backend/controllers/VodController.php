@@ -14,17 +14,9 @@ use common\models\search\VodSearch;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
-
-/**
- * VodController implements the CRUD actions for Vod model.
- */
 class VodController extends BaseController
 {
 
-    /**
-     * Lists all Vod models.
-     * @return mixed
-     */
     public function actionIndex()
     {
         $searchModel = new VodSearch();
@@ -44,12 +36,6 @@ class VodController extends BaseController
 
     }
 
-    /**
-     * Displays a single Vod model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     public function actionView($id)
     {
         return $this->renderAjax('view', [
@@ -57,13 +43,9 @@ class VodController extends BaseController
         ]);
     }
 
-    /**
-     * Creates a new Vod model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
     public function actionCreate()
     {
+        $this->rememberReferer();
         $model = new VodBlock();
         if ($cid = Yii::$app->request->get('vod_cid')) {
             $model->vod_cid = $cid;
@@ -73,7 +55,7 @@ class VodController extends BaseController
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->vod_id]);
+            return $this->redirect(Func::getLastPage());
         }
 
         return $this->render('create', [
@@ -81,20 +63,18 @@ class VodController extends BaseController
         ]);
     }
 
-    /**
-     * Updates an existing Vod model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
         $this->rememberReferer();
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            $this->setFlash('info', Yii::t('backend', 'Success'));
-            return $this->redirect(Func::getLastPage());
+
+        if ($model->load(Yii::$app->request->post())) {
+            $model->setAttribute('vod_type', json_encode($model->getAttribute('vod_type')));
+            if ($model->save()) {
+               $this->setFlash('info', Yii::t('backend', 'Success'));
+               return $this->redirect(Func::getLastPage());
+           }
+
         }
 
         return $this->render('update', [
@@ -120,9 +100,6 @@ class VodController extends BaseController
         return $this->redirect(Yii::$app->request->referrer);
     }
 
-    /**
-     *
-     */
     public function actionBatchDelete()
     {
         $id = Yii::$app->request->get('id');
@@ -138,13 +115,6 @@ class VodController extends BaseController
         return $this->redirect($this->getReferer());
     }
 
-    /**
-     * Finds the Vod model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Vod the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     protected function findModel($id)
     {
         if (($model = VodBlock::findOne($id)) !== null) {
@@ -206,6 +176,5 @@ class VodController extends BaseController
                 'schemeOptions' => $schemeOptions
             ]);
         }
-
     }
 }

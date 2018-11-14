@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'name',
             'zh_name',
             'sort',
-
+            'exist_num',
             [
                     'class' => 'common\grid\MyActionColumn',
                     'template' => '{update} {delete}',

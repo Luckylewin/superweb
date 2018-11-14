@@ -12,6 +12,7 @@ use Yii;
  * @property string $name 名称
  * @property string $zh_name 中文名称
  * @property int $sort 排序
+ * @property int $exist_num 存在影片数量
  */
 class IptvTypeItem extends \yii\db\ActiveRecord
 {
@@ -32,6 +33,7 @@ class IptvTypeItem extends \yii\db\ActiveRecord
             [['type_id', 'name', 'zh_name', 'sort'], 'required'],
             [['type_id', 'sort'], 'integer'],
             [['name', 'zh_name'], 'string', 'max' => 255],
+            ['exist_num', 'safe']
         ];
     }
 
@@ -46,12 +48,23 @@ class IptvTypeItem extends \yii\db\ActiveRecord
             'name' => '名称',
             'zh_name' => '中文名称',
             'sort' => '排序',
+            'exist_num' => '数量',
         ];
     }
 
     public function getType()
     {
+
         return $this->hasOne(IptvType::className(), ['id' => 'type_id']);
+    }
+
+    public static function getTypeItems($type_id)
+    {
+        return self::find()
+                    ->where(['type_id' => $type_id])
+                    ->orderBy(['exist_num' => SORT_DESC])
+                    ->all();
+
     }
 
 }
