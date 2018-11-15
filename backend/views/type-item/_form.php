@@ -15,21 +15,24 @@ use yii\widgets\ActiveForm;
 </style>
 <div class="iptv-type-item-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin([
+            'id' => 'form-save'
+    ]); ?>
 
-    <?= $form->field($model, 'type_id')->textInput() ?>
+    <?= $form->field($model, 'type_id')->hiddenInput()->label(false) ?>
 
-    <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'name')->textInput(['autocomplete' => 'off']) ?>
 
-    <?= $form->field($model, 'zh_name')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'zh_name')->textInput(['autocomplete' => 'off']) ?>
 
-    <?= $form->field($model, 'sort')->textInput() ?>
+    <?= $form->field($model, 'sort')->textInput(['autocomplete' => 'off']) ?>
 
     <div class="form-group">
         <?= Html::submitButton(\Yii::t('backend','Save'), ['class' => 'btn btn-success']) ?>
-        <?= Html::a(Yii::t('backend','Go Back'), Yii::$app->request->referrer, ['class' => 'btn btn-default']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
 
 </div>
+
+

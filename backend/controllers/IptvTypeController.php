@@ -2,12 +2,12 @@
 
 namespace backend\controllers;
 
+use Yii;
 use backend\models\IptvTypeItem;
 use common\components\Func;
 use common\models\Type;
 use common\models\Vod;
 use common\models\VodList;
-use Yii;
 use backend\models\IptvType;
 use yii\data\ActiveDataProvider;
 use yii\helpers\Url;
@@ -60,7 +60,7 @@ class IptvTypeController extends BaseController
 
     public function actionCreate()
     {
-        $this->rememberReferer();
+
         $model = new IptvType();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {

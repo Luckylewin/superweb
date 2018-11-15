@@ -7,6 +7,7 @@ use Yii;
 use backend\models\IptvTypeItem;
 use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
+use yii\web\Response;
 
 /**
  * TypeItemController implements the CRUD actions for IptvTypeItem model.
@@ -52,14 +53,19 @@ class TypeItemController extends BaseController
     public function actionCreate()
     {
         $model = new IptvTypeItem();
+        if ($this->getRequest()->isPost) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            if ($model->load(Yii::$app->request->post()) && $model->save()) {
+                return ['status' => 'success'];
+            }
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            $this->jump($model, 'success');
+            return ['status' => 'fail'];
         }
 
         $model->type_id = Yii::$app->request->get('type_id');
+        $model->sort    = 0;
 
-        return $this->render('create', [
+        return $this->renderAjax('create', [
             'model' => $model,
         ]);
     }
