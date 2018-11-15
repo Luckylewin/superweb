@@ -16,16 +16,12 @@ $this->title = Yii::t('backend', 'Play Groups');
 $this->params['breadcrumbs'][] = ['url' => Url::to(['vod-list/index']), 'label' => $vod->list->list_name];
 $this->params['breadcrumbs'][] = ['url' => Func::getLastPage(), 'label' => $vod->vod_name];
 $this->params['breadcrumbs'][] = $this->title;
-
-
 ?>
 
 <div class="play-group-index">
     <p>
-
         <?= Html::a(Yii::t('backend', 'Create Group'), \yii\helpers\Url::to(['play-group/create', 'vod_id' => Yii::$app->request->get('vod_id')]), ['class' => 'btn btn-success']) ?>
         <?= Html::a(Yii::t('backend', 'Go Back'), Func::getLastPage(), ['class' => 'btn btn-default']) ?>
-
     </p>
 
     <?= \yii\widgets\ListView::widget([

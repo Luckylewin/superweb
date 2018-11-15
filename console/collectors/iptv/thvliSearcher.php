@@ -15,6 +15,7 @@ use yii\base\Model;
 class thvliSearcher extends common
 {
     public $model;
+    public $resoure = 'thvli';
 
     public function __construct(Model $model)
     {
@@ -98,7 +99,7 @@ class thvliSearcher extends common
                     continue;
                 }
 
-                $this->createVod($data);
+                $this->createVod($data, 'thvil');
                 $this->goSleep([3,5]);
             }
         }
@@ -366,13 +367,6 @@ class thvliSearcher extends common
 
     }
 
-    private function createVod($data)
-    {
-        if (method_exists($this->model, 'collect')) {
-            if (!empty($data['links'])) {
-                $this->model->collect($data, 'thvli');
-            }
-        }
-    }
+
 
 }

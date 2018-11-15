@@ -101,9 +101,9 @@ class Cartoon extends Vod
                     $link->url      = $_link['url'];
                     $link->episode  = $_link['episode'];
                     $link->group_id = $playGroup->id;
-
-                    if (isset($_link['pic']))   $link->pic   = $_link['pic'];
-                    if (isset($_link['title'])) $link->title = $_link['title'];
+                    if (isset($_link['during'])) $link->during = $_link['during'];
+                    if (isset($_link['pic']))   $link->pic     = $_link['pic'];
+                    if (isset($_link['title'])) $link->title   = $_link['title'];
 
                     $link->save(false);
                 }

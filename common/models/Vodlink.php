@@ -18,6 +18,7 @@ use backend\models\PlayGroup;
  * @property string $save_type 链接类型
  * @property string $pic 图片
  * @property string $title 链接小标题
+ * @property string $during 链接小标题
  */
 
 class Vodlink extends \yii\db\ActiveRecord
@@ -52,6 +53,7 @@ class Vodlink extends \yii\db\ActiveRecord
             [['url', 'hd_url', 'save_type', 'pic'], 'string', 'max' => 255],
             [['plot','title'], 'string', 'max' => 1000],
             ['episode', 'filter', 'filter' => 'intval'],
+            ['during', 'safe']
 
         ];
     }
@@ -70,7 +72,8 @@ class Vodlink extends \yii\db\ActiveRecord
             'episode' => '剧集',
             'plot' => '剧情',
             'pic' => '剧集图片',
-            'save_type' => '资源位置'
+            'save_type' => '资源位置',
+            'during' => '时长',
         ];
     }
 

@@ -44,22 +44,23 @@ class common
 
     /**
      * @param $time
+     * @param string $reason
      */
-    public function goSleep($time)
+    public function goSleep($time, $reason="")
     {
         if ($this->getDomIsCached() == false) {
             if (is_array($time)) {
                 $time = mt_rand($time[0], $time[1]);
-                echo "Zzz....睡眠{$time}s" . PHP_EOL;
+                echo $reason . " Zzz....睡眠{$time}s" . PHP_EOL;
                 sleep($time);
             } else {
-                echo "Zzz....睡眠{$time}s" . PHP_EOL;
+                echo $reason . " Zzz....睡眠{$time}s" . PHP_EOL;
                 sleep($time);
             }
         }
     }
 
-    public function getJson($url)
+    public function getJson($url, $referer='https://www.google.com/')
     {
         try {
             if (Yii::$app->cache->exists(md5($url))) {
@@ -71,8 +72,8 @@ class common
                 $client  = new Client();
                 $options = [
                     'headers' => [
-                        'User-Agent' => 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36',
-                        'Referer'    => 'https://www.google.com/',
+                        'User-Agent'      => 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36',
+                        'Referer'         =>  $referer,
                         'Accept-Language' => 'en-US,en;q=0.5'
                     ],
 
@@ -190,6 +191,15 @@ class common
                 $out = "[1;32m"; //Blue background
         }
 
-        echo "\033$out" . "$text" . PHP_EOL . "\e[0m";
+        if ($this->getDomIsCached() == false) echo "\033$out" . "$text" . PHP_EOL . "\e[0m";
+    }
+
+    public function createVod($data)
+    {
+        if (method_exists($this->model, 'collect')) {
+            if (!empty($data['links'])) {
+                $this->model->collect($data, $this->resource);
+            }
+        }
     }
 }

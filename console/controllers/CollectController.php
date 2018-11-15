@@ -10,6 +10,7 @@ namespace console\controllers;
 
 use console\collectors\hlpus\HplusSearcher;
 use console\collectors\iptv\thvliSearcher;
+use console\collectors\iptv\zingSearcher;
 use console\collectors\youtube\Searcher;
 use console\models\Cartoon;
 use console\models\Karaoke;
@@ -197,6 +198,13 @@ class CollectController extends Controller
         $variety->setLanguage('Vietnamese');
         $search = new HplusSearcher($variety);
         $search->collectVariety();
+    }
+
+    public function actionZingTv()
+    {
+        $tv  = new Tv();
+        $search = new zingSearcher($tv);
+        $search->collectTv();
     }
 
 }

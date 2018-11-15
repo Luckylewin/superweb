@@ -73,7 +73,7 @@ class Movie extends Vod
             if (isset($data['vod_pic_slide'])) $movie->vod_pic_slide   = $data['vod_pic_slide'];
             if (isset($data['vod_reurl'])) $movie->vod_reurl           = $data['vod_reurl'];
             if (isset($data['vod_language'])) $movie->vod_language     = $data['vod_language'];
-            if (isset($data['vod_area'])) $movie->vod_area           = $data['vod_area'];
+            if (isset($data['vod_area'])) $movie->vod_area             = $data['vod_area'];
             if (isset($data['vod_origin_url'])) $movie->vod_origin_url  = $data['vod_origin_url'];
 
             $movie->save(false);
@@ -89,6 +89,7 @@ class Movie extends Vod
             $link->url = $url;
             $link->episode = 1;
             $link->group_id = $playGroup->id;
+            if (isset($data['during'])) $link->during = $data['during'];
             $link->save(false);
 
             echo $title . "新增" . PHP_EOL;

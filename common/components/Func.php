@@ -144,6 +144,32 @@ class Func
         return (self::convertSize(memory_get_usage($status)));
     }
 
+    /**
+     * 连续空格替换成一个
+     * @param $string
+     * @return null|string|string[]
+     */
+    public static function merge_spaces ($string)
+    {
+        return preg_replace( "/\s(?=\s)/","\\1", $string );
+    }
+
+    /**
+     * 简单提取匹配后的值
+     * @param $pattern
+     * @param $string
+     * @return bool
+     */
+    public static function pregSieze($pattern, $string)
+    {
+        preg_match($pattern, $string, $match);
+        if (!empty($match)) {
+            return $match[0];
+        }
+
+        return false;
+    }
+
     public static function convertSize($byte)
     {
         $unit=array('b','kb','MB','GB','TB','PB');
