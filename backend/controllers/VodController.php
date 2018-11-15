@@ -69,7 +69,6 @@ class VodController extends BaseController
         $this->rememberReferer();
 
         if ($model->load(Yii::$app->request->post())) {
-            $model->setAttribute('vod_type', json_encode($model->getAttribute('vod_type')));
             if ($model->save()) {
                $this->setFlash('info', Yii::t('backend', 'Success'));
                return $this->redirect(Func::getLastPage());
