@@ -87,6 +87,8 @@ class Tv extends Vod
             if (isset($data['vod_area'])) $tv->vod_area             = $data['vod_area'];
             if (isset($data['vod_origin_url'])) $tv->vod_origin_url  = $data['vod_origin_url'];
 
+            $tv['vod_total'] = count($data['links']);
+
             $tv->save(false);
 
             // 新增一个播放分组
@@ -94,6 +96,7 @@ class Tv extends Vod
             $playGroup->vod_id = $tv->vod_id;
             $playGroup->group_name = $groupName;
             $playGroup->save(false);
+
 
             // 新增播放链接
             if (!empty($data['links'])) {
@@ -112,6 +115,39 @@ class Tv extends Vod
 
             echo  " {$title}新增" . PHP_EOL;
         } else {
+            $update = false;
+
+            // 判断地区是否有了数据
+            if (isset($data['vod_area']) && empty($vod->vod_area)) {
+                $vod->vod_area = $data['vod_area'];
+                $update = true;
+            }
+
+            // 判断地区是否有了数据
+            if (isset($data['vod_language']) && empty($vod->vod_language)) {
+                $vod->vod_language = $data['vod_language'];
+                $update = true;
+            }
+
+            // 判断类型是否一致 取出vod_type 字段
+            if (isset($data['vod_type']) && !empty($data['vod_type']) && $data['vod_type'] != 'Other') {
+                $old  = explode(',', $vod->vod_type);
+                $new  = explode(',', $vod['vod_type']);
+                $diff = array_diff($new, $old);
+                if (!empty($diff)) {
+                    $new = array_merge($old, $new);
+                    $vod->vod_type = implode(',', $new);
+                    $update = true;
+
+                }
+            }
+
+            if (empty($vod->vod_type)) {
+                $vod->vod_type = 'Other';
+                $update = true;
+            }
+
+            $update && $vod->save(false);
             echo  " {$title}存在" . PHP_EOL;
         }
         return false;

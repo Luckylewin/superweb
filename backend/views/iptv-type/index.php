@@ -45,7 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         $str = '';
 
                         foreach ($data as $key => $item) {
-                            if ($item->exist_num) {
+                            if ($item->exist_num && $item->is_show) {
                                 $str .= Html::button($item->name , [
                                     'title' => $item->exist_num,
                                     'class' => 'btn btn-info',

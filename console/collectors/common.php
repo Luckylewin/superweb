@@ -191,7 +191,8 @@ class common
                 $out = "[1;32m"; //Blue background
         }
 
-        if ($this->getDomIsCached() == false) echo "\033$out" . "$text" . PHP_EOL . "\e[0m";
+        echo "\033$out" . "$text" . PHP_EOL . "\e[0m";
+
     }
 
     public function createVod($data)

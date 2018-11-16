@@ -111,6 +111,35 @@ class Cartoon extends Vod
 
             echo  " {$title}新增" . PHP_EOL;
         } else {
+
+            $update = false;
+
+            // 判断地区是否有了数据
+            if (isset($data['vod_area']) && empty($vod->vod_area)) {
+                $vod->vod_area = $data['vod_area'];
+                $update = true;
+            }
+
+            // 判断地区是否有了数据
+            if (isset($data['vod_language']) && empty($vod->vod_language)) {
+                $vod->vod_language = $data['vod_language'];
+                $update = true;
+            }
+
+            // 判断类型是否一致 取出vod_type 字段
+            if (isset($data['vod_type']) && !empty($data['vod_type'])) {
+                $old  = explode(',', $vod->vod_type);
+                $new  = explode(',', $vod['vod_type']);
+                $diff = array_diff($new, $old);
+                if (!empty($diff)) {
+                    $new = array_merge($old, $new);
+                    $vod->vod_type = implode(',', $new);
+                    $update = true;
+                    $vod->save(false);
+                }
+            }
+
+            $update && $vod->save(false);
             echo  " {$title}存在" . PHP_EOL;
         }
 

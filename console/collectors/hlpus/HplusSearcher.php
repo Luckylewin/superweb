@@ -311,7 +311,7 @@ class HplusSearcher extends common
         return $this->getDom($url, 'html', 'UTF-8', $cookieJar);
     }
 
-    protected function createVod($data)
+    public function createVod($data)
     {
         //判断链接是不是空的
         if (!empty($data['links']) && method_exists($this->model, 'collect')) {

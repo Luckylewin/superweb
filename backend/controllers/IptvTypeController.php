@@ -112,6 +112,39 @@ class IptvTypeController extends BaseController
     public function actionSync()
     {
         $vod_list_id = Yii::$app->request->get('vod_list_id');
+
+
+        // 查找 vod
+        $typeList = IptvType::find()->with('items')->where(['vod_list_id' => $vod_list_id, 'field' => 'type'])->asArray()->one();
+
+        if ($typeList) {
+            // 新增不存在的分类标签
+            $existTypes = Vod::find()->select('vod_type')->where(['vod_cid' => $vod_list_id])->distinct()->column();
+            $types = [];
+            foreach ($existTypes as $existType) {
+                $types = array_merge($types, explode(',', $existType));
+            }
+            $types = array_unique($types);
+
+            $category = array_column($typeList['items'], 'name');
+
+            if (!empty($types)) {
+                foreach ($types as $type) {
+                    if (in_array($type, $category) == false) {
+                        // 新增
+                        $typeItem = new IptvTypeItem();
+                        $typeItem->name     = $type;
+                        $typeItem->zh_name  = '请翻译';
+                        $typeItem->sort     = 0 ;
+                        $typeItem->type_id  = $typeList['id'];
+
+                        $typeItem->save(false);
+                    }
+                }
+            }
+        }
+
+
         $items = IptvType::find()->with('items')->where(['vod_list_id' => $vod_list_id])->asArray()->all();
         foreach ($items as $item) {
             $items = $item['items'];
@@ -123,9 +156,7 @@ class IptvTypeController extends BaseController
             }
         }
 
-
         $this->success();
-
         return $this->redirect($this->getReferer());
     }
 

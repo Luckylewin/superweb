@@ -202,9 +202,23 @@ class CollectController extends Controller
 
     public function actionZingTv()
     {
-        $tv  = new Tv();
+        $tv     = new Tv();
         $search = new zingSearcher($tv);
         $search->collectTv();
+    }
+
+    public function actionZingCartoon()
+    {
+        $cartoon     = new Cartoon();
+        $search = new zingSearcher($cartoon);
+        $search->collectCartoon();
+    }
+
+    public function actionZingShow()
+    {
+        $show   = new Variety();
+        $search = new zingSearcher($show);
+        $search->collectVariety();
     }
 
 }

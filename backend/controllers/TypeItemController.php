@@ -26,9 +26,11 @@ class TypeItemController extends BaseController
 
         $dataProvider = new ActiveDataProvider([
             'query' => IptvTypeItem::find()->where(['type_id' => $type_id]),
+            'pagination' => ['pagesize' => 100],
             'sort' => [
                 'defaultOrder' => [
-                    'sort' => SORT_ASC
+                    'sort' => SORT_ASC,
+                    'exist_num' => SORT_DESC,
                 ]
             ]
         ]);
@@ -64,6 +66,7 @@ class TypeItemController extends BaseController
 
         $model->type_id = Yii::$app->request->get('type_id');
         $model->sort    = 0;
+        $model->is_show = 1;
 
         return $this->renderAjax('create', [
             'model' => $model,

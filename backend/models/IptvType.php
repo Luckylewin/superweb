@@ -16,6 +16,7 @@ use yii\helpers\ArrayHelper;
  * @property int $sort 排序
  * @property int $image 图片
  * @property int $image_hover  高亮图片
+ * @property int $is_show  是否显示
  */
 class IptvType extends \yii\db\ActiveRecord
 {
@@ -37,7 +38,8 @@ class IptvType extends \yii\db\ActiveRecord
             [['vod_list_id'], 'integer'],
             [['name', 'field'], 'string', 'max' => 20],
             ['sort', 'default', 'value' => 0],
-            [['image','image_hover'], 'safe']
+            [['image','image_hover','is_show'], 'safe'],
+            ['is_show', 'default', 'value' => 1]
         ];
     }
 
@@ -54,6 +56,7 @@ class IptvType extends \yii\db\ActiveRecord
             'sort' => '排序',
             'image' => '图标',
             'image_hover' => '高亮图标',
+            'is_show' => '是否显示',
         ];
     }
 

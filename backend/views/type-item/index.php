@@ -17,9 +17,14 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
+        'rowOptions' => function($model, $key, $index, $grid) {
+            if ($model->is_show == false) {
+                return ['style' => 'background:#eee'];
+            }
+        },
+        'tableOptions' => ['class' => 'table table-bordered'],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
             'name',
             'zh_name',
             'sort',
