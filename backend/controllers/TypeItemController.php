@@ -90,7 +90,7 @@ class TypeItemController extends BaseController
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
-
+        $this->success('info');
         return $this->redirect(['index', 'type_id' => $this->session()->get('type_id')]);
     }
 
