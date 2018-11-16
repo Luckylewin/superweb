@@ -33,14 +33,14 @@ use dosamigos\fileupload\FileUploadUI;
     </div>
 
     <div class="col-md-6">
-        <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'name')->textInput(['autocomplete' => 'off']) ?>
     </div>
     <div class="col-md-6">
-        <?= $form->field($model, 'sort')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'sort')->textInput(['autocomplete' => 'off']) ?>
     </div>
 
     <div class="col-md-6">
-        <?= $form->field($model, 'image')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'image')->textInput(['maxlength' => 'off']) ?>
 
         <?= FileUploadUI::widget([
             'model' => new \backend\models\UploadForm(),

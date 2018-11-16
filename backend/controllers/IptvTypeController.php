@@ -60,10 +60,11 @@ class IptvTypeController extends BaseController
 
     public function actionCreate()
     {
-
+        $this->rememberReferer();
         $model = new IptvType();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $this->success();
             return $this->redirect(Func::getLastPage());
         }
 
@@ -151,7 +152,7 @@ class IptvTypeController extends BaseController
                 }
             }
         }
-        
+
         $items = IptvType::find()->with('items')->where(['vod_list_id' => $vod_list_id])->asArray()->all();
         foreach ($items as $item) {
             $items = $item['items'];
