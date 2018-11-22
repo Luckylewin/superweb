@@ -17,9 +17,9 @@ use yii\widgets\ActiveField;
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'url')->textInput(['maxlength' => true])->hint('格式: index/index&id=2&type=1') ?>
+    <?= $form->field($model, 'url')->textInput()->hint('格式: index/index&id=2&type=1 或 http://开头') ?>
 
-    <?= $form->field($model, 'icon_style')->textInput(['maxlength' => true])->hint('格式为: 图标样式, 例如: icon-comment') ?>
+    <?= $form->field($model, 'icon_style')->textInput(['maxlength' => true])->hint('格式为: 图标样式, 例如: fa-star') ?>
 
     <?= $form->field($model, 'display')->radioList($model->getDisplays()) ?>
 

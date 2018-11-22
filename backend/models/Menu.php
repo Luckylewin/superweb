@@ -52,7 +52,7 @@ class Menu extends \yii\db\ActiveRecord
             [['name', 'url'], 'required'],
             [['pid', 'display', 'sort'], 'integer'],
             [['name', 'icon_style'], 'string', 'max' => 50],
-            [['url'], 'string', 'max' => 60],
+            [['url'], 'string', 'max' => 255],
             [['sort'],'default','value' => '0']
         ];
     }

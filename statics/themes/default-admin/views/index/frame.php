@@ -31,7 +31,7 @@ $username = Yii::$app->user->isGuest == false ? Yii::$app->user->identity->usern
     <link rel="shortcut icon" href="/statics/iptv.ico">
     <link href="/statics/themes/default-admin/plugins/bootstrap-v3.3/bootstrap.min.css?v=3.3.6" rel="stylesheet">
     <link href="/statics/themes/default-admin/css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
-    <link href="/statics/themes/default-admin/css/animate.css" rel="stylesheet">
+<!--    <link href="/statics/themes/default-admin/css/animate.css" rel="stylesheet">-->
     <link href="/statics/themes/default-admin/css/style.css?v=4.1.0" rel="stylesheet">
 
 </head>
@@ -81,7 +81,15 @@ $username = Yii::$app->user->isGuest == false ? Yii::$app->user->identity->usern
                                 $menuArr = explode('/', $menu['url']);
                                 ?>
 
-                                <li><a class="J_menuItem" href="<?=Url::to([$menu['url']]);?>"><?= Yii::t('backend', $menu['name']);?></a></li>
+                                <li>
+                                    <?php if(strpos($menu['url'], 'http') !== false): ?>
+                                        <a target="_blank" href="<?= $menu['url'];?>">
+                                    <?php else: ?>
+                                        <a class="J_menuItem" href="<?=Url::to([$menu['url']]);?>">
+                                    <?php endif; ?>
+                                        <?= Yii::t('backend', $menu['name']);?>
+                                        </a>
+                                </li>
 
                             <?php }?>
                         </ul>
