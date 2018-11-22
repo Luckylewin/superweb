@@ -56,8 +56,8 @@ class VodSearch extends VodBlock
             ],
             'sort' => [
                 'defaultOrder' => [
-                    'vod_addtime' => SORT_DESC,
-                    'sort' => SORT_ASC
+                    'sort'        => SORT_ASC,
+                    'vod_addtime' => SORT_DESC
                 ]
             ]
         ]);
@@ -65,9 +65,7 @@ class VodSearch extends VodBlock
         $this->load($params);
 
         if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
-            return $dataProvider;
+           return $dataProvider;
         }
 
         if ($this->vod_cid) {
@@ -82,31 +80,10 @@ class VodSearch extends VodBlock
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'vod_id' => $this->vod_id,
-            'vod_cid' => $this->vod_cid,
-            'vod_year' => $this->vod_year,
-            'vod_total' => $this->vod_total,
-            'vod_addtime' => $this->vod_addtime,
-            'vod_filmtime' => $this->vod_filmtime,
-            'vod_hits' => $this->vod_hits,
-            'vod_hits_day' => $this->vod_hits_day,
-            'vod_hits_week' => $this->vod_hits_week,
-            'vod_hits_month' => $this->vod_hits_month,
-            'vod_up' => $this->vod_up,
-            'vod_down' => $this->vod_down,
+            'vod_id'        => $this->vod_id,
+            'vod_cid'       => $this->vod_cid,
             'vod_price' => $this->vod_price,
-            'vod_trysee' => $this->vod_trysee,
-            'vod_gold' => $this->vod_gold,
-            'vod_golder' => $this->vod_golder,
-            'vod_length' => $this->vod_length,
-            'vod_copyright' => $this->vod_copyright,
-            'vod_douban_id' => $this->vod_douban_id,
-            'vod_douban_score' => $this->vod_douban_score,
-            'vod_stars' => $this->vod_stars,
-            'vod_ispay' => $this->vod_ispay,
             'vod_status' => $this->vod_status,
-            'vod_isend' => $this->vod_isend,
-            'vod_weekday' => $this->vod_weekday,
         ]);
 
         $query->andFilterWhere(['like', 'vod_name', $this->vod_name])

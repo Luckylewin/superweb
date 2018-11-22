@@ -5,7 +5,6 @@ use backend\models\form\OttSettingForm;
 use Yii;
 use backend\models\Config;
 use backend\models\search\ConfigSearch;
-use yii\helpers\Json;
 use yii\web\NotFoundHttpException;
 
 /**
@@ -104,10 +103,6 @@ class ConfigController extends BaseController
 
     }
 
-    /**
-     * Lists all Config models.
-     * @return mixed
-     */
     public function actionIndex()
     {
         $searchModel = new ConfigSearch();
@@ -119,11 +114,6 @@ class ConfigController extends BaseController
         ]);
     }
 
-    /**
-     * Displays a single Config model.
-     * @param integer $id
-     * @return mixed
-     */
     public function actionView($id)
     {
         return $this->render('view', [
@@ -131,11 +121,6 @@ class ConfigController extends BaseController
         ]);
     }
 
-    /**
-     * Creates a new Config model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
     public function actionCreate()
     {
         $model = new Config();
@@ -149,12 +134,6 @@ class ConfigController extends BaseController
         }
     }
 
-    /**
-     * Updates an existing Config model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     */
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
@@ -168,12 +147,6 @@ class ConfigController extends BaseController
         }
     }
 
-    /**
-     * Deletes an existing Config model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     */
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
@@ -181,13 +154,6 @@ class ConfigController extends BaseController
         return $this->redirect(['index']);
     }
 
-    /**
-     * Finds the Config model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Config the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     protected function findModel($id)
     {
         if (($model = Config::findOne($id)) !== null) {

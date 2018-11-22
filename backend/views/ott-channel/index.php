@@ -93,7 +93,7 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js'
                         }
                     ],
 
-                    [
+                    /*[
                         'attribute' => 'keywords',
                         'contentOptions' => ['class' => 'ajax-td'],
                         'options' => ['style' => 'min-width:120px;'],
@@ -107,7 +107,17 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js'
                             ]);
                             return $str = "<div class='text'>{$model->keywords}</div>" . "<div class='input' style='display: none'>$str</div>";
                         }
+                    ],*/
+
+
+                    [
+                        'attribute' => 'channel_number',
+
+                        'options' => ['style' => 'width:70px;'],
+                        'filter' => false
                     ],
+
+
                     [
                         'attribute' => 'sort',
                         'filter' => false,
@@ -123,29 +133,25 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js'
                             ]);
                         }
                     ],
+
                     [
                         'attribute' => 'use_flag',
                         'headerOptions' =>['class' => 'col-md-1'],
                         'filter' => false,
-                        'contentOptions' => ['class' => 'ajax-td'],
                         'format' => 'raw',
                         'value' => function($model) {
-                            $icon =  $model->use_flag ? '<i style="color: #23c6c8;font-size: large" class="glyphicon glyphicon-ok-circle"></i>' : '<i style="color: #953b39;font-size: large" class="glyphicon glyphicon-remove-circle"></i>';
-                            $dropDownList = Html::dropDownList('use_flag', $model->use_flag, [Yii::t('backend', 'Unavailable'), Yii::t('backend', 'Available')] , [
-                                'class' => 'form-control ajax-update',
+                            return \common\widgets\switchInput\SwitcherInputWidget::widget([
+                                'id' => $model->id,
                                 'field' => 'use_flag',
-                                'data-id' => $model->id,
-                                'old-value' => $model->use_flag,
-                                'style' => 'width:120px;margin:0 auto;'
+                                'url' => \yii\helpers\Url::to(['ott-channel/update', 'id' => $model->id]),
+                                'defaultCheckedStatus' => $model->use_flag,
+                                'successTips' => '操作成功',
+                                'errorTips'   => '操作失败'
                             ]);
-                            return $str = "<div class='text'>{$icon}</div>" . "<div class='input' style='display: none'>{$dropDownList}</div>";
                         }
                     ],
-                    [
-                            'attribute' => 'channel_number',
-                            'headerOptions' =>['class' => 'col-md-1'],
-                            'filter' => false
-                    ],
+
+
                     //'alias_name',
 
                     [

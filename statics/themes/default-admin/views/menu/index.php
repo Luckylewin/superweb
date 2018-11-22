@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use backend\models\Menu;
 use yii\widgets\ActiveForm;
-
+use common\widgets\switchInput\SwitcherInputWidget;
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\search\MenuSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -13,6 +13,7 @@ $this->title = Yii::t('backend', 'Menu Management');
 $this->params['breadcrumbs'][] = Yii::t('backend', 'System Setting');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
 
 <style>
     td{vertical-align: middle!important;}
@@ -68,17 +69,28 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'name',
                 'format' => 'raw',
+                'value' => function($model) {
+                    return $model['level_string'] . Yii::t('backend', $model['origin_name']);
+                }
             ],
-            'url:url',
+
 
             [
                 'attribute' => 'display',
                 'format' => 'raw',
                 'value' => function($data) {
-                    return Html::tag('span', Yii::t('backend', Menu::getDisplayText($data['display'])), ['class' => 'label label-sm '.Menu::getDisplayStyle($data['display'])]);
+                // Html::tag('span', Yii::t('backend', Menu::getDisplayText($data['display'])), ['class' => 'label label-sm '.Menu::getDisplayStyle($data['display'])])
+                    return SwitcherInputWidget::widget([
+                            'id' => $data['id'],
+                            'field' => 'display',
+                            'url' => \yii\helpers\Url::to(['menu/update', 'id' => $data['id']]),
+                            'defaultCheckedStatus' => $data['display'],
+                            'successTips' => '操作成功',
+                            'errorTips'   => '操作失败'
+                    ]);
                 }
             ],
-
+            'url:url',
             [
                 'class' => 'common\grid\ActionColumn',
                 'header' => Yii::t('backend', 'Operate'),

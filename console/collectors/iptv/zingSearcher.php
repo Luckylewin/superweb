@@ -10,6 +10,7 @@ namespace console\collectors\iptv;
 
 
 use common\components\Func;
+use common\models\Type;
 use console\collectors\common;
 use Symfony\Component\DomCrawler\Crawler;
 use yii\base\Model;
@@ -17,20 +18,12 @@ use yii\base\Model;
 class zingSearcher extends common
 {
     public $model;
-    public $resource = 'zing';
+    public $resource = 'zingtv';
     public $site = "https://tv.zing.vn/";
 
     public function __construct(Model $model)
     {
         $this->model = $model;
-    }
-
-    public function collectAll()
-    {
-
-        $this->collectTv();
-        $this->collectVariety();
-        $this->collectCartoon();
     }
 
     public function collectTv()
@@ -158,6 +151,18 @@ class zingSearcher extends common
             [
                 'type' => 'Game Show',
                 'url'  => 'https://tv.zing.vn/the-loai/Show-Viet-Nam/IWZ9ZII7.html'
+            ],
+            [
+                'type' => 'Music',
+                'url'  => 'https://tv.zing.vn/the-loai/Nhac-Viet-Nam/IWZ9ZIW0.html',
+            ],
+            [
+                'type' => 'Music',
+                'url'  => 'https://tv.zing.vn/the-loai/Nhac-Han-Quoc/IWZ9ZIWW.html',
+            ],
+            [
+                'type' => 'Live show',
+                'url'  => 'https://tv.zing.vn/the-loai/Liveshow/IWZ9ZIIF.html'
             ]
         ];
 
@@ -387,13 +392,57 @@ class zingSearcher extends common
             return false;
         }
         $profile['title']           = $dom->filter('.box-description strong')->first()->text();
-        if ($type) $profile['vod_type']        = $type;
         $profile['image']           = $dom->filter('.outside-des img')->first()->attr('src');
         $profile['info']            = $dom->filter('#_description')->text();
         $profile['vod_pic_slide']   = $dom->filter('.slide .fluid-img img')->count() ? $dom->filter('.slide .fluid-img img')->first()->attr('src') : '';
-        $profile['vod_total']       =  $dom->filter('.see-all')->count() ? Func::pregSieze('/\d+/', $dom->filter('.see-all')->first()->text()) : '1';
-        $profile[ 'vod_reurl']      = $this->resource;
-        $profile[ 'vod_origin_url'] = $link;
+        $profile['vod_total']       = $dom->filter('.see-all')->count() ? Func::pregSieze('/\d+/', $dom->filter('.see-all')->first()->text()) : '1';
+        $profile['vod_gold']        = Func::pregSieze('/(?<="ratingValue": ")[^"]+/', $dom->html());
+        $profile['vod_golder']      = Func::pregSieze('/(?<="ratingCount": ")[^"]+/', $dom->html());
+        $profile['vod_reurl']       = $this->resource;
+        $profile['vod_origin_url']  = $link;
+
+        //
+
+        $patterns = [
+            'Việt Nam' => [
+                'language' => Type::LANGUAGE_VIETNAMESE,
+                'area'     => Type::AREA_VIETNAM
+            ],
+            'Hàn Quốc' => [
+                'language' => Type::LANGUAGE_KOREAN,
+                'area'     => Type::AREA_KOREA
+            ],
+            'Hoa Ngữ' => [
+                'language' => Type::LANGUAGE_CHINESE,
+                'area'     => Type::AREA_CHINA
+            ],
+            'Thái Lan' => [
+                'language' => Type::LANGUAGE_THAT,
+                'area'     => Type::AREA_THAILAND
+            ],
+            'Nhật Bản' => [
+                'language' => Type::LANGUAGE_JAPANESE,
+                'area'     => Type::AREA_JAPAN
+            ],
+            'Âu Mỹ'    => [
+                'language' => Type::LANGUAGE_ENGLISH,
+                'area'     => Type::AREA_AMERICA
+            ]
+
+        ];
+
+        if ($dom->filter('.box-description .tag')->count()) {
+            $tag = $dom->filter('.box-description .tag')->text();
+            foreach ($patterns as $pattern => $patternData) {
+               if (preg_match("/{$pattern}/", $tag)) {
+                    $profile['vod_area']     = $patternData['area'];
+                    $profile['vod_language'] = $patternData['language'];
+                    break;
+               }
+            }
+        }
+
+        if ($type) $profile['vod_type'] = $type;
 
         if ($dom->filter('.box-statistics li')->count()) {
             $dom->filter('.box-statistics li')->each(function (Crawler $li) use(&$profile) {
@@ -448,9 +497,9 @@ class zingSearcher extends common
         $data     = $this->getProfile($dom, $link, $type);
         $episodes = $this->getEpisode($dom);
 
-        if ($area) $data['vod_area'] = $area;
+        if ($area && empty($data['vod_area'])) $data['vod_area'] = $area;
+        if ($lang && empty($data['vod_area'])) $data['vod_language'] = $lang;
         if ($type) $data['vod_type'] = $type;
-        if ($lang) $data['vod_language'] = $lang;
 
         if (!empty($episodes)) {
             $data['links']        = $episodes;

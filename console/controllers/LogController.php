@@ -8,16 +8,16 @@
 
 namespace console\controllers;
 
-use backend\models\LogInterface;
-use backend\models\LogStatics;
-use backend\models\LogTmp;
-use backend\models\ProgramLog;
-use common\components\Func;
 use Yii;
 use yii\console\Controller;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Console;
 use yii\redis\Connection;
+use backend\models\LogInterface;
+use backend\models\LogStatics;
+use backend\models\LogTmp;
+use backend\models\ProgramLog;
+use common\components\Func;
 
 /**
  * 日志分析控制器
@@ -32,7 +32,7 @@ class LogController extends Controller
      */
     public $redis;
 
-    public $interfaces = ['watch', 'total', 'notify', 'getCountryList', 'getOttRecommend', 'getMajorEvent', 'register', 'ottCharge', 'getNewApp', 'renew', 'getAppMarket', 'getIptvList', 'getOttNewList', 'getClientToken'];
+    public $interfaces = ['watch', 'total', 'notify', 'getCountryList', 'getOttRecommend', 'getMajorEvent', 'register', 'ottCharge', 'getNewApp', 'renew', 'getAppMarket', 'getIptvList', 'getOttNewList', 'getClientToken', 'vods'];
 
     public function actionHelp()
     {
@@ -287,7 +287,7 @@ class LogController extends Controller
         $data['total']              = LogTmp::find()->count();
         $data['token']              = LogTmp::find()->where(['header' => 'getClientToken'])->count();
         $data['ott_list']           = LogTmp::find()->where(['header' => 'getOttNewList'])->count();
-        $data['iptv_list']          = LogTmp::find()->where(['header' => 'vods'])->count();
+        $data['iptv_list']          = LogTmp::find()->where(['like', 'header', 'vods'])->count();
         $data['karaoke_list']       = LogTmp::find()->where(['header' => 'getKaraokeList'])->count();
         $data['epg']                = LogTmp::find()->where(['in','header',['getParadeList','getEPG']])->count();
         $data['app_upgrade']        = LogTmp::find()->where(['IN', 'header', ['getNewApp', 'getApp', 'upgrade']])->count();
@@ -301,7 +301,7 @@ class LogController extends Controller
         $data['dokypay_callback']   = LogTmp::find()->where(['header' => 'return/dokypay'])->count();
         $data['getServerTime']      = LogTmp::find()->where(['header' => 'getServerTime'])->count();
         $data['play']               = LogTmp::find()->where(['in', 'header', [
-            'local', 'sohatv', 'hplus'
+            'local', 'sohatv', 'hplus', 'play'
         ]])->count();
 
         // 新增数据库数据
@@ -376,19 +376,22 @@ class LogController extends Controller
                 \SeasLog::setLogger("ApiLog/" . date('Y/m'));
                 \SeasLog::info($log);
             }
-            $log = explode('|', $log);
-            
-            $time = isset($log[0]) ? $log[0] : false;
-            $ip = isset($log[1]) ? $log[1] : false;
-            $json = isset($log[2]) ? $log[2] : '';
+            $log   = explode('|', $log);
+            // 接口时间
+            $time  = isset($log[0]) ? $log[0] : false;
+            // 接口ip
+            $ip    = isset($log[1]) ? $log[1] : false;
+            // 接口json字符串
+            $json  = isset($log[2]) ? $log[2] : '';
+            // 接口错误
             $error = isset($log[3])? $log[3] : false;
 
             $data = json_decode($json, true);
 
             $program = isset($data['class']) ? $data['class'] : false;
-            $uid = isset($data['uid']) ? $data['uid'] : false;
-            $header = isset($data['header']) ? $data['header'] : false;
-            $name = isset($data['name']) ? $data['name'] : false;
+            $uid     = isset($data['uid']) ? $data['uid'] : false;
+            $header  = isset($data['header']) ? $data['header'] : false;
+            $name    = isset($data['name']) ? $data['name'] : false;
             $requestData = isset($data['data']) ? $data['data'] : false;
 
             if (empty($header)) return false;
@@ -490,7 +493,6 @@ class LogController extends Controller
         $program_data = $this->redis->hgetall($program_key);
         $program_data = $this->_map($program_data);
 
-
         foreach ($hours as $hour) {
             $key = "interface:" . date('m-d:') . $hour;
             $data = $this->redis->hgetall($key);
@@ -500,6 +502,7 @@ class LogController extends Controller
                 $this->_map($data))
             ;
         }
+
         return $today;
     }
 
@@ -572,7 +575,7 @@ class LogController extends Controller
      * @param $field
      * @param int $increment
      */
-    public function hincyby($key,$field ,$increment = 1)
+    private function hincyby($key,$field ,$increment = 1)
     {
         $isExist = (boolean)$this->redis->exists($key);
         if ($isExist === false) {
@@ -589,7 +592,7 @@ class LogController extends Controller
      * @param $file
      * @return \Generator
      */
-    public static function readLine($file)
+    private static function readLine($file)
     {
         $handle = fopen($file, 'r');
 

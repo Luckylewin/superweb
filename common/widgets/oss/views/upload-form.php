@@ -127,7 +127,6 @@ use yii\web\AssetBundle as AppAsset;
 
 </script>
 
-
 <?php Jsblock::end(); ?>
 
 

@@ -11,7 +11,6 @@ use common\models\OttChannel;
 use common\models\search\OttChannelSearch;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
-use yii\helpers\Url;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
@@ -152,9 +151,8 @@ class OttChannelController extends BaseController
                 $model->$field = Yii::$app->request->post('value');
                 $model->save(false);
             }
-            return [
-                'status' => 0
-            ];
+
+            return ['status' => 'success'];
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {

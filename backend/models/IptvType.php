@@ -80,9 +80,14 @@ class IptvType extends \yii\db\ActiveRecord
 
     public static function getTypeItem($list_id, $field)
     {
-        $type = self::find()->where(['field' => $field, 'vod_list_id' => $list_id])
-                            ->orWhere(['field' => str_replace('vod_', '', $field)])
-                            ->with('items')
+        $type = self::find()->where(['field' => $field])
+                            ->orWhere(['or', ['=', 'field', str_replace('vod_', '', $field)]])
+                            ->andWhere(['vod_list_id' => $list_id])
+                            ->with([
+                                'items' => function($query) {
+                                    $query->where(['>', 'exist_num', 0]);
+                                }
+                            ])
                             ->one();
 
         if ($type) {

@@ -59,22 +59,17 @@ class Movie extends Vod
             $movie->vod_total = 1;
 
 
+            $perhapsFields = [
+                'vod_keywords', 'vod_type', 'vod_actor', 'vod_director',
+                'vod_area', 'vod_length', 'vod_filmtime', 'vod_year',
+                'vod_hits', 'vod_up', 'vod_pic_bg', 'vod_pic_slide',
+                'vod_reurl', 'vod_language', 'vod_area', 'vod_origin_url',
+                'vod_gold', 'vod_golder'
+            ];
 
-            if (isset($data['vod_type'])) $movie->vod_type         = $data['vod_type'];
-            if (isset($data['vod_actor'])) $movie->vod_actor       = $data['vod_actor'];
-            if (isset($data['vod_director'])) $movie->vod_director = $data['vod_director'];
-            if (isset($data['vod_area'])) $movie->vod_area         = $data['vod_area'];
-            if (isset($data['vod_length'])) $movie->vod_length     = $data['vod_length'];
-            if (isset($data['vod_year'])) $movie->vod_year         = $data['vod_year'];
-            if (isset($data['vod_year'])) $movie->vod_year             = $data['vod_year'];
-            if (isset($data['vod_hits'])) $movie->vod_hits             = $data['vod_hits'];
-            if (isset($data['vod_up'])) $movie->vod_up                 = $data['vod_up'];
-            if (isset($data['vod_pic_bg'])) $movie->vod_pic_bg         = $data['vod_pic_bg'];
-            if (isset($data['vod_pic_slide'])) $movie->vod_pic_slide   = $data['vod_pic_slide'];
-            if (isset($data['vod_reurl'])) $movie->vod_reurl           = $data['vod_reurl'];
-            if (isset($data['vod_language'])) $movie->vod_language     = $data['vod_language'];
-            if (isset($data['vod_area'])) $movie->vod_area             = $data['vod_area'];
-            if (isset($data['vod_origin_url'])) $movie->vod_origin_url  = $data['vod_origin_url'];
+            foreach ($perhapsFields as $field) {
+                if (isset($data[$field])) $movie->$field = $data[$field];
+            }
 
             $movie->save(false);
 
@@ -97,14 +92,21 @@ class Movie extends Vod
 
             $update = false;
 
+            if (isset($data['vod_gold']) && empty($vod->vod_gold)) {
+                $vod->vod_gold   = $data['vod_gold'];
+                $vod->vod_golder = $data['vod_golder'];
+                $update = true;
+            }
+
+
             // 判断地区是否有了数据
-            if (isset($data['vod_area']) && empty($vod->vod_area)) {
+            if (isset($data['vod_area']) && (empty($vod->vod_area) || $data['vod_area'] != $vod->vod_area)) {
                 $vod->vod_area = $data['vod_area'];
                 $update = true;
             }
 
-            // 判断地区是否有了数据
-            if (isset($data['vod_language']) && empty($vod->vod_language)) {
+            // 判断语言是否有了数据
+            if (isset($data['vod_language']) && (empty($vod->vod_language) || $data['vod_language'] != $vod->vod_language )) {
                 $vod->vod_language = $data['vod_language'];
                 $update = true;
             }

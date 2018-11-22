@@ -16,6 +16,7 @@ use common\libs\Tree;
 
  * @property integer $hide
  * @property integer $sort
+ * @property integer $display
  */
 class Menu extends \yii\db\ActiveRecord
 {
@@ -33,10 +34,6 @@ class Menu extends \yii\db\ActiveRecord
         self::DISPLAY => 'label-info',
     ];
 
-    public function __construct()
-    {
-        $this->display = self::DISPLAY;
-    }
 
     /**
      * @inheritdoc
@@ -66,13 +63,13 @@ class Menu extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'pid' => Yii::t('backend', 'Superior menu'),
-            'name' => Yii::t('backend', 'Name'),
-            'url' => Yii::t('backend', 'Route'),
+            'id'         => 'ID',
+            'pid'        => Yii::t('backend', 'Superior menu'),
+            'name'       => Yii::t('backend', 'Name'),
+            'url'        => Yii::t('backend', 'Route'),
             'icon_style' => Yii::t('backend', 'Icon'),
-            'display' => Yii::t('backend', 'Display Switch'),
-            'sort' => Yii::t('backend', 'Sort'),
+            'display'    => Yii::t('backend', 'Display Switch'),
+            'sort'       => Yii::t('backend', 'Sort'),
         ];
     }
 
@@ -83,6 +80,8 @@ class Menu extends \yii\db\ActiveRecord
 
     /**
      * 获取菜单状态
+     * @param $display
+     * @return mixed
      */
     public static function getDisplayText($display)
     {
@@ -91,6 +90,8 @@ class Menu extends \yii\db\ActiveRecord
 
     /**
      * 获取菜单状态样式
+     * @param $display
+     * @return mixed
      */
     public static function getDisplayStyle($display)
     {

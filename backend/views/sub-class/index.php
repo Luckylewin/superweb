@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 ?>
 <style>
-    .grid-view td{
+    .grid-view td,.grid-view th{
         text-align: center;
         vertical-align:middle!important;
     }
@@ -100,16 +100,17 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'use_flag',
                 'contentOptions' => ['class' => 'ajax-td'],
                 'format' => 'raw',
+
                 'value' => function($model) {
-                    $icon =  $model->use_flag ? '<i style="color: #23c6c8;font-size: large" class="glyphicon glyphicon-ok-circle"></i>' : '<i style="color: #953b39;font-size: large" class="glyphicon glyphicon-remove-circle"></i>';
-                    $dropDownList = Html::dropDownList('use_flag', $model->use_flag, ['不可用','可用'] , [
-                        'class' => 'form-control ajax-update',
+                    return \common\widgets\switchInput\SwitcherInputWidget::widget([
+                        'id' => $model->id,
                         'field' => 'use_flag',
-                        'data-id' => $model->id,
-                        'old-value' => $model->use_flag,
-                        'style' => 'width:120px;margin:0 auto;'
+                        'url' => Url::to(['sub-class/update','field' => 'use_flag' ,'id' => $model->id]),
+                        'defaultCheckedStatus' => $model->use_flag,
+                        'successTips' => '操作成功',
+                        'errorTips'   => '操作失败'
                     ]);
-                    return $str = "<div class='text'>{$icon}</div>" . "<div class='input' style='display: none'>{$dropDownList}</div>";
+
                 }
             ],
 

@@ -159,7 +159,11 @@ class IptvTypeController extends BaseController
             foreach ($items as $val) {
                 if (strtolower($item['field']) == 'hot') $item['field'] = 'type';
 
-                $count = Vod::find()->where(['like', 'vod_'.$item['field'], $val['name']])->count();
+                $count = Vod::find()
+                            ->where(['vod_cid' => $vod_list_id])
+                            ->andFilterWhere(['like', 'vod_'.$item['field'], $val['name']])
+                            ->count();
+
                 IptvTypeItem::updateAll(['exist_num' => $count], ['id' => $val['id']]);
             }
         }

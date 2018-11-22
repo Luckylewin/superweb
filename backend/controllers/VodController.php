@@ -2,17 +2,18 @@
 
 namespace backend\controllers;
 
+use Yii;
+use yii\web\NotFoundHttpException;
+use yii\web\Response;
+use common\models\Vod;
+use common\models\search\VodSearch;
+use common\components\Func;
+use common\models\VodList;
 use backend\blocks\VodBlock;
 use backend\models\form\BindVodSchemeForm;
 use backend\models\Scheme;
 use backend\models\VodToScheme;
-use common\components\Func;
-use common\models\VodList;
-use Yii;
-use common\models\Vod;
-use common\models\search\VodSearch;
-use yii\web\NotFoundHttpException;
-use yii\web\Response;
+
 
 class VodController extends BaseController
 {

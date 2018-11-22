@@ -200,6 +200,13 @@ class CollectController extends Controller
         $search->collectVariety();
     }
 
+    public function actionZingAll()
+    {
+        $this->actionZingCartoon();
+        $this->actionZingTv();
+        $this->actionZingShow();
+    }
+
     public function actionZingTv()
     {
         $tv     = new Tv();
