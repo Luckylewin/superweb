@@ -185,7 +185,7 @@ class Searcher
     {
        $data['title'] = trim($searchResult['snippet']['title']);
        if (!empty($data['title'])) {
-            $data['url'] = $searchResult['id']['videoId'];
+            $data['url'] = "http://ott.topertv.com:12389/play/{$searchResult['id']['videoId']}?resolve=youtube&sign=";
             $data['image'] = $searchResult['snippet']['thumbnails']['high']['url'];
             $data['info'] = $searchResult['snippet']['description'];
 
