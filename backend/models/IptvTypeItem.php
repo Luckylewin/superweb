@@ -69,4 +69,9 @@ class IptvTypeItem extends \yii\db\ActiveRecord
 
     }
 
+    public function getMultiLanguage()
+    {
+        return $this->hasMany(MultiLang::className(), ['fid' => 'id']);
+    }
+
 }

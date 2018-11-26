@@ -172,5 +172,23 @@ class IptvTypeController extends BaseController
         return $this->redirect($this->getReferer());
     }
 
+    public function actionSetLanguage($id)
+    {
+        $model = VodList::findOne(['list_id' => $id]);
+        if ($model->load($this->getRequest()->post())) {
+            VodList::updateAll(['supported_language' => json_encode($model->supported_language)], [
+                '>', 'list_id', 0
+            ]);
+
+            $this->success();
+
+            return $this->redirect($this->getReferer());
+        }
+
+        $model->supported_language = json_decode($model->supported_language);
+        return $this->render('set-language', [
+            'model' => $model
+        ]);
+    }
 
 }

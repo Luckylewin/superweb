@@ -17,16 +17,19 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?= Html::a(Yii::t('backend', 'Create'), ['create','vod_list_id' => $list->list_id], ['class' => 'btn btn-success']) ?>
+
         <?= Html::a(Yii::t('backend', '同步'), ['sync','vod_list_id' => $list->list_id], ['class' => 'btn btn-info']) ?>
 
-        <?= Html::a(Yii::t('backend','Go Back'), ['vod-list/index'], ['class' => 'btn btn-default']) ?>
+        <?= Html::a(Yii::t('backend', 'Language setting'), Url::to(['iptv-type/set-language', 'id' => Yii::$app->request->get('list_id')]),['class' => 'btn btn-primary '])?>
 
+        <?= Html::a(Yii::t('backend','Go Back'), ['vod-list/index'], ['class' => 'btn btn-default']) ?>
 
     </p>
 
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
+        'layout' => '{items}',
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -81,18 +84,17 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
             ],
 
-            'sort',
-
             [
                     'class' => 'common\grid\MyActionColumn',
                     'size' => 'btn-sm',
-                    'template' => '{sub} {view} {update} {delete}',
+                    'template' => '{sub} {update} {delete}',
                     'buttons' => [
                             'sub' => function($url, $model, $key) {
-                                return Html::a(Yii::t('backend', 'Condition List'), \yii\helpers\Url::to(['type-item/index', 'type_id' => $model->id, 'list_id' => Yii::$app->request->get('list_id')]),[
+                                return Html::a(Yii::t('backend', 'List'), Url::to(['type-item/index', 'type_id' => $model->id, 'list_id' => Yii::$app->request->get('list_id')]),[
                                         'class' => 'btn btn-sm btn-info'
                                 ]);
-                            }
+                            },
+
                     ]
             ],
         ],

@@ -24,6 +24,7 @@ use yii\helpers\Url;
  * @property string $list_extend 扩展配置
  * @property string $list_icon 图标
  * @property string $list_sort 排序
+ * @property int $supported_language  支持的语言
  */
 class VodList extends \yii\db\ActiveRecord implements Linkable
 {
@@ -57,7 +58,8 @@ class VodList extends \yii\db\ActiveRecord implements Linkable
             ['list_trysee', 'default', 'value' => 5],
             [['list_name','list_dir'], 'unique'],
             [['list_price', 'list_sort'], 'default', 'value' => 0],
-            [['icon', 'list_icon', 'list_sort'], 'safe']
+            [['icon', 'list_icon', 'list_sort'], 'safe'],
+            ['supported_language', 'safe']
         ];
     }
 
@@ -98,6 +100,7 @@ class VodList extends \yii\db\ActiveRecord implements Linkable
             'list_extend' => Yii::t('backend', 'Extended configuration'),
             'list_icon' => Yii::t('backend', 'Icon'),
             'list_sort' => Yii::t('backend', 'Sort'),
+            'supported_language' => Yii::t('backend', 'supported_language'),
         ];
     }
 

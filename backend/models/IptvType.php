@@ -56,7 +56,7 @@ class IptvType extends \yii\db\ActiveRecord
             'sort' => '排序',
             'image' => '图标',
             'image_hover' => '高亮图标',
-            'is_show' => '是否显示',
+            'is_show' => '是否显示'
         ];
     }
 

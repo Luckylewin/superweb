@@ -4,6 +4,9 @@ namespace backend\controllers;
 
 use backend\models\form\RenameForm;
 use backend\models\IptvType;
+use backend\models\MultiLang;
+use common\models\Type;
+use common\models\VodList;
 use Yii;
 use backend\models\IptvTypeItem;
 use yii\data\ActiveDataProvider;
@@ -145,4 +148,59 @@ class TypeItemController extends BaseController
             'model' => $model
         ]);
     }
+    
+    public function actionMultiLanguage($id)
+    {
+        if ($this->getRequest()->isPost) {
+            $form = $this->getRequest()->post();
+            if (!empty($form['name'])) {
+                foreach ($form['name'] as $language => $value) {
+                    $multiLang = new MultiLang();
+                    $multiLang->field = 'name';
+                    $multiLang->fid   = $id;
+                    $multiLang->language = $language;
+                    $multiLang->value = $value;
+                    $multiLang->save(false);
+                }
+            }
+
+            $this->success();
+            return $this->redirect($this->getReferer());
+        }
+
+        $item = IptvTypeItem::find()
+                            ->with('type')
+                            ->with('multiLanguage')
+                            ->where(['id' => $id])
+                            ->asArray()
+                            ->one();
+
+        $list = VodList::find()->select(['supported_language', 'list_id'])->where(['>','list_id', 0])->one();
+
+        if (!$languages = $list->supported_language) {
+            $this->setFlash('error', '请设置多语言配置后再进行操作');
+
+            return $this->redirect(['iptv-type/set-language', 'id' => $list->list_id]);
+        }
+
+        $languages = json_decode($languages, true);
+        $data = array_flip($languages);
+        array_walk($data, function(&$v) {$v="";});
+        if (!empty($item['multiLanguage'])) {
+            foreach ($languages as $language) {
+                foreach ($item['multiLanguage'] as $lang) {
+                    if ($lang['language'] == $language) {
+                        $data[$language] = $lang['value'];
+                    }
+                }
+            }
+        }
+
+        return $this->renderAjax('multi-language', [
+            'data'      => $data,
+            'fid'       => $id,
+            'name'      => 'name'
+        ]);
+    }
+    
 }
