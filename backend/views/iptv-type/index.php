@@ -18,7 +18,12 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a(Yii::t('backend', 'Create'), ['create','vod_list_id' => $list->list_id], ['class' => 'btn btn-success']) ?>
         <?= Html::a(Yii::t('backend', '同步'), ['sync','vod_list_id' => $list->list_id], ['class' => 'btn btn-info']) ?>
+
+        <?= Html::a(Yii::t('backend','Go Back'), ['vod-list/index'], ['class' => 'btn btn-default']) ?>
+
+
     </p>
+
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -48,8 +53,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             if ($item->exist_num && $item->is_show) {
                                 $str .= Html::button($item->name , [
                                     'title' => $item->exist_num,
-                                    'class' => 'btn btn-info',
-                                    'style' => 'margin:2px;'
+                                    'class' => 'btn btn-info rename',
+                                    'style' => 'margin:2px;',
+                                    'data-toggle' => 'modal',
+                                    'data-target' => '#rename-modal',
+                                    'data-id'     => $item->id,
                                 ]);
                             } else {
                                 $str .= Html::button($item->name , [
@@ -91,8 +99,30 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); ?>
 </div>
 
-<?= Html::a(Yii::t('backend','Go Back'), ['vod-list/index'], ['class' => 'btn btn-default']) ?>
+<!--重命名Modal-->
+<?php
+Modal::begin([
+    'id' => 'rename-modal',
+    'size' => Modal::SIZE_SMALL,
+    'header' => '<h4 class="modal-title">重命名到其他分类</h4>',
+    'footer' => '<a href="#" class="btn btn-default" data-dismiss="modal">关闭</a>',
+]);
+$requestUrl = Url::to(['type-item/rename', 'id' => '']);
+$requestJs=<<<JS
+     $(document).on('click', '.rename', function() {
+                var id = $(this).attr('data-id');
+                $.get('{$requestUrl}' + id, {'id':id},
+                    function (data) {
+                        $('.modal-body').css('min-height', '200px').html(data);
+                    }
+                )
+            })
+JS;
+$this->registerJs($requestJs);
+Modal::end();
+?>
 
+<!--新增Modal-->
 <?php
 Modal::begin([
     'id' => 'create-modal',

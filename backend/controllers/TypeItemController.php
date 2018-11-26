@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\models\form\RenameForm;
 use backend\models\IptvType;
 use Yii;
 use backend\models\IptvTypeItem;
@@ -9,9 +10,6 @@ use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
-/**
- * TypeItemController implements the CRUD actions for IptvTypeItem model.
- */
 class TypeItemController extends BaseController
 {
     public function actionIndex()
@@ -78,6 +76,16 @@ class TypeItemController extends BaseController
     {
         $model = $this->findModel($id);
 
+        if ($this->getRequest()->isAjax) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            $field = Yii::$app->request->post('field');
+            $value = Yii::$app->request->post('value');
+            $model->$field = $value;
+            $model->save(false);
+
+            return ['status' => 'success'];
+        }
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->jump($model, 'info');
         }
@@ -115,4 +123,26 @@ class TypeItemController extends BaseController
         return $this->redirect(['view', 'id' => $model->id]);
     }
 
+    public function actionRename($id)
+    {
+        $item = $this->findModel($id);
+        $model = new RenameForm();
+
+        if ($this->getRequest()->isPost) {
+            $model->load($this->getRequest()->post());
+            if ($model->rename() !== true) {
+                $this->setFlash('error', $model->getFirstErrors()[0]);
+            }
+
+            $this->success();
+            return $this->redirect($this->getReferer());
+        }
+
+        $model->oldName = $item->name;
+        $model->id = $item->id;
+
+        return $this->renderAjax('rename', [
+            'model' => $model
+        ]);
+    }
 }

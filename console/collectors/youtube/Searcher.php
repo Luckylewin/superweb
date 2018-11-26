@@ -173,7 +173,7 @@ class Searcher
                 $exist = $this->model->judgeIsExist($data['title']);
                 if ($exist == false) {
                     $data['links'] = $this->getPlaylistItems($data['playlistId']);
-                    $this->model->collect($data, 'Youtube');
+                    $this->model->collect($data, 'youtube');
                 }
             }
 
@@ -190,7 +190,7 @@ class Searcher
             $data['info'] = $searchResult['snippet']['description'];
 
             if (method_exists($this->model, 'collect') && !empty($data['url']) && !empty($data['title'])) {
-                $this->model->collect($data, 'Youtube');
+                $this->model->collect($data, 'youtube');
             }
        }
     }

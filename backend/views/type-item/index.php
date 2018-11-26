@@ -2,7 +2,8 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-
+use \common\widgets\ajaxInput\AjaxInputWidget;
+use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
@@ -25,14 +26,61 @@ $this->params['breadcrumbs'][] = $this->title;
         'tableOptions' => ['class' => 'table table-bordered'],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            'name',
-            'zh_name',
-            'sort',
+            [
+                'attribute' => 'name',
+                'options' => ['class' => 'col-md-1'],
+                'format' => 'raw',
+                'value' => function($model) {
+                    return AjaxInputWidget::widget([
+                        'url'   => Url::to(['type-item/update', 'id' => $model->id]),
+                        'field' => 'name',
+                        'value' => $model->name,
+                        'options' => [
+                            'class' => 'form-control',
+                            'style' => 'width:200px;'
+                        ]
+                    ]);
+                }
+            ],
+            [
+                'attribute' => 'zh_name',
+                'options' => ['class' => 'col-md-1'],
+                'format' => 'raw',
+                'value' => function($model) {
+                    return AjaxInputWidget::widget([
+                        'url'   => Url::to(['type-item/update', 'id' => $model->id]),
+                        'field' => 'zh_name',
+                        'value' => $model->zh_name,
+                        'options' => [
+                            'class' => 'form-control',
+                            'style' => 'width:200px;'
+                        ]
+                    ]);
+                }
+            ],
+
+            [
+                    'attribute' => 'sort',
+                    'options' => ['class' => 'col-md-1'],
+                    'format' => 'raw',
+                    'value' => function($model) {
+                       return AjaxInputWidget::widget([
+                           'url'   => Url::to(['type-item/update', 'id' => $model->id]),
+                           'field' => 'sort',
+                           'value' => $model->sort,
+                           'options' => [
+                                'class' => 'form-control col-md-1',
+                                'style' => 'width:80px;'
+                           ]
+                       ]);
+                    }
+            ],
             'exist_num',
             [
                     'class' => 'common\grid\MyActionColumn',
                     'template' => '{update} {delete}',
-                    'size' => 'btn-sm'
+                    'size' => 'btn-sm',
+
             ],
         ],
     ]); ?>

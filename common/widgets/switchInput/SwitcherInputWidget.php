@@ -12,6 +12,18 @@ namespace common\widgets\switchInput;
 use yii\base\InvalidArgumentException;
 use yii\bootstrap\Widget;
 
+/**
+ *
+ * SwitcherInputWidget::widget([
+    'id' => $data['id'],
+    'url' => \yii\helpers\Url::to(['menu/update', 'id' => $data['id']]),
+    'defaultCheckedStatus' => $data['display'],
+    'successTips' => '操作成功',
+    'errorTips'   => '操作失败'
+    ]);
+ * Class SwitchInputAsset
+ * @package common\widgets\switchInput
+ */
 class SwitcherInputWidget extends Widget
 {
     /**
