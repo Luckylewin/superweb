@@ -17,11 +17,47 @@ class BaiduTranslator
     private static $APP_ID;
     private static $SEC_KEY;
 
+    public static function convertCode($code)
+    {
+        $codes = [
+            'zh-cn'   => ['bcode' => 'zh', 'name' => '中文'],
+            'en-us'   => ['bcode' => 'en','name' => '英语'],
+            'ja-jp' => ['bcode' => 'jp','name' => '日语'],
+            'ko-kr' => ['bcode' => 'kor','name' => '韩语'],
+            'fr-fr' => ['bcode' => 'fra','name' => '法语'],
+            'de-de' => ['bcode' => 'de','name'=>'德语'],
+            'ru-ru' => ['bcode' => 'ru','name'=>'俄语'],
+            'th-th' => ['bcode' => 'th','name'=>'泰语'],
+            'es-es' => ['bcode' => 'spa','name'=>'西班牙语'],
+            'el-gr' => ['bcode' => 'el','name'=>'希腊语'],
+            'af' => ['bcode' => 'nl','name'=>'荷兰语'],
+            'pl-pl' => ['bcode' => 'pl','name'=>'波兰语'],
+            'vi-vn' => ['bcode' => 'vie','name'=>'越南语'],
+            'ar' => ['bcode' => 'ara','name' => '阿拉伯语'],
+            'pt-pt' => ['bcode' => 'pt','name' => '葡萄牙语'],
+            'it-it' => ['bcode' => 'it','name' => '意大利语'],
+            'da-dk' => ['bcode' => 'dan','name'=>'丹麦语'],
+            'fi-FI' => ['bcode' => 'fin','name'=>'芬兰语'],
+            'sv-se' => ['bcode' => 'swe','name'=>'瑞典语'],
+            'pt-br' => ['bcode' => 'pt','name' => '葡萄牙语'],
+            'zh-tw' => ['bcode' => 'cht','name' => '中文繁体'],
+            'nl-nl' => ['bcode' => 'nl','name' => '荷兰语'],
+            'fi-fi' => ['bcode' => 'fin','name' => '芬兰语'],
+
+
+        ];
+
+        if (array_key_exists($code, $codes)) {
+            return $codes[$code]['bcode'];
+        }
+
+        return false;
+    }
 
     //翻译入口
     static public function translate($query, $from, $to)
    {
-        self::$APP_ID = Yii::$app->params['BAIDU_TRANSLATE']['APP_ID'];
+        self::$APP_ID  = Yii::$app->params['BAIDU_TRANSLATE']['APP_ID'];
         self::$SEC_KEY = Yii::$app->params['BAIDU_TRANSLATE']['SEC_KEY'];
 
         $args = array(
@@ -29,7 +65,7 @@ class BaiduTranslator
             'appid' => self::$APP_ID,
             'salt' => rand(10000,99999),
             'from' => $from,
-            'to' => $to,
+            'to'   => $to,
 
         );
 

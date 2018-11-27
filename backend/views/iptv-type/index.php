@@ -22,6 +22,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <?= Html::a(Yii::t('backend', 'Language setting'), Url::to(['iptv-type/set-language', 'id' => Yii::$app->request->get('list_id')]),['class' => 'btn btn-primary '])?>
 
+        <?= Html::a(Yii::t('backend', 'Baidu Translate'), Url::to(['iptv-type/translate', 'id' => Yii::$app->request->get('list_id')]),['class' => 'btn btn-primary '])?>
+
         <?= Html::a(Yii::t('backend','Go Back'), ['vod-list/index'], ['class' => 'btn btn-default']) ?>
 
     </p>

@@ -20,16 +20,17 @@ $this->registerJsFile('statics/plugins/select2/js/select2.min.js', ['depends' =>
 <div class="iptv-type-form">
 
     <?php $form = ActiveForm::begin(); ?>
-
-    <div class="col-md-10">
+    
+    <div class="col-md-12">
+        <label for="">Supported Languages</label>
         <?= $form->field($model, 'supported_language')->dropDownList(\common\models\Type::getLangCode(), [
             "multiple" => "multiple",
             'class' => 'js-example-basic-multiple',
             'style' => 'width:800px;'
-        ]) ?>
+        ])->label(false) ?>
     </div>
 
-    <div class="col-md-2">
+    <div class="col-md-12">
         <div class="form-group">
             <?= Html::submitButton(Yii::t('backend', 'Save'), ['class' => 'btn btn-success']) ?>
             <?= Html::a(Yii::t('backend', 'Go Back'), \yii\helpers\Url::to(['iptv-type/index', 'list_id' => Yii::$app->request->get('id')]), ['class' => 'btn btn-default']) ?>

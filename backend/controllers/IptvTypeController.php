@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use console\queues\TranslateQueue;
 use Yii;
 use backend\models\IptvTypeItem;
 use common\components\Func;
@@ -109,7 +110,10 @@ class IptvTypeController extends BaseController
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-
+    /**
+     * 抽取影片中的 type area language year
+     * @return \yii\web\Response
+     */
     public function actionSync()
     {
         $vod_list_id = Yii::$app->request->get('vod_list_id');
@@ -189,6 +193,14 @@ class IptvTypeController extends BaseController
         return $this->render('set-language', [
             'model' => $model
         ]);
+    }
+
+    public function actionTranslate()
+    {
+        Yii::$app->queue->push(new TranslateQueue());
+        $this->success('后台任务:使用百度翻译全部');
+
+        $this->redirect($this->getReferer());
     }
 
 }

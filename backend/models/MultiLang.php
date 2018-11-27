@@ -8,6 +8,7 @@ use Yii;
  * This is the model class for table "sys_multi_lang".
  *
  * @property int $fid
+ * @property string $table 表名
  * @property string $field 字段名
  * @property string $value 值
  * @property string $language 语言
@@ -29,7 +30,7 @@ class MultiLang extends \yii\db\ActiveRecord
     {
         return [
             [['fid'], 'integer'],
-            [['field'], 'string', 'max' => 20],
+            [['field','table'], 'string', 'max' => 20],
             [['value'], 'string', 'max' => 800],
             [['language'], 'string', 'max' => 10],
         ];
@@ -41,7 +42,8 @@ class MultiLang extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'fid' => 'Fid',
+            'fid'   => 'Fid',
+            'table' => '表名',
             'field' => '字段名',
             'value' => '值',
             'language' => '语言',
