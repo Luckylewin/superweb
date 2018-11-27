@@ -34,26 +34,26 @@ class TranslateJob
                             ])
                             ->exists();
                         if ($exist == false) {
+                            $multiLang = new MultiLang();
+                            $multiLang->field = 'name';
+                            $multiLang->fid   = $item->id;
+                            $multiLang->table = IptvTypeItem::tableName();
+                            $multiLang->language = $language;
+                            if (preg_match('/^\d+$/', $item->name)) {
+                                $multiLang->value = $item->name;
+                            } else {
+                                $to = BaiduTranslator::convertCode($language);
+                                if ($to) {
+                                    $multiLang->value = BaiduTranslator::translate($item->name, 'auto', $to);
+                                }
+                            }
 
+                            $multiLang->save(false);
+                            echo "新增翻译项" . $multiLang->value , PHP_EOL;
+                            sleep(1);
                         }
 
-                         $multiLang = new MultiLang();
-                         $multiLang->field = 'name';
-                         $multiLang->fid   = $item->id;
-                         $multiLang->table = IptvTypeItem::tableName();
-                         $multiLang->language = $language;
-                         if (preg_match('/^\d+$/', $item->name)) {
-                             $multiLang->value = $item->name;
-                         } else {
-                             $to = BaiduTranslator::convertCode($language);
-                             if ($to) {
-                                 $multiLang->value = BaiduTranslator::translate($item->name, 'auto', $to);
-                             }
-                         }
 
-                         $multiLang->save(false);
-                         echo "新增翻译项" . $multiLang->value , PHP_EOL;
-                         sleep(1);
                     }
            }
        }

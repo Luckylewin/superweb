@@ -14,6 +14,7 @@ use backend\models\Mac;
 use backend\models\MiddleParade;
 use backend\models\Parade;
 use backend\models\PlayGroup;
+use common\components\BaiduTranslator;
 use common\models\MainClass;
 use common\models\OttChannel;
 use common\models\OttLink;
@@ -23,6 +24,7 @@ use common\models\Vod;
 use common\models\Vodlink;
 use common\models\VodList;
 use console\components\MySnnopy;
+use console\jobs\TranslateJob;
 use Symfony\Component\DomCrawler\Crawler;
 use yii\console\Controller;
 use yii\console\ExitCode;
@@ -49,17 +51,7 @@ class HelloController extends Controller
      */
     public function actionIndex($message = 'hello world')
     {
-        $query = new Query();
-        $query->from('mac_detail');
-        foreach($query->batch() as $users){
-            foreach($users as $user){
-               if (!empty($user['client_id']) && !empty($user['MAC'])) {
-                   Mac::updateAllCounters(['client_id' => $user['client_id']], [
-                      'MAC' => $user['MAC']
-                   ]);
-               }
-            }
-        }
+
 
 
         return ExitCode::OK;
@@ -131,32 +123,7 @@ class HelloController extends Controller
 
     public function actionTest()
     {
-        $vodList = vodList::find()->all();
-        foreach ($vodList as $list) {
-            // 判断是否存在 iptv types
-           $typeList = IptvType::find()->where(['vod_list_dir' => $list->list_dir, 'field' => 'type'])->one();
-           if (empty($typeList)) {
-               $fields = ['year', 'type', 'area', 'language'];
-               foreach ($fields as $field) {
-                   $iptvType = new IptvType();
-                   $iptvType->field = $field;
-                   $iptvType->name  = $field;
-                   $iptvType->vod_list_dir = $list->list_dir;
-                   $iptvType->vod_list_id  = $list->list_id;
-                   $iptvType->save(false);
-               }
-           } else {
-               $vods = Vod::find()->where(['vod_cid' => $list->vod_id])->all();
-               foreach ($vods as $vod) {
-                   $typesString = explode(',', $vod->vod_type);
-                   if (!empty($typesString)) {
-                        foreach ($typesString as $type) {
-                            // 判断是否存在于
-                        }
-                   }
-               }
-           }
-        }
+        TranslateJob::typeItem();
     }
 
 
