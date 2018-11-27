@@ -24,27 +24,37 @@ class TranslateJob
            $supported_languages = json_decode($list->supported_language, true);
            $items = IptvTypeItem::find()->where(['is_show' => 1])->andFilterWhere(['>', 'exist_num', 0])->all();
            foreach ($items as $item) {
-               if (MultiLang::find()->where(['table' => IptvTypeItem::tableName(), 'fid' => $item->id, 'field' => 'name'])->exists() == false) {
                     foreach ($supported_languages as $language) {
+                        $exist = MultiLang::find()
+                            ->where([
+                                    'table' => IptvTypeItem::tableName(),
+                                    'fid'   => $item->id,
+                                    'field' => 'name',
+                                    'language' => $language
+                            ])
+                            ->exists();
+                        if ($exist == false) {
+
+                        }
+
                          $multiLang = new MultiLang();
                          $multiLang->field = 'name';
                          $multiLang->fid   = $item->id;
                          $multiLang->table = IptvTypeItem::tableName();
                          $multiLang->language = $language;
-                         if (is_numeric($item->name) == false) {
+                         if (preg_match('/^\d+$/', $item->name)) {
+                             $multiLang->value = $item->name;
+                         } else {
                              $to = BaiduTranslator::convertCode($language);
                              if ($to) {
                                  $multiLang->value = BaiduTranslator::translate($item->name, 'auto', $to);
                              }
-                         } else {
-                             $multiLang->value = $item->name;
                          }
 
                          $multiLang->save(false);
                          echo "新增翻译项" . $multiLang->value , PHP_EOL;
                          sleep(1);
                     }
-               }
            }
        }
 
