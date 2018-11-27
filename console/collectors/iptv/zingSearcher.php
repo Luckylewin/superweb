@@ -36,7 +36,7 @@ class zingSearcher extends common
                 'language' => 'English'
             ],
             [
-                'type' => 'Hover',
+                'type' => 'Horror',
                 'url'  => 'https://tv.zing.vn/the-loai/Kinh-Di-Sieu-Nhien/IWZ9ZI0W.html'
             ],
             [
@@ -356,18 +356,33 @@ class zingSearcher extends common
         // 获取页码
         $episodePageLinks = $this->getPageLinks($dom, $episodeLink);
         $episodes         = [];
-
+        
+        // 版权标志
+        $authFlag = true;
+        
         foreach ($episodePageLinks as $key => $link) {
             $this->getDomIsCached() == false && $this->color("获取分集".($key+1).'/'.(count($episodePageLinks)));
+
+            if ($authFlag == false) continue;
+
             $dom  = $this->getDom($link);
-            $dom->filter('.subtray .item')->each(function(Crawler $item) use (&$episodes) {
+            $dom->filter('.subtray .item')->each(function(Crawler $item, $i) use (&$episodes,$key, &$authFlag) {
                   $href    = $this->site . $item->filter('.thumb')->first()->attr('href');
                   $image   = $item->filter('.thumb img')->first()->attr('src');
                   $title   = $item->filter('.box-description a')->first()->text();
                   $episode = Func::pregSieze('/\d+/', $title);
                   $during  = $item->filter('.info-detail span')->last()->text();
 
-                  if ($href && $episode) {
+                  if ($key == 0 && $i == 0) {
+                      $this->color('验证是否有版权');
+                      $episodePage = $this->getDom($href);
+                      if (preg_match('/source: "(.+mp4.+)"/', $episodePage->html()) == false) {
+                          $authFlag = false;
+                          $this->color('无版权', 'error');
+                      }
+                  }
+
+                  if ($authFlag && $href && $episode) {
                       $episodes[] = [
                           'title'   => trim($title),
                           'episode' => $episode,

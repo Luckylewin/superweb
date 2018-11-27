@@ -31,13 +31,16 @@ class AnnaOtt extends base
     public function dealOTT()
     {
         $this->dealLiveTV();
-        $this->dealMiTV();
     }
 
     private function dealLiveTV()
     {
         $accounts = [
             "http://www.hdboxtv.net:8000/get.php?username=287994000090&password=287994000090&type=m3u_plus&output=ts",
+            "http://www.hdboxtv.net:8000/get.php?username=287994000091&password=287994000091&type=m3u_plus&output=ts",
+            "http://www.hdboxtv.net:8000/get.php?username=287994000092&password=287994000092&type=m3u_plus&output=ts",
+            "http://www.hdboxtv.net:8000/get.php?username=287994000093&password=287994000093&type=m3u_plus&output=ts",
+            "http://www.hdboxtv.net:8000/get.php?username=287994000094&password=287994000094&type=m3u_plus&output=ts",
             "http://www.hdboxtv.net:8000/get.php?username=287994000099&password=287994000099&type=m3u_plus&output=ts",
         ];
 
@@ -87,25 +90,6 @@ class AnnaOtt extends base
                         $channel->save(false);
                     }
                 }
-            }
-        }
-    }
-
-    private function dealMiTV()
-    {
-        $url = "http://dns.infinitytv.xyz:8000/get.php?username=287994000026&password=287994000026&type=m3u_plus&output=ts";
-        self::$data = $this->download($url);
-        $data = $this->initData();
-
-        if ($data) {
-            // 基本数据录入
-            foreach ($data as $value) {
-                // 普通数据
-                $temp['group-title'] = 'xxx|MITV';
-                $mainClassID  = $this->_mainClass($temp);
-                $subClassID = $this->_subClass($value, $mainClassID, false);
-                $channelID = $this->_channel($value, $subClassID);
-                $this->_link($value, $channelID);
             }
         }
     }

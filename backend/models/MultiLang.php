@@ -7,14 +7,17 @@ use Yii;
 /**
  * This is the model class for table "sys_multi_lang".
  *
+ * @property int $id
  * @property int $fid
  * @property string $table 表名
  * @property string $field 字段名
+ * @property string $origin 原值
  * @property string $value 值
  * @property string $language 语言
  */
 class MultiLang extends \yii\db\ActiveRecord
 {
+
     /**
      * @inheritdoc
      */
@@ -29,9 +32,10 @@ class MultiLang extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            ['id', 'integer'],
             [['fid'], 'integer'],
             [['field','table'], 'string', 'max' => 20],
-            [['value'], 'string', 'max' => 800],
+            [['value', 'origin'], 'string', 'max' => 800],
             [['language'], 'string', 'max' => 10],
         ];
     }

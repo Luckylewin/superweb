@@ -8,6 +8,7 @@
 
 namespace console\collectors;
 
+use backend\components\MyRedis;
 use GuzzleHttp\Client;
 use Symfony\Component\DomCrawler\Crawler;
 use Yii;
@@ -108,11 +109,14 @@ class common
      */
     public function getDom($url, $format ='html', $charset = "UTF-8", $cookies = null)
     {
+        $redis = MyRedis::init(2);
+        $md5 = md5($url);
+
         try {
-            if (Yii::$app->cache->exists(md5($url))) {
+            if ($redis->get($md5) && Yii::$app->cache->exists($md5)) {
                 $this->isCached = true;
-                $data = Yii::$app->cache->get(md5($url));
-                Yii::$app->cache->set(md5($url), $data, 386400);
+                $data = Yii::$app->cache->get($md5);
+                Yii::$app->cache->set($md5, $data, 386400);
             } else {
                 $this->isCached = false;
                 $client  = $this->getHttpClient();
@@ -134,7 +138,9 @@ class common
 
                 $this->isCached = false;
                 if ($data) {
-                    Yii::$app->cache->set(md5($url), $data, 386400);
+                    Yii::$app->cache->set($md5, $data, 386400);
+                    $redis->set($md5, $url);
+                    $redis->expire($md5, 86400);
                 }
             }
         } catch (\Exception $e) {

@@ -136,4 +136,16 @@ class VodList extends \yii\db\ActiveRecord implements Linkable
     {
         return $this->hasMany(Vod::className(), ['vod_cid' => 'list_id']);
     }
+
+    public static function getLanguages()
+    {
+        // 查询支持的语言
+        $list = self::find()->where(['>', 'list_id', 0])->one();
+
+        if (is_null($list)) {
+            return false;
+        }
+
+        return json_decode($list->supported_language, true);
+    }
 }

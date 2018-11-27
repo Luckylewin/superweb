@@ -13,6 +13,8 @@ use yii\redis\Connection;
 
 class MyRedis
 {
+    private static $redis;
+
     const REDIS_PARADE_CONTENT	      =	0;
     const REDIS_DEVICE_STATUS	      =	1;
     const REDIS_EPG     =	2;
@@ -34,9 +36,14 @@ class MyRedis
      */
     public static function init($database = 0)
     {
+        if (self::$redis) {
+            return self::$redis;
+        }
+
         $redis = Yii::$app->redis;
         $redis->select($database);
-        return $redis;
+
+        return self::$redis = $redis;
     }
 
 }

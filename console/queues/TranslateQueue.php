@@ -17,6 +17,7 @@ class TranslateQueue extends BaseObject implements \yii\queue\JobInterface
     public function execute($queue)
     {
         TranslateJob::typeItem();
+        TranslateJob::iptvType();
     }
 
 }

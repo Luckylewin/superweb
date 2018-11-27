@@ -51,9 +51,6 @@ class HelloController extends Controller
      */
     public function actionIndex($message = 'hello world')
     {
-
-
-
         return ExitCode::OK;
     }
 
@@ -123,6 +120,7 @@ class HelloController extends Controller
 
     public function actionTest()
     {
+        TranslateJob::iptvType();
         TranslateJob::typeItem();
     }
 
