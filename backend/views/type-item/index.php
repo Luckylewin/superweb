@@ -85,4 +85,27 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); ?>
 </div>
 
+<!--重命名Modal-->
+<?php
+Modal::begin([
+    'id' => 'rename-modal',
+    'size' => Modal::SIZE_SMALL,
+    'header' => '<h4 class="modal-title">重命名到其他分类</h4>',
+    'footer' => '<a href="#" class="btn btn-default" data-dismiss="modal">关闭</a>',
+]);
+$requestUrl = Url::to(['type-item/rename', 'id' => '']);
+$requestJs=<<<JS
+     $(document).on('click', '.rename', function() {
+                var id = $(this).attr('data-id');
+                $.get('{$requestUrl}' + id, {'id':id},
+                    function (data) {
+                        $('.modal-body').css('min-height', '200px').html(data);
+                    }
+                )
+            })
+JS;
+$this->registerJs($requestJs);
+Modal::end();
+?>
+
 
