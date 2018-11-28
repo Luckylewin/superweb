@@ -43,15 +43,15 @@ class AnnaOtt extends base
     private function dealLiveTV()
     {
         $accounts = [
-           /* [
+            [
                 'url' => "http://www.hdboxtv.net:8000/get.php?username=287994000090&password=287994000090&type=m3u_plus&output=ts",
                 'mainClass' => null,
-            ],*/
+            ],
             [
                 'url' => 'http://www.hdboxtv.net:8000/get.php?username=287994000091&password=287994000091&type=m3u_plus&output=ts',
                 'mainClass' => 'ltn',
             ],
-            /*[
+           [
                 'url' => 'http://www.hdboxtv.net:8000/get.php?username=287994000092&password=287994000092&type=m3u_plus&output=ts',
                 'mainClass' => 'br',
             ],
@@ -66,7 +66,7 @@ class AnnaOtt extends base
             [
                 'url' => 'http://www.hdboxtv.net:8000/get.php?username=287994000099&password=287994000099&type=m3u_plus&output=ts',
                 'mainClass' => null,
-            ],*/
+            ],
 
         ];
 
@@ -309,7 +309,7 @@ class AnnaOtt extends base
         } else if ($Link->link !== $value['ts']) {
             echo "updated link" .PHP_EOL;
             $Link->link = $value['ts'];
-            $Link->save(); 
+            $Link->save();
         }
 
         return $Link->id;
