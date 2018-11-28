@@ -20,6 +20,12 @@ class AnnaOtt extends base
 {
     protected static $data;
 
+    protected $currentMainClass;
+
+    protected $currentSubClass;
+
+    protected $map;
+
     public function __destruct()
     {
         $this->stdout('本次任务执行结束,若无输出则说明无新数据', Console::FG_GREEN);
@@ -31,20 +37,21 @@ class AnnaOtt extends base
     public function dealOTT()
     {
         $this->dealLiveTV();
+        $this->sync();
     }
 
     private function dealLiveTV()
     {
         $accounts = [
-            [
+           /* [
                 'url' => "http://www.hdboxtv.net:8000/get.php?username=287994000090&password=287994000090&type=m3u_plus&output=ts",
                 'mainClass' => null,
-            ],
+            ],*/
             [
                 'url' => 'http://www.hdboxtv.net:8000/get.php?username=287994000091&password=287994000091&type=m3u_plus&output=ts',
                 'mainClass' => 'ltn',
             ],
-            [
+            /*[
                 'url' => 'http://www.hdboxtv.net:8000/get.php?username=287994000092&password=287994000092&type=m3u_plus&output=ts',
                 'mainClass' => 'br',
             ],
@@ -59,7 +66,7 @@ class AnnaOtt extends base
             [
                 'url' => 'http://www.hdboxtv.net:8000/get.php?username=287994000099&password=287994000099&type=m3u_plus&output=ts',
                 'mainClass' => null,
-            ],
+            ],*/
 
         ];
 
@@ -95,7 +102,6 @@ class AnnaOtt extends base
             // 给A-Z重新排列频道好
             $this->sortAZ($allData);
         }
-
     }
 
     protected function sortAZ($data)
@@ -186,9 +192,9 @@ class AnnaOtt extends base
         }
 
         if (is_null($assignMainClass)) {
-            $mainClassName = $className[1];
+            $this->currentMainClass = $mainClassName = $className[1];
         } else {
-            $mainClassName = $assignMainClass;
+            $this->currentMainClass = $mainClassName = $assignMainClass;
         }
 
         $mainClass = MainClass::findOne(['name' => $mainClassName]);
@@ -218,7 +224,7 @@ class AnnaOtt extends base
             return false;
         }
 
-        $subClassName = $className[0];
+        $this->currentSubClass = $subClassName = $className[0];
         $subClass = SubClass::findOne(['name' => $subClassName, 'main_class_id' => $mainClassID]);
 
         if (is_null($subClass)) {
@@ -245,9 +251,11 @@ class AnnaOtt extends base
 
         //查找频道
         $channel = OttChannel::findOne([
-            "name" => $value['tvg-name'],
-            'sub_class_id' => $subClassID
+            "name"          => $value['tvg-name'],
+            'sub_class_id'  => $subClassID
         ]);
+
+        $this->map[$this->currentMainClass][$this->currentSubClass][] = $value['tvg-name'];
 
         //新增频道
         if (empty($channel)) {
@@ -285,7 +293,8 @@ class AnnaOtt extends base
             return false;
         }
 
-        $Link = OttLink::findOne(['channel_id' => $channelID, 'link' => $value['ts']]);
+        $Link = OttLink::find()->where(['channel_id' => $channelID])
+                               ->one();
 
         //新增链接
         if (is_null($Link)) {
@@ -297,9 +306,53 @@ class AnnaOtt extends base
             $Link->method = 'null';
             $Link->decode = 1;
             $Link->save(false);
+        } else if ($Link->link !== $value['ts']) {
+            echo "updated link" .PHP_EOL;
+            $Link->link = $value['ts'];
+            $Link->save(); 
         }
 
         return $Link->id;
+    }
+
+    protected function sync()
+    {
+        $this->map;
+
+        // 遍历每一个一级分类
+        if (empty($this->map)) {
+            return false;
+        }
+
+        foreach ($this->map as $mainClassName => $fileSubClassArr) {
+            $mainClass = MainClass::find()->where(['name' => $mainClassName])
+                                          ->with('sub')
+                                          ->asArray()
+                                          ->one();
+            if (empty($mainClass)) {
+                return false;
+            }
+
+            if (!empty($mainClass['sub'])) {
+                foreach ($mainClass['sub'] as $dbSubClass) {
+                    if (!array_key_exists($dbSubClass['name'], $fileSubClassArr)) {
+                        echo "数据库中不存在二级分类{$dbSubClass['name']} 已删除" . PHP_EOL;
+                        SubClass::findOne($dbSubClass['id'])->delete();
+                    } else {
+                        $dbChannelNames = OttChannel::find()->select('name')->where(['sub_class_id' => $dbSubClass['id']])->column();
+                        if ($dbChannelNames) {
+                            foreach ($dbChannelNames as $dbChannelName) {
+                                if (!in_array($dbChannelName, $fileSubClassArr[$dbSubClass['name']])) {
+                                    OttChannel::findOne(['sub_class_id' => $dbSubClass['id'], 'name' => $dbChannelName])->delete();
+                                    echo "删除频道 {$dbChannelName}" . PHP_EOL;
+                                }
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
     }
 
     private static function get($data, $default = null)
