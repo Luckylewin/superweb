@@ -36,17 +36,38 @@ class AnnaOtt extends base
     private function dealLiveTV()
     {
         $accounts = [
-            "http://www.hdboxtv.net:8000/get.php?username=287994000090&password=287994000090&type=m3u_plus&output=ts",
-            "http://www.hdboxtv.net:8000/get.php?username=287994000091&password=287994000091&type=m3u_plus&output=ts",
-            "http://www.hdboxtv.net:8000/get.php?username=287994000092&password=287994000092&type=m3u_plus&output=ts",
-            "http://www.hdboxtv.net:8000/get.php?username=287994000093&password=287994000093&type=m3u_plus&output=ts",
-            "http://www.hdboxtv.net:8000/get.php?username=287994000094&password=287994000094&type=m3u_plus&output=ts",
-            "http://www.hdboxtv.net:8000/get.php?username=287994000099&password=287994000099&type=m3u_plus&output=ts",
+            [
+                'url' => "http://www.hdboxtv.net:8000/get.php?username=287994000090&password=287994000090&type=m3u_plus&output=ts",
+                'mainClass' => null,
+            ],
+            [
+                'url' => 'http://www.hdboxtv.net:8000/get.php?username=287994000091&password=287994000091&type=m3u_plus&output=ts',
+                'mainClass' => 'ltn',
+            ],
+            [
+                'url' => 'http://www.hdboxtv.net:8000/get.php?username=287994000092&password=287994000092&type=m3u_plus&output=ts',
+                'mainClass' => 'br',
+            ],
+            [
+                'url' => 'http://www.hdboxtv.net:8000/get.php?username=287994000093&password=287994000093&type=m3u_plus&output=ts',
+                'mainClass' => null,
+            ],
+            [
+                'url' => 'http://www.hdboxtv.net:8000/get.php?username=287994000094&password=287994000094&type=m3u_plus&output=ts',
+                'mainClass' => null,
+            ],
+            [
+                'url' => 'http://www.hdboxtv.net:8000/get.php?username=287994000099&password=287994000099&type=m3u_plus&output=ts',
+                'mainClass' => null,
+            ],
+
         ];
+
+
 
         $allData = [];
         foreach ($accounts as $url) {
-            self::$data = $this->download($url);
+            self::$data = $this->download($url['url']);
             $data = $this->initData();
 
             // 基本数据录入
@@ -54,9 +75,9 @@ class AnnaOtt extends base
 
                 $allData[] = $value;
                 // 普通数据
-                $mainClassID  = $this->_mainClass($value);
-                $subClassID = $this->_subClass($value, $mainClassID);
-                $channelID = $this->_channel($value, $subClassID);
+                $mainClassID  = $this->_mainClass($value, $url['mainClass']);
+                $subClassID   = $this->_subClass($value, $mainClassID);
+                $channelID    = $this->_channel($value, $subClassID);
                 $this->_link($value, $channelID);
             }
         }
@@ -154,16 +175,22 @@ class AnnaOtt extends base
     /**
      * 一级分类
      * @param $value
+     * @param $assignMainClass string 可能指定的分类
      * @return bool|int
      */
-    private function _mainClass($value)
+    private function _mainClass($value, $assignMainClass)
     {
         $className = explode('|',$value['group-title']);
         if (!isset($className[1])) {
             return false;
         }
 
-        $mainClassName = $className[1];
+        if (is_null($assignMainClass)) {
+            $mainClassName = $className[1];
+        } else {
+            $mainClassName = $assignMainClass;
+        }
+
         $mainClass = MainClass::findOne(['name' => $mainClassName]);
 
         if (is_null($mainClass)) {
