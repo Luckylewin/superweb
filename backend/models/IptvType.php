@@ -78,6 +78,11 @@ class IptvType extends \yii\db\ActiveRecord
         return $this->hasOne(VodList::className(), ['list_id' => 'vod_list_id']);
     }
 
+    public function getMultiLang()
+    {
+        return $this->hasMany(MultiLang::className(), ['fid' => 'id']);
+    }
+
     public static function getTypeItem($list_id, $field)
     {
         $type = self::find()->where(['field' => $field])

@@ -53,4 +53,22 @@ class MultiLang extends \yii\db\ActiveRecord
             'language' => '语言',
         ];
     }
+
+    public static function loadData($supportedLanguages, $multiLanguages)
+    {
+        $data = array_flip($supportedLanguages);
+        array_walk($data, function(&$v) {$v="";});
+        if (!empty($multiLanguages)) {
+            foreach ($supportedLanguages as $language) {
+                foreach ($multiLanguages as $lang) {
+                    if ($lang['language'] == $language) {
+                        $data[$language] = $lang['value'];
+                    }
+                }
+            }
+        }
+
+        return $data;
+    }
+
 }

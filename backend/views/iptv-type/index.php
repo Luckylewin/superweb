@@ -4,6 +4,8 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\bootstrap\Modal;
 use yii\helpers\Url;
+use \common\widgets\multilang\MultiLangWidget;
+
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js', ['depends' => 'yii\web\JqueryAsset']);
@@ -25,50 +27,64 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a(Yii::t('backend', 'Baidu Translate'), Url::to(['iptv-type/translate', 'id' => Yii::$app->request->get('list_id')]),['class' => 'btn btn-primary '])?>
 
         <?= Html::a(Yii::t('backend','Go Back'), ['vod-list/index'], ['class' => 'btn btn-default']) ?>
-
     </p>
-
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'layout' => '{items}',
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
+            [
+                    'attribute' => 'name',
+                    'format' => 'raw',
+                    'value' => function($model) {
+                        return MultiLangWidget::widget([
+                            'id'    => $model->id,
+                            'table' => \backend\models\IptvType::tableName(),
+                            'field' => 'name',
+                            'name'  => $model->name,
+                            'options' => [
+                                    'style' => 'margin:2px;',
+                                    'class' => 'btn btn-default',
+                                    'title' => $model->field
+                            ]
+                        ]);
 
-            'name',
-            'field',
+                    }
+            ],
+
             [
                 'attribute' => 'image',
                 'format' => 'raw',
                 'value' => function($model) {
                     return Html::img(\common\components\Func::getAccessUrl($model->image),[
-                            'width' => '40'
+                            'width' => '30'
                     ]);
                 }
             ],
             [
                     'label' => Yii::t('backend', 'options'),
                     'format' => 'raw',
-                    'options' => ['style' => 'width:55%'],
+                    'options' => ['style' => 'width:58%'],
                     'value' => function($model) {
                         $data = \backend\models\IptvTypeItem::getTypeItems($model->id);
                         $str = '';
 
                         foreach ($data as $key => $item) {
                             if ($item->exist_num && $item->is_show) {
-                                $str .= Html::button($item->name , [
-                                    'title' => $item->exist_num,
-                                    'class' => 'btn btn-info rename',
-                                    'style' => 'margin:2px;',
-                                    'data-toggle' => 'modal',
-                                    'data-target' => '#rename-modal',
-                                    'data-id'     => $item->id,
+                                $str .= \common\widgets\multilang\MultiLangWidget::widget([
+                                    'id'    => $item->id,
+                                    'table' => \backend\models\IptvTypeItem::tableName(),
+                                    'field' => 'name',
+                                    'name'  => $item->name,
+                                    'options' => [ 'style' => 'margin:2px;']
                                 ]);
+
                             } else {
                                 $str .= Html::button($item->name , [
                                     'title' => $item->exist_num,
                                     'class' => 'btn btn-default',
-                                    'style' => 'margin:2px;'
+                                    'style' => 'margin: 2px;background: #eee'
                                 ]);
                             }
                         }
@@ -103,28 +119,7 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); ?>
 </div>
 
-<!--重命名Modal-->
-<?php
-Modal::begin([
-    'id' => 'rename-modal',
-    'size' => Modal::SIZE_SMALL,
-    'header' => '<h4 class="modal-title">重命名到其他分类</h4>',
-    'footer' => '<a href="#" class="btn btn-default" data-dismiss="modal">关闭</a>',
-]);
-$requestUrl = Url::to(['type-item/rename', 'id' => '']);
-$requestJs=<<<JS
-     $(document).on('click', '.rename', function() {
-                var id = $(this).attr('data-id');
-                $.get('{$requestUrl}' + id, {'id':id},
-                    function (data) {
-                        $('.modal-body').css('min-height', '200px').html(data);
-                    }
-                )
-            })
-JS;
-$this->registerJs($requestJs);
-Modal::end();
-?>
+
 
 <!--新增Modal-->
 <?php

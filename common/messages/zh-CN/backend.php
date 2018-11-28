@@ -578,5 +578,6 @@ return [
     'Sync online-state' => '同步用户在线状态',
     'user' => '用户',
     'Language setting'  => '语言设置',
-    'List'  => '列表'
+    'List'  => '列表',
+    'Modify' => '修改'
 ];

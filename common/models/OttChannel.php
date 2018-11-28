@@ -2,10 +2,10 @@
 
 namespace common\models;
 
-use backend\models\OttBanner;
-use backend\models\OttRecommend;
 use Yii;
 use yii\helpers\ArrayHelper;
+use backend\models\OttBanner;
+use backend\models\OttRecommend;
 
 /**
  * This is the model class for table "ott_channel".

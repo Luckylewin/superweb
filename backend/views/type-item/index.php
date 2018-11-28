@@ -5,6 +5,7 @@ use yii\grid\GridView;
 use \common\widgets\ajaxInput\AjaxInputWidget;
 use yii\helpers\Url;
 use yii\bootstrap\Modal;
+use common\widgets\multilang\MultiLangWidget;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -64,16 +65,19 @@ $this->params['breadcrumbs'][] = $this->title;
             'exist_num',
             [
                     'class' => 'common\grid\MyActionColumn',
-                    'template' => '{multi-language} {update} {delete}',
+                    'template' => '{rename} {update} {delete}',
                     'size' => 'btn-sm',
                     'buttons' => [
-                            'multi-language' => function($url, $model) {
-                                return Html::a('多语言设置', null, [
-                                    'class' => 'fa fa-language btn btn-info language',
-                                    'data-target' => '#language-modal',
-                                    'data-toggle' => 'modal',
-                                    'data-id'     => $model->id
-                                ]);
+
+                            'rename' => function($url, $model) {
+                                 return Html::button('影片分类重命名' , [
+                                     'title' => $model->exist_num,
+                                     'class' => 'fa fa-edit btn  btn-info rename',
+                                     'style' => 'margin:2px;',
+                                     'data-toggle' => 'modal',
+                                     'data-target' => '#rename-modal',
+                                     'data-id'     => $model->id,
+                                 ]);
                             }
                     ]
             ],
@@ -81,25 +85,4 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); ?>
 </div>
 
-<!-- 多语言modal -->
-<?php
-Modal::begin([
-    'id' => 'language-modal',
-    'size' => Modal::SIZE_LARGE,
-    'header' => '<h4 class="modal-title">多语言设定</h4>',
-    'footer' => '<a href="#" class="btn btn-default" data-dismiss="modal">关闭</a>',
-]);
-$requestUrl = Url::to(['type-item/multi-language', 'id' => '']);
-$requestJs=<<<JS
-     $(document).on('click', '.language', function() {
-                var id = $(this).attr('data-id');
-                $.get('{$requestUrl}' + id, {'id':id},
-                    function (data) {
-                        $('.modal-body').css('min-height', '300px').html(data);
-                    }
-                )
-            })
-JS;
-$this->registerJs($requestJs);
-Modal::end();
-?>
+

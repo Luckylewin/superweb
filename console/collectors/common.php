@@ -113,10 +113,15 @@ class common
         $md5 = md5($url);
 
         try {
-            if ($redis->get($md5) && Yii::$app->cache->exists($md5)) {
+
+            if ($redis->get($md5) || Yii::$app->cache->exists($md5)) {
                 $this->isCached = true;
                 $data = Yii::$app->cache->get($md5);
                 Yii::$app->cache->set($md5, $data, 386400);
+
+                $redis->set($md5, $url);
+                $redis->expire($md5, 86400);
+
             } else {
                 $this->isCached = false;
                 $client  = $this->getHttpClient();
