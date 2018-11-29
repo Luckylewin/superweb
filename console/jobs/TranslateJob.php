@@ -32,11 +32,9 @@ class TranslateJob
                 $exist = MultiLang::find()->where([
                     'table'    => $tableName,
                     'fid'      => $item->id,
-                    'field'    => 'name',
-                ])
-                    ->andfilterWhere(['like', 'language', $language])
-                    ->andfilterWhere(['like', 'origin', $item->$field])
-                    ->one();
+                    'field'    => $field,
+                    'language' => $language,
+                ])->one();
 
                 if ($exist == false) {
                     $multiLang = new MultiLang();
@@ -53,11 +51,11 @@ class TranslateJob
                         if ($to) {
                             $multiLang->value = BaiduTranslator::translate($item->$field, 'auto', $to);
                         }
+                        sleep(1);
                     }
 
                     $multiLang->save(false);
                     echo "新增翻译项 " . $item->$field . '=>' . $multiLang->value , PHP_EOL;
-                    sleep(1);
                 }
             }
         }

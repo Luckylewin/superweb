@@ -120,6 +120,11 @@ class HelloController extends Controller
 
     public function actionTest()
     {
+        ExitCode::OK;
+    }
+
+    public function actionLang()
+    {
         TranslateJob::iptvType();
         TranslateJob::typeItem();
     }

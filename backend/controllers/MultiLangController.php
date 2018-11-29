@@ -40,9 +40,14 @@ class MultiLangController extends BaseController
             if (!empty($form['name'])) {
 
                 foreach ($form['name'] as $language => $value) {
-                    // 查询一下是否存在
-                    $lang = MultiLang::findOne(['id' => $form['id'][$language]]);
-                    
+
+                    if (!empty($form['id'])) {
+                        $lang = MultiLang::findOne(['id' => $form['id'][$language]]);
+                    } else {
+                        // 查询一下是否存在
+                        $lang = MultiLang::find()->where(['table' => $tableName,'field' => $field, 'language' => $language, 'value' => $value])->one();
+                    }
+
                     if ($lang) {
                         if ($lang->value != $value) {
                             $lang->value = $value;
