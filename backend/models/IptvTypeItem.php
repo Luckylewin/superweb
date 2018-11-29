@@ -2,6 +2,7 @@
 
 namespace backend\models;
 
+use common\models\Vod;
 use Yii;
 
 /**
@@ -72,6 +73,32 @@ class IptvTypeItem extends \yii\db\ActiveRecord
     public function getMultiLanguage()
     {
         return $this->hasMany(MultiLang::className(), ['fid' => 'id']);
+    }
+
+    public function beforeDelete()
+    {
+        // 查询分类所属
+        $typeParent= $this->getType()->one();
+        if ($typeParent) {
+            $tableName = Vod::tableName();
+            $type = $this->name;
+
+            if (isset($typeParent->vod_list_id)) {
+                $list_id = $typeParent->vod_list_id;
+                // 删除时把标签从影片中删除
+                $sql1 = "UPDATE {$tableName} set vod_type=REPLACE(vod_type,'$type', '') where vod_cid={$list_id}";
+                $sql2 = "UPDATE {$tableName} set vod_type=REPLACE(vod_type,',,', ',') where vod_cid={$list_id}";
+                $sql3 = "UPDATE {$tableName} set vod_type=trim(BOTH ',' FROM `vod_type`)  where vod_cid={$list_id}";
+                Yii::$app->db->createCommand($sql1)->execute();
+                Yii::$app->db->createCommand($sql2)->execute();
+                Yii::$app->db->createCommand($sql3)->execute();
+            }
+        }
+
+        // 同时删除对应的多语言
+        MultiLang::deleteAll(['fid' => $this->id, 'table' => self::tableName()]);
+
+        return true;
     }
 
 }

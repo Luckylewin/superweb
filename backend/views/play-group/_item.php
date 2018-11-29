@@ -56,12 +56,10 @@ $dataProvider = new \yii\data\ActiveDataProvider([
                     'format' => 'raw',
                     'value' => function($mod) use ($model) {
                         if ($mod->save_type == Vodlink::FILE_LINK) {
-                            if (strtolower($model->group_name) == 'youtube') {
-
-                                //$href = "https://www.youtube.com/watch?v=" . $mod->url;
-                                $href = str_replace('sign=','', $mod->url) . 'noauth=true';
+                            if (strtolower($model->group_name) == 'youtube' && strpos($mod->url, 'play') !== false) {
+                                $href = str_replace('sign=','', $mod->url) . '&noauth=true';
                             } else {
-                                $href = $mod->url;
+                                $href = 'link';
                             }
                             $text = $href;
                         } else if ($mod->save_type == Vodlink::FILE_SERVER) {
@@ -71,7 +69,8 @@ $dataProvider = new \yii\data\ActiveDataProvider([
 
                         return Html::a(Html::tag('i',basename($text), ['class' => 'fa fa-link']), $href, [
                                 'class' => 'btn btn-link',
-                                'target' => '_blank'
+                                'target' => '_blank',
+                                'title' => $mod->url
                         ]);
                     },
 

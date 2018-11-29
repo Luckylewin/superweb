@@ -103,4 +103,18 @@ class IptvType extends \yii\db\ActiveRecord
         return [];
     }
 
+    public function beforeDelete()
+    {
+       $items = $this->getItems()->all();
+       if ($items) {
+           foreach ($items as $item) {
+               $item->delete();
+           }
+       }
+
+       MultiLang::deleteAll(['fid' => $this->id, 'table' => self::tableName()]);
+
+       return true;
+    }
+
 }

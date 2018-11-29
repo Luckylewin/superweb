@@ -33,6 +33,7 @@ class MultiLangController extends BaseController
 
         $tableName = \Yii::$app->request->get('table');
         $field     = \Yii::$app->request->get('field');
+        $orgin     = \Yii::$app->request->get('origin');
 
         if ($this->getRequest()->isPost) {
 
@@ -52,11 +53,12 @@ class MultiLangController extends BaseController
                         $lang = MultiLang::find()->where(['table' => $tableName,'field' => $field, 'language' => $language, 'value' => $value])->one();
                         if (is_null($lang)) {
                             $multiLang = new MultiLang();
-                            $multiLang->field = $field;
-                            $multiLang->fid   = $id;
+                            $multiLang->field  = $field;
+                            $multiLang->origin = $orgin;
+                            $multiLang->fid    = $id;
                             $multiLang->language = $language;
-                            $multiLang->value = $value;
-                            $multiLang->table = $tableName;
+                            $multiLang->value  = $value;
+                            $multiLang->table  = $tableName;
                             $multiLang->save(false);
                         }
 

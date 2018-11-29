@@ -15,13 +15,14 @@ class MultiLangWidget extends Widget
     public $table;
     public $field;
     public $id;
+    public $origin;
     public $options = [];
 
     protected static $runNum = 0;
 
     public function init()
     {
-        $checks = ['name','table', 'field', 'id'];
+        $checks = ['name','table', 'field', 'id', 'origin'];
         foreach ($checks as $field) {
             if (empty($this->$field)) {
                 throw new \InvalidArgumentException("请配置<{$field}>参数");
@@ -34,7 +35,8 @@ class MultiLangWidget extends Widget
             'data-toggle' => 'modal',
             'data-id'     =>  $this->id,
             'data-table'  =>  $this->table,
-            'data-field'  =>  $this->field
+            'data-field'  =>  $this->field,
+            'data-origin' =>  $this->origin
         ], $this->options);
 
         $this->options['class'] .= ' language';

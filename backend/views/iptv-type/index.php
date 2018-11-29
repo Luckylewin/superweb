@@ -39,7 +39,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     'format' => 'raw',
                     'value' => function($model) {
                         return MultiLangWidget::widget([
-                            'id'    => $model->id,
+                            'id'     => $model->id,
+                            'origin' => $model->name,
                             'table' => \backend\models\IptvType::tableName(),
                             'field' => 'name',
                             'name'  => $model->name,
@@ -72,11 +73,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
                         foreach ($data as $key => $item) {
                             if ($item->exist_num && $item->is_show) {
-                                $str .= \common\widgets\multilang\MultiLangWidget::widget([
-                                    'id'    => $item->id,
-                                    'table' => \backend\models\IptvTypeItem::tableName(),
-                                    'field' => 'name',
-                                    'name'  => $item->name,
+                                $str .= MultiLangWidget::widget([
+                                    'id'     => $item->id,
+                                    'origin' => $item->name,
+                                    'table'  => \backend\models\IptvTypeItem::tableName(),
+                                    'field'  => 'name',
+                                    'name'   => $item->name,
                                     'options' => [ 'style' => 'margin:2px;']
                                 ]);
 
