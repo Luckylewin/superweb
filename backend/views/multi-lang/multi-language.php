@@ -21,7 +21,9 @@ $langCodes = Type::getLangCode();
 <?php foreach ($data as $lang => $value): ?>
 <div class="col-md-12">
         <label for="<?= $lang ?>"><?= $langCodes[$lang]."({$lang})" ?></label>
+        <?php if(isset($value['id'])): ?>
         <?= Html::hiddenInput("id[$lang]", $value['id']); ?>
+        <?php endif; ?>
         <?= Html::input('text', "{$name}[$lang]", $value['value'], [
             'class'         => 'form-control',
             'required'      => true,
