@@ -19,32 +19,28 @@ class BaiduTranslator
 
     public static function convertCode($code)
     {
+
         $codes = [
-            'zh-cn'   => ['bcode' => 'zh', 'name' => '中文'],
-            'en-us'   => ['bcode' => 'en','name' => '英语'],
-            'ja-jp' => ['bcode' => 'jp','name' => '日语'],
-            'ko-kr' => ['bcode' => 'kor','name' => '韩语'],
-            'fr-fr' => ['bcode' => 'fra','name' => '法语'],
-            'de-de' => ['bcode' => 'de','name'=>'德语'],
-            'ru-ru' => ['bcode' => 'ru','name'=>'俄语'],
-            'th-th' => ['bcode' => 'th','name'=>'泰语'],
-            'es-es' => ['bcode' => 'spa','name'=>'西班牙语'],
-            'el-gr' => ['bcode' => 'el','name'=>'希腊语'],
-            'af' => ['bcode' => 'nl','name'=>'荷兰语'],
-            'pl-pl' => ['bcode' => 'pl','name'=>'波兰语'],
-            'vi-vn' => ['bcode' => 'vie','name'=>'越南语'],
-            'ar' => ['bcode' => 'ara','name' => '阿拉伯语'],
-            'pt-pt' => ['bcode' => 'pt','name' => '葡萄牙语'],
-            'it-it' => ['bcode' => 'it','name' => '意大利语'],
-            'da-dk' => ['bcode' => 'dan','name'=>'丹麦语'],
-            'fi-FI' => ['bcode' => 'fin','name'=>'芬兰语'],
-            'sv-se' => ['bcode' => 'swe','name'=>'瑞典语'],
-            'pt-br' => ['bcode' => 'pt','name' => '葡萄牙语'],
-            'zh-tw' => ['bcode' => 'cht','name' => '中文繁体'],
-            'nl-nl' => ['bcode' => 'nl','name' => '荷兰语'],
+            'zh_CN' => ['bcode' => 'zh', 'name' => '中文'],
+            'en_US' => ['bcode' => 'en','name' => '英语'],
+            'ja_JP' => ['bcode' => 'jp','name' => '日语'],
+            'ko_KR' => ['bcode' => 'kor','name' => '韩语'],
+            'fr_FR' => ['bcode' => 'fra','name' => '法语'],
+            'de_DE' => ['bcode' => 'de','name'=>'德语'],
+            'ru_RU' => ['bcode' => 'ru','name'=>'俄语'],
+            'th_TH' => ['bcode' => 'th','name'=>'泰语'],
+            'es_ES' => ['bcode' => 'spa','name'=>'西班牙语'],
+            'el_GR' => ['bcode' => 'el','name'=>'希腊语'],
+            'vi_VN' => ['bcode' => 'vie','name'=>'越南语'],
+            'ar_AE' => ['bcode' => 'ara','name' => '阿拉伯语'],
+            'pt_PT' => ['bcode' => 'pt','name' => '葡萄牙语'],
+            'it_IT' => ['bcode' => 'it','name' => '意大利语'],
+            'da_DK' => ['bcode' => 'dan','name'=>'丹麦语'],
+            'sv_SE' => ['bcode' => 'swe','name'=>'瑞典语'],
+            'pt_BR' => ['bcode' => 'pt','name' => '葡萄牙语'],
+            'zh_TW' => ['bcode' => 'cht','name' => '中文繁体'],
+            'zh_HK' => ['bcode' => 'cht','name' => '中文繁体'],
             'fi-fi' => ['bcode' => 'fin','name' => '芬兰语'],
-
-
         ];
 
         if (array_key_exists($code, $codes)) {
