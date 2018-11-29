@@ -41,7 +41,7 @@ class MultiLangController extends BaseController
 
                 foreach ($form['name'] as $language => $value) {
 
-                    if (isset($form['id']) && !empty($form['id'])) {
+                    if (isset($form['id']) && !empty($form['id']) && isset($form['id'][$language])) {
                         $lang = MultiLang::findOne(['id' => $form['id'][$language]]);
                         if ($lang->value != $value) {
                             $lang->value = $value;
