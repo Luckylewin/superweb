@@ -29,12 +29,16 @@ class TranslateJob
 
         foreach ($items as $item) {
             foreach ($supported_languages as $language) {
+
                 $exist = MultiLang::find()->where([
                     'table'    => $tableName,
-                    'fid'      => $item->id,
+                    'fid'      => (int)$item->id,
                     'field'    => $field,
                     'language' => $language,
                 ])->one();
+
+                // $multiLangTable = MultiLang::tableName();
+                // $sql = "SELECT count(*) from {$multiLangTable} where `table`='{$tableName}',`fid`=>{$item->id},`field`='{$field}', `language`='{$language}'";
 
                 if ($exist == false) {
                     $multiLang = new MultiLang();
@@ -66,7 +70,7 @@ class TranslateJob
     public static function iptvType()
     {
         $items = IptvType::find()->where(['is_show' => 1])->all();
-        self::translateType($items,'field', IptvType::tableName());
+        self::translateType($items,'name', IptvType::tableName());
     }
 
     public static function typeItem()
