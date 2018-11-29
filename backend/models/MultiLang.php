@@ -62,7 +62,10 @@ class MultiLang extends \yii\db\ActiveRecord
             foreach ($supportedLanguages as $language) {
                 foreach ($multiLanguages as $lang) {
                     if ($lang['language'] == $language) {
-                        $data[$language] = $lang['value'];
+                        $data[$language] = [
+                            'id' => $lang['id'],
+                            'value' => $lang['value']
+                        ];
                     }
                 }
             }

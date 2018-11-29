@@ -38,9 +38,11 @@ class MultiLangController extends BaseController
 
             $form = $this->getRequest()->post();
             if (!empty($form['name'])) {
+
                 foreach ($form['name'] as $language => $value) {
                     // 查询一下是否存在
-                    $lang = MultiLang::find()->where(['table' => $tableName,'field' => $field, 'language' => $language, 'value' => $value])->one();
+                    $lang = MultiLang::findOne(['id' => $form['id'][$language]]);
+                    
                     if ($lang) {
                         if ($lang->value != $value) {
                             $lang->value = $value;

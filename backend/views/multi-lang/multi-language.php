@@ -21,12 +21,13 @@ $langCodes = Type::getLangCode();
 <?php foreach ($data as $lang => $value): ?>
 <div class="col-md-12">
         <label for="<?= $lang ?>"><?= $langCodes[$lang]."({$lang})" ?></label>
-        <?= Html::input('text', "{$name}[$lang]", $value, [
+        <?= Html::hiddenInput("id[$lang]", $value['id']); ?>
+        <?= Html::input('text', "{$name}[$lang]", $value['value'], [
             'class'         => 'form-control',
             'required'      => true,
             'autocomplete'  => false,
             'id'            => $lang,
-            'style' => 'margin-bottom: 10px;'
+            'style'         => 'margin-bottom: 10px;'
         ]) ?>
 </div>
 <?php endforeach; ?>
