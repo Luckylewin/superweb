@@ -23,7 +23,7 @@ class RenewalCardController extends BaseController
     public function actionIndex()
     {
         $searchModel = new RenewalCardSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->index(Yii::$app->request->queryParams);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -31,12 +31,29 @@ class RenewalCardController extends BaseController
         ]);
     }
 
-    /**
-     * Displays a single RenewalCard model.
-     * @param string $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+    public function actionBatch()
+    {
+        $searchModel = new RenewalCardSearch();
+        $dataProvider = $searchModel->batch(Yii::$app->request->queryParams);
+
+        return $this->render('batch', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    public function actionQuery()
+    {
+        $searchModel = new RenewalCardSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('batch', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+
     public function actionView($id)
     {
         return $this->render('view', [
@@ -44,11 +61,7 @@ class RenewalCardController extends BaseController
         ]);
     }
 
-    /**
-     * Creates a new RenewalCard model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
+
     public function actionCreate()
     {
         $model = new RenewalCard();
@@ -63,13 +76,6 @@ class RenewalCardController extends BaseController
     }
 
 
-    /**
-     * Deletes an existing RenewalCard model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param string $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
@@ -77,13 +83,7 @@ class RenewalCardController extends BaseController
         return $this->redirect(['index']);
     }
 
-    /**
-     * Finds the RenewalCard model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param string $id
-     * @return RenewalCard the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+
     protected function findModel($id)
     {
         if (($model = RenewalCard::findOne($id)) !== null) {
@@ -105,5 +105,13 @@ class RenewalCardController extends BaseController
         return $this->render('batch-create', [
             'model' => $model
         ]);
+    }
+
+    public function actionBatchDelete($batch_id)
+    {
+        RenewalCard::deleteAll(['batch' => $batch_id]);
+        $this->success();
+
+        return $this->redirect($this->getReferer());
     }
 }

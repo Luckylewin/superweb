@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use backend\models\RenewalCard;
+use yii\db\Query;
 
 /**
  * RenewalCardSearch represents the model behind the search form of `backend\models\RenewalCard`.
@@ -32,22 +33,8 @@ class RenewalCardSearch extends RenewalCard
         return Model::scenarios();
     }
 
-    /**
-     * Creates data provider instance with search query applied
-     *
-     * @param array $params
-     *
-     * @return ActiveDataProvider
-     */
-    public function search($params)
+    protected function getProvider(Query $query, $params)
     {
-        if ($batch_id = Yii::$app->request->get('batch_id')) {
-            $query = RenewalCard::find()->where(['batch' => $batch_id]);
-        } else {
-            $query = RenewalCard::find()->groupBy('batch');
-        }
-
-
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
@@ -83,4 +70,27 @@ class RenewalCardSearch extends RenewalCard
 
         return $dataProvider;
     }
+
+    public function index($params)
+    {
+        $query = RenewalCard::find()->groupBy('batch');
+
+        return $this->getProvider($query, $params);
+    }
+
+    public function search($params)
+    {
+        $query = RenewalCard::find();
+
+        return $this->getProvider($query, $params);
+    }
+
+    public function batch($params)
+    {
+        $batch_id = Yii::$app->request->get('batch_id');
+        $query = RenewalCard::find()->where(['batch' => $batch_id]);
+        return $this->getProvider($query, $params);
+    }
+
+
 }
