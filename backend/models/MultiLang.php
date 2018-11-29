@@ -71,6 +71,12 @@ class MultiLang extends \yii\db\ActiveRecord
             }
         }
 
+        foreach ($data as $lang => $val) {
+            if (empty($val)) {
+                $data[$lang] = ['value' => ''];
+            }
+        }
+
         return $data;
     }
 
