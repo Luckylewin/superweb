@@ -21,13 +21,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
             'product_name',
             'order_num',
             'order_date',
             'order_count',
             //'client_id',
-
             [
                     'class' => 'common\grid\MyActionColumn',
                     'size' => 'btn-sm'

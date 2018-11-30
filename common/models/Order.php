@@ -172,4 +172,25 @@ class Order extends \yii\db\ActiveRecord
         return $orderSn = $yCode[intval(date('Y')) - 2018] . strtoupper(dechex(date('m'))) . date('d') . substr(time(), -5) . substr(microtime(), 2, 5) . sprintf('%02d', rand(0, 99));
     }
 
+    public static function getTotal($start, $end)
+    {
+       return self::find()
+                    ->where(['>=', 'order_addtime', $start])
+                    ->andFilterWhere(['<', 'order_addtime', $end])
+                    ->andWhere(['order_ispay' => self::PAID])
+                    ->count();
+    }
+
+    public static function getSumMoney($start, $end)
+    {
+        $sum =  self::find()
+                    ->select('order_money')
+                    ->where(['>=', 'order_addtime', $start])
+                    ->andFilterWhere(['<', 'order_addtime', $end])
+                    ->andWhere(['order_ispay' => self::PAID])
+                    ->sum('order_money');
+
+        return is_null($sum) ? 0 : $sum;
+    }
+
 }

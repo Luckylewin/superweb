@@ -105,4 +105,22 @@ class BaseController extends Controller
         \Yii::$app->response->getCookies()->add($cookie);
     }
 
+    public function withoutYiiJs()
+    {
+        \Yii::$app->assetManager->bundles = [
+            'yii\web\JqueryAsset' => [
+                'js'=>[]
+            ],
+            'yii\web\YiiAsset' => [
+                'js' => []
+            ],
+            'yii\bootstrap\BootstrapPluginAsset' => [
+                'js'=>[]
+            ],
+            'yii\bootstrap\BootstrapAsset' => [
+                'css' => [],
+            ],
+        ];
+    }
+
 }
