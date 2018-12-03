@@ -20,10 +20,6 @@ class AdminController extends BaseController
     public $type = Item::TYPE_ROLE;
 
 
-    /**
-     * Lists all Admin models.
-     * @return mixed
-     */
     public function actionIndex()
     {
         $searchModel = new AdminSearch();
@@ -36,11 +32,7 @@ class AdminController extends BaseController
         ]);
     }
 
-    /**
-     * Displays a single Admin model.
-     * @param integer $id
-     * @return mixed
-     */
+
     public function actionView($id)
     {
         return $this->render('view', [
@@ -48,11 +40,6 @@ class AdminController extends BaseController
         ]);
     }
 
-    /**
-     * Creates a new Admin model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
     public function actionCreate()
     {
         $model = new Admin();
@@ -68,12 +55,6 @@ class AdminController extends BaseController
         }
     }
 
-    /**
-     * Updates an existing Admin model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     */
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
@@ -87,13 +68,6 @@ class AdminController extends BaseController
         }
     }
 
-    /**
-     *  * Deletes an existing Admin model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param $id
-     * @return \yii\web\Response
-     * @throws ForbiddenHttpException
-     */
     public function actionDelete($id)
     {
         $admin = $this->findModel($id);

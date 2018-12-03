@@ -7,15 +7,16 @@ namespace backend\components;
 use Yii;
 use yii\filters\AccessRule;
 use yii\helpers\ArrayHelper;
-use yii\web\UnauthorizedHttpException;
 
-//class AccessControl extends \yii\base\ActionFilter {
-class AccessControl extends \yii\filters\AccessControl {
-
+class AccessControl extends \yii\filters\AccessControl
+{
+    public $skipRoutes = [
+        'index/index',
+        'index/frame',
+    ];
 
     public function beforeAction($action)
     {
-        //-----菜单权限检查-----
         $user = $this->user;
         $actionId = $action->getUniqueId();
 
@@ -27,43 +28,18 @@ class AccessControl extends \yii\filters\AccessControl {
         $allLimitedPermission = ArrayHelper::getColumn($permissions, 'ruleName');
 
         foreach ($this->rules as $i => $rule) {
-
             if (in_array($action->id, $rule->actions)) break;
 
-            if (Yii::$app->user->isGuest) {
-                $this->rules[] = Yii::createObject(array_merge($this->ruleConfig, [
-                    'actions' => [$action->id],
-                    'allow' => false,
-                ]));
-            } else if(Yii::$app->user->identity->username == 'admin') {
-                try {
-                    $this->rules[] = Yii::createObject(array_merge($this->ruleConfig, [
-                        'actions' => [$action->id],
-                        'allow' => true,
-                    ]));
-                } catch (\Exception $e) {
-
-                }
-
+            if ($user->isGuest) {
+                $this->allocatePermission($action, false);
+            } else if($user->identity->username == 'admin') {
+                $this->allocatePermission($action, true);
+            } else if(in_array($actionId, $this->skipRoutes)) {
+                $this->allocatePermission($action, true);
             } else if (array_key_exists($actionId, $allLimitedPermission) && Yii::$app->user->can($actionId) == false) {
-                try {
-                    $this->rules[] = Yii::createObject(array_merge($this->ruleConfig, [
-                        'actions' => [$action->id],
-                        'allow' => false,
-                    ]));
-                } catch (\Exception $e) {
-
-                }
-
-            } else {
-                try {
-                    $this->rules[] = Yii::createObject(array_merge($this->ruleConfig, [
-                        'actions' => [$action->id],
-                        'allow' => true,
-                    ]));
-                } catch (\Exception $e) {
-
-                }
+                $this->allocatePermission($action, false);
+            }  else {
+                $this->allocatePermission($action, true);
             }
         }
 
@@ -90,6 +66,18 @@ class AccessControl extends \yii\filters\AccessControl {
             $this->denyAccess($user);
         }
         return false;
+    }
+
+    private function allocatePermission($action, $access = true)
+    {
+        try {
+            $this->rules[] = Yii::createObject(array_merge($this->ruleConfig, [
+                'actions' => [$action->id],
+                'allow' => $access,
+            ]));
+        } catch (\Exception $e) {
+
+        }
     }
 
 }

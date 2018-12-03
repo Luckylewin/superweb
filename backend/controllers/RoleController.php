@@ -94,7 +94,7 @@ class RoleController extends BaseController
         $arr = Menu::find()->asArray()->all();
         $treeObj = new Tree($arr);
         $authRules = $authManager->getChildren($id);
-        $authRules = array_keys($authRules); //var_dump($authRules); exit();
+        $authRules = array_keys($authRules);
 
         return $this->render('auth', [
             'treeArr' => $treeObj->getTreeArray(),

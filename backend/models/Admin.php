@@ -48,7 +48,7 @@ class Admin extends ActiveRecord implements IdentityInterface
 
     public function rules() {
         return [
-            [['username', 'email'], 'required'],
+            [['username'], 'required'],
             [['username'], 'string', 'length' => [5, 15]],
             [['password'], 'required', 'on' => ['create']],
             [['reg_ip', 'last_login_time', 'last_login_ip'], 'integer'],
