@@ -74,15 +74,18 @@ $this->params['breadcrumbs'][] = $this->title;
                         return Yii::$app->formatter->asRelativeTime(strtotime($model->next_rundate));
                     }
             ],
+
             //'execmemory',
+
             'exectime',
-
             [
-                    'class' => 'common\grid\MyActionColumn',
+                    'class'    => 'common\grid\MyActionColumn',
                     'template' => '{update} {delete}',
-                    'size' => 'btn-sm'
+                    'size'     => 'btn-sm',
+                    'visibleButtons' => [
+                        'delete' => Yii::$app->user->can('crontab/delete')
+                    ]
             ],
-
         ],
 
     ]); ?>

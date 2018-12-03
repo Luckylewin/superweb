@@ -30,14 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'createdAt',
                 'label' => Yii::t('backend', 'Created At'),
                 'value' => function($data) {
-                    return date('Y-m-d H:i:s', $data->createdAt);
-                }
-            ],
-            [
-                'attribute' => 'updatedAt',
-                'label' => Yii::t('backend', 'Updated At'),
-                'value' => function($data) {
-                    return date('Y-m-d H:i:s', $data->updatedAt);
+                    return date('Y-m-d', $data->createdAt);
                 }
             ],
 
@@ -45,6 +38,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'common\grid\ActionColumn',
                 'header' => Yii::t('backend', 'Operate'),
                 'template' => '{update} {auth} {delete}',
+                'visibleButtons' => [
+                        'delete' => Yii::$app->user->can('role/delete')
+                ]
             ],
         ],
     ]); ?>

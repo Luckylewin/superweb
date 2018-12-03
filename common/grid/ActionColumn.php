@@ -31,7 +31,7 @@ class ActionColumn extends \yii\grid\ActionColumn {
                     'title' => Yii::t('yii', 'Update'),
                     'aria-label' => Yii::t('yii', 'Update'),
                     'data-pjax' => '0',
-                    'class' => 'btn btn-primary btn-xs',
+                    'class' => 'btn btn-primary btn-sm',
                 ], $this->buttonOptions);
                 return Html::a('<span class="fa fa-edit"></span> '.Yii::t('yii', 'Update'), $url, $options);
             };
@@ -42,7 +42,7 @@ class ActionColumn extends \yii\grid\ActionColumn {
                     'title' => Yii::t('backend', 'Auth'),
                     'aria-label' => Yii::t('backend', 'Auth'),
                     'data-pjax' => '0',
-                    'class' => 'btn btn-success btn-xs',
+                    'class' => 'btn btn-success btn-sm',
                 ], $this->buttonOptions);
                 return Html::a('<span class="fa fa-user"></span> '.Yii::t('backend', 'Auth'), $url, $options);
             };
@@ -55,7 +55,7 @@ class ActionColumn extends \yii\grid\ActionColumn {
                     'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
                     'data-method' => 'post',
                     'data-pjax' => '0',
-                    'class' => 'btn btn-danger btn-xs',
+                    'class' => 'btn btn-danger btn-sm',
                 ], $this->buttonOptions);
                 return Html::a('<span class="fa fa-times"></span> '.Yii::t('yii', 'Delete'), $url, $options);
             };

@@ -23,16 +23,35 @@ class OrderController extends BaseController
 
     public function actionStatics()
     {
+        $month = Yii::$app->request->post('month', date('Y-m'));
+        $monStart = strtotime('first day of this month', strtotime($month . '-01'));
+        $monEnd = strtotime('last day of this month', strtotime($month . '-01'));
+
+        $prev = date('Y-m', strtotime('-1 month', strtotime($month . '-01')));
+        $next = date('Y-m', strtotime('+1 month', strtotime($month . '-01')));
+
+
         $todayNum = Order::getTotal(strtotime('today'), strtotime('tomorrow'));
         $todaySum = Order::getSumMoney(strtotime('today'), strtotime('tomorrow'));
+        $monthNum = Order::getTotal($monStart, $monEnd);
+        $monthSum = Order::getSumMoney($monStart, $monEnd);
         $totalNum = Order::getTotal(0, strtotime('tomorrow'));
         $totalSum = Order::getSumMoney(0, strtotime('tomorrow'));
 
+        // 该月按天数查看
+        $monthDetail = Order::getMonthDataSpiltByDate($monStart, $monEnd);
+
         return $this->render('statics', [
+             'month' => $month,
             'todayNum' => $todayNum,
             'todaySum' => $todaySum,
+            'monthNum' => $monthNum,
+            'monthSum' => $monthSum,
             'totalNum' => $totalNum,
-            'totalSum' => $totalSum
+            'totalSum' => $totalSum,
+            'prev' => $prev,
+            'next' => $next,
+            'monthDetail' => $monthDetail
         ]);
     }
 

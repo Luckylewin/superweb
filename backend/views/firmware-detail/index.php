@@ -28,7 +28,16 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'ver',
             'md5',
-            'url:ntext',
+            [
+                    'attribute' => 'url',
+                    'format' => 'raw',
+                    'value' => function($model) {
+                        return Html::a($model->url, \common\components\Func::getAccessUrl($model->url), [
+                                'class' => 'btn btn-link fa fa-link'
+                        ]);
+                    }
+            ],
+
             //'content:ntext',
             //'sort',
             //'force_update',
@@ -37,7 +46,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                     'class' => 'common\grid\MyActionColumn',
-                    'size' => 'btn-sm'
+                    'size' => 'btn-sm',
+                    'template' => '{update} {delete}',
+                    /*'visibleButtons' => [
+                        'delete' => \Yii::$app->user->can('firmware-detail/delete'),
+                    ]*/
             ],
         ],
     ]); ?>

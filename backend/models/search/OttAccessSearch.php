@@ -18,8 +18,8 @@ class OttAccessSearch extends OttAccess
     public function rules()
     {
         return [
-            [['mac', 'genre', 'deny_msg', 'access_key'], 'safe'],
-            [['is_valid', 'expire_time'], 'integer'],
+            [['mac', 'genre', 'deny_msg', 'access_key', 'expire_time'], 'safe'],
+            [['is_valid',], 'integer'],
         ];
     }
 
@@ -59,9 +59,14 @@ class OttAccessSearch extends OttAccess
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'is_valid' => $this->is_valid,
-            'expire_time' => $this->expire_time,
+            'is_valid' => $this->is_valid
         ]);
+
+        if ($this->expire_time) {
+            $query->andFilterWhere(['>=', 'expire_time', strtotime($this->expire_time)]);
+            $query->andFilterWhere(['<=', 'expire_time', strtotime($this->expire_time) + 86400]);
+
+        }
 
         $query->andFilterWhere(['like', 'mac', $this->mac])
             ->andFilterWhere(['like', 'genre', $this->genre])

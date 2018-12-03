@@ -2,12 +2,14 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-$this->title = '角色授权';
-$this->params['breadcrumbs'][] = \Yii::t('backend','Admin Setting');
-$this->params['breadcrumbs'][] = $this->title;
 /* @var $treeArr */
 /* @var $authRules */
 /* @var $role */
+
+$this->title = "角色授权: $role";
+$this->params['breadcrumbs'][] = ['label'=> \Yii::t('backend','Admin Setting'), 'url' => \yii\helpers\Url::to(['role/index'])];
+$this->params['breadcrumbs'][] = $this->title;
+
 ?>
 
 <style>
@@ -41,11 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="role-index">
     <?php ActiveForm::begin(); ?>
     <table class="table table-advance table-hover">
-        <thead>
-        <tr>
-            <th class="table-head" colspan="2"><?=$this->title.': '.$role;?></th>
-        </tr>
-        </thead>
+
         <tbody>
         <?php
         foreach($treeArr as $tree) {
@@ -87,6 +85,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </table>
     <div class="form-group">
         <?= Html::submitButton(Yii::t('backend', 'Save'), ['class' => 'btn btn-success']) ?>
+        <?= Html::a('返回', ['role/index'], ['class' => 'btn btn-default']) ?>
     </div>
     <?php ActiveForm::end(); ?>
 

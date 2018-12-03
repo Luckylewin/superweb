@@ -22,7 +22,7 @@ class MenuSearch extends Menu
     {
         return [
             [['id', 'pid', 'display', 'sort'], 'integer'],
-            [['name', 'url', 'icon_style'], 'safe'],
+            [['name', 'url', 'icon_style','type'], 'safe'],
         ];
     }
 
@@ -39,12 +39,17 @@ class MenuSearch extends Menu
      * Creates data provider instance with search query applied
      *
      * @param array $params
+     * @param array $condition
      *
      * @return ActiveDataProvider | ArrayDataProvider
      */
-    public function search($params)
+    public function search($params, $condition = null)
     {
         $query = Menu::find();
+
+        if ($condition) {
+            $query->where($condition);
+        }
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -63,13 +68,10 @@ class MenuSearch extends Menu
             'sort' => $this->sort,
         ]);
 
-        $query->andFilterWhere(['like', 'name', $this->name])
-              ->andFilterWhere(['like', 'url', $this->url])
-              ->andFilterWhere(['like', 'icon_style', $this->icon_style]);
-
         $query->orderBy(['sort' => SORT_ASC]);
 
         $arr = $query->asArray()->all();
+
         $treeObj = new Tree(ArrayHelper::toArray($arr));
 
         $treeObj->icon = ['&nbsp;&nbsp;&nbsp;│ ', '&nbsp;&nbsp;&nbsp;├─ ', '&nbsp;&nbsp;&nbsp;└─ '];

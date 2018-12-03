@@ -73,7 +73,11 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                     'class' => 'common\grid\MyActionColumn',
                     'template' => '{view} {delete}',
-                    'options' => ['style' => 'width:150px;']
+                    'options' => ['style' => 'width:150px;'],
+                    'size' => 'btn-sm',
+                    'visibleButtons' => [
+                            'delete' => Yii::$app->user->can('order/delete')
+                    ]
             ],
         ],
     ]); ?>

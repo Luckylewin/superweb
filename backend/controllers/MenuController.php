@@ -67,9 +67,31 @@ class MenuController extends BaseController
             }
         }
         $searchModel = new MenuSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, ['type' => 'all']);
 
         return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    public function actionRoutes()
+    {
+        if (Yii::$app->request->isPost) {
+            $sorts = Yii::$app->request->post('sort');
+            if (!empty($sorts)) {
+                foreach ($sorts as $id => $v) {
+                    $model = Menu::findOne($id);
+                    $model->sort = $v;
+                    $model->save();
+                }
+                Yii::$app->session->setFlash('success', Yii::t('backend', 'Success'));
+            }
+        }
+        $searchModel = new MenuSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('routes', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
@@ -91,6 +113,7 @@ class MenuController extends BaseController
             Yii::$app->session->setFlash('info', Yii::t('backend', 'Success'));
             return $this->redirect(['index']);
         } else {
+            $model->sort = 0;
             $model->pid = Yii::$app->request->get('pid', 0);
             $arr = Menu::find()->asArray()->all();
             $treeObj = new Tree($arr);

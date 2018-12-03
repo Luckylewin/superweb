@@ -76,7 +76,7 @@ class Admin extends ActiveRecord implements IdentityInterface
             'auth_key' => 'Auth Key',
             'password' => Yii::t('backend', 'password'),
             'password_hash' => 'Password Hash',
-            'email' => Yii::t('backend', 'mail'),
+            'email' => Yii::t('backend', 'email'),
             'reg_ip' => Yii::t('backend', 'register ip'),
             'last_login_time' => Yii::t('backend', 'Last Logging Time'),
             'last_login_ip' => Yii::t('backend', 'Last Logging IP'),
@@ -164,21 +164,24 @@ class Admin extends ActiveRecord implements IdentityInterface
     /**
      * 获取账号状态
      */
-    public function getStatus() {
+    public function getStatus()
+    {
         return self::$statusTexts[$this->status];
     }
 
     /**
      * 获取账号状态样式
      */
-    public function getStatusStyle() {
+    public function getStatusStyle()
+    {
         return self::$statusStyles[$this->status];
     }
 
     /**
      * 获取状态
      */
-    public function getStatusTexts() {
+    public function getStatusTexts()
+    {
         return self::$statusTexts;
     }
 

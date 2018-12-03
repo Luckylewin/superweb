@@ -33,12 +33,14 @@ $this->params['breadcrumbs'][] = $this->title;
             'email:email',
             [
                 'attribute' => 'last_login_ip',
+                'label' => '登录IP',
                 'value' => function ($data) {
                     return long2ip($data->last_login_ip);
                 }
             ],
             [
                     'attribute' => 'last_login_time',
+                    'label' => '登录时间',
                     'value' => function($model) {
                         if (empty($model->last_login_time)) {
                             return \Yii::t('backend', 'Not Logged In');
@@ -65,6 +67,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'common\grid\ActionColumn',
                 'header' => Yii::t('backend', 'Operate'),
                 'template' => '{update} {auth} {delete}',
+                'visibleButtons' => [
+                    'delete' => Yii::$app->user->can('admin/delete')
+                ]
             ],
         ],
     ]); ?>

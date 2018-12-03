@@ -14,8 +14,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?=$this->render('_tab_menu');?>
 
-    <?= $this->render('_form', [
-        'model' => $model,
-    ]) ?>
+    <div style="margin-top: 30px;">
+        <?= $this->render('_form', [
+            'model' => $model,
+        ]) ?>
+    </div>
 
 </div>

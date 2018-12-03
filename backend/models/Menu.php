@@ -17,6 +17,7 @@ use common\libs\Tree;
  * @property integer $hide
  * @property integer $sort
  * @property integer $display
+ * @property integer $type
  */
 class Menu extends \yii\db\ActiveRecord
 {
@@ -53,7 +54,8 @@ class Menu extends \yii\db\ActiveRecord
             [['pid', 'display', 'sort'], 'integer'],
             [['name', 'icon_style'], 'string', 'max' => 50],
             [['url'], 'string', 'max' => 255],
-            [['sort'],'default','value' => '0']
+            [['sort'],'default','value' => '0'],
+            ['type', 'safe']
         ];
     }
 
@@ -70,12 +72,18 @@ class Menu extends \yii\db\ActiveRecord
             'icon_style' => Yii::t('backend', 'Icon'),
             'display'    => Yii::t('backend', 'Display Switch'),
             'sort'       => Yii::t('backend', 'Sort'),
+            'type'       => Yii::t('backend', 'Type'),
         ];
     }
 
     public function getDisplays()
     {
-        return self::$displays;
+       $status = self::$displays;
+       array_walk($status, function(&$v) {
+           return $v = Yii::t('backend', $v);
+       });
+
+       return $status;
     }
 
     /**

@@ -159,6 +159,10 @@ class MainClass extends \yii\db\ActiveRecord
         return $images;
     }
 
+    public static function getAllListName()
+    {
+      return ArrayHelper::map(self::find()->select('list_name')->andWhere(['NOT', ['list_name' => null]])->asArray()->all(), 'list_name', 'list_name');
+    }
 
 
 }

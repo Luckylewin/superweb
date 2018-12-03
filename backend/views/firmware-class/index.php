@@ -45,12 +45,14 @@ $this->params['breadcrumbs'][] = $this->title;
                     'template' => '{firmware-list} {update} {delete}',
                     'buttons' => [
                             'firmware-list' => function($url, $model) {
-
                                 return Html::a(Yii::t('backend', 'File List'),['firmware-detail/index', 'firmware_id' => $model->id], [
                                         'class' => 'btn btn-info btn-sm'
                                 ]);
                             }
-                    ]
+                    ],
+                    'visibleButtons' => [
+                        'delete' => Yii::$app->user->can('firmware-class/delete')
+                ]
             ],
         ],
     ]); ?>

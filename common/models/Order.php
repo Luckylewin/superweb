@@ -96,7 +96,7 @@ class Order extends \yii\db\ActiveRecord
     {
         return [
             'order_id' => 'Order ID',
-            'order_sign' => Yii::t('backend', 'Order Date'),
+            'order_sign' => Yii::t('backend', 'Order Number'),
             'order_status' => Yii::t('backend', 'Order Status'),
             'order_uid' => Yii::t('backend', 'User ID'),
             'order_total' => Yii::t('backend', 'Order Quantity'),
@@ -192,5 +192,40 @@ class Order extends \yii\db\ActiveRecord
 
         return is_null($sum) ? 0 : $sum;
     }
+
+    public static function getMonthData($start, $end)
+    {
+        return  self::find()
+            ->select(['order_money','order_paytime'])
+            ->where(['>=', 'order_addtime', $start])
+            ->andFilterWhere(['<', 'order_addtime', $end])
+            ->andWhere(['order_ispay' => self::PAID])
+            ->orderBy('order_paytime')
+            ->asArray()
+            ->all();
+    }
+
+    public static function getMonthDataSpiltByDate($start, $end)
+    {
+        $data = self::getMonthData($start, $end);
+        if (empty($data)) {
+            return false;
+        }
+
+        $monthData = [];
+        foreach ($data as $value) {
+            $date = date('Y-m-d', $value['order_paytime']);
+            if (isset($monthData[$date])) {
+                $monthData[$date]['num'] += 1;
+                $monthData[$date]['total'] += $value['order_money'];
+            } else {
+                $monthData[$date]['num'] = 1;
+                $monthData[$date]['total'] = $value['order_money'];
+            }
+        }
+
+        return $monthData;
+    }
+
 
 }

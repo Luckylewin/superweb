@@ -21,8 +21,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="menu-index">
 
-    <?=$this->render('_tab_menu');?>
-
     <?php ActiveForm::begin(); ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -94,15 +92,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class' => 'common\grid\ActionColumn',
                 'header' => Yii::t('backend', 'Operate'),
-                'template' => '{create} {update} {delete}',
-                'buttons' => [
-                    'create' => function ($url, $model, $key) {
-                        return Html::a('<span class="fa fa-plus"></span> ' . Yii::t('backend', 'Create submenu') , ['create', 'pid' => $key], [
-                            'title' => Yii::t('backend', 'Create submenu'),
-                            'class' => 'btn btn-success btn-xs'
-                        ]);
-                    },
-                ],
+                'template' => '{update}',
             ],
         ],
     ]); ?>

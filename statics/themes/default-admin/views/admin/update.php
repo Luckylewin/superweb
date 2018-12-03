@@ -11,8 +11,6 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="admin-update">
 
-    <?=$this->render('_tab_menu');?>
-
     <?= $this->render('_form', [
         'model' => $model,
     ]) ?>

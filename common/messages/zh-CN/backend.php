@@ -10,6 +10,8 @@ return [
     'User Set' => '用户设置',
     'Data Backup' => '数据备份',
     'Content Manage' => '内容管理',
+    'email' => '邮箱',
+    'password' => '密码',
 
     'Themes' => '主题',
     'Collapse the left menu' => '收起左侧菜单',
@@ -62,6 +64,10 @@ return [
     'Admin' => '管理员管理',
     'System' => '系统管理',
     'Menu List' => '菜单管理',
+    'Routes List' => '路由管理',
+    'Order number' => '订单号',
+    'Create Route' => '创建路由',
+    'Route Management' => '路由管理',
     'Database' => '数据库管理',
     'Country List' => '国家列表',
     'Timed task' => '定时任务',
@@ -312,6 +318,7 @@ return [
     'Superior menu' => '上级菜单',
     'Display Switch' => '显示开关',
     'Create submenu' => '添加子菜单',
+    'Create sub-route' => '添加下级路由',
 
     'Basic Data' => '基本数据',
     'Extended data (I)' => '扩展数据一',
@@ -579,5 +586,20 @@ return [
     'user' => '用户',
     'Language setting'  => '语言设置',
     'List'  => '列表',
-    'Modify' => '修改'
+    'Modify' => '修改',
+    'Whether to force an update' => '是否强制升级',
+    'Post Content' => '更新内容说明',
+    'Edit apk' => '编辑APK',
+    'Update app' => '编辑APP',
+    'Delete Apk' => '删除版本',
+
+    'View Apk' => '查看详情',
+    'Apk List' => 'APK版本列表',
+    'create App' => '添加APP',
+    'update app' => '编辑APP',
+    'Delete App' => '删除APP',
+    'set scheme' => '设置方案号',
+    'Edit Menu' => '编辑菜单',
+    'System Setting' => '系统设定',
+
 ];
