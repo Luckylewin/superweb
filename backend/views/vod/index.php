@@ -263,7 +263,7 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js'
                             },
                             'link-index' => function($url, $model) {
                                 return Html::button('<i class="glyphicon glyphicon-link"></i> 链接 ', [
-                                    'class' => 'btn btn-success btn-sm link-index',
+                                    'class' => 'btn btn-success btn-sm frame-open',
                                     'title' => '链接列表',
                                     'data-link' => Url::to(['play-group/index', 'vod_id' => $model->vod_id])
                                 ]);
@@ -285,9 +285,10 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js'
                                 ]);
                             },
                             'update' => function($url, $model) {
-                                return Html::a(Html::tag('i','', ['class' => 'fa fa-edit']), $url, [
-                                        'class' => 'btn btn-primary btn-sm',
-                                        'title' => '编辑'
+                                return Html::button(Html::tag('i','', ['class' => 'fa fa-edit']), [
+                                        'class' => 'btn btn-primary btn-sm frame-open',
+                                        'title' => '编辑',
+                                        'data-link' => $url
                                 ]);
                             },
 
@@ -579,12 +580,12 @@ $js=<<<JS
   });
 
   
-$(document).on('click', '.link-index', function() {
+$(document).on('click', '.frame-open', function() {
   var url = $(this).data('link');
      
       layer.open({
           type: 2,
-          area: ['1020px', '585px'],
+          area: ['1120px', '590px'],
           fixed: true, //不固定
           maxmin: true,
           content: url
