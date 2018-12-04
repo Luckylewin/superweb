@@ -579,8 +579,8 @@ $js=<<<JS
   });
 
   
-$('.link-index').click(function() {
-      var url = $(this).data('link');
+$(document).on('click', '.link-index', function() {
+  var url = $(this).data('link');
      
       layer.open({
           type: 2,
@@ -592,6 +592,7 @@ $('.link-index').click(function() {
        
       return false;
 });
+
 
 JS;
 
