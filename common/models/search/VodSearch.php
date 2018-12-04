@@ -21,8 +21,8 @@ class VodSearch extends VodBlock
     public function rules()
     {
         return [
-            [['vod_id', 'vod_cid', 'vod_year', 'vod_total', 'vod_addtime', 'vod_filmtime', 'vod_hits', 'vod_hits_day', 'vod_hits_week', 'vod_hits_month', 'vod_up', 'vod_down', 'vod_price', 'vod_trysee', 'vod_golder', 'vod_length', 'vod_copyright', 'vod_douban_id'], 'integer'],
-            [['vod_name', 'vod_ename', 'vod_title', 'vod_keywords', 'vod_type', 'vod_actor', 'vod_director', 'vod_content', 'vod_pic', 'vod_pic_bg', 'vod_pic_slide', 'vod_area', 'vod_language', 'vod_continu', 'vod_isend', 'vod_stars', 'vod_status', 'vod_ispay', 'vod_play', 'vod_server', 'vod_url', 'vod_inputer', 'vod_reurl', 'vod_jumpurl', 'vod_letter', 'vod_skin', 'vod_weekday', 'vod_series', 'vod_state', 'vod_version', 'vod_scenario'], 'safe'],
+            [['vod_id', 'vod_cid', 'vod_year', 'vod_total', 'vod_filmtime', 'vod_hits', 'vod_hits_day', 'vod_hits_week', 'vod_hits_month', 'vod_up', 'vod_down', 'vod_price', 'vod_trysee', 'vod_golder', 'vod_length', 'vod_copyright', 'vod_douban_id'], 'integer'],
+            [['vod_name', 'vod_ename', 'vod_title', 'vod_keywords','vod_addtime', 'vod_type', 'vod_actor', 'vod_director', 'vod_content', 'vod_pic', 'vod_pic_bg', 'vod_pic_slide', 'vod_area', 'vod_language', 'vod_continu', 'vod_isend', 'vod_stars', 'vod_status', 'vod_ispay', 'vod_play', 'vod_server', 'vod_url', 'vod_inputer', 'vod_reurl', 'vod_jumpurl', 'vod_letter', 'vod_skin', 'vod_weekday', 'vod_series', 'vod_state', 'vod_version', 'vod_scenario'], 'safe'],
             [['vod_gold', 'vod_douban_score'], 'number'],
         ];
     }
@@ -45,7 +45,7 @@ class VodSearch extends VodBlock
      */
     public function search($params)
     {
-        $query = Vod::find();
+        $query = Vod::find()->with('groups');
 
         // add conditions that should always apply here
 

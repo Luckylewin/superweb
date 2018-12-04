@@ -20,7 +20,8 @@ $this->title = '点播列表';
 $this->params['breadcrumbs'][] = ['url' => Url::to(['vod-list/index']), 'label' => $vodList->list_name];
 $this->params['breadcrumbs'][] = $this->title;
 
-$this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js', ['depends' => 'yii\web\JqueryAsset'])
+$this->registerJsFile('/statics/themes/default-admin/plugins/laydate/laydate.js', ['depends' => 'yii\web\JqueryAsset']);
+$this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js', ['depends' => 'yii\web\JqueryAsset']);
 ?>
 <style>
     .current_up
@@ -93,8 +94,6 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js'
     </p>
 
 
-    <?php // $this->render('_search', ['model' => $searchModel]); ?>
-
     <?php $search = Yii::$app->request->get('VodSearch'); ?>
 
 
@@ -143,7 +142,7 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js'
             //'vod_id',
             [
                 'attribute' => 'vod_type',
-                'headerOptions' => ['class' => 'col-md-2'],
+                'headerOptions' => ['class' => 'col-md-3'],
                 'contentOptions' => ['style' => 'width:200px;word-break:break-all'],
                 'filter' => \backend\models\IptvType::getTypeItem($search['vod_cid'], 'vod_type'),
                 'filterInputOptions' => [
@@ -221,8 +220,25 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js'
             ],
 
             [
+                    'label' => '分组',
+                    'value' => function($model) {
+                        if (is_array($model->groups)) {
+                            $str = [];
+                            foreach ($model->groups as $group) {
+                                $str[] = $group->group_name;
+                            }
+
+                            return implode(',', $str);
+                        }
+
+                        return '';
+                    }
+            ],
+
+            [
                     'attribute' => 'vod_addtime',
                     'headerOptions' => ['class' => 'col-md-1'],
+                    'filter' => false,
                     'format' => 'date',
                     'value' => function($model) {
                         return $model->vod_addtime;
@@ -233,7 +249,7 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js'
                     'class' => 'common\grid\MyActionColumn',
                     'headerOptions' => ['class' => 'col-md-4'],
                     'size' => 'btn-sm',
-                    'template' => '{link-index} {scheme-setting} {push-home}&nbsp;{banner-create} {update} {delete} ',
+                    'template' => '{link-index} {more} {update} {delete} ',
 
                     'buttons' => [
                             'view' => function($url, $model) {
@@ -242,34 +258,48 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js'
                                     'data-toggle' => 'modal',
                                     'data-target' => '#show-modal',
                                     'data-id'     => $model->vod_id,
+                                    'title' => '查看'
                                 ]);
                             },
                             'link-index' => function($url, $model) {
-                                return Html::a('<i class="glyphicon glyphicon-link"></i> 链接 ', ['play-group/index', 'vod_id' => $model->vod_id], [
-                                    'class' => 'btn btn-success btn-sm'
+                                return Html::button('<i class="glyphicon glyphicon-link"></i> 链接 ', [
+                                    'class' => 'btn btn-success btn-sm link-index',
+                                    'title' => '链接列表',
+                                    'data-link' => Url::to(['play-group/index', 'vod_id' => $model->vod_id])
                                 ]);
                             },
-                            'scheme-setting' => function($url, $model) {
-                                return Html::button('<i class="glyphicon glyphicon-cog"></i> 方案号 ', [
-                                    'class' => 'btn btn-default btn-sm bind' ,
+                            'more' => function($url, $model) {
+                                return Html::a(Html::tag('i', '', [
+                                        'class' => 'fa fa-cog'
+                                ]),null, [
+                                    'class' => 'btn btn-info btn-sm btn-more',
                                     'data-toggle' => 'modal',
-                                    'data-target' => '#setting-scheme-modal',
-                                    'data-id' => $model->vod_id,
+                                    'data-target' => '#more-modal',
+                                    'data-id'     => $model->vod_id,
+                                    'data-home' => $model->vod_home,
+                                    'data-banner-url' => Url::to(['banner/create','vod_id' => $model->vod_id]),
+                                    'data-home-url' => Url::to(['vod/push-home','id' => $model->vod_id,'action' => $model->vod_home ? '0' : '1' ]),
+                                    'data-home-text' => $model->vod_home ? Html::tag('i', '', ['class' => 'fa fa-thumbs-up']) : Html::tag('i','', ['class' => 'fa fa-thumbs-o-up']),
+                                    'data-home-class' => 'btn btn-lg ' . ($model->vod_home? 'btn-success' : 'btn-default'),
+                                    'title' => '更多操作'
+                                ]);
+                            },
+                            'update' => function($url, $model) {
+                                return Html::a(Html::tag('i','', ['class' => 'fa fa-edit']), $url, [
+                                        'class' => 'btn btn-primary btn-sm',
+                                        'title' => '编辑'
+                                ]);
+                            },
+
+                            'delete' => function($url, $model) {
+                                return Html::a(Html::tag('i','', ['class' => 'fa fa-trash']), $url, [
+                                    'class' => 'btn btn-warning btn-sm',
+                                    'data-confirm' => Yii::t('yii', Yii::t('backend', 'Are you sure?')),
+                                    'data-method' => 'post',
+                                    'title' => '删除'
                                 ]);
                             }
 
-                            ,
-                        'banner-create' => function($url, $model, $key) {
-                            return Html::a(Html::tag('i','', ['class' => 'fa fa-file-picture-o']), ['banner/create','vod_id' => $model->vod_id], [
-                                'class' => 'btn btn-default btn-sm'
-                            ]);
-                        },
-                        'push-home' => function($url, $model, $key) {
-                            $text = $model->vod_home ? Html::tag('i', '', ['class' => 'fa fa-thumbs-up']) : Html::tag('i','', ['class' => 'fa fa-thumbs-o-up']);
-                            return Html::a($text, ['vod/push-home','id' => $model->vod_id,'action' => $model->vod_home ? '0' : '1' ], [
-                                'class' => 'btn btn-sm ' . ($model->vod_home? 'btn-success' : 'btn-default')
-                            ]);
-                        },
 
                     ],
 
@@ -352,7 +382,59 @@ $this->registerJs($requestJs);
 
 <?php
 
-//绑定方案号
+//更多操作
+Modal::begin([
+    'id' => 'more-modal',
+    'size' => Modal::SIZE_DEFAULT,
+    'header' => '<h4 class="modal-title">详情</h4>',
+    'footer' => '<a href="#" class="btn btn-default" data-dismiss="modal">关闭</a>',
+]);
+
+$requestJs=<<<JS
+    
+     $(document).on('click', '.btn-more', function() {
+                var id = $(this).data('id');
+                var home_url = $(this).data('home-url');
+                var banner_url = $(this).data('banner-url');
+                $('#more-modal .modal-body').css('height', '100px')
+                $('.bind').data('id', id).attr('data-id', id);
+                $('#bannerBtn').attr('href', banner_url);
+                $('#homeBtn').attr('href', home_url).attr('class', $(this).data('home-class'));
+     });
+     
+     
+JS;
+
+echo "<div class='col-md-10 col-md-offset-1 text-center'>";
+echo Html::button('<i class="glyphicon glyphicon-cog"></i> 设置方案号 ', [
+    'class' => 'btn btn-default btn-lg bind',
+    'data-toggle' => 'modal',
+    'data-target' => '#setting-scheme-modal',
+    'data-id' => '',
+
+]);
+
+echo "&nbsp;";
+
+echo Html::a(Html::tag('i','Banner图推送', ['class' => 'fa fa-file-picture-o']), '', [
+    'class' => 'btn btn-default btn-lg',
+    'id' => 'bannerBtn',
+
+]);
+echo "&nbsp;";
+
+echo Html::a(Html::tag('i','首页推荐', ['class' => 'fa fa-thumbs-up']), '', [
+    'class' => 'btn btn-sm btn-default btn-lg',
+    'id' => 'homeBtn'
+]);
+
+echo "&nbsp;</div>";
+
+$this->registerJs($requestJs);
+Modal::end();
+
+
+//影片详情
 Modal::begin([
     'id' => 'show-modal',
     'size' => Modal::SIZE_LARGE,
@@ -388,7 +470,7 @@ $requestJs=<<<JS
                 var id = $(this).attr('data-id');
                 $.get('{$requestUrl}', {'id':id},
                     function (data) {
-                        $('.modal-body').css('min-height', '200px').html(data);
+                        $('#setting-scheme-modal .modal-body').css('min-height', '200px').html(data);
                     }
                 )
             })
@@ -482,5 +564,41 @@ $error = Yii::t('backend', 'operation failed')
 JS;
 
 $this->registerJs($js, \yii\web\View::POS_END);
- ?>
+
+
+$js=<<<JS
+   
+    lay('.range').each(function(){
+    laydate.render({
+      elem: this
+      ,trigger: 'click'
+      ,type: 'date'
+      ,range: false
+      ,theme: 'grid'
+    });
+  });
+
+  
+$('.link-index').click(function() {
+      var url = $(this).data('link');
+     
+      layer.open({
+          type: 2,
+          area: ['1020px', '585px'],
+          fixed: true, //不固定
+          maxmin: true,
+          content: url
+      });
+       
+      return false;
+});
+
+JS;
+
+
+
+$this->registerJs($js);
+
+
+?>
 

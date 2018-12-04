@@ -335,11 +335,19 @@ class Vod extends \yii\db\ActiveRecord implements Linkable
         return $this->hasMany(Vodlink::className(), ['video_id' => 'vod_id']);
     }
 
+    /**
+     * 多来源分组 一对多关联
+     * @return \yii\db\ActiveQuery
+     */
     public function getGroups()
     {
         return $this->hasMany(PlayGroup::className(), ['vod_id' => 'vod_id']);
     }
 
+    /**
+     * 播放链接 一对多关联
+     * @return \yii\db\ActiveQuery
+     */
     public function getGroupLinks()
     {
         return $this->hasMany(Vodlink::className(), ['group_id' => 'id'])->via('groups');
