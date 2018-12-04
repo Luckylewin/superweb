@@ -21,6 +21,10 @@ use backend\models\OttRecommend;
  * @property string $image 图标
  * @property string $alias_name 别名
  * @property string $is_recommend 是否被推荐
+ * @property string $rebroadcast_use_flag 回播可用
+ * @property string $rebroadcast_method 回播算法
+ * @property string $shifting_use_flag 时移可用
+ * @property string $shifting_method 时移算法
  */
 class OttChannel extends \yii\db\ActiveRecord
 {
@@ -44,7 +48,9 @@ class OttChannel extends \yii\db\ActiveRecord
             [['image'], 'string', 'max' => 255],
             [['alias_name'], 'string', 'max' => 100],
             [['sort','is_recommend'], 'default', 'value' => '0'],
-            ['use_flag', 'default', 'value' => '1']
+            ['use_flag', 'default', 'value' => '1'],
+            [['shifting_use_flag', 'rebroadcast_use_flag'], 'integer'],
+            [['shifting_method','rebroadcast_method'], 'string']
         ];
     }
 
@@ -65,6 +71,10 @@ class OttChannel extends \yii\db\ActiveRecord
             'image' => Yii::t('backend', 'Icon'),
             'alias_name' => Yii::t('backend', 'Alias Name'),
             'is_recommend' => Yii::t('backend', 'Recommend'),
+            'shifting_method' => Yii::t('backend', 'time shifting method'),
+            'rebroadcast_method' => Yii::t('backend', 'rebroadcast method'),
+            'rebroadcast_use_flag' => Yii::t('backend', 'rebroadcast use flag'),
+            'shifting_use_flag' => Yii::t('backend', 'time shifting use flag')
         ];
     }
 

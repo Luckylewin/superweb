@@ -601,5 +601,8 @@ return [
     'set scheme' => '设置方案号',
     'Edit Menu' => '编辑菜单',
     'System Setting' => '系统设定',
-
+    'rebroadcast method' => '回播算法',
+    'time shifting method' => '时移算法',
+    'rebroadcast use flag' => '回播可用',
+    'time shifting use flag' => '时移可用',
 ];

@@ -30,7 +30,7 @@ class ParadeJob
         }
 
         // 删除过期的预告数据
-        $date = date('Y-m-d',strtotime('-2 day'));
+        $date = date('Y-m-d',strtotime('-8 day'));
         Parade::deleteAll("parade_date <= '$date'");
 
         $data = MainClass::find()

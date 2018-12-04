@@ -20,32 +20,56 @@ use yii\widgets\ActiveForm;
         <?= $form->field($model, 'sub_class_id')->hiddenInput()->label(false) ?>
     <?php endif; ?>
 
-    <div class="col-md-6">
+    <div class="col-md-3">
         <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
     </div>
 
-    <div class="col-md-6">
+    <div class="col-md-3">
         <?= $form->field($model, 'zh_name')->textInput(['maxlength' => true]) ?>
     </div>
 
-    <div class="col-md-6">
+    <div class="col-md-3">
         <?= $form->field($model, 'keywords')->textInput(['maxlength' => true]) ?>
     </div>
 
-    <div class="col-md-6">
+    <div class="col-md-3">
         <?= $form->field($model, 'sort')->textInput() ?>
     </div>
 
-    <div class="col-md-6">
+    <div class="col-md-3">
         <?= $form->field($model, 'use_flag')->dropDownList(['不可用', "可用"]) ?>
     </div>
 
-    <div class="col-md-6">
+    <div class="col-md-3">
         <?= $form->field($model, 'channel_number')->textInput() ?>
     </div>
 
-    <div class="col-md-12">
+    <div class="col-md-3">
+        <?= $form->field($model, 'is_recommend')->dropDownList(['否','是']) ?>
+    </div>
+
+    <div class="col-md-3">
         <?= $form->field($model, 'alias_name')->textInput(['maxlength' => true]) ?>
+    </div>
+
+    <div class="col-md-3">
+        <?= $form->field($model, 'rebroadcast_method')->textInput() ?>
+    </div>
+
+    <div class="col-md-3">
+        <?= $form->field($model, 'rebroadcast_use_flag')->dropDownList(['1' => '可用', '0' => '不可用']); ?>
+    </div>
+
+    <div class="col-md-3">
+        <?= $form->field($model, 'shifting_method')->textInput(); ?>
+    </div>
+
+    <div class="col-md-3">
+        <?= $form->field($model, 'shifting_use_flag')->dropDownList(['1' => '可用', '0' => '不可用']); ?>
+    </div>
+
+    <div class="col-md-12">
+
         <?= $form->field($model, 'image')->textInput() ?>
         <?=  \dosamigos\fileupload\FileUploadUI::widget([
             'model' => new \backend\models\UploadForm(),
@@ -83,7 +107,6 @@ use yii\widgets\ActiveForm;
 
         <div class="form-group">
             <?= Html::submitButton(\Yii::t('backend','Save'), ['class' => 'btn btn-success']) ?>
-            <?= Html::a(Yii::t('backend','Go Back'), Yii::$app->request->referrer, ['class' => 'btn btn-default']) ?>
         </div>
     </div>
 

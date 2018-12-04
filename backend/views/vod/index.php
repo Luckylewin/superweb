@@ -22,6 +22,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
 $this->registerJsFile('/statics/themes/default-admin/plugins/laydate/laydate.js', ['depends' => 'yii\web\JqueryAsset']);
 $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js', ['depends' => 'yii\web\JqueryAsset']);
+
+
 ?>
 <style>
     .current_up

@@ -12,16 +12,17 @@ use yii\bootstrap\Modal;
 $this->title = Yii::t('backend', 'Genre List');
 $this->params['breadcrumbs'][] = ['label' => $mainClass->name, 'url' => Url::to(['main-class/index'])];
 $this->params['breadcrumbs'][] = $this->title;
-
+$this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js', ['depends' => 'yii\web\JqueryAsset']);
 ?>
+
 <style>
     .grid-view td,.grid-view th{
         text-align: center;
         vertical-align:middle!important;
     }
 </style>
-<div class="sub-class-index">
 
+<div class="sub-class-index">
     <h1><?= Html::encode($this->title) ?></h1>
     <p>
         <?= Html::a(Yii::t('backend', 'Create'), '#', [
@@ -125,7 +126,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'class' => 'btn btn-success btn-sm'
                             ]);
                         },
-
+                        'update' => function($url, $model) {
+                            return Html::button("编辑", [
+                                 'class' => 'btn btn-primary edit',
+                                  'data-link' => $url
+                            ]);
+                        }
                     ]
             ],
 
@@ -257,4 +263,21 @@ $requestJs=<<<JS
 JS;
 
 $this->registerJs($requestJs);
+
+$js=<<<JS
+    $(document).on('click', '.edit', function() {
+      var url = $(this).data('link');
+          layer.open({
+              type: 2,
+              area: ['1020px', '450px'],
+              fixed: true, //不固定
+              maxmin: true,
+              content: url
+          });
+          
+          return false;
+    });
+JS;
+$this->registerJs($js);
+
 ?>

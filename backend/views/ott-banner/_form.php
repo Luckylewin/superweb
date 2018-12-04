@@ -106,7 +106,7 @@ if ($model->isNewRecord) {
 
             <div class="form-group">
                 <?= Html::submitButton(\Yii::t('backend','Save'), ['class' => 'btn btn-success']) ?>
-                <?= Html::a(Yii::t('backend','Go Back'), ['main-class/index'], ['class' => 'btn btn-default']) ?>
+                <?= Html::a(Yii::t('backend','Go Back'), \common\components\Func::getLastPage(), ['class' => 'btn btn-default']) ?>
             </div>
         </div>
 
