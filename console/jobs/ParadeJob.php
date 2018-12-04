@@ -55,7 +55,7 @@ class ParadeJob
         foreach ($channels as $channel) {
             if (empty($channel['alias_name'])) continue;
             $parade = Parade::find()->where(['channel_name' => $channel['alias_name']])
-                ->andWhere(['<=', 'parade_date', date('Y-m-d', strtotime('+4 day'))])
+                ->andWhere(['<=', 'parade_date', date('Y-m-d', strtotime('+7 day'))])
                 ->asArray()
                 ->all();
 
