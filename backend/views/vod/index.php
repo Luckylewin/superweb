@@ -585,7 +585,7 @@ $(document).on('click', '.frame-open', function() {
      
       layer.open({
           type: 2,
-          area: ['1120px', '590px'],
+          area: ['1120px', '600px'],
           fixed: true, //不固定
           maxmin: true,
           content: url

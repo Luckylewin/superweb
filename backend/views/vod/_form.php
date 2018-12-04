@@ -44,33 +44,36 @@ $this->registerJsFile('/statics/js/miniUtils.js')
             <div class="panel panel-default" style="margin-top: 20px;">
                 <div class="panel-body">
 
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <!-- 影片分类  -->
                         <?= $form->field($model, 'vod_cid')->dropDownList(ArrayHelper::map(VodList::getAllList(),'list_id', 'list_name')); ?>
 
-                        <!-- 点播权限 -->
-                        <?= $form->field($model, 'vod_ispay')->dropDownList(\backend\blocks\VodBlock::$chargeStatus) ?>
                     </div>
 
-                    <div class="col-md-4">
+                    <div class="col-md-3">
 
                         <!-- 影片名称  -->
                         <?= $form->field($model, 'vod_name')->textInput([
                             'placeholder' => '必填'
                         ])->label('<font style="color: red"><b>*</b></font>' . Yii::t('backend', 'Movie name')) ?>
                         <!-- 单片付费 -->
-                        <?= $form->field($model, 'vod_price')->textInput() ?>
+                        <?php $form->field($model, 'vod_price')->textInput() ?>
 
                     </div>
 
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <!-- 播放地址 -->
-                        <?= $form->field($model, 'vod_url')->textInput() ?>
+                        <?php $form->field($model, 'vod_url')->textInput() ?>
 
                         <!-- 影片试看 -->
                         <?= $form->field($model, 'vod_trysee')->textInput([
                                 'placeholder' => '必填'
                         ]) ?>
+                    </div>
+
+                    <div class="col-md-3">
+                        <!-- 点播权限 -->
+                        <?= $form->field($model, 'vod_ispay')->dropDownList(\backend\blocks\VodBlock::$chargeStatus) ?>
 
                     </div>
 

@@ -67,14 +67,11 @@ class VodController extends BaseController
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $this->rememberReferer();
 
         if ($model->load(Yii::$app->request->post())) {
             if ($model->save()) {
                $this->setFlash('info', Yii::t('backend', 'Success'));
-               return $this->redirect(Func::getLastPage());
-           }
-
+            }
         }
 
         return $this->render('update', [
