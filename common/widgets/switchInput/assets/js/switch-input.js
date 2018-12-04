@@ -1,6 +1,6 @@
 $('.switch-component').change(function() {
 
-   var value  = $(this).val(),
+   var value  = $(this).prop('checked'),
        method = $(this).data('type'),
        url    = $(this).data('link'),
        id     = $(this).data('id'),
@@ -10,7 +10,7 @@ $('.switch-component').change(function() {
        error  = $(this).data('error'),
        csrf   = $(this).data('csrf');
 
-   value = value === 'on' ? true : false;
+       value = value ? '1' : '0';
 
    if (method === 'POST') {
       $.post(url, {fieldName:id,field:field,value:value,_csrf:csrf}, function (e) {
