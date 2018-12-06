@@ -250,8 +250,6 @@ class Cache
         $value = $dom->createTextNode($version);
         $newVersion->appendChild($value);
 
-
-
         $subClassData = $this->getSubClassLink($id, $scheme);
 
         foreach ($subClassData as $class) {
@@ -269,7 +267,11 @@ class Cache
                 $channelDom->setAttribute("eng_name", $this->handleXml($channel['name']));
                 $channelDom->setAttribute("icon", $this->handleXml(Func::getAccessUrl($channel['image'], 86400 * 14)));
                 $channelDom->setAttribute("number", "1");
-                $channelDom->setAttribute("playback", "0");
+                $channelDom->setAttribute("playback", $channel['rebroadcast_use_flag'] ? '1' : '0');
+                $channelDom->setAttribute("playback_method", $channel['rebroadcast_method'] ?:'null');
+                $channelDom->setAttribute("shifting", $channel['shifting_use_flag']  ? '1' : '0');
+                $channelDom->setAttribute("shifting_method", $channel['shifting_method']?:'null');
+
                 $liveType->appendChild($channelDom);
 
                 foreach ($channel['links'] as $link) {

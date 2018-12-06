@@ -2,15 +2,7 @@
 
 namespace backend\controllers;
 
-use backend\components\MyRedis;
-use backend\models\Cache;
-use backend\models\Scheme;
-use common\components\Func;
-use console\queues\CacheOttListJob;
-use phpDocumentor\Reflection\Types\Integer;
 use Yii;
-use yii\helpers\ArrayHelper;
-use yii\helpers\Json;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\widgets\ActiveForm;
@@ -19,6 +11,8 @@ use common\models\MainClass;
 use common\models\OttChannel;
 use common\models\SubClass;
 use common\models\search\SubClassSearch;
+use common\components\Func;
+use console\queues\CacheOttListJob;
 
 
 /**
@@ -39,10 +33,6 @@ class SubClassController extends BaseController
 
     }
 
-    /**
-     * Lists all SubClass models.
-     * @return mixed
-     */
     public function actionIndex()
     {
         $main_id = Yii::$app->request->get('main-id');
@@ -57,12 +47,6 @@ class SubClassController extends BaseController
         ]);
     }
 
-    /**
-     * Displays a single SubClass model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     public function actionView($id)
     {
         return $this->render('view', [
@@ -70,11 +54,7 @@ class SubClassController extends BaseController
         ]);
     }
 
-    /**
-     * Creates a new SubClass model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
+
     public function actionCreate()
     {
         $main_class_id = Yii::$app->request->get('main_id');
@@ -150,14 +130,6 @@ class SubClassController extends BaseController
         return $this->redirect(Yii::$app->request->referrer);
     }
 
-
-    /**
-     * Finds the SubClass model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return SubClass the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     protected function findModel($id)
     {
         if (($model = SubClass::findOne($id)) !== null) {
@@ -229,11 +201,10 @@ class SubClassController extends BaseController
 
     public function actionGenerateCache($id)
     {
-        Yii::$app->queue->push(new CacheOttListJob([
-                        'id' => $id
-                    ]));
+        Yii::$app->queue->push(new CacheOttListJob(['id' => $id]));
 
         $this->setFlash('info', Yii::t('backend', 'Creating cache in the background'));
+
         return $this->redirect(Yii::$app->request->referrer);
     }
 

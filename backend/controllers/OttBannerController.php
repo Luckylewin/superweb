@@ -56,6 +56,7 @@ class OttBannerController extends BaseController
 
     public function actionCreate()
     {
+        $this->rememberReferer();
         $model = new OttBanner();
         if ($channel_id = Yii::$app->request->get('channel_id')) {
             $model->channel_id = $channel_id;
