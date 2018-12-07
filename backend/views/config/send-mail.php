@@ -2,10 +2,12 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
+/* @var $formParams */
 $this->title = '邮箱配置';
 $this->params['breadcrumbs'][] = ['label' => '站点配置', 'url' => ['basic']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
     <div class="config-form">
         <?=$this->render('_tab_menu');?>
         <div style="margin-top: 50px;">
@@ -28,7 +30,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 <label class="col-sm-2 col-xs-4 control-label">SMTP 端口</label>
                 <div class="col-lg-3 col-sm-4 col-xs-4 input-group">
                     <input type="text" class="form-control" name="form[smtp_port]" color="#000000" value="<?=isset($formParams['smtp_port']) ? $formParams['smtp_port'] : '';?>" >
-
                 </div>
             </div>
             <div class="form-group group-smtp">
@@ -51,15 +52,15 @@ $this->params['breadcrumbs'][] = $this->title;
                     <label class="radio-inline">
                         <input type="radio" name="form[openssl]" value="0" <?php if(isset($formParams['openssl']) && $formParams['openssl'] == 0) echo 'checked';?> >否
                     </label>
-                    <?php if($supportSsl) {?>
-                        <span class="help-block">您的服务器不支持ssl，请安装php扩展openssl</span><?php }?>
+                    <?php if($formParams['openssl'] == false): ?>
+                        <span class="help-block">您的服务器不支持ssl，请安装php扩展openssl</span>
+                    <?php endif;?>
                 </div>
             </div>
             <div class="form-group group-smtp">
                 <label class="col-sm-2 col-xs-4 control-label">邮箱用户名</label>
                 <div class="col-lg-3 col-sm-4 col-xs-4 input-group">
                     <input type="text" class="form-control" name="form[smtp_user]" color="#000000" value="<?=isset($formParams['smtp_user']) ? $formParams['smtp_user'] : '';?>" >
-
                 </div>
             </div>
             <div class="form-group group-smtp">

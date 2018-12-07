@@ -605,4 +605,12 @@ return [
     'time shifting method' => '时移算法',
     'rebroadcast use flag' => '回播可用',
     'time shifting use flag' => '时移可用',
+    'SMTP HOST' => 'SMTP 服务器地址',
+    'SMTP PORT' => 'SMTP 端口',
+    'SMTP AUTHENTICATE' => 'SMTP 身份验证',
+    'ENCRYPTION' => '加密方式',
+    'EMAIL USERNAME' => '帐号',
+    'EMAIL PASSWORD' => '密码',
+    'EMAIL NICKNAME' => '发件人昵称',
+
 ];

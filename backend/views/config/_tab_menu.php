@@ -8,12 +8,12 @@ echo Nav::widget([
             'url' => ['config/basic'],
         ],
         [
-            'label' => '邮箱配置',
+            'label' => '邮箱',
             'url' => ['config/send-mail'],
         ],
         [
-            'label' => '附件配置',
-            'url' => ['config/attachment'],
+            'label' => '第三方配置',
+            'url' => ['config/other'],
         ],
     ],
     'options' => ['class' => 'nav-tabs'],

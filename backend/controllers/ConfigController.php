@@ -1,11 +1,13 @@
 <?php
 namespace backend\controllers;
 
-use backend\models\form\OttSettingForm;
 use Yii;
+use backend\models\form\config\ConfigForm;
+use backend\models\form\config\EmailForm;
+use backend\models\form\config\OtherForm;
+use backend\models\form\config\BasicForm;
+use backend\models\form\OttSettingForm;
 use backend\models\Config;
-use backend\models\search\ConfigSearch;
-use yii\web\NotFoundHttpException;
 
 /**
  * ConfigController implements the CRUD actions for Config model.
@@ -13,79 +15,75 @@ use yii\web\NotFoundHttpException;
 class ConfigController extends BaseController
 {
 
+    protected $formParams = [];
+
     public function actionBasic()
     {
-        $model = Config::find()->where(['keyid' => 'basic'])->one();
-        if(Yii::$app->request->isPost) {
-            if(empty($model)) {
-                $model = new Config();
-                $model->keyid = 'basic';
-            }
+        $formModel = new BasicForm();
+        $model = Config::findOne(['keyid' => Config::TYPE_BASIC]);
 
-            $form = Yii::$app->request->post('form');
-            $model->data = json_encode($form);
-            $model->save();
-            $this->setFlash('success', Yii::t('backend', 'Success'));
+        if(Yii::$app->request->isPost) {
+            $this->saveConfig($model, $formModel, Config::TYPE_BASIC);
+            return $this->redirect($this->getReferer());
         }
-        if(!isset($model->data)) $formParams = [];
-        else $formParams = json_decode($model->data, true);
-        if(!isset($formParams['close'])) $formParams['close'] = 0;
-        if(!isset($formParams['close_reason'])) $formParams['close_reason'] = '站点升级中, 请稍后访问!';
+
+        $formModel = $formModel->loadData($model->data?:[]);
 
         return $this->render('basic', [
-            'formParams' => $formParams,
+            'model' => $formModel
+        ]);
+    }
+
+
+    private function saveConfig($model,ConfigForm $formModel, $type)
+    {
+        if(empty($model)) {
+            $model = new Config();
+            $model->keyid = $type;
+        }
+
+        $data = $this->getRequest()->post($formModel->formName());
+
+        $model->data = $data;
+        $model->save(false);
+
+        $formModel->loadData($data)->setData()->saveToConfigFile();
+        $this->success();
+    }
+
+    public function actionOther()
+    {
+        $formModel = new OtherForm();
+        $model = Config::findOne(['keyid' => Config::TYPE_OTHER]);
+
+        if(Yii::$app->request->isPost) {
+            $this->saveConfig($model, $formModel, Config::TYPE_OTHER);
+
+            return $this->redirect($this->getReferer());
+        }
+
+        $formModel->loadData($model->data??[]);
+
+        return $this->render('other', [
+            'model' => $formModel
         ]);
     }
 
     public function actionSendMail()
     {
-        $model = Config::find()->where(['keyid' => 'sendmail'])->one();
-        if(Yii::$app->request->isPost) {
-            if(empty($model)) {
-                $model = new Config();
-                $model->keyid = 'sendmail';
-            }
-            $form = Yii::$app->request->post('form');
-            $model->data = json_encode($form);
-            $model->save();
-            $this->setFlash('success', Yii::t('backend', 'Success'));
-        }
-        if(!isset($model->data)) $formParams = [];
-        else $formParams = json_decode($model->data, true);
-        if(!isset($formParams['auth'])) $formParams['auth'] = 1;
-        if(!isset($formParams['openssl'])) $formParams['openssl'] = 1;
-        $supportSsl = 'disabled';
-        if(function_exists('openssl_open')) $supportSsl = '';
-        return $this->render('send-mail', [
-            'formParams' => $formParams,
-            'supportSsl' => $supportSsl,
-        ]);
-    }
+        $formModel = new EmailForm();
+        $model = Config::findOne(['keyid' => Config::TYPE_EMAIL]);
 
-    public function actionAttachment()
-    {
-        $model = Config::find()->where(['keyid' => 'attachment'])->one();
         if(Yii::$app->request->isPost) {
-            if(empty($model)) {
-                $model = new Config();
-                $model->keyid = 'attachment';
-            }
-            $form = Yii::$app->request->post('form');
-            $model->data = json_encode($form);
-            $this->setFlash('success', Yii::t('backend', 'Success'));
-            $model->save();
+            $this->saveConfig($model, $formModel, Config::TYPE_EMAIL);
+
+            return $this->redirect($this->getReferer());
         }
-        if(!isset($model->data)) $formParams = [];
-        else $formParams = json_decode($model->data, true);
-        if(!isset($formParams['attachment_size'])) $formParams['attachment_size'] = 2048;
-        if(!isset($formParams['attachment_suffix'])) $formParams['attachment_suffix'] = 'jpg|jpeg|gif|bmp|png';
-        if(!isset($formParams['watermark_enable'])) $formParams['watermark_enable'] = 1;
-        if(!isset($formParams['watermark_pos'])) $formParams['watermark_pos'] = 0;
-        $supportSsl = 'disabled';
-        if(function_exists('openssl_open')) $supportSsl = '';
-        return $this->render('attachment', [
-            'formParams' => $formParams,
-            //'supportSsl' => $supportSsl,
+
+        $formModel->loadData($model->data??[]);
+
+        return $this->render('email', [
+            'model' => $formModel
         ]);
     }
 
@@ -100,66 +98,6 @@ class ConfigController extends BaseController
         return $this->render('ottcharge', [
              'model' => $model,
         ]);
-
     }
 
-    public function actionIndex()
-    {
-        $searchModel = new ConfigSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
-
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
-
-    public function actionCreate()
-    {
-        $model = new Config();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
-        }
-    }
-
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
-        }
-    }
-
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
-    }
-
-    protected function findModel($id)
-    {
-        if (($model = Config::findOne($id)) !== null) {
-            return $model;
-        } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
-        }
-    }
 }
