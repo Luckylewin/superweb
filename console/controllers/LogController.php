@@ -368,10 +368,11 @@ class LogController extends Controller
      */
     private function deal()
     {
-        $log = $this->redis->lpop('log');
+        $log = $this->redis->rpop('log');
 
         if ($log) {
 
+            var_dump($log);
             if (class_exists('SeasLog', false)) {
                 \SeasLog::setLogger("ApiLog/" . date('Y/m'));
                 \SeasLog::info($log);
