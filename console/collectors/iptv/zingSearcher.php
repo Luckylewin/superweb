@@ -518,7 +518,7 @@ class zingSearcher extends common
 
         if (!empty($episodes)) {
             $data['links']        = $episodes;
-            $this->createVod($data);
+            $this->createVod($data, 'zingtv');
             $this->goSleep([3,6]);
         }
     }

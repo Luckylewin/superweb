@@ -31,10 +31,18 @@ class Movie extends Vod
 
     public function collect($data, $playGroupName = 'default')
     {
-        $title     = $data['title'];
-        $url       = $data['url'];
-        $image     = $data['image'];
-        $info      = $data['info'];
+        if (isset($data['title'])) {
+            $title     = $data['title'];
+            $url       = $data['url'];
+            $image     = $data['image'];
+            $info      = $data['info'];
+        } else {
+            $title     = $data['vod_name'];
+            $url       = $data['links'][0]['url'];
+            $image     = $data['vod_pic'];
+            $info      = $data['vod_content'];
+        }
+
         $groupName = $playGroupName;
 
         $title = trim($title);
