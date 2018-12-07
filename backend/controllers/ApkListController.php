@@ -35,9 +35,7 @@ class ApkListController extends BaseController
         ]);
     }
 
-    /**
-     * @return mixed
-     */
+
     public function actionCreate()
     {
         $model = new ApkList();
