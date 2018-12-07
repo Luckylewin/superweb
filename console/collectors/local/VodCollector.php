@@ -8,6 +8,7 @@
 
 namespace console\collectors\local;
 
+use common\models\Vod;
 use yii\base\Model;
 use common\models\Type;
 use console\collectors\profile\OMDB;
@@ -95,20 +96,25 @@ class VodCollector extends common
                 $path = $this->dir . $fileName;
                 $data = $this->getProfile($path);
 
-                $profile = profile::search($data['vod_name']);
-                if ($profile == false) {
-                    $profile = $data = OMDB::findByTitle($data['vod_name']);
-                }
+                if (is_null(Vod::findOne(['vod_name' => $data['vod_name']]))) {
+                    $profile = profile::search($data['vod_name']);
+                    if ($profile == false) {
+                        $profile = $data = OMDB::findByTitle($data['vod_name']);
+                    }
 
-                $data = array_merge($data, $profile);
+                    if ($profile) {
+                        $data = array_merge($data, $profile);
+                        $data['vod_fill_flag'] = 1;
+                    }
 
-                if ($data) {
-                    $data['links'] = $this->getEpisodes($path);
-                    $dirArr[] = $data;
+                    if ($data) {
+                        $data['links'] = $this->getEpisodes($path);
+                        $dirArr[] = $data;
+                    }
+
+                    sleep(1);
+                    $this->createVod($data, 'local');
                 }
-                
-                sleep(1);
-                $this->createVod($data, 'local');
             }
         }
 
