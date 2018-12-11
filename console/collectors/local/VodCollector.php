@@ -8,6 +8,7 @@
 
 namespace console\collectors\local;
 
+use Yii;
 use common\models\Vod;
 use console\collectors\profile\ProfilesSearcher;
 use yii\base\Model;
@@ -32,6 +33,8 @@ class VodCollector extends common
 
     public function doCollect()
     {
+        $this->clearOldData();
+
         foreach ($this->directory as $directory) {
             if (is_dir($directory['dir']) == false) {
                 return Console::error("不存在目录: {$directory['dir']}");
@@ -77,13 +80,14 @@ class VodCollector extends common
             if (!in_array($fileName, ['.', '..'])) {
                 preg_match('/.*mp4/', $fileName, $linkMatch);
                 if (isset($linkMatch[0])) {
-                    preg_match('/\d+/', $fileName, $episodeNum);
+
+                    preg_match('/\d+/', str_replace('mp4','', $fileName), $episodeNum);
 
                     $fileName = $linkMatch[0];
 
                     $episodes[] =  [
                         'title'   => '全集',
-                        'episode' => isset($episodeNum[0]) ? $episodeNum[0] : 1,
+                        'episode' => $episodeNum[0]??1,
                         'url'     => $this->getLink($path, $playPath, $fileName),
                     ];
                 }
@@ -124,7 +128,7 @@ class VodCollector extends common
 
                     if ($data) {
                         $data['links'] = $this->getEpisodes($path, $playPath);
-                        
+
                         if (!empty($data['links'])) {
                             $mediaArr[] = $data;
                             $this->saveToDb($data);
@@ -135,6 +139,16 @@ class VodCollector extends common
         }
 
         return $mediaArr;
+    }
+
+    // 清除旧数据
+    private function clearOldData()
+    {
+        $this->color("清除旧数据");
+        Yii::$app->db->createCommand('truncate table iptv_vod')->query();
+        Yii::$app->db->createCommand('truncate table iptv_play_group')->query();
+        Yii::$app->db->createCommand('truncate table iptv_vodlink')->query();
+        $this->color("数据清除完毕");
     }
 
     protected function saveToDb($data)
