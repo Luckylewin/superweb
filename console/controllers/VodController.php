@@ -16,8 +16,6 @@ use yii\console\Controller;
 
 class VodController extends Controller
 {
-
-
     public function actionDisk()
     {
         $vodCollector = new VodCollector(new Movie());

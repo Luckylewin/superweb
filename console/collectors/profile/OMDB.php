@@ -9,28 +9,20 @@
 namespace console\collectors\profile;
 
 // http://www.omdbapi.com
-class OMDB
+use console\collectors\profile\interfaces\searchById;
+use console\collectors\profile\interfaces\searchByName;
+
+class OMDB implements searchByName,searchById
 {
     static public $api_key = 'http://www.omdbapi.com/?apikey=ad9134f0';
 
-    /**
-     * 通过名字查找
-     * @param $name
-     * @return bool|mixed
-     */
-    static public function findByTitle($name, $year = null)
+    public static function searchByName($name, $year = null)
     {
         $back = self::request(self::setTitleUrl($name, $year));
         return self::initData($back);
     }
 
-
-    /**
-     * 通过 IMDb id 查找
-     * @param $id
-     * @return bool|mixed
-     */
-    static public function findByIMDbID($id)
+    public static function searchById($id)
     {
         $data = self::request(self::setIDUrl($id));
         return self::initData($data);
@@ -63,7 +55,7 @@ class OMDB
         return false;
     }
 
-    static private function setTitleUrl($title, $year)
+    private static function setTitleUrl($title, $year)
     {
         $title = str_replace(' ','+', $title);
         $url = self::$api_key . '&t=' . $title;
@@ -73,12 +65,12 @@ class OMDB
         return $url;
     }
 
-    static private function setIDUrl($id)
+    private static function setIDUrl($id)
     {
         return self::$api_key . '&i=' . $id;
     }
 
-    static private function request($url)
+    private static function request($url)
     {
         try {
             $data = file_get_contents($url);
@@ -89,6 +81,5 @@ class OMDB
         } catch (\Exception $e) {
             return false;
         }
-
     }
 }

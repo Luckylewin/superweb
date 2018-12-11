@@ -208,7 +208,6 @@ class common
 
     public function createVod($data, $resource = 'default')
     {
-
         if (method_exists($this->model, 'collect')) {
             if (!empty($data['links'])) {
                 $this->model->collect($data, $resource);

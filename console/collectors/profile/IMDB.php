@@ -6,96 +6,24 @@
  * Time: 15:14
  */
 
-namespace console\models\movie;
+namespace console\collectors\profile;
 
-use Yii;
+use console\collectors\profile\interfaces\searchById;
+use console\collectors\profile\interfaces\searchByName;
 
-class IMDB
+class IMDB implements searchByName,searchById
 {
-    public $result = array('status'=>'false','message'=>'Unknown error');
-    private static $api_key = '';
+    public $result = ['status'=>'false','message'=>'Unknown error'];
+
+    private static $api_key = 'gPK2rEcengGUwl80cN6sTZoqAX1IaV';
     private static $url = 'http://imdbapi.net/api';
 
-    private static function setAPIKey()
-    {
-        self::$api_key = Yii::$app->params['IMDB'];
-    }
-
-    /**
-     * 按 id 进行搜索
-     * @param bool $id
-     * @param string $type
-     * @return mixed
-     */
-    static public function get($id = false,$type = 'json')
-    {
-        self::setAPIKey();
-        $param = array(
-            'key' => self::$api_key,
-            'id' => $id,
-            'type' => $type
-        );
-
-        $result = self::_curl($param);
-
-        return $result;
-    }
-
-    /**
-     * 按名字进行搜索
-     * @param bool $title
-     * @param string $type
-     * @return mixed
-     */
-    static public function title($title = false,$type = 'json')
-    {
-        self::setAPIKey();
-        $param = array(
-            'key'=>self::$api_key,
-            'title'=>$title,
-            'type'=>$type
-        );
-
-        $result = self::_curl($param);
-
-        return $result;
-    }
-
-    /**
-     * 搜索关键字 年份
-     * @param string $keyword
-     * @param string $year
-     * @param int $page
-     * @param string $type
-     * @return mixed
-     */
-    static public function keyword($keyword = '', $year = '',$page = 0,$type = 'json')
-    {
-        self::setAPIKey();
-        $param = array(
-            'key'=> self::$api_key,
-            'id' => $keyword,
-            'year' => $year,
-            'page' => $page,
-            'type' => $type
-        );
-
-        $result = self::_curl($param);
-
-        return $result;
-    }
-
-    /**
-     * @param $title
-     * @return array|bool
-     */
-    static function search($title)
+    public static function searchByName($title, $otherField = null)
     {
         $data = self::title($title, 'json');
         if ($data) {
             $data = json_decode($data, true);
-            var_dump($data);
-            if ($data['status'] == true) {
+            if ($data && isset($data['status']) && $data['status'] == true) {
                 $profile = [];
                 if (!empty($data['title'])) $profile['vod_title'] = $data['title'];
                 if (!empty($data['title'])) $profile['vod_ename'] = $data['title'];
@@ -118,9 +46,71 @@ class IMDB
 
                 return $profile;
             }
+
         }
 
         return false;
+    }
+
+    /**
+     * 按 id 进行搜索
+     * @param bool $id
+     * @param string $type
+     * @return mixed
+     */
+    public static function searchById($id = false,$type = 'json')
+    {
+        $param = array(
+            'key' => self::$api_key,
+            'id' => $id,
+            'type' => $type
+        );
+
+        $result = self::_curl($param);
+
+        return $result;
+    }
+
+    /**
+     * 按名字进行搜索
+     * @param bool $title
+     * @param string $type
+     * @return mixed
+     */
+    private static function title($title = false,$type = 'json')
+    {
+        $param = array(
+            'key' => self::$api_key,
+            'title'=>$title,
+            'type'=>$type
+        );
+
+        $result = self::_curl($param);
+
+        return $result;
+    }
+
+    /**
+     * 搜索关键字 年份
+     * @param string $keyword
+     * @param string $year
+     * @param int $page
+     * @param string $type
+     * @return mixed
+     */
+    public static function keyword($keyword = '', $year = '',$page = 0,$type = 'json')
+    {
+        $param = array(
+            'key'=> self::$api_key,
+            'id' => $keyword,
+            'year' => $year,
+            'page' => $page,
+            'type' => $type
+        );
+
+        $result = self::_curl($param);
+
+        return $result;
     }
 
     private static function _curl($param)

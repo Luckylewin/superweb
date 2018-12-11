@@ -2,10 +2,7 @@
 
 namespace common\models;
 
-use backend\models\IptvType;
-use backend\models\IptvTypeItem;
 use backend\models\PlayGroup;
-use backend\models\VodTypeMap;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\helpers\Url;

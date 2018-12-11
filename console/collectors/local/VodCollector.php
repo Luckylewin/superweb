@@ -9,17 +9,20 @@
 namespace console\collectors\local;
 
 use common\models\Vod;
+use console\collectors\profile\ProfilesSearcher;
 use yii\base\Model;
 use common\models\Type;
-use console\collectors\profile\OMDB;
-use console\collectors\profile\profile;
 use yii\helpers\Console;
 use console\collectors\common;
 
 class VodCollector extends common
 {
-    public $dir = '/home/lychee/huayu/movie/';
-    public $address = 'http://vod.newpo.cn:8080/vod/movie';
+    public $directory = [
+        [ 'dir' => '/home/lychee/huayu/movie/', 'playpath' => '/vod/movie']
+    ];
+
+    public $address = 'http://vod.newpo.cn:8080';
+
     public $model;
 
     public function __construct(Model $model)
@@ -29,11 +32,14 @@ class VodCollector extends common
 
     public function doCollect()
     {
-        if (is_dir($this->dir) == false) {
-            Console::error("不存在目录: {$this->dir}");
-        }
+        foreach ($this->directory as $directory) {
+            if (is_dir($directory['dir']) == false) {
+                return Console::error("不存在目录: {$directory['dir']}");
+            }
 
-        $this->getFileList();
+            $data = $this->getFileList($directory['dir'], $directory['playpath']);
+            $this->saveToDb($data);
+        }
     }
 
     protected function getProfile($path)
@@ -45,7 +51,7 @@ class VodCollector extends common
         $list = scandir($path);
         foreach ($list as $fileName) {
             preg_match('/(\S)+(?=(.jepg|.jpg|.png))/', $fileName, $match);
-            if (!empty($match)) {
+            if (isset($match[0]) && !empty($match[0])) {
                 return [
                     'vod_name' => $match[0],
                     'vod_pic' => $match[0] . $match[2],
@@ -58,7 +64,7 @@ class VodCollector extends common
         return false;
     }
 
-    protected function getEpisodes($path)
+    protected function getEpisodes($path, $playPath)
     {
         if (!is_dir($path)) {
             return false;
@@ -66,57 +72,80 @@ class VodCollector extends common
 
         $episodes = [];
         $list = scandir($path);
+
         foreach ($list as $fileName) {
-            preg_match('/(\S)+(?=(.jepg|.jpg|.png))/', $fileName, $match);
-            if (!empty($match)) {
-                $episodes[] =  [
-                    'title'   => '全集',
-                    'episode' => '1',
-                    'pic'     => $match[0] . $match[2],
-                    'url'     =>  $this->getLink($path),
-                ];
+            if (!in_array($fileName, ['.', '..'])) {
+                preg_match('/.*mp4/', $fileName, $linkMatch);
+                if (isset($linkMatch[0])) {
+                    preg_match('/\d+/', $fileName, $episodeNum);
+
+                    $fileName = $linkMatch[0];
+
+                    $episodes[] =  [
+                        'title'   => '全集',
+                        'episode' => isset($episodeNum[0]) ? $episodeNum[0] : 1,
+                        'url'     => $this->getLink($path, $playPath, $fileName),
+                    ];
+                }
             }
         }
 
        return $episodes;
     }
 
-    protected function getLink($path)
+    protected function getLink($path, $playPath, $fileName)
     {
         $dirName = basename($path);
-        return $this->address . '/'. $dirName .'/' . $dirName . '.mp4/index.m3u8';
+        return $this->address . $playPath . '/'. $dirName .'/' . $fileName . '/index.m3u8';
     }
 
-    protected function getFileList()
+    /**
+     * @param $directory
+     * @param $playPath
+     * @return array
+     */
+    protected function getFileList($directory, $playPath)
     {
-        $dirArr = [];
-        $list = scandir($this->dir);
+        $mediaArr = [];
+        $list = scandir($directory);
         foreach ($list as $fileName) {
             if (!in_array($fileName, ['.', '..'])) {
-                $path = $this->dir . $fileName;
+                $path = $directory . $fileName;
                 $data = $this->getProfile($path);
 
                 if (is_null(Vod::findOne(['vod_name' => $data['vod_name']]))) {
-                    $profile = profile::search($data['vod_name']);
-                    if ($profile == false) {
-                        $profile = $data = OMDB::findByTitle($data['vod_name']);
-                    }
 
-                    if ($profile) {
+                    if ($profile = ProfilesSearcher::search($data['vod_name'])) {
+                        $profile['vod_language'] = $data['vod_language'];
+                        $profile['vod_area'] = $data['vod_area'];
                         $data = array_merge($data, $profile);
                         $data['vod_fill_flag'] = 1;
                     }
 
                     if ($data) {
-                        $data['links'] = $this->getEpisodes($path);
-                        $dirArr[] = $data;
+                        $data['links'] = $this->getEpisodes($path, $playPath);
+                        $mediaArr[] = $data;
                     }
-
-                    sleep(1);
-                    $this->createVod($data, 'local');
                 }
             }
         }
 
+        return $mediaArr;
+    }
+
+    protected function saveToDb($data)
+    {
+        if (!empty($data)) {
+            foreach ($data as $vod) {
+
+                try {
+                    $this->createVod($vod, 'local');
+                } catch (\Exception $e) {
+                    $this->color("File:" . $e->getFile(),'ERROR');
+                    $this->color("Line:" . $e->getLine(),'ERROR');
+                    $this->color("Message:" . $e->getMessage(),'ERROR');
+                }
+            }
+        }
     }
 }

@@ -7,29 +7,18 @@
 
 namespace console\controllers;
 
-use backend\models\Cache;
-use backend\models\IptvType;
-use backend\models\IptvTypeItem;
-use backend\models\Mac;
+
 use backend\models\MiddleParade;
 use backend\models\Parade;
-use backend\models\PlayGroup;
-use common\components\BaiduTranslator;
 use common\models\MainClass;
 use common\models\OttChannel;
 use common\models\OttLink;
 use common\models\SubClass;
-use common\models\Type;
-use common\models\Vod;
-use common\models\Vodlink;
-use common\models\VodList;
-use console\components\MySnnopy;
+use console\collectors\profile\ProfilesSearcher;
 use console\jobs\TranslateJob;
-use Symfony\Component\DomCrawler\Crawler;
 use yii\console\Controller;
 use yii\console\ExitCode;
-use yii\db\Query;
-use Yii;
+
 /**
  * This command echoes the first argument that you have entered.
  *
@@ -129,5 +118,12 @@ class HelloController extends Controller
         TranslateJob::typeItem();
     }
 
+    public function actionProfile()
+    {
+        $name = "不能说的秘密";
+        $profile = ProfilesSearcher::search($name);
+
+        print_r($profile);
+    }
 
 }

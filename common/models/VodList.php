@@ -148,4 +148,9 @@ class VodList extends \yii\db\ActiveRecord implements Linkable
 
         return json_decode($list->supported_language, true);
     }
+
+    public static function findByDirName($dirName)
+    {
+        return self::findOne(['list_dir' => $dirName]);
+    }
 }

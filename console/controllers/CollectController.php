@@ -159,31 +159,6 @@ class CollectController extends Controller
         $search->collectTv();
     }
 
-    public function actionThCartoon()
-    {
-        $tv  = new Cartoon();
-
-        $search = new thvliSearcher($tv);
-        $search->collectCartoon();
-        $search->collectSpecialCartoon();
-    }
-
-    public function actionThVariety()
-    {
-        $tvShow  = new Variety();
-
-        $search = new thvliSearcher($tvShow);
-        $search->collectVariety();
-    }
-
-    public function actionThTv()
-    {
-        $tv  = new Tv();
-
-        $search = new thvliSearcher($tv);
-        $search->collectTv();
-    }
-
     public function actionVnCartoon()
     {
         $cartoon = new Cartoon();
@@ -228,4 +203,29 @@ class CollectController extends Controller
         $search->collectVariety();
     }
 
+    // 不再使用
+    public function actionThCartoon()
+    {
+        $tv  = new Cartoon();
+
+        $search = new thvliSearcher($tv);
+        $search->collectCartoon();
+        $search->collectSpecialCartoon();
+    }
+    // 不再使用
+    public function actionThVariety()
+    {
+        $tvShow  = new Variety();
+
+        $search = new thvliSearcher($tvShow);
+        $search->collectVariety();
+    }
+    // 不再使用
+    public function actionThTv()
+    {
+        $tv  = new Tv();
+
+        $search = new thvliSearcher($tv);
+        $search->collectTv();
+    }
 }

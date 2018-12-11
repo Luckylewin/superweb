@@ -1,13 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: lychee
- * Date: 2018/4/12
- * Time: 11:13
- */
 
 namespace console\models;
-
 
 use Snoopy\Snoopy;
 
