@@ -44,7 +44,7 @@ return [
     'components' => [
         'assetsAutoCompress' => [
             'class' => '\skeeks\yii2\assetsAuto\AssetsAutoCompressComponent',
-            'enabled' => false,
+            'enabled' => true,
             'cssCompress' => true,
             ],
 
