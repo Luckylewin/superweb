@@ -64,15 +64,15 @@ trait UpdateProfile
     public function create($genre,$data,$groupName)
     {
         if (isset($data['title'])) {
-            $title     = $data['title'];
-            $url       = $data['url'];
-            $image     = $data['image'];
-            $info      = $data['info'];
+            $title     = $data['title']??"";
+            $url       = $data['url']??"";
+            $image     = $data['image']??"";
+            $info      = $data['info']??"";
         } else {
-            $title     = $data['vod_name'];
-            $url       = $data['links'][0]['url'];
-            $image     = $data['vod_pic'];
-            $info      = $data['vod_content'];
+            $title     = $data['vod_name']??"";
+            $url       = $data['links'][0]['url']??"";
+            $image     = $data['vod_pic']??"";
+            $info      = $data['vod_content']??"";
         }
 
         $title = trim($title);

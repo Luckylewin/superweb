@@ -18,7 +18,7 @@ use console\collectors\common;
 class VodCollector extends common
 {
     public $directory = [
-        [ 'dir' => '/home/lychee/huayu/movie/', 'playpath' => '/vod/movie']
+        [ 'dir' => '/home/newpo/pinyin/movie/', 'playpath' => '/vod/movie']
     ];
 
     public $address = 'http://vod.newpo.cn:8080';
@@ -124,7 +124,11 @@ class VodCollector extends common
 
                     if ($data) {
                         $data['links'] = $this->getEpisodes($path, $playPath);
-                        $mediaArr[] = $data;
+                        
+                        if (!empty($data['links'])) {
+                            $mediaArr[] = $data;
+                            $this->saveToDb($data);
+                        }
                     }
                 }
             }
@@ -135,17 +139,12 @@ class VodCollector extends common
 
     protected function saveToDb($data)
     {
-        if (!empty($data)) {
-            foreach ($data as $vod) {
-
-                try {
-                    $this->createVod($vod, 'local');
-                } catch (\Exception $e) {
-                    $this->color("File:" . $e->getFile(),'ERROR');
-                    $this->color("Line:" . $e->getLine(),'ERROR');
-                    $this->color("Message:" . $e->getMessage(),'ERROR');
-                }
-            }
+        try {
+            $this->createVod($data, 'local');
+        } catch (\Exception $e) {
+            $this->color("File:" . $e->getFile(),'ERROR');
+            $this->color("Line:" . $e->getLine(),'ERROR');
+            $this->color("Message:" . $e->getMessage(),'ERROR');
         }
     }
 }
