@@ -3,14 +3,9 @@
 /* @var $content string */
 
 use yii\helpers\Html;
-use yii\web\AssetBundle as AppAsset;
+use backend\assets\BootstrapPluginAsset;
 use yii\widgets\Breadcrumbs;
-
-
-AppAsset::register($this);
-
-
-$this->registerJsFile('/statics/themes/default-admin/plugins/toastr/toastr.min.js', ['depends'=>['yii\web\JqueryAsset']]);
+BootstrapPluginAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -25,8 +20,8 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/toastr/toastr.min.j
     <?php $this->registerCssFile('/statics/themes/default-admin/css/font-awesome.min.css?v=4.4.0',['depends'=>['yii\bootstrap\BootstrapAsset']]) ?>
     <?php $this->registerCssFile('/statics/themes/default-admin/plugins/toastr/toastr.min.css',['depends'=>['yii\bootstrap\BootstrapAsset']]) ?>
     <?php $this->registerCssFile('/statics/plugins/page/pace-blue-theme-flash.css') ?>
-
-
+    <?php $this->registerJsFile('/statics/themes/default-admin/plugins/toastr/toastr.min.js', ['depends'=>['yii\web\JqueryAsset']]); ?>
+    <?php $this->registerJsFile('/statics/plugins/page/page.min.js', ['depends'=>['yii\web\JqueryAsset']]); ?>
 <body>
 <?php $this->beginBody() ?>
 
@@ -82,4 +77,4 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/toastr/toastr.min.j
 <?= \common\widgets\Toastr::widget();?>
 
 <!-- 网页加载进度条插件 -->
-<script src="/statics/plugins/page/page.min.js"></script>
+

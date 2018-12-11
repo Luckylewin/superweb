@@ -3,38 +3,12 @@
 /* @var $content string */
 
 use yii\helpers\Url;
-use backend\assets\AppAsset as AppAsset;
 use backend\models\Menu;
 
-AppAsset::register($this);
+\backend\assets\BootstrapPluginAsset::register($this);
 $allMenus = Menu::getActualMenu();
 $username = Yii::$app->user->isGuest == false ? Yii::$app->user->identity->username : '' ;
-
 ?>
-<!DOCTYPE html>
-<html>
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="renderer" content="webkit">
-
-    <title><?= isset(Yii::$app->params['basic']['sitename']) ? Yii::$app->params['basic']['sitename'] :'' ?></title>
-
-    <meta name="keywords" content="后台">
-    <meta name="description" content="">
-
-    <!--[if lt IE 9]>
-    <meta http-equiv="refresh" content="0;ie.html" />
-    <![endif]-->
-
-    <link rel="shortcut icon" href="/statics/iptv.ico">
-    <link href="/statics/themes/default-admin/plugins/bootstrap-v3.3/bootstrap.min.css?v=3.3.6" rel="stylesheet">
-    <link href="/statics/themes/default-admin/css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
-<!--    <link href="/statics/themes/default-admin/css/animate.css" rel="stylesheet">-->
-    <link href="/statics/themes/default-admin/css/style.css?v=4.1.0" rel="stylesheet">
-
-</head>
 
 <body class="fixed-sidebar full-height-layout gray-bg" style="overflow:hidden">
 <div id="wrapper">
@@ -50,8 +24,8 @@ $username = Yii::$app->user->isGuest == false ? Yii::$app->user->identity->usern
                         <!--<span><img alt="image" class="img-circle" src="/statics/images/admin.png" /></span>-->
                         <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                                 <span class="clear">
-                               <span class="block m-t-xs"><strong class="font-bold"><?= $username ?></strong></span>
-                                <span class="text-muted text-xs block"><?= isset($rolename)?$rolename:'管理员'; ?><b class="caret"></b></span>
+                               <span class="block m-t-xs"><strong class="font-bold account"><?= $username ?></strong></span>
+                                <span class="text-muted text-xs block rolename"><?= isset($rolename)?$rolename:'管理员'; ?><b class="caret"></b></span>
                                 </span>
                         </a>
                         <ul class="dropdown-menu animated fadeInRight m-t-xs">
@@ -65,22 +39,18 @@ $username = Yii::$app->user->isGuest == false ? Yii::$app->user->identity->usern
                             </li>
                         </ul>
                     </div>
-                    <div class="logo-element">H+
+                    <div class="logo-element">IPTV
                     </div>
                 </li>
 
-                <?php
-                foreach ($allMenus as $menus) {
-                    ?>
+                <?php foreach ($allMenus as $menus): ?>
                     <li >
                         <a href="#"><i class="fa <?=$menus['icon_style'];?>"></i><span><?= Yii::t('backend', $menus['name']);?></span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
-                            <?php
-                            if(!isset($menus['_child'])) break;
-                            foreach ($menus['_child'] as $menu) {
-                                $menuArr = explode('/', $menu['url']);
-                                ?>
+                            <?php if(!isset($menus['_child'])) break; ?>
 
+                            <?php foreach ($menus['_child'] as $menu): ?>
+                            <?php $menuArr = explode('/', $menu['url']); ?>
                                 <li>
                                     <?php if(strpos($menu['url'], 'http') !== false): ?>
                                         <a target="_blank" href="<?= $menu['url'];?>">
@@ -90,13 +60,11 @@ $username = Yii::$app->user->isGuest == false ? Yii::$app->user->identity->usern
                                         <?= Yii::t('backend', $menu['name']);?>
                                         </a>
                                 </li>
+                            <?php endforeach; ?>
 
-                            <?php }?>
                         </ul>
                     </li>
-                <?php } ?>
-
-
+                <?php endforeach; ?>
             </ul>
         </div>
     </nav>
@@ -159,7 +127,7 @@ $username = Yii::$app->user->isGuest == false ? Yii::$app->user->identity->usern
             </button>
             <nav class="page-tabs J_menuTabs">
                 <div class="page-tabs-content">
-                    <a href="javascript:void(0);" class="active J_menuTab" data-id="<?=Url::to([isset($allMenus[0]['url'])?$allMenus[0]['url']:'']);?>"><?= Yii::t('backend', 'Home') ?></a>
+                    <a href="javascript:void(0);" class="active J_menuTab" data-id="<?=Url::to(['index/index']);?>"><?= Yii::t('backend', 'Home') ?></a>
                 </div>
             </nav>
             <button class="roll-nav roll-right J_tabRight"><i class="fa fa-forward"></i>
@@ -284,17 +252,3 @@ $username = Yii::$app->user->isGuest == false ? Yii::$app->user->identity->usern
 
 </div>
 
-<!-- 全局js -->
-<script src="/statics/themes/default-admin/js/jquery/jquery.min.js?v=2.1.4"></script>
-<script src="/statics/themes/default-admin/plugins/bootstrap-v3.3/bootstrap.min.js?v=3.3.6"></script>
-<script src="/statics/themes/default-admin/plugins/metisMenu/jquery.metisMenu.js"></script>
-<script src="/statics/themes/default-admin/plugins/slimscroll/jquery.slimscroll.min.js"></script>
-<script src="/statics/themes/default-admin/plugins/layer/layer.min.js"></script>
-
-<!-- 自定义js -->
-<script src="/statics/themes/default-admin/js/hplus.js?v=4.1.0"></script>
-<script type="text/javascript" src="/statics/themes/default-admin/js/contabs.js"></script>
-
-</body>
-
-</html>

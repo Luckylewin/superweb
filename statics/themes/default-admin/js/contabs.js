@@ -188,7 +188,7 @@ $(function () {
         if ($(this).parents('.J_menuTab').hasClass('active')) {
 
             // 当前元素后面有同辈元素，使后面的一个元素处于活动状态
-            if ($(this).parents('.J_menuTab').next('.J_menuTab').size()) {
+            if ($(this).parents('.J_menuTab').next('.J_menuTab').length) {
 
                 var activeId = $(this).parents('.J_menuTab').next('.J_menuTab:eq(0)').data('id');
                 $(this).parents('.J_menuTab').next('.J_menuTab:eq(0)').addClass('active');
@@ -220,7 +220,7 @@ $(function () {
             }
 
             // 当前元素后面没有同辈元素，使当前元素的上一个元素处于活动状态
-            if ($(this).parents('.J_menuTab').prev('.J_menuTab').size()) {
+            if ($(this).parents('.J_menuTab').prev('.J_menuTab').length) {
                 var activeId = $(this).parents('.J_menuTab').prev('.J_menuTab:last').data('id');
                 $(this).parents('.J_menuTab').prev('.J_menuTab:last').addClass('active');
                 $('.J_mainContent .J_iframe').each(function () {
@@ -300,12 +300,9 @@ $(function () {
     function refreshTab() {
         var target = $('.J_iframe[data-id="' + $(this).data('id') + '"]');
         var url = target.attr('src');
-//        //显示loading提示
-//        var loading = layer.load();
-//        target.attr('src', url).load(function () {
-//            //关闭loading提示
-//            layer.close(loading);
-//        });
+
+         layer.msg(':) 已为您刷新页面',{offset: 'rb'});
+         target.attr('src', url).reload();
     }
 
     $('.J_menuTabs').on('dblclick', '.J_menuTab', refreshTab);
@@ -318,15 +315,20 @@ $(function () {
 
     // 关闭全部
     $('.J_tabCloseAll').on('click', function () {
-        $('.page-tabs-content').children("[data-id]").not(":first").each(function () {
+        var tab = $('.page-tabs-content');
+
+        tab.children("[data-id]").not(':first').each(function (i) {
+            console.log($(this).data('id'));
             $('.J_iframe[data-id="' + $(this).data('id') + '"]').remove();
             $(this).remove();
         });
-        $('.page-tabs-content').children("[data-id]:first").each(function () {
+
+        tab.children("[data-id]:first").each(function () {
             $('.J_iframe[data-id="' + $(this).data('id') + '"]').show();
             $(this).addClass("active");
         });
-        $('.page-tabs-content').css("margin-left", "0");
+
+        tab.css("margin-left", "0");
     });
 
 });

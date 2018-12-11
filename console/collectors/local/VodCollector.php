@@ -19,7 +19,7 @@ use console\collectors\common;
 class VodCollector extends common
 {
     public $directory = [
-        [ '  dir'      => '/home/newpo/pinyin/movie/',
+        [   'dir'      => '/home/newpo/pinyin/movie/',
             'playpath' => '/vod/movie',
             'type'     => 'movie'
         ]

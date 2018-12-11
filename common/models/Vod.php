@@ -272,7 +272,13 @@ class Vod extends \yii\db\ActiveRecord implements Linkable
              // 分组链接
             'groupLinks' => function() {
 
-                $groups = PlayGroup::find()->where(['vod_id' => $this->vod_id])->with('links')->asArray()->all();
+                $groups = PlayGroup::find()
+                    ->where(['vod_id' => $this->vod_id])
+                    ->with(['links' => function($query) {
+                        return $query->orderBy(['episode' => SORT_DESC]);
+                    }])
+                    ->asArray()
+                    ->all();
                 $data = [];
                 $data['total'] = count($groups);
                     array_walk($groups, function(&$group) {

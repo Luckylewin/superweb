@@ -2,9 +2,6 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
-use yii\widgets\Pjax;
-use common\models\Vod;
-use yii\helpers\ArrayHelper;
 use \common\models\VodList;
 use \yii\bootstrap\Modal;
 use \yii\helpers\Url;
@@ -19,8 +16,6 @@ $vodList = VodList::findOne($cid);
 $this->title = '点播列表';
 $this->params['breadcrumbs'][] = ['url' => Url::to(['vod-list/index']), 'label' => $vodList->list_name];
 $this->params['breadcrumbs'][] = $this->title;
-
-$this->registerJsFile('/statics/themes/default-admin/plugins/laydate/laydate.js', ['depends' => 'yii\web\JqueryAsset']);
 $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js', ['depends' => 'yii\web\JqueryAsset']);
 
 

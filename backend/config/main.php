@@ -18,7 +18,9 @@ return [
     'bootstrap' => [
         'log',
         'queue',
+        'assetsAutoCompress'
     ],
+
      // 模块
     'modules' => [
         'db-manager' => [
@@ -40,6 +42,12 @@ return [
     ],
     // 组件
     'components' => [
+        'assetsAutoCompress' => [
+            'class' => '\skeeks\yii2\assetsAuto\AssetsAutoCompressComponent',
+            'enabled' => false,
+            'cssCompress' => true,
+            ],
+
         'view' => [
             // 模版设置
             'theme' => [

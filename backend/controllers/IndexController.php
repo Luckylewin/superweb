@@ -16,7 +16,7 @@ class IndexController extends BaseController
 {
     public function actionFrame()
     {
-        $this->layout = false;
+        $this->layout = 'frame';
         return $this->render('frame');
     }
 
