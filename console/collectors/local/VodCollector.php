@@ -9,26 +9,40 @@
 namespace console\collectors\local;
 
 use Yii;
+use yii\base\Model;
+use yii\helpers\Console;
+use common\models\Type;
 use common\models\Vod;
 use console\collectors\profile\ProfilesSearcher;
-use yii\base\Model;
-use common\models\Type;
-use yii\helpers\Console;
 use console\collectors\common;
 
 class VodCollector extends common
 {
     public $directory = [
-        [ 'dir' => '/home/newpo/pinyin/movie/', 'playpath' => '/vod/movie']
+        [ '  dir'      => '/home/newpo/pinyin/movie/',
+            'playpath' => '/vod/movie',
+            'type'     => 'movie'
+        ]
     ];
 
     public $address = 'http://vod.newpo.cn:8080';
-
+    public $playPath;
+    public $type;
     public $model;
 
     public function __construct(Model $model)
     {
         $this->model = $model;
+    }
+
+    public function setPlayPath($path)
+    {
+        $this->playPath = $path;
+    }
+
+    public function setType($type)
+    {
+        $this->type = $type;
     }
 
     public function doCollect()
@@ -37,11 +51,14 @@ class VodCollector extends common
 
         foreach ($this->directory as $directory) {
             if (is_dir($directory['dir']) == false) {
-                return Console::error("不存在目录: {$directory['dir']}");
+                $this->color("不存在目录: {$directory['dir']}", 'ERROR');
+                return false;
             }
 
-            $data = $this->getFileList($directory['dir'], $directory['playpath']);
-            $this->saveToDb($data);
+            $this->setPlayPath($directory['playpath']);
+            $this->setType($directory['type']);
+            $this->getFileList($directory['dir']);
+
         }
     }
 
@@ -67,7 +84,18 @@ class VodCollector extends common
         return false;
     }
 
-    protected function getEpisodes($path, $playPath)
+    protected function getEpisodeNumber($fileName)
+    {
+        preg_match('/\d+/', str_replace('mp4','', $fileName), $episodeNum);
+
+        if ($this->type == 'movie') {
+            return 1;
+        } else {
+            return $episodeNum[0]??1;
+        }
+    }
+
+    protected function getEpisodes($path)
     {
         if (!is_dir($path)) {
             return false;
@@ -80,15 +108,11 @@ class VodCollector extends common
             if (!in_array($fileName, ['.', '..'])) {
                 preg_match('/.*mp4/', $fileName, $linkMatch);
                 if (isset($linkMatch[0])) {
-
-                    preg_match('/\d+/', str_replace('mp4','', $fileName), $episodeNum);
-
                     $fileName = $linkMatch[0];
-
                     $episodes[] =  [
                         'title'   => '全集',
-                        'episode' => $episodeNum[0]??1,
-                        'url'     => $this->getLink($path, $playPath, $fileName),
+                        'episode' => $this->getEpisodeNumber($fileName),
+                        'url'     => $this->getLink($path, $fileName),
                     ];
                 }
             }
@@ -97,18 +121,17 @@ class VodCollector extends common
        return $episodes;
     }
 
-    protected function getLink($path, $playPath, $fileName)
+    protected function getLink($path,$fileName)
     {
         $dirName = basename($path);
-        return $this->address . $playPath . '/'. $dirName .'/' . $fileName . '/index.m3u8';
+        return $this->address . $this->playPath . '/'. $dirName .'/' . $fileName . '/index.m3u8';
     }
 
     /**
      * @param $directory
-     * @param $playPath
      * @return array
      */
-    protected function getFileList($directory, $playPath)
+    protected function getFileList($directory)
     {
         $mediaArr = [];
         $list = scandir($directory);
@@ -127,7 +150,7 @@ class VodCollector extends common
                     }
 
                     if ($data) {
-                        $data['links'] = $this->getEpisodes($path, $playPath);
+                        $data['links'] = $this->getEpisodes($path);
 
                         if (!empty($data['links'])) {
                             $mediaArr[] = $data;

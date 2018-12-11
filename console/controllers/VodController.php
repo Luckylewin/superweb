@@ -8,11 +8,9 @@
 
 namespace console\controllers;
 
-
 use console\collectors\local\VodCollector;
 use console\models\Movie;
 use yii\console\Controller;
-
 
 class VodController extends Controller
 {
