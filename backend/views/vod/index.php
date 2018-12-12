@@ -94,7 +94,7 @@ CSS;
 
     <?php $search = Yii::$app->request->get('VodSearch'); ?>
 
-    <?php \yii\widgets\Pjax::begin(['scrollTo' => true]) ;?>
+   
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -264,7 +264,7 @@ CSS;
             ],
         ],
     ]); ?>
-    <?php \yii\widgets\Pjax::end() ;?>
+
 
 </div>
 
