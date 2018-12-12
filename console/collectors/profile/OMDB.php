@@ -12,9 +12,15 @@ namespace console\collectors\profile;
 use console\collectors\profile\interfaces\searchById;
 use console\collectors\profile\interfaces\searchByName;
 
-class OMDB implements searchByName,searchById
+class OMDB extends searcher implements searchByName,searchById
 {
     static public $api_key = 'http://www.omdbapi.com/?apikey=ad9134f0';
+
+    public function setSupportedLanguage()
+    {
+       return $this->supportedLanguages = ['en-US'];
+    }
+
 
     public static function searchByName($name, $year = null)
     {

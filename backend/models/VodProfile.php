@@ -2,14 +2,13 @@
 
 namespace backend\models;
 
-use Yii;
-
 /**
  * This is the model class for table "iptv_vod_profile".
  *
  * @property int $id
  * @property string $name
  * @property string $profile
+ * @property string $language
  */
 class VodProfile extends \yii\db\ActiveRecord
 {
@@ -29,6 +28,8 @@ class VodProfile extends \yii\db\ActiveRecord
         return [
             [['profile'], 'string'],
             [['name'], 'string', 'max' => 100],
+            ['profile', 'safe'],
+            ['profile', 'default', 'value' => 'zh-US']
         ];
     }
 
@@ -44,9 +45,9 @@ class VodProfile extends \yii\db\ActiveRecord
         ];
     }
 
-    public static function findByName($name)
+    public static function findByName($name, $language = 'en-US')
     {
-        $profile = self::find()->where(['name' => $name])->one();
+        $profile = self::find()->where(['name' => $name, 'language' => $language])->one();
 
         if ($profile) {
             return json_decode($profile->profile, true);

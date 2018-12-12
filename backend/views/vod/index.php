@@ -88,13 +88,8 @@ CSS;
                 'onclick' => 'history.go(-1)'
             ]) ?>
         <?php endif; ?>
-
     </p>
-
-
     <?php $search = Yii::$app->request->get('VodSearch'); ?>
-
-   
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -264,15 +259,10 @@ CSS;
             ],
         ],
     ]); ?>
-
-
 </div>
 
 <?= Html::a(Yii::t('backend', 'Reset Sort'), \yii\helpers\Url::to(['vod/sort-all', 'vod_cid' => Yii::$app->request->get('VodSearch')['vod_cid']]) ,['class' => 'gridview btn btn-primary']); ?> &nbsp;
 <?= Html::button(Yii::t('backend', 'Batch Deletion'),['class' => 'gridview btn btn-danger']); ?>
-
-
-
 
 <?php
 

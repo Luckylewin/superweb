@@ -10,11 +10,11 @@ namespace console\collectors\local;
 
 use Yii;
 use yii\base\Model;
-use yii\helpers\Console;
 use common\models\Type;
 use common\models\Vod;
 use console\collectors\profile\ProfilesSearcher;
 use console\collectors\common;
+use common\components\FileHelper;
 
 class VodCollector extends common
 {
@@ -134,29 +134,24 @@ class VodCollector extends common
     protected function getFileList($directory)
     {
         $mediaArr = [];
-        $list = scandir($directory);
-        foreach ($list as $fileName) {
-            if (!in_array($fileName, ['.', '..'])) {
+        $list = FileHelper::scandir($directory);
+        if (!empty($list)) {
+            foreach ($list as $fileName) {
                 $path = $directory . $fileName;
                 $data = $this->getProfile($path);
+                $data['links'] = $this->getEpisodes($path);
 
-                if (is_null(Vod::findOne(['vod_name' => $data['vod_name']]))) {
+                if (!empty($data) && !empty($data['links']) && is_null(Vod::findOne(['vod_name' => $data['vod_name']]))) {
 
-                    if ($profile = ProfilesSearcher::search($data['vod_name'])) {
+                    if ($profile = ProfilesSearcher::search($data['vod_name'], ['language' => 'zh-CN'])) {
                         $profile['vod_language'] = $data['vod_language'];
                         $profile['vod_area'] = $data['vod_area'];
                         $data = array_merge($data, $profile);
                         $data['vod_fill_flag'] = 1;
                     }
 
-                    if ($data) {
-                        $data['links'] = $this->getEpisodes($path);
-
-                        if (!empty($data['links'])) {
-                            $mediaArr[] = $data;
-                            $this->saveToDb($data);
-                        }
-                    }
+                    $mediaArr[] = $data;
+                    $this->saveToDb($data);
                 }
             }
         }

@@ -11,12 +11,15 @@ namespace console\collectors\profile;
 use console\collectors\profile\interfaces\searchById;
 use console\collectors\profile\interfaces\searchByName;
 
-class IMDB implements searchByName,searchById
+class IMDB extends searcher implements searchByName,searchById
 {
-    public $result = ['status'=>'false','message'=>'Unknown error'];
+    protected static $api_key = 'gPK2rEcengGUwl80cN6sTZoqAX1IaV';
+    protected static $url = 'http://imdbapi.net/api';
 
-    private static $api_key = 'gPK2rEcengGUwl80cN6sTZoqAX1IaV';
-    private static $url = 'http://imdbapi.net/api';
+    public function setSupportedLanguage()
+    {
+        $this->supportedLanguages = ['zh-US'];
+    }
 
     public static function searchByName($title, $otherField = null)
     {

@@ -12,22 +12,29 @@ use console\collectors\profile\interfaces\searchByName;
 use yii\helpers\ArrayHelper;
 
 /**
- * 爬取影片数据
+ * API文档地址：https://developers.themoviedb.org/3/getting-started/languages
+ * 查询影片资料
  * Class profile
  * @package console\models
  */
-class MOVIEDB implements searchByName
+class MOVIEDB extends searcher implements searchByName
 {
     private static $api_key = '64c1188ae2bd62ac5620b429037adaf8';
     private static $url;
 
+    public function setSupportedLanguage()
+    {
+        $this->supportedLanguages = ['en-US','zh-CN','vi-VN'];
+    }
+
     /**
      * @param $name
-     * @param string $lang
+     * @param $options array
      * @return bool|array
      */
-    public static function searchByName($name, $lang='en-US')
+    public static function searchByName($name, $options)
     {
+        $lang = $options['language']??'en-US';
         return self::getBaseInfo($name, $lang);
     }
 

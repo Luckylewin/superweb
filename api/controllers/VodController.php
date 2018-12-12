@@ -19,15 +19,10 @@ use common\models\User;
 use common\models\Vod;
 use common\models\Vodlink;
 use yii\data\ActiveDataProvider;
-use yii\filters\auth\HttpBasicAuth;
-use yii\filters\auth\QueryParamAuth;
-use yii\helpers\Url;
 use yii\rest\ActiveController;
-
 
 class VodController extends ActiveController
 {
-
     public $modelClass = 'common\models\Vod';
     public $serializer = [
         'class' => 'yii\rest\Serializer',

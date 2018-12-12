@@ -11,5 +11,10 @@ namespace console\collectors\profile\interfaces;
 
 Interface searchByName
 {
-    static function searchByName($name, $otherField);
+    /**
+     * @param $name string
+     * @param $options array
+     * @return mixed
+     */
+    static function searchByName($name, $options);
 }
