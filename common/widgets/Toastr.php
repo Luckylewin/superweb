@@ -51,6 +51,8 @@ class Toastr extends \yii\bootstrap\Widget
         $flashes = $session->getAllFlashes();
 
         echo "<script>";
+        echo $js = "toastr = parent.window.getToastr();";
+        $this->getView()->registerJs($js);
 
         foreach ($flashes as $type => $data) {
 
@@ -70,7 +72,7 @@ class Toastr extends \yii\bootstrap\Widget
                         }
                         $message = $str;
                     }
-                    echo $js = "toastr.{$function}('" . str_replace("'","\\'",$message)."');";
+                    $js = "toastr.{$function}('" . str_replace("'","\\'",$message)."');";
                     $view->registerJs($js);
                 }
                 $session->removeFlash($type);

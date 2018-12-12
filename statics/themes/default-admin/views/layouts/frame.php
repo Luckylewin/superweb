@@ -21,27 +21,35 @@ BootstrapPluginAsset::register($this);
     <meta name="keywords" content="后台">
     <meta name="description" content="">
 
-    <link rel="stylesheet" href="/statics/themes/default-admin/css/style.css?v=4.1.0">
-    <?php //$this->registerCssFile('/statics/themes/default-admin/css/style.css?v=4.1.0', ['depends'=>['yii\bootstrap\BootstrapAsset']]) ?>
+<!--    <link rel="stylesheet" href="/statics/themes/default-admin/css/style.css?v=4.1.0">-->
+
     <?php $this->registerCssFile('/statics/themes/default-admin/css/font-awesome.min.css?v=4.4.0',['depends'=>['yii\bootstrap\BootstrapAsset']]) ?>
+    <?php $this->registerCssFile('/statics/themes/default-admin/css/style.css?v=4.1.0', ['depends'=>['yii\bootstrap\BootstrapAsset']]) ?>
 
 <body>
 <?php $this->beginBody() ?>
-
 <?= $content ?>
-
-
 <!-- 全局js -->
+<?php $this->registerJsFile('/statics/themes/default-admin/plugins/toastr/toastr.min.js', ['depends'=>['yii\web\JqueryAsset']]); ?>
 <?php $this->registerJSFile('/statics/themes/default-admin/plugins/metisMenu/jquery.metisMenu.js',['depends'=>['yii\web\JqueryAsset']]) ?>
 <?php $this->registerJSFile("/statics/themes/default-admin/plugins/slimscroll/jquery.slimscroll.min.js",['depends'=>['yii\web\JqueryAsset']]) ?>
-<?php $this->registerJSFile("/statics/themes/default-admin/plugins/layer/layer.min.js",['depends'=>['yii\web\JqueryAsset']]) ?>
-<!-- 自定义js -->
 <?php $this->registerJSFile('/statics/themes/default-admin/js/hplus.js?v=4.1.0',['depends'=>['yii\web\JqueryAsset']]) ?>
 <?php $this->registerJSFile('/statics/themes/default-admin/js/contabs.js',['depends'=>['yii\web\JqueryAsset']]) ?>
+<?php $this->registerCssFile('/statics/themes/default-admin/plugins/toastr/toastr.min.css',['depends'=>['yii\bootstrap\BootstrapAsset']]) ?>
 
 <?php $this->endBody() ?>
 </body>
 </html>
 <?php $this->endPage() ?>
+<script src="/statics/themes/default-admin/plugins/layer/layer.min.js"></script>
 
-
+<script>
+  // 获取全局
+  function getToastr() {
+    return toastr;
+  }
+  // 获取全局Layer
+  function getCommonLayer(){
+    return layer;
+  }
+</script>

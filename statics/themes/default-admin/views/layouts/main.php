@@ -18,16 +18,15 @@ BootstrapPluginAsset::register($this);
     <?php $this->head() ?>
     <?php $this->registerCssFile('/statics/themes/default-admin/css/style.css?v=4.1.0') ?>
     <?php $this->registerCssFile('/statics/themes/default-admin/css/font-awesome.min.css?v=4.4.0',['depends'=>['yii\bootstrap\BootstrapAsset']]) ?>
-    <?php $this->registerCssFile('/statics/themes/default-admin/plugins/toastr/toastr.min.css',['depends'=>['yii\bootstrap\BootstrapAsset']]) ?>
     <?php $this->registerCssFile('/statics/plugins/page/pace-blue-theme-flash.css') ?>
-    <?php $this->registerJsFile('/statics/themes/default-admin/plugins/toastr/toastr.min.js', ['depends'=>['yii\web\JqueryAsset']]); ?>
     <?php $this->registerJsFile('/statics/plugins/page/page.min.js', ['depends'=>['yii\web\JqueryAsset']]); ?>
+
 <body>
 <?php $this->beginBody() ?>
 
 
 
-<div class="wrapper" style="margin-top: 20px;">
+<div class="wrapper" >
     <div class="panel">
         <div class="panel-body">
             <div class="col-md-12">
@@ -50,31 +49,32 @@ BootstrapPluginAsset::register($this);
     </div>
 </div>
 
-
-
 <?php $this->endBody() ?>
 </body>
+<script>
+  $(function(){
+
+    toastr.options = {
+      "closeButton": true,
+      "debug": true,
+      "progressBar": true,
+      "positionClass": "toast-bottom-right",
+      "showDuration": "400",
+      "hideDuration": "1000",
+      "timeOut": "4000",
+      "extendedTimeOut": "1000",
+      "showEasing": "swing",
+      "hideEasing": "linear",
+      "showMethod": "slideDown",
+      "hideMethod": "slideUp"
+    }
+  });
+</script>
+<?= \common\widgets\Toastr::widget();?>
 </html>
 <?php $this->endPage() ?>
-<script>
-    toastr.options = {
-        "closeButton": true,
-        "debug": true,
-        "progressBar": true,
-        "positionClass": "toast-bottom-right",
-        "showDuration": "400",
-        "hideDuration": "1000",
-        "timeOut": "4000",
-        "extendedTimeOut": "1000",
-        "showEasing": "swing",
-        "hideEasing": "linear",
-        "showMethod": "slideDown",
-        "hideMethod": "slideUp"
-    }
 
-</script>
 
-<?= \common\widgets\Toastr::widget();?>
 
-<!-- 网页加载进度条插件 -->
+
 
