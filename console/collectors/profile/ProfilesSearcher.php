@@ -25,10 +25,10 @@ use backend\models\VodProfile;
 class ProfilesSearcher
 {
 
-    public static function quickSearchInDB($name)
+    public static function quickSearchInDB($name, $language = 'en-US')
     {
         // 先使用自身的数据库搜索
-        if ($profile = VodProfile::findByName($name)) {
+        if ($profile = VodProfile::findByName($name, $language)) {
             return $profile;
         }
 
