@@ -51,6 +51,26 @@ class Toastr extends \yii\bootstrap\Widget
         $flashes = $session->getAllFlashes();
 
         echo "<script>";
+
+        $js=<<<JS
+        toastr.options = {
+              "closeButton": true,
+              "debug": true,
+              "progressBar": true,
+              "positionClass": "toast-bottom-right",
+              "showDuration": "400",
+              "hideDuration": "1000",
+              "timeOut": "4000",
+              "extendedTimeOut": "1000",
+             
+              "hideEasing": "linear",
+              "showMethod": "slideDown",
+              "hideMethod": "slideUp"
+        }
+JS;
+
+        $this->getView()->registerJs($js);
+
         foreach ($flashes as $type => $data) {
 
             if (isset($this->alertTypes[$type])) {

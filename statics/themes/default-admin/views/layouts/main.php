@@ -20,7 +20,7 @@ BootstrapPluginAsset::register($this);
     <?php $this->registerCssFile('/statics/themes/default-admin/css/font-awesome.min.css?v=4.4.0',['depends'=>['yii\bootstrap\BootstrapAsset']]) ?>
     <?php $this->registerCssFile('/statics/plugins/page/pace-blue-theme-flash.css',['depends'=>['yii\bootstrap\BootstrapAsset']]) ?>
     <?php $this->registerJsFile('/statics/plugins/page/page.min.js', ['depends'=>['yii\web\JqueryAsset']]); ?>
-    <?php $this->registerJsFile('/statics/themes/default-admin/plugins/toastr/toastr.min.js');?>
+    <?php $this->registerJsFile('/statics/themes/default-admin/plugins/toastr/toastr.min.js', ['depends'=>['yii\web\JqueryAsset']]);?>
     <?php $this->registerCssFile('/statics/themes/default-admin/plugins/toastr/toastr.min.css'); ?>
 <body>
 <?php $this->beginBody() ?>
