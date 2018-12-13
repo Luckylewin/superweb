@@ -231,15 +231,7 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js'
 $js=<<<JS
     $(document).on('click', '.edit', function() {
       var url = $(this).data('link');
-          layer.open({
-              type: 2,
-              area: ['1020px', '550px'],
-              fixed: true, //不固定
-              maxmin: true,
-              content: url
-          });
-          
-          return false;
+      layer.myWindows(url,'频道编辑')    
     });
 JS;
 $this->registerJs($js);

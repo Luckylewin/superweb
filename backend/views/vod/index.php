@@ -275,9 +275,6 @@ $requestJs=<<<JS
                 window.location.href = url;
             });
 
-    $(function() {
-        window.layer = parent.window.getCommonLayer();
-    });
 JS;
 
 $this->registerJs($requestJs);

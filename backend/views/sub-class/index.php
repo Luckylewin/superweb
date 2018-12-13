@@ -267,15 +267,8 @@ $this->registerJs($requestJs);
 $js=<<<JS
     $(document).on('click', '.edit', function() {
       var url = $(this).data('link');
-          layer.open({
-              type: 2,
-              area: ['1020px', '450px'],
-              fixed: true, //不固定
-              maxmin: true,
-              content: url
-          });
-          
-          return false;
+      layer.myWindows(url,'分类编辑')  
+      
     });
 JS;
 $this->registerJs($js);

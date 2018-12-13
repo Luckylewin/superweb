@@ -43,7 +43,6 @@ BootstrapPluginAsset::register($this);
 <script src="/statics/themes/default-admin/plugins/layer/layer.min.js"></script>
 
 <script>
-
   // 获取全局Layer
   function getCommonLayer(){
     return layer;
