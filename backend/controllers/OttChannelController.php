@@ -11,6 +11,7 @@ use common\models\OttChannel;
 use common\models\search\OttChannelSearch;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
+use yii\helpers\Url;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
@@ -158,7 +159,7 @@ class OttChannelController extends BaseController
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $this->setFlash('info', Yii::t('backend', 'Success'));
 
-            return $this->redirect(Func::getLastPage());
+            return $this->redirect(Url::to(['ott-channel/update', 'id' => $model->id]));
         }
 
         return $this->render('update', [

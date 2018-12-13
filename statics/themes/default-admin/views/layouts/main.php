@@ -24,8 +24,6 @@ BootstrapPluginAsset::register($this);
 <body>
 <?php $this->beginBody() ?>
 
-
-
 <div class="wrapper" >
     <div class="panel">
         <div class="panel-body">
@@ -53,7 +51,6 @@ BootstrapPluginAsset::register($this);
 </body>
 <script>
   $(function(){
-
     toastr.options = {
       "closeButton": true,
       "debug": true,
@@ -69,6 +66,13 @@ BootstrapPluginAsset::register($this);
       "hideMethod": "slideUp"
     }
   });
+
+  $(document).keyup(function(event){
+    if (event.keyCode === 27 || event.keyCode === 96) {
+      layer.closeAll();
+    }
+  });
+
 </script>
 <?= \common\widgets\Toastr::widget();?>
 </html>

@@ -51,8 +51,8 @@ class Toastr extends \yii\bootstrap\Widget
         $flashes = $session->getAllFlashes();
 
         echo "<script>";
-        echo $js = "toastr = parent.window.getToastr();";
-        $this->getView()->registerJs($js);
+        $this->getView()->registerJsFile('statics/themes/default-admin/plugins/toastr/toastr.min.js');
+        $this->getView()->registerCssFile('statics/themes/default-admin/plugins/toastr/toastr.min.css');
 
         foreach ($flashes as $type => $data) {
 

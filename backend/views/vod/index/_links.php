@@ -30,12 +30,6 @@ $(document).on('click', '.frame-open', function() {
       return false;
 });
 
-$(document).keyup(function(event){
-      if (event.keyCode === 27 || event.keyCode === 96) {
-        layer.closeAll();
-      }
-});
-
 JS;
 
 $this->registerJs($js);
