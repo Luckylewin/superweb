@@ -53,7 +53,7 @@ class VodCollector extends common
 
     public function doCollect()
     {
-        $this->clearOldData();
+
 
         if (is_dir($this->dir) == false) {
             $this->color("不存在目录: {$this->dir}", 'ERROR');
@@ -163,16 +163,6 @@ class VodCollector extends common
         }
 
         return $mediaArr;
-    }
-
-    // 清除旧数据
-    private function clearOldData()
-    {
-        $this->color("清除旧数据");
-        Yii::$app->db->createCommand('truncate table iptv_vod')->query();
-        Yii::$app->db->createCommand('truncate table iptv_play_group')->query();
-        Yii::$app->db->createCommand('truncate table iptv_vodlink')->query();
-        $this->color("数据清除完毕");
     }
 
     protected function saveToDb($data)

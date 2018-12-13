@@ -8,6 +8,7 @@
 
 namespace console\controllers;
 
+use Yii;
 use console\collectors\local\VodCollector;
 use console\models\Cartoon;
 use console\models\Movie;
@@ -17,6 +18,17 @@ use yii\helpers\Console;
 
 class VodController extends Controller
 {
+
+    // 清除旧数据
+    private function ActionClearData()
+    {
+        $this->stdout("清除旧数据", Console::FG_GREEN);
+        Yii::$app->db->createCommand('truncate table iptv_vod')->query();
+        Yii::$app->db->createCommand('truncate table iptv_play_group')->query();
+        Yii::$app->db->createCommand('truncate table iptv_vodlink')->query();
+        $this->stdout("数据清除完毕", Console::FG_GREEN);
+    }
+
     public function actionDisk($type="movie")
     {
         switch ($type)
