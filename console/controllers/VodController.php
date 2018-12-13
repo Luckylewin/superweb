@@ -8,6 +8,7 @@
 
 namespace console\controllers;
 
+use console\models\Tv;
 use Yii;
 use console\collectors\local\VodCollector;
 use console\models\Cartoon;
@@ -20,13 +21,13 @@ class VodController extends Controller
 {
 
     // 清除旧数据
-    private function ActionClearData()
+    public function actionClearData()
     {
-        $this->stdout("清除旧数据", Console::FG_GREEN);
+        $this->stdout("清除旧数据" . PHP_EOL, Console::FG_GREEN);
         Yii::$app->db->createCommand('truncate table iptv_vod')->query();
         Yii::$app->db->createCommand('truncate table iptv_play_group')->query();
         Yii::$app->db->createCommand('truncate table iptv_vodlink')->query();
-        $this->stdout("数据清除完毕", Console::FG_GREEN);
+        $this->stdout("数据清除完毕" . PHP_EOL, Console::FG_GREEN);
     }
 
     public function actionDisk($type="movie")
@@ -104,9 +105,9 @@ class VodController extends Controller
 
     private function kr()
     {
-        return $vodCollector = new VodCollector(new Movie(),[
-            'dir'      => '/home/newpo/pinyin/hangju/',
-            'playpath' => '/vod/hangju',
+        return $vodCollector = new VodCollector(new Tv(),[
+            'dir'      => '/home/newpo/pinyin/hanju/',
+            'playpath' => '/vod/hanju',
             'type'     => 'serial',
             'language' => '韩语',
             'area'     => '韩国'
@@ -115,7 +116,7 @@ class VodController extends Controller
 
     private function local()
     {
-        return $vodCollector = new VodCollector(new Movie(),[
+        return $vodCollector = new VodCollector(new Tv(),[
             'dir'      => '/home/newpo/pinyin/neidi/',
             'playpath' => '/vod/neidi',
             'type'     => 'serial',
@@ -126,7 +127,7 @@ class VodController extends Controller
 
     private function hk()
     {
-        return $vodCollector = new VodCollector(new Movie(),[
+        return $vodCollector = new VodCollector(new Tv(),[
             'dir'      => '/home/newpo/pinyin/gangju/',
             'playpath' => '/vod/gangju',
             'type'     => 'serial',
@@ -137,7 +138,7 @@ class VodController extends Controller
 
     private function us()
     {
-        return $vodCollector = new VodCollector(new Movie(),[
+        return $vodCollector = new VodCollector(new Tv(),[
             'dir'      => '/home/newpo/pinyin/meiju/',
             'playpath' => '/vod/meiju',
             'type'     => 'serial',
