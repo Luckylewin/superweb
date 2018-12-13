@@ -53,7 +53,7 @@ class VodCollector extends common
 
     public function doCollect()
     {
-        // $this->clearOldData();
+        $this->clearOldData();
 
         if (is_dir($this->dir) == false) {
             $this->color("不存在目录: {$this->dir}", 'ERROR');
@@ -127,7 +127,7 @@ class VodCollector extends common
     protected function getLink($path,$fileName)
     {
         $dirName = basename($path);
-        return $this->address . $this->playPath . '/'. $dirName .'/' . $fileName . '/index.m3u8';
+        return $this->address . $this->playpath . '/'. $dirName .'/' . $fileName . '/index.m3u8';
     }
 
     /**

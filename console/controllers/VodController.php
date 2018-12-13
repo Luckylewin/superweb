@@ -50,9 +50,9 @@ class VodController extends Controller
         return $vodCollector->doCollect();
     }
 
-    public function actionSerial()
+    public function actionDiskAll()
     {
-        foreach (['cartoon','variety','kr','hk','local','us'] as $item){
+        foreach (['movie','cartoon','variety','kr','hk','local','us'] as $item){
             $this->actionDisk($item);
         }
     }
@@ -73,7 +73,7 @@ class VodController extends Controller
         return $vodCollector = new VodCollector(new Cartoon(),[
             'dir'      => '/home/newpo/pinyin/dongman/',
             'playpath' => '/vod/dongman',
-            'type'     => 'movie',
+            'type'     => 'cartoon',
             'language' => '中文',
             'area'     => '中国'
         ]);
@@ -84,7 +84,7 @@ class VodController extends Controller
         return $vodCollector = new VodCollector(new Variety(),[
             'dir'      => '/home/newpo/pinyin/zongyi/',
             'playpath' => '/vod/zongyi',
-            'type'     => 'movie',
+            'type'     => 'variety',
             'language' => '中文',
             'area'     => '中国'
         ]);
@@ -95,7 +95,7 @@ class VodController extends Controller
         return $vodCollector = new VodCollector(new Movie(),[
             'dir'      => '/home/newpo/pinyin/hangju/',
             'playpath' => '/vod/hangju',
-            'type'     => 'movie',
+            'type'     => 'serial',
             'language' => '韩语',
             'area'     => '韩国'
         ]);
