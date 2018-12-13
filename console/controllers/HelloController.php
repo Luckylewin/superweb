@@ -10,11 +10,15 @@ namespace console\controllers;
 
 use backend\models\MiddleParade;
 use backend\models\Parade;
+use backend\models\VodProfile;
 use common\models\MainClass;
 use common\models\OttChannel;
 use common\models\OttLink;
 use common\models\SubClass;
+use console\collectors\profile\DOUBAN;
+use console\collectors\profile\MOVIEDB;
 use console\collectors\profile\ProfilesSearcher;
+use console\collectors\profile\SOKU;
 use console\jobs\TranslateJob;
 use yii\console\Controller;
 use yii\console\ExitCode;
@@ -120,10 +124,11 @@ class HelloController extends Controller
 
     public function actionProfile()
     {
-        $name = "不能说的秘密";
-        $profile = ProfilesSearcher::search($name);
+        $name = "大秦帝国";
 
+        $profile = DOUBAN::searchByName($name, ['language' => 'zh-CN']);
         print_r($profile);
     }
+
 
 }

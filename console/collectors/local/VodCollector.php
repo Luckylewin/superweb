@@ -18,7 +18,18 @@ use common\components\FileHelper;
 
 class VodCollector extends common
 {
+    public $model;
+    public $dir;
+    public $playpath;
+    public $type;
+    public $area;
+    public $language;
+
     public $directory = [
+        [   'dir'      => '/home/newpo/pinyin/movie/',
+            'playpath' => '/vod/movie',
+            'type'     => 'movie'
+        ],
         [   'dir'      => '/home/newpo/pinyin/movie/',
             'playpath' => '/vod/movie',
             'type'     => 'movie'
@@ -26,40 +37,32 @@ class VodCollector extends common
     ];
 
     public $address = 'http://vod.newpo.cn:8080';
-    public $playPath;
-    public $type;
-    public $model;
 
-    public function __construct(Model $model)
+    public function __construct(Model $model, $options)
     {
         $this->model = $model;
-    }
-
-    public function setPlayPath($path)
-    {
-        $this->playPath = $path;
-    }
-
-    public function setType($type)
-    {
-        $this->type = $type;
+        $fields = ['dir', 'playpath', 'type','area','language'];
+        foreach ($fields as $field) {
+            if (!isset($options[$field])) {
+                throw new \Exception("{$field} 必须配置");
+            } else {
+                $this->$field = $options[$field];
+            }
+        }
     }
 
     public function doCollect()
     {
-        $this->clearOldData();
+        // $this->clearOldData();
 
-        foreach ($this->directory as $directory) {
-            if (is_dir($directory['dir']) == false) {
-                $this->color("不存在目录: {$directory['dir']}", 'ERROR');
-                return false;
-            }
-
-            $this->setPlayPath($directory['playpath']);
-            $this->setType($directory['type']);
-            $this->getFileList($directory['dir']);
-
+        if (is_dir($this->dir) == false) {
+            $this->color("不存在目录: {$this->dir}", 'ERROR');
+            return false;
         }
+
+        $this->getFileList($this->dir);
+
+        return true;
     }
 
     protected function getProfile($path)
@@ -143,12 +146,15 @@ class VodCollector extends common
 
                 if (!empty($data) && !empty($data['links']) && is_null(Vod::findOne(['vod_name' => $data['vod_name']]))) {
 
-                    if ($profile = ProfilesSearcher::search($data['vod_name'], ['language' => 'zh-CN'])) {
+                    if ($this->type == 'movie' && $profile = ProfilesSearcher::search($data['vod_name'], ['language' => 'zh-CN'])) {
                         $profile['vod_language'] = $data['vod_language'];
                         $profile['vod_area'] = $data['vod_area'];
                         $data = array_merge($data, $profile);
                         $data['vod_fill_flag'] = 1;
                     }
+
+                    $data['vod_language'] = $this->language;
+                    $data['vod_area']     = $this->area;
 
                     $mediaArr[] = $data;
                     $this->saveToDb($data);
