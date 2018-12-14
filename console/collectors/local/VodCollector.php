@@ -157,7 +157,7 @@ class VodCollector extends common
                 $path = $directory . $fileName;
                 $data = $this->getProfile($path);
                 $data['links'] = $this->getEpisodes($path);
-                var_dump($data);exit;
+
                 if (!empty($data) && !empty($data['links']) && is_null(Vod::findOne(['vod_name' => $data['vod_name']]))) {
 
                     if ($this->type == 'movie' && $profile = ProfilesSearcher::search($data['vod_name'], ['language' => 'zh-CN'])) {
