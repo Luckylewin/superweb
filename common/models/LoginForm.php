@@ -72,7 +72,7 @@ class LoginForm extends Model
         $cache = Yii::$app->cache;
         $ip    = Yii::$app->request->getRemoteIP();
 
-        if ($cache->get($ip) >= 10) {
+        if ($cache->get($ip) >= 30) {
             $this->addError('errorTime', '错误登录次数太多，请再半小时后再尝试');
             return false;
         }

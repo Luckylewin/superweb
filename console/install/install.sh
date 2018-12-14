@@ -174,7 +174,6 @@ function install_nginx()
                 cp -r  ${module} "${EXTENSION_PATH}/"
 			}
 
-			
 			tar xvzf "${version}.tar.gz"
 			cd ${version} && ./configure --user=nginx --group=nginx --prefix=/application/${version}/ --with-http_stub_status_module --with-http_ssl_module --add-module=${EXTENSION_PATH}/nginx-accesskey-master
 			make && make install

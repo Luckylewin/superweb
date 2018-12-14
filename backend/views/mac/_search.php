@@ -10,11 +10,9 @@ use \backend\models\Search\MacSearch;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<?php $this->registerJsFile('/statics/themes/default-admin/plugins/laydate/laydate.js', ['depends' => 'yii\web\JqueryAsset']) ?>
+<script src="/statics/themes/default-admin/plugins/laydate/laydate.js"></script>
 
 <div class="mac-search">
-
-
     <div class="panel panel-primary">
         <div class="panel-heading">
             <h3 class="panel-title"><?= Yii::t('backend', 'Query panel') ?></h3>

@@ -5,7 +5,6 @@ use yii\bootstrap\ActiveForm;
 use common\widgets\Alert;
 
 BootstrapAsset::register($this);
-$this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js', ['depends' => 'yii\web\JqueryAsset']);
 $this->title = '管理员登录';
 ?>
 <?php $this->beginPage() ?>
@@ -13,6 +12,7 @@ $this->title = '管理员登录';
 <html lang="<?= Yii::$app->language ?>">
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
+    <meta name="robots" content="NOINDEX,NOFOLLOW,noarchive" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
@@ -113,13 +113,11 @@ $js =<<<JS
   }); 
 JS;
 
-$this->registerJs($js);
+$this->registerJs($js,\yii\web\View::POS_END);
 
 ?>
-
-
 <?php $this->endPage() ?>
-
+<script src="/statics/themes/default-admin/plugins/layer/layer.min.js"></script>
 
 
 
