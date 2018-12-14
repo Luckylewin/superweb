@@ -13,6 +13,8 @@ trait getWord
 {
     public function getFirstLetter($str)
     {
+        $str = trim($str, '.');
+
         if (empty($str)) {
            return '';
         }
@@ -26,10 +28,14 @@ trait getWord
             return strtoupper($str{0});
         }
 
-        $s1 = iconv('UTF-8','gb2312',$str);
-        $s2 = iconv('gb2312','UTF-8',$s1);
-        $s= $s2==$str ? $s1 : $str;
-        $asc = ord($s{0}) * 256 + ord($s{1}) - 65536;
+        try {
+            $s1 = @iconv('UTF-8','gb2312',$str);
+            $s2 = @iconv('gb2312','UTF-8',$s1);
+            $s= $s2==$str ? $s1 : $str;
+            $asc = ord($s{0}) * 256 + ord($s{1}) - 65536;
+        } catch (\Exception $e) {
+            return "";
+        }
 
         if($asc>=-20319 && $asc<=-20284) return 'A';
         if($asc>=-20283 && $asc<=-19776) return 'B';
