@@ -171,11 +171,11 @@ function install_nginx()
    			basepath=${SCRIPT_PATH}
 			module="${basepath}extension/nginx-accesskey-master"
 			[ ! -d "${EXTENSION_PATH}/nginx-accesskey-master" ] && {
-                cp -r  ${module} "${EXTENSION_PATH}/"
+                /bin/cp -r  ${module} "${EXTENSION_PATH}/"
 			}
 
 			tar xvzf "${version}.tar.gz"
-			cd ${version} && ./configure --user=nginx --group=nginx --prefix=/application/${version}/ --with-http_stub_status_module --with-http_ssl_module --add-module=${EXTENSION_PATH}/nginx-accesskey-master
+			cd ${version} && ./configure --user=nginx --group=nginx --prefix=/application/${version}/ --with-http_stub_status_module --with-http_ssl_module -with-http_secure_link_module --add-module=${EXTENSION_PATH}/nginx-accesskey-master
 			make && make install
 			[ $? -eq 0 ] && {
 			     ln -s /application/${version} /application/nginx
@@ -636,6 +636,12 @@ function manage_menu()
     esac
 }
 
+function close_apache()
+{
+    systemctl disable httpd;
+    systemctl disable httpd;
+}
+
 function set_php_timezone()
 {
     sed -i 's/;date.timezone =/date.timezone = Asia/Shanghai;/' ${php_ini}
@@ -749,6 +755,8 @@ esac
 
 }
 
+
+
 function one_key_install()
 {
 	init
@@ -763,6 +771,7 @@ function one_key_install()
 	install_mysql
     install_web
     install_api
+    close_apache
     boot
 	setting_firewalld
 	register_to_global

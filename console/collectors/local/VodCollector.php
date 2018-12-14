@@ -18,23 +18,31 @@ use common\components\FileHelper;
 
 class VodCollector extends common
 {
+    /**
+     * @var Model 接收数据的模型
+     */
     public $model;
+    /**
+     * @var string 映射路径 /home/newpo/pinyin/zongyi/
+     */
     public $dir;
+    /**
+     * @var string nginx访问路径 如  /vod/zongyi
+     */
     public $playpath;
+    /**
+     * @var string 类型 如movie cartoon
+     */
     public $type;
+    /**
+     * @var string 地区
+     */
     public $area;
+    /**
+     * @var string 语言
+     */
     public $language;
 
-    public $directory = [
-        [   'dir'      => '/home/newpo/pinyin/movie/',
-            'playpath' => '/vod/movie',
-            'type'     => 'movie'
-        ],
-        [   'dir'      => '/home/newpo/pinyin/movie/',
-            'playpath' => '/vod/movie',
-            'type'     => 'movie'
-        ]
-    ];
 
     public $address = 'http://vod.newpo.cn:8080';
 
@@ -65,6 +73,12 @@ class VodCollector extends common
         return true;
     }
 
+    protected function getCover($path, $fileName)
+    {
+        return 'http://' . (Yii::$app->params['serverDomain']?:Yii::$app->params['serverIP'] ) .
+                '/' . basename($this->playpath) . "/". basename($path) . "/" . $fileName;
+    }
+
     protected function getProfile($path)
     {
         if (!is_dir($path)) {
@@ -77,9 +91,9 @@ class VodCollector extends common
             if (isset($match[0]) && !empty($match[0])) {
                 return [
                     'vod_name' => $match[0],
-                    'vod_pic' => $match[0] . $match[2],
-                    'vod_area' => Type::AREA_CHINA,
-                    'vod_language' => Type::LANGUAGE_CHINESE
+                    'vod_pic' => $this->getCover($path, $fileName),
+                    'vod_area' => $this->area,
+                    'vod_language' => $this->language
                 ];
             }
         }
@@ -143,7 +157,7 @@ class VodCollector extends common
                 $path = $directory . $fileName;
                 $data = $this->getProfile($path);
                 $data['links'] = $this->getEpisodes($path);
-
+                var_dump($data);exit;
                 if (!empty($data) && !empty($data['links']) && is_null(Vod::findOne(['vod_name' => $data['vod_name']]))) {
 
                     if ($this->type == 'movie' && $profile = ProfilesSearcher::search($data['vod_name'], ['language' => 'zh-CN'])) {
