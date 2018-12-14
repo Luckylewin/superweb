@@ -15,6 +15,8 @@ use common\models\MainClass;
 use common\models\OttChannel;
 use common\models\OttLink;
 use common\models\SubClass;
+use common\models\Vod;
+use console\collectors\profile\BAIDU;
 use console\collectors\profile\DOUBAN;
 use console\collectors\profile\MOVIEDB;
 use console\collectors\profile\ProfilesSearcher;
@@ -124,10 +126,15 @@ class HelloController extends Controller
 
     public function actionProfile()
     {
-        $name = "大秦帝国";
+        $vods = Vod::find()->all();
+        foreach ($vods as $vod) {
+            $vod->vod_letter = $vod->getKeyword($vod->vod_name);
+            $vod->vod_keywords = $vod->getKeyword($vod->vod_keywords);
+            $vod->save(false);
+        }
 
-        $profile = DOUBAN::searchByName($name, ['language' => 'zh-CN']);
-        print_r($profile);
+        /*$name = "大秦帝国 电视剧";
+        $profile = BAIDU::searchByName($name, ['language' => 'zh-CN']);*/
     }
 
 

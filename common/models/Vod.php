@@ -3,6 +3,7 @@
 namespace common\models;
 
 use backend\models\PlayGroup;
+use console\traits\getWord;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\helpers\Url;
@@ -75,6 +76,8 @@ use Yii;
  */
 class Vod extends \yii\db\ActiveRecord implements Linkable
 {
+    use getWord;
+
     public $vod_length = '0';
     public $is_buy;
     public $pic;
@@ -137,6 +140,11 @@ class Vod extends \yii\db\ActiveRecord implements Linkable
     public function beforeSave($insert)
     {
         parent::beforeSave($insert);
+
+        if ($this->isNewRecord) {
+            $this->vod_letter = $this->getFirstLetter($this->vod_name);
+            $this->vod_keywords = $this->getKeyword($this->vod_name);
+        }
 
         if (!$this->vod_trysee) {
             $vodList = VodList::findOne($this->vod_cid);

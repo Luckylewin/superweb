@@ -422,15 +422,31 @@ function setting_firewalld()
 
 function service_api()
 {
-   ps -ef | grep 'WorkerMan: master process' | grep -v grep > /dev/null
-   if [ $? -ne 0 ]
-   then
-      cd "${WWW_PATH}/superAPI/public/";
-   	  php start.php restart -d > /dev/null  2>&1
-   	  run_tips "API服务"
-   else
-       running_tips "API服务"
-   fi
+    cd "${WWW_PATH}/superAPI/public/";
+
+    if [ ! $1 ]
+    then
+       ps -ef | grep 'WorkerMan: master process' | grep -v grep > /dev/null
+       if [ $? -ne 0 ]
+       then
+          php start.php restart -d > /dev/null  2>&1
+          run_tips "API服务"
+       else
+          service_api "restart"
+       fi
+    else
+        if [ $1 == 'status' ]
+        then
+          php start.php status
+        elif [ $1 == 'reload' ]
+        then
+          php start.php reload
+        elif [ $1 == 'restart' ]
+        then
+           php start.php restart -d > /dev/null  2>&1
+           running_tips "API服务"
+        fi
+    fi
 }
 
 function service_log()
@@ -516,7 +532,6 @@ function boot()
    service_log
    service_queue
 }
-
 
 function finish()
 {
@@ -607,7 +622,6 @@ function error()
    echo -e "\033[31m ${1}  \033[0m"
 }
 
-
 function goodbye()
 {
     mecho ":) 感谢使用,有缘再会~" "blue" "white"
@@ -651,6 +665,23 @@ function set_linux_timezone()
 {
    timedatectl set-timezone Asia/Shanghai
    ntpdate ntp1.aliyun.com
+}
+
+function api_manage()
+{
+    mecho "★★★★★★★★★★ API服务管理 ★★★★★★★★★★" "blue" "white"
+    mecho "      ➤ (1) 服务状态"  "green-blue"
+    mecho "      ➤ (2) 热重载" "green-blue"
+    mecho "      ➤ (3) 服务重启" "green-blue"
+    mecho "      ➤ (4) 退出" "white"
+
+    read -p "请输入选择: " input
+    case ${input} in
+    1) service_api 'status';;
+    2) service_api 'reload';;
+    3) service_api 'restart';;
+    4) goodbye;;
+    esac
 }
 
 function install_helper()
@@ -708,7 +739,7 @@ function service_menu()
 
     read -p "请输入选择: " input
     case ${input} in
-    1) service_api;;
+    1) api_manage;;
     2) service_log;;
     3) service_queue;;
     4) service_crontab;;
@@ -754,8 +785,6 @@ case ${input} in
 esac
 
 }
-
-
 
 function one_key_install()
 {
