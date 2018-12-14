@@ -129,7 +129,7 @@ class HelloController extends Controller
         $vods = Vod::find()->all();
         foreach ($vods as $vod) {
             $vod->vod_letter = $vod->getFirstLetter($vod->vod_name);
-            $vod->vod_keywords = $vod->getKeyword($vod->vod_keywords);
+            $vod->vod_keywords = $vod->getKeyword($vod->vod_name);
             $vod->save(false);
         }
 
