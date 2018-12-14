@@ -50,7 +50,7 @@ class ParadeController extends Controller
 
     public function clearExpire()
     {
-        $date = date('Y-m-d' ,strtotime('-3 day'));
+        $date = date('Y-m-d' ,strtotime('-9 day'));
         Parade::deleteAll(['<=', 'parade_date', $date]);
     }
 
