@@ -14,7 +14,11 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'username')->textInput(['autocomplete' => 'off']) ?>
 
-    <?= $form->field($model, 'password')->passwordInput(['autocomplete' => 'off']) ?>
+    <?php if($model->isNewRecord): ?>
+        <?= $form->field($model, 'password')->passwordInput(['autocomplete' => 'off','placeholder' => '密码至少为6位']) ?>
+    <?php else: ?>
+        <?= $form->field($model, 'password')->passwordInput(['autocomplete' => 'off','placeholder' => '不修改密码请留空']) ?>
+    <?php endif; ?>
 
     <?= $form->field($model, 'email')->textInput(['autocomplete' => 'off']) ?>
 
@@ -23,8 +27,7 @@ use yii\widgets\ActiveForm;
     <?php endif; ?>
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? Yii::t('backend', 'Create') : Yii::t('backend', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
-        <?= Html::a('返回', ['admin/index'], ['class' => 'btn btn-default']) ?>
+        <?= Html::submitButton($model->isNewRecord ? Yii::t('backend', 'Create') : Yii::t('backend', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary col-md-12']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

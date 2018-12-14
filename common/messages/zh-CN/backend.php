@@ -175,6 +175,7 @@ return [
     'Post content' => '发布内容',
     'Resource' => '资源',
     'force update' => '强制更新',
+    'updated' => '已更新',
     'File List' => '文件列表',
     "APP List" => 'App列表',
     'Create Apk' => '新增APK',

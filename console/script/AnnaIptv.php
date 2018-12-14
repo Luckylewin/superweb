@@ -479,7 +479,7 @@ class AnnaIptv extends base
             $vod->vod_pic = $picture;
             $vod->vod_letter = common::getFirstCharter($name);
             $vod->vod_language = $language;
-            $vod->sort = $sort;
+
             $vod->vod_multiple = $type == '电影' ? '0' : '1';
             $vod->save(false);
             $this->stdout("新增{$type}{$name}" . PHP_EOL, Console::FG_YELLOW);

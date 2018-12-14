@@ -65,7 +65,7 @@ class SubClassController extends BaseController
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $this->setFlash('success', Yii::t('backend', 'Success'));
-            return $this->redirect(['index', 'main-id' => $model->main_class_id]);
+            return $this->goBack($this->getReferer());
         } else {
             return $this->renderAjax('create', ['model' => $model]);
         }
@@ -83,7 +83,6 @@ class SubClassController extends BaseController
 
     public function actionUpdate($id)
     {
-        $this->rememberReferer();
         $model = $this->findModel($id);
 
         if (Yii::$app->request->isAjax) {
@@ -101,7 +100,7 @@ class SubClassController extends BaseController
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $this->setFlash('info', Yii::t('backend', 'Success'));
-            return $this->redirect(Func::getLastPage());
+            return $this->goBack($this->getReferer());
         }
 
         return $this->render('update', [

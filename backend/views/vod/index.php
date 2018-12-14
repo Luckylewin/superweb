@@ -19,55 +19,8 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <?php
     $css=<<<CSS
-     .current_up
-    {
-        border-color:transparent transparent #00AA88 !important; /*透明 透明  黄*/
-    }
-
-    .current_down
-    {
-        border-color: #00AA88 transparent transparent !important; /*透明 透明  黄*/
-    }
-
-    .triangle_border_up{
-        width:0;
-        height:0;
-        border-width:0 7px 10px;
-        border-style:solid;
-        border-color:transparent transparent #d2d2d2;/*透明 透明  黄*/
-        position:absolute;
-        top:0;
-        left:64px;
-        cursor: pointer;
-    }
-
-    /*下箭头*/
-    .triangle_border_down{
-        display:block;
-        width:0;
-        height:0;
-        border-width:10px 7px 0;
-        border-style:solid;
-        border-color:#d2d2d2 transparent transparent;/*黄 透明 透明 */
-        position:absolute;
-        bottom:0;
-        left:64px;
-        cursor: pointer;
-    }
-
-    .triangle_border_up:hover
-    {
-        border-color:transparent transparent #23527c;/*透明 透明  黄*/
-
-    }
-
-    .triangle_border_down:hover
-    {
-        border-color:#23527c transparent transparent;/*黄 透明 透明 */
-
-    }
+    .current_up {border-color:transparent transparent #00AA88 !important; /*透明 透明  黄*/ } .current_down {border-color: #00AA88 transparent transparent !important; /*透明 透明  黄*/ } .triangle_border_up{width:0; height:0; border-width:0 7px 10px; border-style:solid; border-color:transparent transparent #d2d2d2;/*透明 透明  黄*/ position:absolute; top:0; left:64px; cursor: pointer; } /*下箭头*/ .triangle_border_down{display:block; width:0; height:0; border-width:10px 7px 0; border-style:solid; border-color:#d2d2d2 transparent transparent;/*黄 透明 透明 */ position:absolute; bottom:0; left:64px; cursor: pointer; } .triangle_border_up:hover {border-color:transparent transparent #23527c;/*透明 透明  黄*/ } .triangle_border_down:hover {border-color:#23527c transparent transparent;/*黄 透明 透明 */ }
 CSS;
-
     $this->registerCss($css);
 ?>
 <div class="vod-index">
@@ -236,10 +189,16 @@ CSS;
                                 ]);
                             },
                             'update' => function($url, $model) {
-                                return Html::button(Html::tag('i','', ['class' => 'fa fa-edit']), [
-                                        'class' => 'btn btn-primary btn-sm frame-open',
+
+                                return \common\widgets\frameButton::widget([
+                                    'url' => $url,
+                                    'title' => '编辑',
+                                    'content' =>Html::tag('i','', ['class' => 'fa fa-edit']),
+                                    'options' => [
+                                        'class' => 'btn btn-primary btn-sm',
                                         'title' => '编辑',
                                         'data-link' => $url
+                                    ]
                                 ]);
                             },
 
@@ -283,7 +242,6 @@ $this->registerJs($requestJs);
 <?= $this->render('index/_more'); ?>
 <?= $this->render('index/_bind'); ?>
 <?= $this->render('index/_sort'); ?>
-<?= $this->render('index/_links'); ?>
 <?= $this->render('index/_detail'); ?>
 
 

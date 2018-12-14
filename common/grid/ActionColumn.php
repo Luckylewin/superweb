@@ -1,8 +1,5 @@
 <?php
-/**
- * GridView的ActionColumn用于列表的查看、更新、删除等按钮
- * @author 边走边乔 <771405950>
- */
+
 namespace common\grid;
 
 use Yii;

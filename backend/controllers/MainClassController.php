@@ -22,10 +22,7 @@ use yii\web\Response;
  */
 class MainClassController extends BaseController
 {
-    /**
-     * Lists all MainClass models.
-     * @return mixed
-     */
+
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
@@ -43,12 +40,6 @@ class MainClassController extends BaseController
         ]);
     }
 
-    /**
-     * Displays a single MainClass model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     public function actionView($id)
     {
         return $this->render('view', [
@@ -56,11 +47,7 @@ class MainClassController extends BaseController
         ]);
     }
 
-    /**
-     * Creates a new MainClass model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
+
     public function actionCreate()
     {
         $model = new MainClass();
@@ -74,13 +61,7 @@ class MainClassController extends BaseController
         ]);
     }
 
-    /**
-     * Updates an existing MainClass model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
@@ -99,7 +80,7 @@ class MainClassController extends BaseController
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $this->setFlash('success', Yii::t('backend', 'Success'));
-            return $this->redirect(['index', 'id' => $model->id]);
+            return $this->goBack($this->getReferer());
         }
 
         return $this->render('update', [

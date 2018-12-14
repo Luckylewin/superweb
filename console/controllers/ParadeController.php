@@ -11,7 +11,6 @@ namespace console\controllers;
 use backend\models\Parade;
 use console\jobs\ParadeJob;
 use console\collectors\event\NBA;
-use console\collectors\event\sportsmediawatch;
 use console\collectors\event\zhiboba;
 use console\collectors\parade\beginsport;
 use console\collectors\parade\espn;
@@ -23,7 +22,7 @@ use console\collectors\parade\sportnet;
 use console\collectors\parade\tsn;
 use console\collectors\parade\vn;
 use yii\console\Controller;
-use yii\helpers\ArrayHelper;
+
 
 /**
  * 预告控制器

@@ -52,10 +52,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'attribute' => 'list_dir',
                     'options' => ['style' => 'width:100px;'],
             ],
-            //'list_status',
-            //'list_keywords',
-            //'list_title',
-            //'list_description',
+
             [
                     'attribute' => 'list_ispay',
                     'options' => ['style' => 'width:100px;'],
@@ -63,12 +60,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         return \backend\blocks\VodBlock::$chargeStatus[$model->list_ispay];
                     }
             ],
-           /* [
-                    'attribute' => 'list_price',
-                    'value' => function($model) {
-                        return $model->list_price . ' ' . Yii::t('backend', 'gold');
-                    }
-            ],*/
+
             [
                 'label' => '影片数量',
                 'value' => function($model) {
@@ -82,8 +74,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 'options' => ['style' => 'width:60px;']
             ],
 
-            //'list_extend:ntext',
-
             [
                     'class' => 'common\grid\MyActionColumn',
                     'template' => '{vods} {type} {update} {delete}',
@@ -95,11 +85,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]);
                             },
                             'type' => function($url, $model, $key) {
-                                return Html::a('查看子类别', ['iptv-type/index', 'list_id'=>$model->list_id], [
-                                    'class' => 'btn btn-default btn-sm'
+                                return \common\widgets\frameButton::widget([
+                                    'content' => '查看子类别',
+                                    'url' => \yii\helpers\Url::to(['iptv-type/index', 'list_id'=>$model->list_id]),
+
                                 ]);
-                            }
+                            },
                     ],
+
                     'options' => ['style' => 'width:280px;']
             ],
         ],
@@ -112,3 +105,4 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= Html::a('更新点播数据', \yii\helpers\Url::to(['client/anna-iptv']), ['class' => 'btn btn-info']) ?>
 </p>
 <?php endif; ?>
+

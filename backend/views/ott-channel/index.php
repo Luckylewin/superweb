@@ -12,8 +12,6 @@ $this->title = Yii::t('backend', 'Channel List');
 $this->params['breadcrumbs'][] = ['label' => $mainClass->zh_name? $mainClass->zh_name:$mainClass->name, 'url' => Url::to(['main-class/index'])];
 $this->params['breadcrumbs'][] = ['label' => $subClass->zh_name?$subClass->zh_name:$subClass->name, 'url' => Url::to(['sub-class/index', 'main-id' => $mainClass->id])];
 $this->params['breadcrumbs'][] = $this->title;
-
-$this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js', ['depends' => 'yii\web\JqueryAsset']);
 ?>
 
 <style>
@@ -25,15 +23,6 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js'
 </style>
 
 <div class="ott-channel-index">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <p>
-        <?= Html::a(Yii::t('backend', 'Create'), ['create','sub-id' => $subClass->id], ['class' => 'btn btn-success']) ?>
-    </p>
-
     <?php
 
             echo GridView::widget([
@@ -60,8 +49,7 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js'
                             return \common\components\Func::getAccessUrl($model->image);
                         }
                     ],
-                    //'id',
-                    //'sub_class_id',
+
                     [
                         'attribute' => 'name',
                         'contentOptions' => ['class' => 'ajax-td'],
@@ -93,31 +81,12 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js'
                         }
                     ],
 
-                    /*[
-                        'attribute' => 'keywords',
-                        'contentOptions' => ['class' => 'ajax-td'],
-                        'options' => ['style' => 'min-width:120px;'],
-                        'format' => 'raw',
-                        'value' => function($model) {
-                            $str =  Html::textInput('sort', $model->keywords, [
-                                'class' => 'form-control ajax-update',
-                                'field' => 'keywords',
-                                'data-id' => $model->id,
-                                'old-value' => $model->keywords
-                            ]);
-                            return $str = "<div class='text'>{$model->keywords}</div>" . "<div class='input' style='display: none'>$str</div>";
-                        }
-                    ],*/
-
-
                     [
                         'attribute' => 'channel_number',
 
                         'options' => ['style' => 'width:70px;'],
                         'filter' => false
                     ],
-
-
                     [
                         'attribute' => 'sort',
                         'filter' => false,
@@ -151,9 +120,6 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js'
                         }
                     ],
 
-
-                    //'alias_name',
-
                     [
                         'class' => 'common\grid\MyActionColumn',
                         'size' => 'btn-sm',
@@ -161,12 +127,13 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js'
                         'buttons' => [
 
                             'update' => function($url, $model) {
-                                return Html::button(" 编辑", [
-                                    'class' => 'btn btn-primary edit fa fa-edit',
-                                    'data-link' => $url
+                                return \common\widgets\frameButton::widget([
+                                        'content' => '编辑',
+                                        'url' => $url,
+                                        'options' => ['class' => 'btn btn-primary fa fa-edit',]
                                 ]);
-                            },
 
+                            },
                             'channel' => function($url, $model, $key) {
                                 return Html::a("&nbsp;&nbsp;<i class='glyphicon glyphicon-link'></i>". Yii::t('backend', 'Link')."&nbsp;&nbsp;", null, [
                                     'class' => 'btn btn-success btn-sm load-link',
@@ -175,13 +142,11 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js'
                                     'data-id' => $model->id,
                                 ]);
                             },
-
                             'push-banner' => function($url, $model, $key) {
                                 return Html::a("&nbsp;<i class='glyphicon glyphicon-picture'></i>&nbsp;", Url::to(Url::to(['ott-banner/create', 'channel_id' => $model->id])), [
                                     'class' => 'btn btn-default btn-sm'
                                 ]);
                             },
-
                             'push-recommend' => function($url, $model, $key) {
                                 $class = $model->is_recommend ? 'btn-warning' : 'btn-default';
 
@@ -218,6 +183,8 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js'
  </div>
 <div>
 
+<?= \common\widgets\frameButton::widget(['options' => ['class' => 'btn btn-success'],'content' => Yii::t('backend', 'Create'), 'url' => Url::to(['create','sub-id' => $subClass->id])]) ?>
+
 <?= Html::a(Yii::t('backend', 'Rearrange channel numbers'), ['sub-class/reset-number','main_class_id' => $mainClass->id], ['class' => 'btn btn-primary']) ?>
 
 <?= Html::button(Yii::t('backend', 'Batch Deletion'),['class' => 'gridview btn btn-danger' ]) ?>
@@ -225,17 +192,6 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js'
 <?= Html::a(Yii::t('backend', 'Go Back'), Url::to(['sub-class/index', 'main-id' => $mainClass->id]), ['class' => 'btn btn-default']) ?>
 
 </div>
-
-
-<?php
-$js=<<<JS
-    $(document).on('click', '.edit', function() {
-      var url = $(this).data('link');
-      layer.myWindows(url,'频道编辑')    
-    });
-JS;
-$this->registerJs($js);
-?>
 
 <?= $this->render('_links'); ?>
 <?= $this->render('_more'); ?>

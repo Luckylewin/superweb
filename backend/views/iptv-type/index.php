@@ -10,12 +10,8 @@ use \common\widgets\multilang\MultiLangWidget;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js', ['depends' => 'yii\web\JqueryAsset']);
 
-$this->title = 'Iptv Types';
-$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="iptv-type-index">
-
-    <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
         <?= Html::a(Yii::t('backend', 'Create'), ['create','vod_list_id' => $list->list_id], ['class' => 'btn btn-success']) ?>

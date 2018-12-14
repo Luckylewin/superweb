@@ -3,13 +3,8 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\ActiveForm;
 
-$this->title = '分配角色';
-$this->params['breadcrumbs'][] = ['label' => \Yii::t('backend','Admin Setting'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="role-index">
-
-    <?=$this->render('_tab_menu');?>
 
     <?php ActiveForm::begin(); ?>
     <?= GridView::widget([
@@ -36,8 +31,8 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); ?>
     <div class="form-group">
 
-        <?=Html::submitButton('保存', ['class' => 'btn btn-info']) ?>
-        <?= Html::a('返回', ['index'], ['class' => 'btn btn-default']) ?>
+        <?=Html::submitButton(Yii::t('backend', 'Auth'), ['class' => 'btn btn-info col-md-12']) ?>
+
     </div>
     <?php ActiveForm::end(); ?>
 

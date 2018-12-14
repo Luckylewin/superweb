@@ -58,7 +58,7 @@ class BaseController extends Controller
 
     public function setFlash($status, $message)
     {
-        \Yii::$app->session->setFlash($status, $message);
+        \Yii::$app->session->setFlash($status, Yii::t('backend', $message));
     }
 
     public function success($status = 'success')

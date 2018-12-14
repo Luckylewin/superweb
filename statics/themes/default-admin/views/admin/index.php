@@ -67,6 +67,24 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'common\grid\ActionColumn',
                 'header' => Yii::t('backend', 'Operate'),
                 'template' => '{update} {auth} {delete}',
+                'buttons' => [
+                    'update' => function($url, $model) {
+                        return \common\widgets\frameButton::widget([
+                            'content' => Yii::t('backend', 'Edit'),
+                            'icon' => 'fa-edit',
+                            'url' => $url,
+                            'options' => ['class' => 'btn btn-sm btn-primary']
+                        ]);
+                    },
+                    'auth' => function($url, $model) {
+                        return \common\widgets\frameButton::widget([
+                            'content' => Yii::t('backend', 'Auth'),
+                            'icon' => 'fa-user',
+                            'url' => $url,
+                            'options' => ['class' => 'btn btn-sm btn-success']
+                        ]);
+                    },
+                ],
                 'visibleButtons' => [
                     'delete' => Yii::$app->user->can('admin/delete')
                 ]

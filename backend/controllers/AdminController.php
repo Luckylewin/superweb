@@ -60,7 +60,8 @@ class AdminController extends BaseController
         $model = $this->findModel($id);
         $model->scenario = 'update';
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
+            $this->setFlash('info', 'updated');
+            return $this->goBack($this->getReferer());
         } else {
             return $this->render('update', [
                 'model' => $model,

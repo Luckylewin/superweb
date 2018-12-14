@@ -84,8 +84,8 @@ $this->params['breadcrumbs'][] = $this->title;
         </tbody>
     </table>
     <div class="form-group">
-        <?= Html::submitButton(Yii::t('backend', 'Save'), ['class' => 'btn btn-success']) ?>
-        <?= Html::a('返回', ['role/index'], ['class' => 'btn btn-default']) ?>
+        <?= Html::submitButton(Yii::t('backend', 'Save'), ['class' => 'btn btn-success col-md-12']) ?>
+
     </div>
     <?php ActiveForm::end(); ?>
 

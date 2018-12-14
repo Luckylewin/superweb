@@ -208,8 +208,8 @@ use yii\widgets\ActiveForm;
             <?= $form->field($model, 'use_flag')->dropDownList([Yii::t('backend', 'off'), Yii::t('backend', 'on')]); ?>
         </div>
         <div class="form-group">
-            <?= Html::submitButton(\Yii::t('backend','Save'), ['class' => 'btn btn-success']) ?>
-            <?= Html::a(Yii::t('backend','Go Back'), ['index'], ['class' => 'btn btn-default']) ?>
+            <?= Html::submitButton(\Yii::t('backend','Save'), ['class' => 'btn btn-success col-md-12']) ?>
+
         </div>
     </div>
 

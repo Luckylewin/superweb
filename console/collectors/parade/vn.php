@@ -94,7 +94,7 @@ class vn extends CommonParade
         $paradeData = [];
         $crawler->filter('div.chanel-detail')->last()->filter('div.row')->each(function(Crawler $node,$i) use (&$paradeData) {
             $item = [];
-            $item['parade_time'] = $node->filter('div.time-tv')->eq(0)->text();
+            $item['parade_time'] = substr($node->filter('div.time-tv')->eq(0)->text(),0,5);
             $item['parade_name'] = $node->filter('div.t-detail a span')->eq(0)->text();
             $paradeData[] = $item;
         });

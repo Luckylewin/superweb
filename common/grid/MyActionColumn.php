@@ -21,7 +21,9 @@ class MyActionColumn extends \yii\grid\ActionColumn
     protected function initDefaultButtons()
     {
         $this->initDefaultButton('view', null, ['class'=>'btn btn-info ' . $this->size ]);
-        $this->initDefaultButton('update', null , ['class'=>'btn btn-primary '. $this->size]);
+        $this->initDefaultButton('update', null , [
+            'class'=>'btn btn-primary frame-open '. $this->size
+        ]);
         $this->initDefaultButton('delete', null,[
             'class'=>'btn btn-danger ' . $this->size ,
             'data-confirm' => Yii::t('yii', Yii::t('backend', 'Are you sure?')),
@@ -56,6 +58,7 @@ class MyActionColumn extends \yii\grid\ActionColumn
                     'title' => $title,
                     'aria-label' => $title,
                     'data-pjax' => '0',
+                    'data-link' => $url
                 ], $additionalOptions, $this->buttonOptions);
 
 
