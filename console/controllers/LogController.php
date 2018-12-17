@@ -8,6 +8,7 @@
 
 namespace console\controllers;
 
+use backend\models\LogOttGenre;
 use Yii;
 use yii\console\Controller;
 use yii\helpers\ArrayHelper;
@@ -18,7 +19,7 @@ use backend\models\LogStatics;
 use backend\models\LogTmp;
 use backend\models\ProgramLog;
 use common\components\Func;
-
+use common\models\MainClass;
 /**
  * 日志分析控制器
  * Class LogController
@@ -66,15 +67,24 @@ class LogController extends Controller
     /**
      * 离线统计活跃用户/接口使用情况
      * 调用方式： php yii log/offline
+     * @param null $date
      */
-    public function actionOffline()
+    public function actionOffline($date = null)
     {
-        $timestamp = strtotime('yesterday');
+        if (!is_null($date) && preg_match('/\d{4}-\d{2}-\d{2}/', $date)) {
+            $timestamp = strtotime($date);
+        } else {
+            $timestamp = strtotime('yesterday');
+        }
+
         $this->beforeAnalyse($timestamp);
         $this->actionImport($timestamp);
         $this->actionStatics($timestamp);
+        $this->actionOttStatics($timestamp);
         $this->actionStaticProgram($timestamp);
         $this->actionStaticHour($timestamp);
+        //$this->clearTmpTable();
+
         $this->stdout("任务执行结束");
     }
 
@@ -226,10 +236,12 @@ class LogController extends Controller
         $logInterface->save();
 
         $this->stdout("处理" . date('Y-m-d', $timestamp) . '成功' . PHP_EOL);
-
     }
 
-
+    protected function clearTmpTable()
+    {
+        Yii::$app->db->createCommand("truncate " . LogTmp::tableName())->execute();
+    }
 
     // 从日志导入数据到mysql
     public function actionImport($timestamp)
@@ -238,45 +250,70 @@ class LogController extends Controller
         $row = 0;
         $start = time();
         $filePaths = $this->getLogPaths($timestamp);
-        Yii::$app->db->createCommand("truncate " . LogTmp::tableName())->execute();
+        $this->clearTmpTable();
 
         foreach ($filePaths as $filePath) {
-            if (file_exists($filePath) == false) {
-                continue;
-            }
+            if (file_exists($filePath) == false) continue;
             foreach (self::readLine($filePath) as $i => $line) {
-                $row = $i;
-                preg_match('/{.*}/', $line, $result);
-                if (isset($result[0])) {
-                    $interface = json_decode($result[0], true);
-                    if (isset($interface['header'])) {
-                        if (!isset($interface['uid'])) {
-                            $interface['uid'] = '00000';
-                        }
-
-                        $rows[] = [
-                            'header' => $interface['header'],
-                            'mac' => $interface['uid'],
-                        ];
-
-                        if (count($rows) >= 1500) {
-                            Yii::$app->db->createCommand()->batchInsert(LogTmp::tableName(), ['header', 'mac'], $rows)->execute();
-                            $rows = [];
-                        }
-                    }
-
-                }
+                $this->dealJsonData($line);
             }
-        }
-
-        if (!empty($rows)) {
-            Yii::$app->db->createCommand()->batchInsert(LogTmp::tableName(), ['header', 'mac'], $rows)->execute();
         }
 
         $end = time();
         $waste = $end - $start;
         $this->stdout("该文件有{$row}行数据,读取耗时{$waste}秒" . PHP_EOL);
+    }
 
+
+    protected function dealJsonData($line)
+    {
+        $result = Func::pregSieze('/{.*}/', $line);
+
+        if ($result) {
+            $interface = json_decode($result, true);
+            if (isset($interface['header'])) {
+                if (!isset($interface['uid'])) {
+                    $interface['uid'] = '00000';
+                }
+
+                $code = Func::pregSieze('/(?<=ERROR:)\d+/', $line);
+                $code = $code == false ? '0' : $code;
+
+                Yii::$app->db->createCommand()->insert(LogTmp::tableName(), [
+                    'header' => $interface['header'],
+                    'mac'  => $interface['uid'],
+                    'data' => $result,
+                    'code' => $code
+                ])->execute();
+            }
+        }
+    }
+
+    // 利用 mysql 统计直播列表下载 情况
+    public function actionOttStatics($timestamp)
+    {
+        // 查询当前有几个分类
+        $genres = MainClass::find()->all();
+
+        $getBasicQuery = function($listname) {
+            return LogTmp::find()->where(['header' => 'getOttNewList'])->andWhere(['like', 'data', 'country":"' . $listname]);
+        };
+
+        foreach ($genres as $genre) {
+
+            $log = new LogOttGenre();
+            if ($genre->list_name) {
+                $log->date = date('Y-m-d', $timestamp);
+                $log->genre = $genre->list_name;
+                $log->download_time  = $getBasicQuery($genre->list_name)->count();
+                $log->person_time = $getBasicQuery($genre->list_name)->groupBy('mac')->count();
+                $log->same_version_time =  $getBasicQuery($genre->list_name)->andWhere(['code' => 16])->count();
+
+                if ($log->download_time) {
+                    $log->save(false);
+                }
+            }
+        }
     }
 
     // 利用mysql 统计接口数据
@@ -445,12 +482,13 @@ class LogController extends Controller
         }
     }
 
+    /**
+     * 统计每天的接口调用情况
+     */
     public function actionDailyLog()
     {
-        // 统计每天的接口调用情况
         $this->redis = Yii::$app->redis;
         $this->redis->select($this->db);
-
         $this->setTodayProgramData();
 
         $todayData = $this->getTodayInterfaceData();
@@ -535,9 +573,6 @@ class LogController extends Controller
         return json_encode($data);
     }
 
-    /**
-     *
-     */
     private function _generateHour()
     {
         $hours = [];

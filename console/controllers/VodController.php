@@ -8,7 +8,10 @@
 
 namespace console\controllers;
 
+use common\models\Vod;
+use common\models\VodList;
 use console\models\Tv;
+use console\traits\Similar;
 use Yii;
 use console\collectors\local\VodCollector;
 use console\models\Cartoon;
@@ -19,6 +22,7 @@ use yii\helpers\Console;
 
 class VodController extends Controller
 {
+    use Similar;
 
     // 清除旧数据
     public function actionClearData()
@@ -145,6 +149,31 @@ class VodController extends Controller
             'language' => '英语',
             'area'     => '美国'
         ]);
+    }
+
+    /**
+     * 专题归类
+     */
+    public function actionLike()
+    {
+       $vods = Vod::find()->all();
+       foreach ($vods as $vod) {
+           $this->stdout("检测{$vod->vod_name}" . PHP_EOL);
+           foreach ($vods as $_vod) {
+               if ($vod->vod_id != $_vod->vod_id) {
+                   $similarValue = ceil($this->getSimilar($vod->vod_name, $_vod->vod_name) * 10);
+                   if ($similarValue > 9) {
+                        $vod->vod_series = $this->getLCS($vod->vod_name, $_vod->vod_name);
+                        $vod->vod_series = trim(preg_replace('/\s*S\d+\s*/', '', $vod->vod_series));
+                        $vod->vod_series = preg_replace('/\s(?=\s)/', "\\1", $vod->vod_series);
+
+                        $vod->save(false);
+                        $this->stdout("{$vod->vod_name} 设置系列为 :{$vod->vod_series}" . PHP_EOL ,Console::FG_BLUE);
+                   }
+               }
+
+           }
+       }
     }
 
 }

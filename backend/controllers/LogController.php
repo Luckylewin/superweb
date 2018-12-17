@@ -5,12 +5,10 @@ namespace backend\controllers;
 use backend\models\form\LogChangedForm;
 use Yii;
 use yii\redis\Connection;
-use backend\models\AppLog;
 use backend\models\LogInterface;
+use backend\models\LogOttGenre;
 use backend\models\LogStatics;
 use backend\models\ProgramLog;
-use backend\models\TimelineLog;
-use yii\helpers\ArrayHelper;
 
 class LogController extends BaseController
 {
@@ -27,16 +25,19 @@ class LogController extends BaseController
 
         // 按日期查询
         if ($type == 'date') {
-            $model = LogInterface::findByDate($date);
+            $model      = LogInterface::findByDate($date);
             $programLog = ProgramLog::findByDate($date);
+            $statics    = LogStatics::findByDate($date);
+            $genres     = LogOttGenre::findByDate($date);
 
-            $statics = LogStatics::findByDate($date);
         } else {
             // 按 月份进行查询
             list($year, $month) = explode('-', $date);
-            $model = LogInterface::findByMonth($year, $month);
+            $model      = LogInterface::findByMonth($year, $month);
             $programLog = ProgramLog::findByMonth($year, $month);
-            $statics = LogStatics::findByMonth($year, $month);
+            $statics    = LogStatics::findByMonth($year, $month);
+            $genres     = LogOttGenre::findByMonth($year, $month);
+
         }
 
         if (empty($model)) {
@@ -46,6 +47,7 @@ class LogController extends BaseController
         return $this->render('index', [
             'programLog' => $programLog,
             'statics'    => $statics,
+            'genres'     => $genres,
             'model'      => $model,
             'date'       => $date
         ]);

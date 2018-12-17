@@ -9,6 +9,8 @@ use Yii;
  *
  * @property string $header
  * @property string $mac
+ * @property string $data
+ * @property string $code
  */
 class LogTmp extends \yii\db\ActiveRecord
 {
@@ -28,6 +30,7 @@ class LogTmp extends \yii\db\ActiveRecord
         return [
             [['header'], 'string', 'max' => 20],
             [['mac'], 'string', 'max' => 32],
+            [['data', 'code'],'safe']
         ];
     }
 
@@ -39,6 +42,8 @@ class LogTmp extends \yii\db\ActiveRecord
         return [
             'header' => 'Header',
             'mac' => 'Mac',
+            'data' => 'data',
+            'code' => 'Code',
         ];
     }
 }

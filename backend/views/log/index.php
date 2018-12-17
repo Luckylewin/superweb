@@ -4,13 +4,12 @@
  * @var $model \backend\models\LogInterface
  * @var $statics \backend\models\LogStatics
  */
-$this->registerJsFile('/statics/themes/default-admin/plugins/laydate/laydate.js', ['depends'=>'yii\web\JqueryAsset', 'position'=>\yii\web\View::POS_HEAD] );
+
 $this->registerJsFile('https://cdn.bootcss.com/echarts/4.1.0/echarts.common.js', ['depends'=>'yii\web\JqueryAsset', 'position'=>\yii\web\View::POS_HEAD]);
 
 /**@var $date string */
 
 ?>
-
 
 <div class="col-md-12 well-sm well">
     <h1 class="text-center">
@@ -22,6 +21,7 @@ $this->registerJsFile('https://cdn.bootcss.com/echarts/4.1.0/echarts.common.js',
             <div class="col-md-2">
                 <label style="line-height: 30px;height: 30px;">时间选择:</label>
             </div>
+
             <form action="" id="myform2">
                 <div class="col-md-4">
                     <input type="text" autocomplete="off" placeholder="按月份统计" value="<?= Yii::$app->request->get('type') == 'month' ? Yii::$app->request->get('value') : '' ?>"  name="ym" id="test13" class="form-control">
@@ -46,11 +46,8 @@ $this->registerJsFile('https://cdn.bootcss.com/echarts/4.1.0/echarts.common.js',
 </div>
 
 <div class="col-md-12 well">
-    <div id="program" style="height: 400px;border:1px dashed #ccc;">
-
-    </div>
+    <div id="program" style="height: 400px;border:1px dashed #ccc;"></div>
 </div>
-
 
 <div>
     <div class="col-md-2">
@@ -307,8 +304,6 @@ $this->registerJsFile('https://cdn.bootcss.com/echarts/4.1.0/echarts.common.js',
         </div>
     </div>
 
-
-
     <div class="col-md-2">
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -322,7 +317,27 @@ $this->registerJsFile('https://cdn.bootcss.com/echarts/4.1.0/echarts.common.js',
         </div>
     </div>
 
+    <div class="col-md-12 text-center">
+        <h3>直播取列表</h3>
+    </div>
 
+    <?php if(!empty($genres)): ?>
+        <?php foreach ($genres as $genre => $data): ?>
+            <div class="col-md-2">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            <?= $genre ?>
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                            <p>下载: <?= $data['download_time']??0 ?></p>
+                            <p>人次: <?= $data['person_time']??0 ?></p>
+                    </div>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    <?php endif; ?>
 
 </div>
 
@@ -568,6 +583,7 @@ JS;
 
 ?>
 
+<script src="/statics/themes/default-admin/plugins/laydate/laydate.js"></script>
 <script>
     laydate.render({
         elem: '#test12'

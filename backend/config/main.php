@@ -18,7 +18,6 @@ return [
     'bootstrap' => [
         'log',
         'queue',
-        'assetsAutoCompress'
     ],
 
      // 模块
@@ -42,10 +41,7 @@ return [
     ],
     // 组件
     'components' => [
-        'assetsAutoCompress' => [
-            'class' => '\skeeks\yii2\assetsAuto\AssetsAutoCompressComponent',
-            'enabled' => true
-            ],
+
 
         'view' => [
             // 模版设置

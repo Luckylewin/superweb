@@ -113,6 +113,21 @@ class HelloController extends Controller
         }
     }
 
+    public function actionAnna()
+    {
+        $channels = OttChannel::find()->all();
+        foreach ($channels as $channel) {
+            $links = $channel->ownLink;
+            if (!empty($links) && count($links) > 1) {
+                foreach ($links as $link) {
+                    if (preg_match('/\.ts/' , $link->link)) {
+                        $link->delete();
+                    }
+                }
+            }
+        }
+    }
+
     public function actionTest()
     {
         ExitCode::OK;
