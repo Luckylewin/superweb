@@ -183,7 +183,8 @@ class LogController extends Controller
                 if (file_exists($filePath) == false) continue;
                 foreach (self::readLine($filePath) as $line) {
 
-                    $result = preg_match("/\|{$hour}(?=:)/", $line);
+                    $result = preg_match("/\|\s?{$hour}(?=:)/", $line);
+
                     if ($result) {
                         $data['total'][$i]++;
 
@@ -255,6 +256,7 @@ class LogController extends Controller
         foreach ($filePaths as $filePath) {
             if (file_exists($filePath) == false) continue;
             foreach (self::readLine($filePath) as $i => $line) {
+                $row++;
                 $this->dealJsonData($line);
             }
         }
