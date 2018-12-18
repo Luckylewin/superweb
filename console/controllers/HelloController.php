@@ -67,8 +67,6 @@ class HelloController extends Controller
                                              ->asArray()
                                              ->all();
 
-
-
                  if (!empty($parade)) {
                      $exist = MiddleParade::find()->where(['channel' => trim($channel['name']), 'genre' => trim($class['name'])])->exists();
                      if ($exist == false) {

@@ -317,22 +317,24 @@ $this->registerJsFile('https://cdn.bootcss.com/echarts/4.1.0/echarts.common.js',
         </div>
     </div>
 
+    <?php if(!empty($genres)): ?>
     <div class="col-md-12 text-center">
-        <h3>直播取列表</h3>
+        <h3>直播取列表统计</h3>
     </div>
+    <?php endif; ?>
 
     <?php if(!empty($genres)): ?>
         <?php foreach ($genres as $genre => $data): ?>
             <div class="col-md-2">
-                <div class="panel panel-default">
+                <div class="panel panel-info">
                     <div class="panel-heading">
                         <h3 class="panel-title">
                             <?= $genre ?>
                         </h3>
                     </div>
                     <div class="panel-body">
-                            <p>下载: <?= $data['download_time']??0 ?></p>
-                            <p>人次: <?= $data['person_time']??0 ?></p>
+                        <p>下载: <?= $data['download_time']??0 ?></p>
+                        <p>人次: <?= $data['person_time']??0 ?></p>
                     </div>
                 </div>
             </div>

@@ -9,6 +9,7 @@
 namespace console\controllers;
 
 use backend\models\LogOttGenre;
+use backend\models\LogOttTmp;
 use Yii;
 use yii\console\Controller;
 use yii\helpers\ArrayHelper;
@@ -78,12 +79,13 @@ class LogController extends Controller
         }
 
         $this->beforeAnalyse($timestamp);
+        $this->clearTmpTable();
         $this->actionImport($timestamp);
         $this->actionStatics($timestamp);
         $this->actionOttStatics($timestamp);
         $this->actionStaticProgram($timestamp);
         $this->actionStaticHour($timestamp);
-        //$this->clearTmpTable();
+
 
         $this->stdout("任务执行结束");
     }
@@ -242,6 +244,7 @@ class LogController extends Controller
     protected function clearTmpTable()
     {
         Yii::$app->db->createCommand("truncate " . LogTmp::tableName())->execute();
+        Yii::$app->db->createCommand("truncate " . LogOttTmp::tableName())->execute();
     }
 
     // 从日志导入数据到mysql
@@ -251,23 +254,32 @@ class LogController extends Controller
         $row = 0;
         $start = time();
         $filePaths = $this->getLogPaths($timestamp);
-        $this->clearTmpTable();
+        $rows = [];
 
         foreach ($filePaths as $filePath) {
             if (file_exists($filePath) == false) continue;
             foreach (self::readLine($filePath) as $i => $line) {
                 $row++;
-                $this->dealJsonData($line);
+                $this->dealJsonData($rows, $line);
             }
         }
 
+        $this->theEndJsonData($rows);
         $end = time();
         $waste = $end - $start;
         $this->stdout("该文件有{$row}行数据,读取耗时{$waste}秒" . PHP_EOL);
     }
 
 
-    protected function dealJsonData($line)
+    protected function theEndJsonData($rows)
+    {
+        if ($rows) {
+            Yii::$app->db->createCommand()->batchInsert(LogTmp::tableName(), ['header','mac','code'],$rows)->execute();
+        }
+
+    }
+
+    protected function dealJsonData(&$rows, $line)
     {
         $result = Func::pregSieze('/{.*}/', $line);
 
@@ -281,12 +293,29 @@ class LogController extends Controller
                 $code = Func::pregSieze('/(?<=ERROR:)\d+/', $line);
                 $code = $code == false ? '0' : $code;
 
-                Yii::$app->db->createCommand()->insert(LogTmp::tableName(), [
+                if ($interface['header'] == 'getOttNewList' ) {
+                    $genre = $interface['data']['country']??($interface['data']['genre']??false);
+
+                    if ($genre) {
+                        Yii::$app->db->createCommand()->insert(LogOttTmp::tableName(),[
+                            'mac' => $interface['uid'],
+                            'genre' => $genre,
+                            'code' => $code
+                        ])->execute();
+                    }
+                }
+
+                $rows[] = [
                     'header' => $interface['header'],
                     'mac'  => $interface['uid'],
-                    'data' => $result,
                     'code' => $code
-                ])->execute();
+                ];
+
+                if (count($rows) >= 800) {
+                    Yii::$app->db->createCommand()->batchInsert(LogTmp::tableName(), ['header','mac','code'],$rows)->execute();
+                    $rows = [];
+                }
+
             }
         }
     }
@@ -297,19 +326,15 @@ class LogController extends Controller
         // 查询当前有几个分类
         $genres = MainClass::find()->all();
 
-        $getBasicQuery = function($listname) {
-            return LogTmp::find()->where(['header' => 'getOttNewList'])->andWhere(['like', 'data', 'country":"' . $listname]);
-        };
-
         foreach ($genres as $genre) {
 
             $log = new LogOttGenre();
             if ($genre->list_name) {
                 $log->date = date('Y-m-d', $timestamp);
                 $log->genre = $genre->list_name;
-                $log->download_time  = $getBasicQuery($genre->list_name)->count();
-                $log->person_time = $getBasicQuery($genre->list_name)->groupBy('mac')->count();
-                $log->same_version_time =  $getBasicQuery($genre->list_name)->andWhere(['code' => 16])->count();
+                $log->download_time  = LogOttTmp::find()->where(['genre' => $genre->list_name])->count();
+                $log->person_time = LogOttTmp::find()->where(['genre' => $genre->list_name])->groupBy('mac')->count();
+                $log->same_version_time =  LogOttTmp::find()->where(['genre' => $genre->list_name,'code' => '16'])->count();
 
                 if ($log->download_time) {
                     $log->save(false);
