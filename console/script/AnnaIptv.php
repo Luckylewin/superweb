@@ -219,6 +219,12 @@ class AnnaIptv extends base
                 $vod->save(false);
             }
 
+            // 如果更改了语言 则更新
+            if ($vod->vod_language != $lang) {
+                $vod->vod_language = $lang;
+                $vod->save(false);
+            }
+
             $group = $this->attachGroup($vod);
             $this->attachLink($vod,$group, $val['ts']);
         }
@@ -266,8 +272,6 @@ class AnnaIptv extends base
             $this->fillWithMovieProfile($vod,$data);
         }
     }
-
-
 
     /**
      * 下载文件

@@ -130,9 +130,45 @@ class VodController extends BaseController
     public function actionSortAll($vod_cid)
     {
         VodBlock::sortAll($vod_cid);
-        $this->success();
 
         return $this->redirect(Yii::$app->request->referrer);
+    }
+
+    public function actionCancelStickToday($cid)
+    {
+        Vod::updateAll(['is_top' => 0], ['vod_cid' => $cid]);
+
+        $this->success('info');
+
+        $this->redirect($this->getReferer());
+    }
+
+    public function actionStickToday($cid)
+    {
+        Vod::updateAll(['is_top' => 1], ['and',
+                ['vod_cid' => $cid],
+                ['>=', 'vod_addtime', strtotime('today')],
+                ['<','vod_addtime',strtotime('tomorrow')]
+            ]);
+
+        $this->success();
+
+        $this->redirect($this->getReferer());
+    }
+
+    public function actionStick($id)
+    {
+        $model = $this->findModel($id);
+        if ($model->is_top) {
+            $model->is_top = 0;
+        } else {
+            $model->is_top = 1;
+        }
+
+        $model->save(false);
+
+        $this->success();
+        return $this->goBack($this->getReferer());
     }
 
     public function actionSort($id, $vod_cid, $action, $compare_id)

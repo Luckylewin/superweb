@@ -56,8 +56,8 @@ class VodSearch extends VodBlock
             ],
             'sort' => [
                 'defaultOrder' => [
-                    'sort'        => SORT_ASC,
-                    'vod_addtime' => SORT_DESC
+                    'is_top' => SORT_DESC,
+                    'sort'   => SORT_ASC
                 ]
             ]
         ]);

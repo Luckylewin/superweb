@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <div class="panel panel-default">
             <div class="panel-heading">
-                格式说明(多条以换行符分开)
+                格式说明 <b><font color="#0000cd">(多条以换行符分开,包含前面的中文)</font></b>
             </div>
             <div class="panel-body">
                 <div>

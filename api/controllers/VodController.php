@@ -118,6 +118,7 @@ class VodController extends ActiveController
             'query' => $query,
             'sort' => [
                 'defaultOrder' => [
+                    'is_top' => SORT_DESC,
                     'vod_addtime' => SORT_DESC,
                     'sort' => SORT_ASC
                 ]

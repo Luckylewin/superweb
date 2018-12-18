@@ -144,7 +144,7 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js'
 <div>
 
     <?php if(isset($mainClass)): ?>
-        <?php $version = (new \backend\models\Cache())->getCacheVersion($mainClass->name); ?>
+        <?php $version = (new \backend\models\Cache())->getCacheVersion($mainClass->list_name); ?>
         <?= Html::a(Yii::t('backend', 'Generate cache'). "($version)" , '#', [
             'url' => Url::to(['sub-class/generate-cache', 'id' => $mainClass->id]),
             'class' => 'btn btn-success',

@@ -31,7 +31,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 'tableOptions' => [
                     'class' => 'table table-bordered table-hover',
                 ],
+                'pager' => [
+                    'class' => 'common\widgets\goPager',
+                    'firstPageLabel' => Yii::t('backend', 'First Page'),
+                    'lastPageLabel' => Yii::t('backend', 'Last Page'),
+                    'go' => true
+                ],
                 'options' => ["class" => "grid-view","style"=>"overflow:auto", "id" => "grid"],
+
                 'columns' => [
                     [
                         "class" => "yii\grid\CheckboxColumn",

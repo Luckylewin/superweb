@@ -230,7 +230,11 @@ class VodBlock extends Vod
      */
     static public function sortAll($cid)
     {
-        $items = self::find()->where(['vod_cid' => $cid])->all();
+        $items = self::find()->where(['vod_cid' => $cid])->orderBy([
+            'is_top' => SORT_DESC,
+            'vod_addtime' => SORT_ASC,
+            'sort' => SORT_ASC,
+        ])->all();
 
         $start = 0;
 

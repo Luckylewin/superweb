@@ -72,6 +72,7 @@ use Yii;
  * @property string $vod_multiple 是否有多集
  * @property string $vod_fill_flag 是否完善数据(爬虫爬过)
  * @property string $sort 排序
+ * @property string $is_top 排序
 
  */
 class Vod extends \yii\db\ActiveRecord implements Linkable
@@ -115,7 +116,7 @@ class Vod extends \yii\db\ActiveRecord implements Linkable
             [['vod_letter'], 'string', 'max' => 2],
             [['vod_weekday'], 'string', 'max' => 60],
             [['vod_series'], 'string', 'max' => 120],
-            [['vod_home', 'pic', 'vod_stars', 'vod_ispay', 'vod_fill_flag', 'sort', 'vod_imdb_id', 'vod_imdb_score', 'vod_type'], 'safe'],
+            [['vod_home', 'pic', 'vod_stars', 'vod_ispay', 'vod_fill_flag', 'sort', 'vod_imdb_id', 'vod_imdb_score', 'vod_type', 'is_top'], 'safe'],
             [['vod_up', 'vod_down', 'vod_hits', 'vod_hits_day', 'vod_hits_month', 'vod_hits_week', 'vod_multiple'],'default', 'value' => 0],
             ['vod_total', 'default', 'value' => '1']
         ];
@@ -224,6 +225,7 @@ class Vod extends \yii\db\ActiveRecord implements Linkable
             'vod_origin_url'   => Yii::t('backend', 'Origin Url'),
             'vod_imdb_score'   => Yii::t('backend', 'IMDb Ratting'),
             'vod_douban_score' => Yii::t('backend', 'Douban Ratting'),
+            'is top' => Yii::t('backend', 'stick'),
 
         ];
     }

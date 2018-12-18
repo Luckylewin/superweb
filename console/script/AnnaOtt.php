@@ -394,11 +394,12 @@ class AnnaOtt extends base
 
         foreach ($data as $item) {
             $preg = [];
+
             preg_match('/(?<=tvg-id\=")[^"]+/', $item, $tvg_id);
             preg_match('/(?<=tvg-name\=")[^"]+/', $item, $tvg_name);
             preg_match('/(?<=tvg-logo\=")[^"]+/', $item, $tvg_logo);
             preg_match('/(?<=group-title\=")[^"]+/i', $item, $group_title);
-            preg_match('/\S+\.(ts|mp4|mkv|rmvb)/', $item, $ts);
+            preg_match('/^http:\/\/\S+\.(ts|mp4|mkv|rmvb)/', $item, $ts);
             preg_match('/(?<=",)[^\r\n]+/', $item, $other);
 
             $preg['tvg-id'] = self::get($tvg_id);

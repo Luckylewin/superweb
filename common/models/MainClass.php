@@ -126,6 +126,15 @@ class MainClass extends \yii\db\ActiveRecord
                     ->via('subChannel');
     }
 
+    public function beforeSave($insert)
+    {
+        if (empty($this->list_name)) {
+            $this->list_name = $this->name;
+        }
+
+        return true;
+    }
+
     public function beforeDelete()
     {
        $subClass = $this->sub;

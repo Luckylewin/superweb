@@ -18,15 +18,17 @@ $this->params['breadcrumbs'][] = ['url' => Url::to(['vod-list/index']), 'label' 
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <?php
+
     $css=<<<CSS
-    .current_up {border-color:transparent transparent #00AA88 !important; /*透明 透明  黄*/ } .current_down {border-color: #00AA88 transparent transparent !important; /*透明 透明  黄*/ } .triangle_border_up{width:0; height:0; border-width:0 7px 10px; border-style:solid; border-color:transparent transparent #d2d2d2;/*透明 透明  黄*/ position:absolute; top:0; left:64px; cursor: pointer; } /*下箭头*/ .triangle_border_down{display:block; width:0; height:0; border-width:10px 7px 0; border-style:solid; border-color:#d2d2d2 transparent transparent;/*黄 透明 透明 */ position:absolute; bottom:0; left:64px; cursor: pointer; } .triangle_border_up:hover {border-color:transparent transparent #23527c;/*透明 透明  黄*/ } .triangle_border_down:hover {border-color:#23527c transparent transparent;/*黄 透明 透明 */ }
+    .is_top{background: #1ab394;color: #fff}
+    .current_up {border-color:transparent transparent #00AA88 !important; /*透明 透明  黄*/ } .current_down {border-color: #00AA88 transparent transparent !important; /*透明 透明  黄*/ } .triangle_border_up{width:0; height:0; border-width:0 7px 10px; border-style:solid; border-color:transparent transparent #d2d2d2;/*透明 透明  黄*/ position:absolute; top:0; left:50px; cursor: pointer; } /*下箭头*/ .triangle_border_down{display:block; width:0; height:0; border-width:10px 7px 0; border-style:solid; border-color:#d2d2d2 transparent transparent;/*黄 透明 透明 */ position:absolute; bottom:0; left:50px; cursor: pointer; } .triangle_border_up:hover {border-color:transparent transparent #23527c;/*透明 透明  黄*/ } .triangle_border_down:hover {border-color:#23527c transparent transparent;/*黄 透明 透明 */ }
 CSS;
     $this->registerCss($css);
 ?>
+
 <div class="vod-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-
     <p>
         <?= Html::a(Yii::t('backend', 'Create'), Url::to(['create','vod_cid' => isset(Yii::$app->request->get('VodSearch')['vod_cid']) ? Yii::$app->request->get('VodSearch')['vod_cid'] : '1']), ['class' => 'btn btn-success']) ?>
 
@@ -49,7 +51,12 @@ CSS;
         'tableOptions' => ['class' => 'table-center table table-striped table-bordered'],
         "options" => ["class" => "grid-view","style"=>"overflow:auto", "id" => "grid"],
         'summaryOptions' => ['tag' => 'p', 'class' => 'text-right text-muted'],
-        'pager' => ['class' => 'common\widgets\goPager', 'go' => true],
+        'pager' => [
+                'class' => 'common\widgets\goPager',
+                'firstPageLabel' => Yii::t('backend', 'First Page'),
+                'lastPageLabel' => Yii::t('backend', 'Last Page'),
+                'go' => true
+            ],
 
         'columns' => [
 
@@ -107,14 +114,14 @@ CSS;
 
             [
                 'attribute' => 'sort',
-                'headerOptions' => ['class' => 'col-md-1'],
+
                 'format' => 'raw',
                 'value' => function($model) {
                     return
                         '<div style="position: relative">' .
                         Html::input('text', 'sort', $model->sort, [
                             'class' => 'form-control sort',
-                            'style' => 'width:62px;'
+                            'style' => 'width:50px;margin-right:10px;'
                     ])
                         .
                         "<div class='triangle_border_up' ></div>"   .
@@ -153,7 +160,7 @@ CSS;
                     'class' => 'common\grid\MyActionColumn',
                     'headerOptions' => ['class' => 'col-md-4'],
                     'size' => 'btn-sm',
-                    'template' => '{link-index} {more} {update} {delete} ',
+                    'template' => '{link-index} {stick} {more} {update} {delete} ',
 
                     'buttons' => [
                             'view' => function($url, $model) {
@@ -162,6 +169,14 @@ CSS;
                                     'data-toggle' => 'modal',
                                     'data-target' => '#show-modal',
                                     'data-id'     => $model->vod_id
+                                ]);
+                            },
+                            'stick' => function($url, $model) {
+                                $topClass = $model->is_top ? 'is_top' : 'btn-default';
+
+                                return Html::a('<i class="fa fa-arrow-up"></i>', Url::to(['vod/stick', 'id' => $model->vod_id]),[
+                                    'class' => 'btn btn-sm ' . $topClass,
+                                    'title' => '链接列表',
                                 ]);
                             },
                             'link-index' => function($url, $model) {
@@ -219,6 +234,10 @@ CSS;
         ],
     ]); ?>
 </div>
+
+<?= Html::a('置顶今日新增',['vod/stick-today','cid' => Yii::$app->request->get('VodSearch')['vod_cid']],['class' => 'btn btn-primary']); ?> &nbsp;
+
+<?= Html::a('取消全部置顶',['vod/cancel-stick-today','cid' => Yii::$app->request->get('VodSearch')['vod_cid']],['class' => 'btn btn-warning']); ?> &nbsp;
 
 <?= Html::a(Yii::t('backend', 'Reset Sort'), \yii\helpers\Url::to(['vod/sort-all', 'vod_cid' => Yii::$app->request->get('VodSearch')['vod_cid']]) ,['class' => 'gridview btn btn-primary']); ?> &nbsp;
 <?= Html::button(Yii::t('backend', 'Batch Deletion'),['class' => 'gridview btn btn-danger']); ?>

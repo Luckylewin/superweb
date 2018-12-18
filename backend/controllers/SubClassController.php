@@ -3,7 +3,6 @@
 namespace backend\controllers;
 
 use Yii;
-use yii\helpers\Url;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\widgets\ActiveForm;
@@ -12,13 +11,8 @@ use common\models\MainClass;
 use common\models\OttChannel;
 use common\models\SubClass;
 use common\models\search\SubClassSearch;
-use common\components\Func;
 use console\queues\CacheOttListJob;
 
-
-/**
- * SubClassController implements the CRUD actions for SubClass model.
- */
 class SubClassController extends BaseController
 {
     public $mainClass;
@@ -31,7 +25,6 @@ class SubClassController extends BaseController
             $this->mainClass = MainClass::findOne(['id' => $main_class_id]);
         }
         return true;
-
     }
 
     public function actionIndex()
@@ -149,15 +142,33 @@ class SubClassController extends BaseController
     {
 
         $subClasses = SubClass::find()
-                           ->where(['main_class_id' => $main_class_id])
+                           ->where(['main_class_id' => $main_class_id, 'use_flag' => '1'])
                            ->orderBy(['sort' => SORT_ASC])
-                           ->with('ownChannel')
+                           ->with([
+                               'ownChannel' => function($query) {
+                                    return $query->orderBy(['sort' => SORT_ASC]);
+                               }
+                           ])
                            ->all();
+
         $start = 1;
 
         foreach ($subClasses as $subClass) {
+
+            if (strtoupper($subClass->name) == 'A-Z') {
+                $subClass = SubClass::find()->where(['id' => $subClass->id])
+                    ->with([
+                        'ownChannel' => function($query) {
+                            return $query->orderBy(['sort' => SORT_ASC]);
+                        }
+                    ])
+                    ->one();
+            }
+
             if (!empty($subClass->ownChannel)) {
+
                 $channels = $subClass->ownChannel;
+
                 foreach ($channels as $channel) {
                     if ($channel instanceof  OttChannel) {
                         if ($channel->use_flag) {
