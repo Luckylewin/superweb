@@ -24,13 +24,16 @@ use \backend\models\FirmwareClass;
             '不可用'
     ]) ?>
 
-    <?= $form->field($model, 'order_id')->dropDownList(FirmwareClass::getDropDownList(), [
+
+    <?php if($model->isNewRecord): ?>
+    <?= $form->field($model, 'order_id')->dropDownList($dropDownList, [
             'disabled' => $model->isNewRecord ? false : true
     ]) ?>
+    <?php endif; ?>
+
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? '新增' : \Yii::t('backend','Save'), ['class' => 'btn btn-success']) ?>
-        <?= Html::a(Yii::t('backend','Go Back'), ['firmware-class/index'], ['class' => 'btn btn-default']) ?>
+        <?= Html::submitButton($model->isNewRecord ? '新增' : \Yii::t('backend','Save'), ['class' => 'btn btn-success col-md-12']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

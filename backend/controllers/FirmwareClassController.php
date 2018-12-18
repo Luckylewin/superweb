@@ -5,6 +5,7 @@ namespace backend\controllers;
 use Yii;
 use backend\models\FirmwareClass;
 use yii\data\ActiveDataProvider;
+use yii\helpers\Url;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -22,7 +23,7 @@ class FirmwareClassController extends BaseController
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => FirmwareClass::find(),
+            'query' => FirmwareClass::find()->with('detail'),
         ]);
 
         return $this->render('index', [
@@ -30,12 +31,7 @@ class FirmwareClassController extends BaseController
         ]);
     }
 
-    /**
-     * Displays a single FirmwareClass model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+
     public function actionView($id)
     {
         return $this->render('view', [
@@ -43,32 +39,31 @@ class FirmwareClassController extends BaseController
         ]);
     }
 
-    /**
-     * Creates a new FirmwareClass model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
+
     public function actionCreate()
     {
         $model = new FirmwareClass();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $this->setFlash('success', Yii::t('backend', 'Success'));
-            return $this->redirect(['firmware-class/index']);
+            return $this->redirect(['firmware-detail%2Fcreate','firmware_id' => $model->id]);
+        }
+
+        $dropDownList = FirmwareClass::getDropDownList();
+
+        if (empty($dropDownList)) {
+            $this->setFlash('error', '需要新增新的关联订单');
+
+            return $this->redirect(Url::to(['dvb-order/create']));
         }
 
         return $this->render('create', [
             'model' => $model,
+            'dropDownList' => $dropDownList
         ]);
     }
 
-    /**
-     * Updates an existing FirmwareClass model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
@@ -78,8 +73,11 @@ class FirmwareClassController extends BaseController
             return $this->redirect(['firmware-class/index', 'id' => $model->id]);
         }
 
+        $dropDownList = FirmwareClass::getDropDownList();
+
         return $this->render('update', [
             'model' => $model,
+            'dropDownList' => $dropDownList
         ]);
     }
 

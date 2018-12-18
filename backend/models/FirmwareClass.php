@@ -50,6 +50,11 @@ class FirmwareClass extends \yii\db\ActiveRecord
         ];
     }
 
+    public function getDetail()
+    {
+        return $this->hasMany(FirmwareDetail::className(), ['firmware_id' => 'id']);
+    }
+
     public function getOrder()
     {
         return $this->hasOne(DvbOrder::className(), ['id' => 'order_id']);

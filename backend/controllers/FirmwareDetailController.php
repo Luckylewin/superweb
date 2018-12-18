@@ -5,6 +5,7 @@ namespace backend\controllers;
 use Yii;
 use backend\models\FirmwareDetail;
 use yii\data\ActiveDataProvider;
+use yii\helpers\Url;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
@@ -17,9 +18,15 @@ class FirmwareDetailController extends BaseController
     public function actionIndex()
     {
         $firmware_id = Yii::$app->request->get('firmware_id');
+
+        $query = FirmwareDetail::find()->where(['firmware_id' => $firmware_id]);
         $dataProvider = new ActiveDataProvider([
-            'query' => FirmwareDetail::find()->where(['firmware_id' => $firmware_id]),
+            'query' => $query,
         ]);
+
+        if ($query->count() == 0) {
+            return $this->redirect(Url::to(['firmware-detail/create', 'firmware_id' => $firmware_id]));
+        }
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,

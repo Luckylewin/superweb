@@ -298,7 +298,7 @@ class LogController extends Controller
                     $genre = $interface['data']['country']??($interface['data']['genre']??false);
                     $logGenres = MainClass::getLogGenres();
 
-                    if (in_array($genre, $logGenres)) {
+                    if (in_array($genre, $logGenres) && strpos('287994', $interface['uid']) === false) {
                         $date = date('Y-m-d', $timestamp);
                         $time = Func::pregSieze('/(?<=\|)\s*(\d+:)+\d+/',$line);
                         $dateTime = $date ." ". trim($time);

@@ -225,8 +225,6 @@ CSS;
                                     'title' => '删除'
                                 ]);
                             }
-
-
                     ],
 
                     'header' => Yii::t('backend', 'Operate')

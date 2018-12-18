@@ -26,6 +26,8 @@ class AnnaOtt extends base
 
     protected $map;
 
+    protected $sortedData = [];
+
     public function __destruct()
     {
         $this->stdout('本次任务执行结束,若无输出则说明无新数据', Console::FG_GREEN);
@@ -62,32 +64,39 @@ class AnnaOtt extends base
             [
                 'url' => 'http://www.hdboxtv.net:8000/get.php?username=287994000094&password=287994000094&type=m3u_plus&output=ts',
                 'mainClass' => null,
-            ],
-            [
-                'url' => 'http://www.hdboxtv.net:8000/get.php?username=287994000099&password=287994000099&type=m3u_plus&output=ts',
-                'mainClass' => null,
-            ],
+            ]
 
         ];
 
-
-
         $allData = [];
+        $allDataWithMainClass = [];
+
         foreach ($accounts as $url) {
             self::$data = $this->download($url['url']);
             $data = $this->initData();
 
             // 基本数据录入
-            foreach ($data as $value) {
-
-                $allData[] = $value;
-                // 普通数据
-                $mainClassID  = $this->_mainClass($value, $url['mainClass']);
-                $subClassID   = $this->_subClass($value, $mainClassID);
-                $channelID    = $this->_channel($value, $subClassID);
-                $this->_link($value, $channelID);
+            if (!empty($data)) {
+                foreach ($data as $value) {
+                    $allDataWithMainClass[] = [
+                        'data' => $value,
+                        'mainClass' => $url['mainClass']
+                    ];
+                }
             }
         }
+
+        if (!empty($allDataWithMainClass)) {
+            foreach ($allDataWithMainClass as $value) {
+                $allData[] = $value['data'];
+                $mainClassID  = $this->_mainClass($value['data'], $value['mainClass']);
+                $subClassID   = $this->_subClass($value['data'], $mainClassID);
+                $channelID    = $this->_channel($value['data'], $subClassID);
+                $this->_link($value['data'], $channelID);
+            }
+        }
+
+        $this->sortSameAsFile();
 
         if (!empty($allData)) {
             ArrayHelper::multisort($allData, 'tvg-name', SORT_ASC);
@@ -104,6 +113,37 @@ class AnnaOtt extends base
         }
     }
 
+    protected function sortSameAsFile()
+    {
+        if (!empty($this->sortedData)) {
+            $mainClassSort = 1;
+            foreach ($this->sortedData as $mainClass => $mainClassArr) {
+
+                MainClass::updateAll(['sort' => $mainClassSort], ['name' => $mainClass]);
+                $mainClassSort++;
+
+                if (!empty($mainClassArr)) {
+                    $subClassSort = 1;
+                    foreach ($mainClassArr as $subClass => $subClassArr) {
+
+
+                        SubClass::updateAll(['sort' => $subClassSort], ['name' => $subClass]);
+                        $subClassSort++;
+                        if (!empty($subClassArr)) {
+                            $channelSort = 1;
+                            foreach ($subClassArr as $channelSort => $channel) {
+                               echo "{$channel} 排序为 {$channelSort}".PHP_EOL;
+                                OttChannel::updateAll(['sort' => $channelSort], ['name' => $channel]);
+                                $channelSort++;
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
+    }
+
     protected function sortAZ($data)
     {
         if (!empty($data)) {
@@ -113,7 +153,7 @@ class AnnaOtt extends base
                 if (!empty($channels)) {
                     $channelNumber = 1;
                     foreach ($channels as $channel) {
-                        $channel->channel_number = $channelNumber++;
+                        $channel->sort = $channelNumber++;
                         $channel->save(false);
                     }
                 }
@@ -203,7 +243,12 @@ class AnnaOtt extends base
             $mainClass = new MainClass();
             $mainClass->name = $mainClassName;
             $mainClass->zh_name = $mainClassName;
+
             $mainClass->save(false);
+        }
+
+        if (array_key_exists($mainClassName, $this->sortedData) == false) {
+            $this->sortedData[$mainClassName] = [];
         }
 
         return $mainClass->id;
@@ -233,7 +278,13 @@ class AnnaOtt extends base
             $subClass->zh_name = $subClassName;
             $subClass->keyword = $subClassName;
             $subClass->main_class_id = $mainClassID;
+
             $subClass->save(false);
+        }
+
+        $mainClass = MainClass::findOne(['id' => $mainClassID]);
+        if (array_key_exists($subClassName, $this->sortedData[$mainClass->name]) == false) {
+            $this->sortedData[$mainClass->name][$subClassName] = [];
         }
 
         return $subClass->id;
@@ -278,6 +329,13 @@ class AnnaOtt extends base
             $this->stdout("更新直播频道：" . $value['tvg-name'].PHP_EOL, Console::FG_BLUE);
         }
 
+        $subClass = SubClass::find()->where(['id' => $subClassID])->with('mainClass')->one();
+        $mainClass =  $subClass->mainClass;
+
+        if (in_array($channel->name, $this->sortedData[$mainClass->name][$subClass->name]) == false) {
+            $this->sortedData[$mainClass->name][$subClass->name][] = $channel->name;
+        }
+
         return $channel->id;
     }
 
@@ -306,8 +364,8 @@ class AnnaOtt extends base
             $Link->method = 'null';
             $Link->decode = 1;
             $Link->save(false);
-        } else if ($Link->link !== $value['ts']) {
-            echo "updated link" .PHP_EOL;
+        } else if (md5(strtolower(trim($Link->link))) !== md5(strtolower(trim($value['ts'])))) {
+            // echo "更新链接" .PHP_EOL;
             $Link->link = $value['ts'];
             $Link->save();
         }
@@ -399,7 +457,7 @@ class AnnaOtt extends base
             preg_match('/(?<=tvg-name\=")[^"]+/', $item, $tvg_name);
             preg_match('/(?<=tvg-logo\=")[^"]+/', $item, $tvg_logo);
             preg_match('/(?<=group-title\=")[^"]+/i', $item, $group_title);
-            preg_match('/^http:\/\/\S+\.(ts|mp4|mkv|rmvb)/', $item, $ts);
+            preg_match('/\S+\.(ts|mp4|mkv|rmvb)/', $item, $ts);
             preg_match('/(?<=",)[^\r\n]+/', $item, $other);
 
             $preg['tvg-id'] = self::get($tvg_id);
