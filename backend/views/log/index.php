@@ -329,12 +329,12 @@ $this->registerJsFile('https://cdn.bootcss.com/echarts/4.1.0/echarts.common.js',
                 <div class="panel panel-info">
                     <div class="panel-heading">
                         <h3 class="panel-title">
-                            <?= $genre ?>
+                            <?= \yii\helpers\Html::a($genre, \yii\helpers\Url::to(['log-ott-activity/index', 'date' => $date])) ?>
                         </h3>
                     </div>
                     <div class="panel-body">
-                        <p>下载: <?= $data['download_time']??0 ?></p>
-                        <p>人次: <?= $data['person_time']??0 ?></p>
+                        <p>下载    : <?= $data['download_time']??0 ?></p>
+                        <p>活动用户 : <?= $data['person_time']??0 ?></p>
                     </div>
                 </div>
             </div>

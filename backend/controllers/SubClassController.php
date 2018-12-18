@@ -3,6 +3,7 @@
 namespace backend\controllers;
 
 use Yii;
+use yii\helpers\Url;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 use yii\widgets\ActiveForm;
@@ -64,10 +65,11 @@ class SubClassController extends BaseController
         $model->sort = 0;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            $this->setFlash('success', Yii::t('backend', 'Success'));
-            return $this->goBack($this->getReferer());
+            $this->success();
+
+            return $this->redirect(['sub-class/view','id' => $model->id]);
         } else {
-            return $this->renderAjax('create', ['model' => $model]);
+            return $this->render('create', ['model' => $model]);
         }
     }
 

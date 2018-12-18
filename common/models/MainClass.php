@@ -22,14 +22,18 @@ use yii\helpers\ArrayHelper;
  * @property string $is_charge 是否收费
  * @property string $price 价格
  * @property string $use_flag 开关
- * @property string one_month_price 一个月价格
- * @property string three_month_price 三个月价格
- * @property string six_month_price 六个月价格
- * @property string one_year_price 十二个月价格
- * @property integer free_trail_days 免费试用天数
+ * @property string $one_month_price 一个月价格
+ * @property string $three_month_price 三个月价格
+ * @property string $six_month_price 六个月价格
+ * @property string $one_year_price 十二个月价格
+ * @property integer $free_trail_days 免费试用天数
+ * @property integer $is_log 是否记录用户活动日志
  */
 class MainClass extends \yii\db\ActiveRecord
 {
+
+    private static $log_genres = false;
+
     /**
      * @inheritdoc
      */
@@ -49,7 +53,7 @@ class MainClass extends \yii\db\ActiveRecord
             [['sort'], 'string', 'max' => 3],
             ['price', 'number', 'integerOnly' => false, 'min' => 0],
             ['is_charge', 'boolean'],
-            ['use_flag', 'safe'],
+            [['is_log', 'use_flag'], 'safe'],
             ['use_flag', 'default', 'value' => '1'],
             ['price', 'default', 'value' => '0.00'],
             ['is_charge', 'default', 'value' => 0],
@@ -82,7 +86,17 @@ class MainClass extends \yii\db\ActiveRecord
             'six_month_price' => Yii::t('backend', 'six month price'),
             'one_year_price' => Yii::t('backend', 'one year price'),
             'free_trail_days' => Yii::t('backend', 'free trail days'),
+            'is_log' => Yii::t('backend', 'record log'),
         ];
+    }
+
+    public static function getLogGenres()
+    {
+        if (self::$log_genres == false) {
+            self::$log_genres =  self::find()->where(['is_log' => 1])->select('list_name')->asArray()->column();
+        }
+
+        return self::$log_genres;
     }
 
     /**
@@ -95,6 +109,7 @@ class MainClass extends \yii\db\ActiveRecord
         if ($where) {
             $query->where($where)->orderBy('sort asc');
         }
+
         return $query;
     }
 

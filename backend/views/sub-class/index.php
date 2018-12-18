@@ -25,12 +25,12 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js'
 <div class="sub-class-index">
     <h1><?= Html::encode($this->title) ?></h1>
     <p>
-        <?= Html::a(Yii::t('backend', 'Create'), '#', [
-                'class' => 'btn btn-success',
-                'data-toggle' => 'modal',
-                'data-target' => '#create-modal',
-                'id' => 'create'
-        ]) ?>
+        <?= \common\widgets\frameButton::widget([
+            'url' => Url::to(['sub-class/create','main_id' => Yii::$app->request->get('main-id')]),
+            'title' => Yii::t('backend', 'Create'),
+            'icon' => 'fa-edit',
+            'options' => ['class' => 'btn btn-success']
+        ]); ?>
     </p>
 
     <?= GridView::widget([

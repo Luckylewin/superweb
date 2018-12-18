@@ -8,6 +8,7 @@
 
 namespace console\controllers;
 
+use backend\models\LogOttActivity;
 use backend\models\LogOttGenre;
 use backend\models\LogOttTmp;
 use Yii;
@@ -260,7 +261,7 @@ class LogController extends Controller
             if (file_exists($filePath) == false) continue;
             foreach (self::readLine($filePath) as $i => $line) {
                 $row++;
-                $this->dealJsonData($rows, $line);
+                $this->dealJsonData($rows, $line, $timestamp);
             }
         }
 
@@ -279,7 +280,7 @@ class LogController extends Controller
 
     }
 
-    protected function dealJsonData(&$rows, $line)
+    protected function dealJsonData(&$rows, $line, $timestamp)
     {
         $result = Func::pregSieze('/{.*}/', $line);
 
@@ -295,13 +296,30 @@ class LogController extends Controller
 
                 if ($interface['header'] == 'getOttNewList' ) {
                     $genre = $interface['data']['country']??($interface['data']['genre']??false);
+                    $logGenres = MainClass::getLogGenres();
 
-                    if ($genre) {
-                        Yii::$app->db->createCommand()->insert(LogOttTmp::tableName(),[
+                    if (in_array($genre, $logGenres)) {
+                        $date = date('Y-m-d', $timestamp);
+                        $time = Func::pregSieze('/(?<=\|)\s*(\d+:)+\d+/',$line);
+                        $dateTime = $date ." ". trim($time);
+
+                        $data = [
+                            'date' => $date,
+                            'timestamp' => strtotime($dateTime),
                             'mac' => $interface['uid'],
                             'genre' => $genre,
                             'code' => $code
-                        ])->execute();
+                        ];
+
+                        Yii::$app->db->createCommand()->insert(LogOttActivity::tableName(),$data)->execute();
+
+                        $data = [
+                            'mac' => $interface['uid'],
+                            'genre' => $genre,
+                            'code' => $code
+                        ];
+
+                        Yii::$app->db->createCommand()->insert(LogOttTmp::tableName(),$data)->execute();
                     }
                 }
 

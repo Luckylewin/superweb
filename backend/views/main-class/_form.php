@@ -42,6 +42,10 @@ use yii\widgets\ActiveForm;
     </div>
 
     <div class="col-md-6">
+        <?= $form->field($model, 'is_log')->dropDownList([Yii::t('backend', 'No'), Yii::t('backend', 'Yes')]) ?>
+    </div>
+
+    <div class="col-md-6">
         <?= $form->field($model, 'free_trail_days'); ?>
     </div>
 

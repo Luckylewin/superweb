@@ -100,12 +100,12 @@ class OttChannelController extends BaseController
 
     public function actionCreate()
     {
-        $this->rememberReferer();
         $model = new OttChannel();
         $model->sub_class_id = $this->subClass->id;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(Func::getLastPage());
+            $this->success();
+            return $this->redirect(['ott-channel/view', 'id' => $model->id]);
         }
 
         return $this->render('create', [
@@ -118,7 +118,7 @@ class OttChannelController extends BaseController
 
     public function actionUpdate($id)
     {
-        $this->rememberReferer();
+
         $model = $this->findModel($id);
 
         if (in_array(Yii::$app->request->get('field'), ['is_recommend'])) {
@@ -142,7 +142,7 @@ class OttChannelController extends BaseController
             }
 
             $this->setFlash('info', $msg);
-            return $this->redirect(Yii::$app->request->referrer);
+            return $this->redirect(Url::to(['ott-channel/update','id' => $model->id]));
         }
 
         if (Yii::$app->request->isAjax) {
