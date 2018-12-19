@@ -182,12 +182,19 @@ class ParadeController extends Controller
         // 取出今天的主要赛事给他们匹配上频道
         $tasks = ['NBA常规赛','CBA常规赛'];
         foreach ($tasks as $eventTitle) {
-            $events = MajorEvent::getTodayEventByTitle($eventTitle);
-            if (!is_null($events)) {
-                foreach ($events as $num => $event) {
-                    if ($match = OttChannel::getChannelParadeInfo('sport','NBA', "sport{$num}", "CN")) {
-                        $event->match_data = json_encode([$match]);
-                        $event->save(false);
+
+            $basic = strtotime('today');
+            for($day=0; $day<=6; $day++) {
+                $start = $basic + $day * 86400;
+                $end = $start + 86400;
+                $events = MajorEvent::getEventByTitle($eventTitle, $start, $end);
+
+                if (!is_null($events)) {
+                    foreach ($events as $num => $event) {
+                        if ($match = OttChannel::getChannelParadeInfo('sport','NBA', "sport{$num}", "CN")) {
+                            $event->match_data = json_encode([$match]);
+                            $event->save(false);
+                        }
                     }
                 }
             }

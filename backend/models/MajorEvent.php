@@ -217,11 +217,11 @@ class MajorEvent extends \yii\db\ActiveRecord
      * @param $title
      * @return MajorEvent
      */
-    public static function getTodayEventByTitle($title)
+    public static function getEventByTitle($title, $start, $end)
     {
         return static::find()->where(['title' => $title])
-                             ->andWhere(['>=','time',strtotime('today')])
-                             ->andWhere(['<','time',strtotime('tomorrow') + 86400])
+                             ->andWhere(['>=','time',$start])
+                             ->andWhere(['<','time',$end])
                              ->all();
     }
 
