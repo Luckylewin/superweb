@@ -33,8 +33,8 @@ use common\widgets\Jsblock;
 <div class="col-md-12">
 
     <div class="form-group">
-        <?= Html::submitButton(\Yii::t('backend','Save'), ['class' => 'btn btn-success']); ?>
-        <?= Html::a(Yii::t('backend','Go Back'),Yii::$app->request->referrer, ['class' => 'btn btn-default']); ?>
+        <?= Html::submitButton(\Yii::t('backend','Save'), ['class' => 'btn col-md-12 btn-success']); ?>
+
     </div>
 </div>
 <?php $form = ActiveForm::end(); ?>

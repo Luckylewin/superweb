@@ -56,7 +56,6 @@ class VodSearch extends VodBlock
             ],
             'sort' => [
                 'defaultOrder' => [
-                    'is_top' => SORT_DESC,
                     'sort'   => SORT_ASC
                 ]
             ]

@@ -243,7 +243,7 @@ CSS;
 
 <?= Html::a('取消全部置顶',['vod/cancel-stick-today','cid' => Yii::$app->request->get('VodSearch')['vod_cid']],['class' => 'btn btn-warning']); ?> &nbsp;
 
-<?= Html::a(Yii::t('backend', 'Reset Sort'), \yii\helpers\Url::to(['vod/sort-all', 'vod_cid' => Yii::$app->request->get('VodSearch')['vod_cid']]) ,['class' => 'gridview btn btn-primary']); ?> &nbsp;
+<?= Html::a(Yii::t('backend', 'Set Sort'), \yii\helpers\Url::to(['vod/sort-all', 'vod_cid' => Yii::$app->request->get('VodSearch')['vod_cid']]) ,['class' => 'gridview btn btn-primary']); ?> &nbsp;
 <?= Html::button(Yii::t('backend', 'Batch Deletion'),['class' => 'gridview btn btn-danger']); ?>
 
 <?php

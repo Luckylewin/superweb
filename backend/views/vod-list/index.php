@@ -85,10 +85,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]);
                             },
                             'type' => function($url, $model, $key) {
-                                return \common\widgets\frameButton::widget([
-                                    'content' => '查看子类别',
-                                    'url' => \yii\helpers\Url::to(['iptv-type/index', 'list_id'=>$model->list_id]),
-
+                                return Html::a('查看子分类', \yii\helpers\Url::to(['iptv-type/index', 'list_id'=>$model->list_id]), [
+                                        'class' => 'btn btn-sm btn-default'
                                 ]);
                             },
                     ],

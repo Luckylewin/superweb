@@ -37,6 +37,10 @@ class AnnaIptv extends base
 
     protected $program = [];
 
+    protected $movieSet = [];
+
+    protected $programSet = [];
+
     private $accounts = [
         '287994000050' =>  ['en' => 'English', 'zh' =>'英语'],
         '287994000051' =>  ['en' => 'Portuguese', 'zh' =>'葡萄牙语'],
@@ -47,7 +51,9 @@ class AnnaIptv extends base
     public function dealIPTV()
     {
         // $this->clearOldData();
-        $this->saveDataFromArray($this->getOriginData());
+        $data = $this->getOriginData();
+
+        $this->saveDataFromArray($data);
         $this->saveNewLang();
         $this->clearDeleteData();
         $this->updateProfile();
@@ -77,16 +83,37 @@ class AnnaIptv extends base
         if ($originData) {
             // 处理电影
             foreach ($originData as $file) {
-                $data = $this->initData($file['file'], 'iptv', 'movie');
-                $this->saveNewMovieData($data, $file['lang']['en']);
+                if (!empty($file['file'])) {
+                    $data = $this->initData($file['file'], 'iptv', 'movie');
+                    $this->saveNewMovieData($data, $file['lang']['en']);
+                }
             }
+            // 排序
+            $this->sortSameAsFile($this->movieSet, 'Movie');
 
             // 处理电视剧
             foreach ($originData as $file) {
-                $data = $this->initData($file['file'], 'iptv', 'program');
-                $this->saveNewProgramData($data, $file['lang']['en']);
+                if (!empty($file['file'])) {
+                    $data = $this->initData($file['file'], 'iptv', 'program');
+                    $this->saveNewProgramData($data, $file['lang']['en']);
+                }
+            }
+            // 排序
+            $this->sortSameAsFile($this->programSet, 'Serial');
+
+        }
+    }
+
+    private function sortSameAsFile($array, $list_name)
+    {
+        // 找到电影分类
+        $vodList = $this->getGenre($list_name);
+        if (!is_null($vodList)) {
+            foreach ($array as $sort => $value) {
+                Vod::updateAll(['sort' => $sort], ['vod_name' => $value, 'vod_cid' => $vodList->list_id]);
             }
         }
+
     }
 
     /**
@@ -170,17 +197,22 @@ class AnnaIptv extends base
     {
         // 找到电视剧分类
         $vodList = $this->getGenre('Serial');
-
         if (is_null($vodList)) {
             $this->stdout("请新增电视剧类型" . PHP_EOL, Console::BG_RED);
         }
-
         if (is_null($data)) {
             $this->stdout("没有影片数据" . PHP_EOL, Console::BG_RED);
         }
 
-        foreach ($data as $key => $val) {
-            $vod = $this->getOrSetVod($vodList->list_id,  $val['tvg-name'],  $val['group-title'], $val['tvg-logo'], $lang, $key,'电视剧');
+        foreach ($data as $sort => $val) {
+            $vod = $this->getOrSetVod($vodList->list_id,  $val['tvg-name'],  $val['group-title'], $val['tvg-logo'], $lang, $sort,'电视剧');
+
+            $this->pushIn($this->programSet, $vod->vod_name);
+
+            // 如果更改了类别 则更新
+            $this->changeGenre($vod, $val['group-title']);
+            // 如果更改了语言 则更新
+            $this->changeLanguage($vod, $lang);
             $group = $this->attachGroup($vod);
 
             $url = $val['ts'];
@@ -189,6 +221,13 @@ class AnnaIptv extends base
             $this->attachLink($vod, $group, $url, $episode);
         }
 
+    }
+
+    private function pushIn(&$array, $value)
+    {
+        if (in_array($value, $array) == false) {
+            $array[] = $value;
+        }
     }
 
     /**
@@ -210,26 +249,44 @@ class AnnaIptv extends base
             return $this->stdout("没有电影数据" . PHP_EOL, Console::BG_RED);
         }
 
-        foreach ($data as $key => $val) {
-            $vod = $this->getOrSetVod($vodList->list_id,  $val['tvg-name'],  $val['group-title'], $val['tvg-logo'], $lang, $key);
-            // 如果更改了类别 则更新
-            if ($vod->vod_type != $val['group-title'] || $vod->vod_keywords != $val['group-title']) {
-                $vod->vod_type = $val['group-title'];
-                $vod->vod_keywords = $val['group-title'];
-                $vod->save(false);
-            }
+        foreach ($data as $sort => $val) {
 
+            $vod = $this->getOrSetVod($vodList->list_id,  $val['tvg-name'],  $val['group-title'], $val['tvg-logo'], $lang, $sort);
+
+            $this->pushIn($this->movieSet, $vod->vod_name);
+
+            // 如果更改了类别 则更新
+            $this->changeGenre($vod, $val['group-title']);
             // 如果更改了语言 则更新
-            if ($vod->vod_language != $lang) {
-                $vod->vod_language = $lang;
-                $vod->save(false);
-            }
+            $this->changeLanguage($vod, $lang);
 
             $group = $this->attachGroup($vod);
             $this->attachLink($vod,$group, $val['ts']);
         }
 
         return true;
+    }
+
+
+    protected function changeGenre(Vod $vod, $genre)
+    {
+        // 如果更改了类别 则更新
+        if (strcmp($vod->vod_type, $genre) != 0) {
+            $vod->vod_type = $genre;
+            $vod->save(false);
+
+            $this->stdout("{$vod->vod_name} 更改类别" . PHP_EOL);
+        }
+    }
+
+    protected function changeLanguage(Vod $vod, $lang)
+    {
+        if (strcmp($vod->vod_language, $lang) != 0) {
+            $vod->vod_language = $lang;
+            $vod->save(false);
+
+            $this->stdout("{$vod->vod_name} 更改语言" . PHP_EOL);
+        }
     }
 
     /**
@@ -261,16 +318,18 @@ class AnnaIptv extends base
      */
     private function updateProfile()
     {
+        $this->stdout("更新影片资料>>>>>>>>>>>>>>>>>>>>>>>>>",Console::FG_YELLOW);
+
         $vods = Vod::find()->all();
         foreach ($vods as $vod) {
             $data = ProfilesSearcher::quickSearchInDB($vod->vod_name);
             $this->fillWithMovieProfile($vod,$data);
         }
 
-        foreach ($vods as $vod) {
+       /* foreach ($vods as $vod) {
             $data = ProfilesSearcher::search($vod->vod_name);
             $this->fillWithMovieProfile($vod,$data);
-        }
+        }*/
     }
 
     /**
@@ -483,8 +542,9 @@ class AnnaIptv extends base
             $vod->vod_pic = $picture;
             $vod->vod_letter = common::getFirstCharter($name);
             $vod->vod_language = $language;
-
             $vod->vod_multiple = $type == '电影' ? '0' : '1';
+            $vod->sort = $sort;
+
             $vod->save(false);
             $this->stdout("新增{$type}{$name}" . PHP_EOL, Console::FG_YELLOW);
 

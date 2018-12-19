@@ -61,7 +61,9 @@ class ApkListSearch extends ApkList
         } else {
             $query = ApkList::find();
         }
-        
+
+
+        $query->with('version');
 
         // add conditions that should always apply here
 

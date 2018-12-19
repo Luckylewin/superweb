@@ -13,6 +13,7 @@ return [
     'email' => '邮箱',
     'password' => '密码',
 
+    'File' => '文件',
     'Themes' => '主题',
     'Collapse the left menu' => '收起左侧菜单',
     'Fixed top' => '固定顶部',
@@ -552,7 +553,7 @@ return [
     'Are you sure to save your changes?' => '确定保存变更吗？',
     'Condition List' => '条件列表',
     'No executive authority' => '没有执行权限',
-    'Reset Sort' => '重置排序',
+    'Set Sort' => '生成排序',
     'Super administrator' => '超级管理员',
     'administrator' => '管理员',
     'set' => '设定',

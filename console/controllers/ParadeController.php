@@ -9,6 +9,7 @@
 namespace console\controllers;
 
 use backend\models\Parade;
+use console\collectors\event\CBA;
 use console\jobs\ParadeJob;
 use console\collectors\event\NBA;
 use console\collectors\event\zhiboba;
@@ -54,10 +55,18 @@ class ParadeController extends Controller
         Parade::deleteAll(['<=', 'parade_date', $date]);
     }
 
+    public function actionCba()
+    {
+        try {
+            $live = new CBA();
+            $live->start();
+
+        } catch (\Exception $e) {}
+    }
+
     public function actionNba()
     {
         try {
-            //$live = new sportsmediawatch();
             $live = new NBA();
             $live->start();
 

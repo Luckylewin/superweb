@@ -73,15 +73,24 @@ $this->params['breadcrumbs'][] = $this->title;
             [
 
                 'attribute'=>'sort',
-
+                'filter' => false,
                 'format'=>['html'],
+                'headerOptions' => ['class' => 'col-md-1']
+            ],
+
+            [
+                    'attribute' => Yii::t('backend', 'File'),
+                'headerOptions' => ['class' => 'col-md-1'],
+                    'value' => function($model) {
+                        return count($model->version);
+                    }
             ],
 
             //'scheme_id',
 
             [
                     'class' => 'common\grid\MyActionColumn',
-                    'headerOptions' => ['class' => 'col-md-6'],
+                    'headerOptions' => ['class' => 'col-md-4'],
                     'header' => Yii::t('backend', 'Operation'),
                     'size' => 'btn-sm',
                     'template' => '{child} {set-scheme} {view} {update} {delete}',
@@ -93,9 +102,13 @@ $this->params['breadcrumbs'][] = $this->title;
                         },
                         'set-scheme' => function($url,$model, $key) {
                             if (Yii::$app->user->can('apk-list/set-scheme')) {
-                                return Html::a(Yii::t('backend', 'Set Scheme'), \yii\helpers\Url::to(['apk-list/set-scheme','id' => $model->ID]), [
-                                    'class' => 'btn btn-default btn-sm'
+                                return \common\widgets\frameButton::widget([
+                                        'content' => Yii::t('backend', 'Set Scheme'),
+                                        'url' => \yii\helpers\Url::to(['apk-list/set-scheme','id' => $model->ID]),
+                                        'icon' => 'fa-book',
+                                        'options' => ['class' => 'btn btn-default btn-sm']
                                 ]);
+
                             }
                             return '';
                         },

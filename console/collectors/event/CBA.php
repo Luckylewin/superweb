@@ -10,7 +10,7 @@ namespace console\collectors\event;
 
 use console\collectors\parade\collector;
 
-class NBA extends common implements collector
+class CBA extends common implements collector
 {
     public function start()
     {
@@ -25,13 +25,14 @@ class NBA extends common implements collector
         for ($i = $start; $i <= $end;) {
             $data = [];
             $date = date('Y-m-d', $i);
-            $content = $this->getDom("http://tiyu.baidu.com/api/match/NBA/live/date/{$date}/direction/after?from=self");
+
+            $content = $this->getDom("http://tiyu.baidu.com/api/match/CBA/live/date/{$date}/direction/after?from=self");
             $content = json_decode($content->text(), true);
 
             foreach ($content['data'] as $list) {
                 foreach ($list['list'] as $val) {
 
-                    if ($val['matchName'] == 'NBA常规赛') {
+                    if ($val['matchName'] == 'CBA常规赛') {
                         $data[] = [
                             'time' => strtotime($val['startTime']),
                             'teams' => [
@@ -47,7 +48,7 @@ class NBA extends common implements collector
             if (!empty($data)) {
                 foreach ($data as $val) {
                     try {
-                        $this->createMajorEvent("NBA常规赛", 'NBA常规赛' , $val['time'], $val['teams']);
+                        $this->createMajorEvent("CBA常规赛", 'CBA常规赛' , $val['time'], $val['teams']);
                     }catch (\Exception $e) {
                         echo $e->getMessage();
                     }
