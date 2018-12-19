@@ -9,6 +9,10 @@ use yii\grid\GridView;
 
 $this->title = 'Log Ott Activities';
 $this->params['breadcrumbs'][] = $this->title;
+
+$genre = \yii\helpers\ArrayHelper::map(\common\models\MainClass::find()->where(['is_log' => 1])->all(), 'list_name','list_name');
+
+
 ?>
 <div class="log-ott-activity-index">
 
@@ -37,9 +41,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'attribute' => 'genre',
-                'filter' => Html::dropDownList('',null,\yii\helpers\ArrayHelper::map(\common\models\MainClass::find()->where(['is_log' => 1])->all(), 'list_name','list_name'), [
-                    'class' => 'form-control'
-                ])
+                'filter' => $genre
             ],
 
 
@@ -47,9 +49,15 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                     'attribute' => 'code',
-                    'filter' => Html::dropDownList('',null,['0' => '成功下载', '16' => '版本一致', '17' => '没有数据','36' => '没有权限'], [
+                    'filter' => ['0' => '成功下载', '16' => '版本一致', '17' => '没有数据','36' => '没有权限'],
+                    'filterInputOptions' => [
+                            'prompt' => ' 下拉选择状态',
                             'class' => 'form-control'
-                    ])
+                    ],
+                    'value' => function($data) {
+                        $map = ['0' => '成功下载', '16' => '版本一致', '17' => '没有数据','36' => '没有权限'];
+                        return $map[$data->code]??$data->code;
+                    }
             ],
         ],
     ]); ?>

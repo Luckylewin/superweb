@@ -13,6 +13,7 @@ use Yii;
  * @property string $mac
  * @property string $genre
  * @property string $code
+ * @property string $scheme
  */
 class LogOttActivity extends \yii\db\ActiveRecord
 {
@@ -30,7 +31,7 @@ class LogOttActivity extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['date'], 'safe'],
+            [['date','scheme'], 'safe'],
             [['timestamp'], 'integer'],
             [['mac', 'code'], 'string', 'max' => 32],
             [['genre'], 'string', 'max' => 30],
@@ -49,6 +50,7 @@ class LogOttActivity extends \yii\db\ActiveRecord
             'mac' => 'Mac',
             'genre' => 'Genre',
             'code' => 'Code',
+            'scheme' => 'Scheme',
         ];
     }
 }

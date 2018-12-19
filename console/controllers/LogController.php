@@ -286,7 +286,7 @@ class LogController extends Controller
         if ($interface['header'] == 'getOttNewList' ) {
             $genre = $interface['data']['country']??($interface['data']['genre']??false);
             $logGenres = MainClass::getLogGenres();
-          
+
             if (in_array($genre, $logGenres)) {
 
                 // 判断方案号
@@ -303,7 +303,8 @@ class LogController extends Controller
                     'timestamp' => strtotime($dateTime),
                     'mac' => $interface['uid'],
                     'genre' => $genre,
-                    'code' => $code
+                    'code' => $code,
+                    'scheme' => $interface['data']['scheme']
                 ];
 
                 Yii::$app->db->createCommand()->insert(LogOttActivity::tableName(),$data)->execute();
