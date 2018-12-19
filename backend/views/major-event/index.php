@@ -12,6 +12,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <style>
     .today td:nth-child(3){background: #23c6c8!important;color: white}
+    .tomorrow td:nth-child(3){background: skyblue!important;color: white}
 
 </style>
 <div class="major-event-index">
@@ -29,8 +30,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
             $today_start = strtotime(date('Y-m-d'));
             $today_end = $today_start + 86400;
-            if ($model->base_time >= $today_start && $model->base_time <= $today_end) {
+            $tomorrow_end = $today_end + 86400;
+
+            if ($model->base_time >= $today_start && $model->base_time < $today_end) {
                 return ['class' => 'today'];
+            } else if ($model->base_time >= $today_end && $model->base_time < $tomorrow_end) {
+                return ['class' => 'tomorrow'];
             }
         },
         'columns' => [
