@@ -8,7 +8,9 @@
 
 namespace console\controllers;
 
+use backend\models\MajorEvent;
 use backend\models\Parade;
+use common\models\OttChannel;
 use console\collectors\event\CBA;
 use console\jobs\ParadeJob;
 use console\collectors\event\NBA;
@@ -174,5 +176,23 @@ class ParadeController extends Controller
         } catch (\Exception $e) {}
     }
 
+
+    public function actionMatchChannel()
+    {
+        // 取出今天的主要赛事给他们匹配上频道
+        $tasks = ['NBA常规赛','CBA常规赛'];
+        foreach ($tasks as $eventTitle) {
+            $events = MajorEvent::getTodayEventByTitle($eventTitle);
+            if (!is_null($events)) {
+                foreach ($events as $num => $event) {
+                    if ($match = OttChannel::getChannelParadeInfo('sport','NBA', "sport{$num}", "CN")) {
+                        $event->match_data = json_encode([$match]);
+                        $event->save(false);
+                    }
+                }
+            }
+        }
+
+    }
 
 }

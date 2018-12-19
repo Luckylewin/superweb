@@ -85,10 +85,9 @@ class LogOttGenre extends \yii\db\ActiveRecord
                 ->andFilterWhere(['like', 'date', $year.'-'.$month])
                 ->select([
                             "download_time" => "sum(download_time)",
-                            "person_time" => "sum('person_time')",
+                            "person_time" => "sum(person_time)",
                             "same_version_time" => "sum(same_version_time)"
                 ])
-                ->limit(1)
                 ->asArray()
                 ->one();
 

@@ -160,4 +160,27 @@ class OttChannel extends \yii\db\ActiveRecord
         return $channels;
     }
 
+    public static function getChannelParadeInfo($mainClassName,$subClassName,$channelName,$lang)
+    {
+        $mainClass = MainClass::findOne(['name' => $mainClassName]);
+        if ($mainClass) {
+            $subClass = SubClass::findOne(['name' => $subClassName]);
+            if ($subClass) {
+                $channel = static::findOne(['name' => $channelName]);
+                if ($channel) {
+                    return  [
+                        "channel_language" => $lang,
+                        "main_class" =>  $mainClass->list_name,
+                        "channel_name" =>  $channel->name,
+                        "channel_id" => $channel->channel_number,
+                        "channel_true_id" =>  $channel->id,
+                        "channel_icon" =>  $channel->image,
+                    ];
+                }
+            }
+        }
+
+        return false;
+    }
+
 }

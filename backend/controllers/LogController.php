@@ -37,7 +37,7 @@ class LogController extends BaseController
             $programLog = ProgramLog::findByMonth($year, $month);
             $statics    = LogStatics::findByMonth($year, $month);
             $genres     = LogOttGenre::findByMonth($year, $month);
-
+            print_r($genres);
         }
 
         if (empty($model)) {
