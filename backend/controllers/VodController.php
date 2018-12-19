@@ -167,8 +167,10 @@ class VodController extends BaseController
 
         $model->save(false);
 
-        $this->success();
-        return $this->goBack($this->getReferer());
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        return ['status' => '0'];
+
     }
 
     public function actionSort($id, $vod_cid, $action, $compare_id)

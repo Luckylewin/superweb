@@ -17,10 +17,11 @@ $this->title = '点播列表';
 $this->params['breadcrumbs'][] = ['url' => Url::to(['vod-list/index']), 'label' => $vodList->list_name];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<?php
 
+<?php
     $css=<<<CSS
-    .is_top{background: #1ab394;color: #fff}
+    .is_top{background: #396;color: #fff;}
+    .is_top:hover{color: #fff;background: #386;}
     .current_up {border-color:transparent transparent #00AA88 !important; /*透明 透明  黄*/ } .current_down {border-color: #00AA88 transparent transparent !important; /*透明 透明  黄*/ } .triangle_border_up{width:0; height:0; border-width:0 7px 10px; border-style:solid; border-color:transparent transparent #d2d2d2;/*透明 透明  黄*/ position:absolute; top:0; left:50px; cursor: pointer; } /*下箭头*/ .triangle_border_down{display:block; width:0; height:0; border-width:10px 7px 0; border-style:solid; border-color:#d2d2d2 transparent transparent;/*黄 透明 透明 */ position:absolute; bottom:0; left:50px; cursor: pointer; } .triangle_border_up:hover {border-color:transparent transparent #23527c;/*透明 透明  黄*/ } .triangle_border_down:hover {border-color:#23527c transparent transparent;/*黄 透明 透明 */ }
 CSS;
     $this->registerCss($css);
@@ -29,6 +30,7 @@ CSS;
 <div class="vod-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
+
     <p>
         <?= Html::a(Yii::t('backend', 'Create'), Url::to(['create','vod_cid' => isset(Yii::$app->request->get('VodSearch')['vod_cid']) ? Yii::$app->request->get('VodSearch')['vod_cid'] : '1']), ['class' => 'btn btn-success']) ?>
 
@@ -44,7 +46,9 @@ CSS;
             ]) ?>
         <?php endif; ?>
     </p>
+
     <?php $search = Yii::$app->request->get('VodSearch'); ?>
+
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
@@ -174,9 +178,11 @@ CSS;
                             'stick' => function($url, $model) {
                                 $topClass = $model->is_top ? 'is_top' : 'btn-default';
 
-                                return Html::a('<i class="fa fa-arrow-up"></i>', Url::to(['vod/stick', 'id' => $model->vod_id]),[
-                                    'class' => 'btn btn-sm ' . $topClass,
-                                    'title' => '链接列表',
+                                return Html::button('<i class="fa fa-arrow-up"></i>',[
+                                    'class' => 'btn btn-sm stick ' . $topClass,
+                                    'title' => '置顶',
+                                    'data-id' => $model->vod_id,
+                                    'data-top' => $model->is_top
                                 ]);
                             },
                             'link-index' => function($url, $model) {
@@ -260,6 +266,7 @@ $this->registerJs($requestJs);
 <?= $this->render('index/_bind'); ?>
 <?= $this->render('index/_sort'); ?>
 <?= $this->render('index/_detail'); ?>
+<?= $this->render('index/_stick'); ?>
 
 
 

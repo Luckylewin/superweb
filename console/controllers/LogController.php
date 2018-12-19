@@ -280,60 +280,77 @@ class LogController extends Controller
 
     }
 
+    // 记录某些分类的用户获取列表情况
+    protected function staticsSomeOttGenre($line, $interface, $timestamp, $code)
+    {
+        if ($interface['header'] == 'getOttNewList' ) {
+            $genre = $interface['data']['country']??($interface['data']['genre']??false);
+            $logGenres = MainClass::getLogGenres();
+          
+            if (in_array($genre, $logGenres)) {
+
+                // 判断方案号
+                if (isset($interface['data']['scheme']) && strpos($interface['data']['scheme'], 'GALAXY') !== false) {
+                    return false;
+                }
+                
+                $date = date('Y-m-d', $timestamp);
+                $time = Func::pregSieze('/(?<=\|)\s*(\d+:)+\d+/',$line);
+                $dateTime = $date ." ". trim($time);
+
+                $data = [
+                    'date' => $date,
+                    'timestamp' => strtotime($dateTime),
+                    'mac' => $interface['uid'],
+                    'genre' => $genre,
+                    'code' => $code
+                ];
+
+                Yii::$app->db->createCommand()->insert(LogOttActivity::tableName(),$data)->execute();
+
+                $data = [
+                    'mac' => $interface['uid'],
+                    'genre' => $genre,
+                    'code' => $code
+                ];
+
+                Yii::$app->db->createCommand()->insert(LogOttTmp::tableName(),$data)->execute();
+            }
+        }
+
+        return true;
+    }
+
+    protected function staticsActivity(&$rows, $interface, $code)
+    {
+        $rows[] = [
+            'header' => $interface['header'],
+            'mac'  => $interface['uid'],
+            'code' => $code
+        ];
+
+        if (count($rows) >= 800) {
+            Yii::$app->db->createCommand()->batchInsert(LogTmp::tableName(), ['header','mac','code'],$rows)->execute();
+            $rows = [];
+        }
+    }
+
+    protected function getCode($line)
+    {
+        $code = Func::pregSieze('/(?<=ERROR:)\d+/', $line);
+        return $code == false ? '0' : $code;
+    }
+
     protected function dealJsonData(&$rows, $line, $timestamp)
     {
         $result = Func::pregSieze('/{.*}/', $line);
 
         if ($result) {
             $interface = json_decode($result, true);
-            if (isset($interface['header'])) {
-                if (!isset($interface['uid'])) {
-                    $interface['uid'] = '00000';
-                }
-
-                $code = Func::pregSieze('/(?<=ERROR:)\d+/', $line);
-                $code = $code == false ? '0' : $code;
-
-                if ($interface['header'] == 'getOttNewList' ) {
-                    $genre = $interface['data']['country']??($interface['data']['genre']??false);
-                    $logGenres = MainClass::getLogGenres();
-
-                    if (in_array($genre, $logGenres) && strpos('287994', $interface['uid']) === false) {
-                        $date = date('Y-m-d', $timestamp);
-                        $time = Func::pregSieze('/(?<=\|)\s*(\d+:)+\d+/',$line);
-                        $dateTime = $date ." ". trim($time);
-
-                        $data = [
-                            'date' => $date,
-                            'timestamp' => strtotime($dateTime),
-                            'mac' => $interface['uid'],
-                            'genre' => $genre,
-                            'code' => $code
-                        ];
-
-                        Yii::$app->db->createCommand()->insert(LogOttActivity::tableName(),$data)->execute();
-
-                        $data = [
-                            'mac' => $interface['uid'],
-                            'genre' => $genre,
-                            'code' => $code
-                        ];
-
-                        Yii::$app->db->createCommand()->insert(LogOttTmp::tableName(),$data)->execute();
-                    }
-                }
-
-                $rows[] = [
-                    'header' => $interface['header'],
-                    'mac'  => $interface['uid'],
-                    'code' => $code
-                ];
-
-                if (count($rows) >= 800) {
-                    Yii::$app->db->createCommand()->batchInsert(LogTmp::tableName(), ['header','mac','code'],$rows)->execute();
-                    $rows = [];
-                }
-
+            if (isset($interface['header']) && isset($interface['uid'])) {
+                $code = $this->getCode($line);
+                $this->staticsSomeOttGenre($line, $interface, $timestamp, $code);
+                $this->staticsActivity($rows, $interface, $code);
             }
         }
     }
