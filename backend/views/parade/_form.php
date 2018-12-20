@@ -67,8 +67,7 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/laydate/laydate.js'
 
     <div class="col-md-12">
         <div class="form-group">
-            <?= Html::submitButton('新增', ['class' => 'btn btn-success', 'style' => 'margin-top:30px;']) ?>
-            <?= Html::a(Yii::t('backend','Go Back'), ['parade/index'], ['class' => 'btn btn-default', 'style' => 'margin-top:30px;']) ?>
+            <?= Html::submitButton('新增', ['class' => 'btn btn-success col-md-12', 'style' => 'margin-top:30px;']) ?>
         </div>
     </div>
 

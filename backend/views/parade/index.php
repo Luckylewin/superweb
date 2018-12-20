@@ -14,8 +14,15 @@ $this->title = Yii::t('backend', 'EPG');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="parade-index">
+
+
     <p>
-        <?= Html::a(Yii::t('backend', 'Create'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= common\widgets\frameButton::widget([
+                'url' => Url::to(['parade/create']),
+                'content' => Yii::t('backend', 'Create'),
+                'icon' => 'fa-edit',
+                'options' => ['class' => 'btn btn-success']
+        ]) ?>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <?= Html::a(Yii::t('backend', 'Generate Cache'), ['create-cache'], ['class' => 'btn btn-info']) ?>
         <?= Html::a(Yii::t('backend', 'Clear Cache'), ['clear-cache'], ['class' => 'btn btn-warning']) ?>
@@ -39,9 +46,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     'attribute' => 'channel_name',
                     'contentOptions' => ['class' => 'col-md-1'],
                     'format' => 'raw',
-                    'value' => function($data) {
-                        $channel = $data->channel;
-                        return Html::a($data->channel_name,'#',['btn btn-link']);
+                    'value' => function($model) {
+                            return common\widgets\frameButton::widget([
+                                'url' => \yii\helpers\Url::to(['parade/list-channel','name'=>$model->channel_name]),
+                                'content' => $model->channel_name
+                            ]);
                     }
                 ],
 
