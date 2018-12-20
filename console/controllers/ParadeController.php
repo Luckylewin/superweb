@@ -205,7 +205,7 @@ class ParadeController extends Controller
                             $date = $event->getDate();
                             $channelArr[$match['channel_name']][$date][] = [
                                 'parade_time' => $event->getTime(),
-                                'parade_type' => $event->getBrief(),
+                                'parade_name' => $event->getBrief(),
                                 'channel_id' => $match['channel_true_id'],
                             ];
                         }
