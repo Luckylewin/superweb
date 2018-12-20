@@ -57,6 +57,7 @@ class ApkListController extends BaseController
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $this->success();
+
             return $this->redirect(['view', 'id' => $model->ID]);
         }
 
@@ -99,7 +100,7 @@ class ApkListController extends BaseController
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $this->success();
 
-            return $this->refresh();
+            return $this->redirect(['view', 'id' => $model->ID]);
         }
 
 

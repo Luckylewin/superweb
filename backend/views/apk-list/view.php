@@ -4,22 +4,13 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\ApkList */
+/* @var $model common\models\ApkList */
 
 $this->title = $model->typeName;
 $this->params['breadcrumbs'][] = ['label' => 'APK列表', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="apk-list-view">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
-
-
-
-<p>
-   <?= Html::a('发布版本', ['apk-detail/create', 'id' => $model->ID], ['class' => 'btn btn-info']) ?>
-</p>
 
     <?= DetailView::widget([
         'model' => $model,
@@ -38,8 +29,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     'visible' => Yii::$app->user->can('apk-list/set-scheme'),
                     'headerOptions' => ['class' => 'col-md-6'],
                     'format' => 'raw',
-                    'value' => function($data) {
-                        $schemes = $data->scheme;
+                    'value' => function($model) {
+                        $schemes = $model->schemes;
                         $str = '';
                         foreach ($schemes as $key => $scheme) {
                             $str .= Html::button($scheme->schemeName ,[
@@ -56,6 +47,8 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 
 <p>
+    <?= Html::a('发布版本', ['apk-detail/create', 'id' => $model->ID], ['class' => 'btn btn-info']) ?>
+
     <?= Html::a(Yii::t('backend', 'Update'), ['update', 'id' => $model->ID], ['class' => 'btn btn-primary']) ?>
     <?= Html::a(Yii::t('backend','Go Back'), \yii\helpers\Url::to(['apk-list/index']), ['class' => 'btn btn-default']) ?>
 </p>

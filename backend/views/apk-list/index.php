@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'options' => ['class' => 'grid-view',"style"=>"overflow:auto", "id" => "grid"],
-       
+
         'columns' => [
 
             [

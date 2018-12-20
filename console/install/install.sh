@@ -631,7 +631,12 @@ function register_to_global()
 {
     path="$(pwd)/${0}"
     [ -e ${path} ] && {
-        /bin/cp ${path} /usr/local/sbin/iptv.sh
+        if [ -d  /usr/local/sbin/ ];then
+            /bin/cp ${path} /usr/local/sbin/iptv.sh
+        else
+            /bin/cp ${path} /usr/sbin/iptv.sh
+        fi
+
     }
 }
 
