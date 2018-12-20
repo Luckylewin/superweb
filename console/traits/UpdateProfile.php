@@ -106,7 +106,7 @@ trait UpdateProfile
             if (isset($data[$field])) $tv->$field = $data[$field];
         }
 
-        $tv['vod_total'] = count($data['links']);
+        $tv['vod_total'] = $tv->vod_total;
 
         $tv->save(false);
 

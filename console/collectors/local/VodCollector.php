@@ -48,7 +48,7 @@ class VodCollector extends common
      */
     public $genre;
 
-    public $address = 'http://vod.newpo.cn:8080';
+    public $address = 'http://hvod.imirun.net:8080';
 
     public function __construct(Model $model, $options)
     {
