@@ -21,8 +21,8 @@ class ApkListSearch extends ApkList
     public function rules()
     {
         return [
-            [['ID', 'sort'], 'integer'],
-            [['typeName', 'type', 'class'], 'safe'],
+            [['ID', 'sort','scheme_id'], 'integer'],
+            [['typeName', 'type', 'class', 'scheme_id'], 'safe'],
         ];
     }
 
@@ -37,7 +37,9 @@ class ApkListSearch extends ApkList
 
 
     public function search($params)
-    {   
+    {
+        $this->load($params);
+
         // 判断身份
         if (Yii::$app->user->getIdentity()->username != Admin::SUPER_ADMIN) {
             $user = Admin::findOne(Yii::$app->user->getId());
@@ -53,7 +55,19 @@ class ApkListSearch extends ApkList
             ]);
 
         } else {
+
             $query = ApkList::find();
+         
+            if ($this->scheme_id) {
+                 $query->joinWith([
+                     'schemes' => function($query){
+                         /**
+                          * @var $query ActiveQuery
+                          */
+                         $query->andWhere(['IN', 'sys_scheme.id', $this->scheme_id]);
+                     }
+                 ]);
+            }
         }
 
 

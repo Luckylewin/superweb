@@ -9,7 +9,7 @@ use common\widgets\Jsblock;
 /* @var $model backend\models\ApkList */
 /* @var $form yii\widgets\ActiveForm */
 
-$schemes = \yii\helpers\ArrayHelper::map(Scheme::getAll(),'id', 'schemeName');
+$schemes = Scheme::getOptions();
 
 ?>
 

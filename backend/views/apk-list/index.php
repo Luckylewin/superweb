@@ -17,13 +17,16 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
     <?php Pjax::begin(); ?>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+
+    <?php if(\backend\models\Admin::isSuperAdmin()): ?>
+    <?php echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?php endif; ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'options' => ['class' => 'grid-view',"style"=>"overflow:auto", "id" => "grid"],
-
+       
         'columns' => [
 
             [
