@@ -161,6 +161,7 @@ class MajorEvent extends \yii\db\ActiveRecord
         return true;
     }
 
+
     public function beforeUpdate($model)
     {
         $model->time = date('Y-m-d', $model->time);
@@ -223,6 +224,38 @@ class MajorEvent extends \yii\db\ActiveRecord
                              ->andWhere(['>=','time',$start])
                              ->andWhere(['<','time',$end])
                              ->all();
+    }
+
+    public function getTeamsInfo()
+    {
+        return json_decode($this->live_match);
+    }
+
+    public function getDate()
+    {
+        return date('Y-m-d', $this->time);
+    }
+
+    public function getTime()
+    {
+        return date('H:i', $this->time);
+    }
+
+    public function getBrief()
+    {
+        $match = json_decode($this->live_match, true);
+        $teams = $match['teams'];
+        $name = '';
+
+        if (!empty($teams)) {
+            foreach ($teams as $team) {
+                $name .= ' vs ' . $team['team_name'];
+            }
+        }
+
+        $name = trim($name, ' vs ');
+
+        return $match['event_info'] . ' : ' . $name;
     }
 
 }

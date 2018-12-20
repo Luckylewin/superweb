@@ -179,27 +179,54 @@ class ParadeController extends Controller
 
     public function actionMatchChannel()
     {
+        // 频道数组 放频道会播放的节目
+        $channelArr = [];
+
         // 取出今天的主要赛事给他们匹配上频道
-        $tasks = ['NBA常规赛','CBA常规赛'];
+        $tasks = ['NBA常规赛', 'CBA常规赛'];
         foreach ($tasks as $eventTitle) {
 
             $basic = strtotime('today');
-            for($day=0; $day<=6; $day++) {
+            for ($day = 0; $day <= 7; $day++) {
                 $start = $basic + $day * 86400;
                 $end = $start + 86400;
                 $events = MajorEvent::getEventByTitle($eventTitle, $start, $end);
 
                 if (!is_null($events)) {
                     foreach ($events as $num => $event) {
-                        if ($match = OttChannel::getChannelParadeInfo('sport','NBA', "sport{$num}", "CN")) {
+
+                        if ($match = OttChannel::getChannelParadeInfo('sport', 'NBA', "sport{$num}", "CN")) {
+                            // 主要赛事 频道绑定
                             $event->match_data = json_encode([$match]);
                             $event->save(false);
+
+                            $date = $event->getDate();
+                            $channelArr[$match['channel_name']][$date][] = [
+                                'parade_time' => $event->getTime(),
+                                'parade_name' => $event->getBrief(),
+                                'channel_id' => $match['channel_true_id']
+                            ];
                         }
                     }
                 }
             }
         }
 
-    }
+        if (!empty($channelArr)) {
+            foreach ($channelArr as $channelName => $dateArr) {
+                foreach ($dateArr as $date => $parade) {
+                     $paradeObject = new Parade();
+                     $paradeObject->parade_data = json_encode($parade);
+                     $paradeObject->parade_date = $date;
+                     $paradeObject->upload_date = date('Y-m-d');
+                     $paradeObject->channel_name = $channelName;
+                     $paradeObject->channel_id = $parade[0]['channel_id'];
+                     $paradeObject->source = '匹配添加';
 
+                     $paradeObject->save(false);
+                }
+            }
+        }
+
+    }
 }

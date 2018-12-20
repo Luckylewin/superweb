@@ -104,4 +104,15 @@ class Parade extends \yii\db\ActiveRecord
                     ->asArray()
                     ->all();
     }
+
+    public function beforeSave($insert)
+    {
+        if ($this->isNewRecord) {
+            if (static::find()->where(['channel_id' => $this->channel_id, 'parade_date' => $this->parade_date])->exists()) {
+                return false;
+            }
+        }
+        return true;
+
+    }
 }

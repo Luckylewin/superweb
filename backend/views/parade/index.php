@@ -14,8 +14,6 @@ $this->title = Yii::t('backend', 'EPG');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="parade-index">
-
-
     <p>
         <?= Html::a(Yii::t('backend', 'Create'), ['create'], ['class' => 'btn btn-success']) ?>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

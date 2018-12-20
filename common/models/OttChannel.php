@@ -50,7 +50,8 @@ class OttChannel extends \yii\db\ActiveRecord
             [['sort','is_recommend'], 'default', 'value' => '0'],
             ['use_flag', 'default', 'value' => '1'],
             [['shifting_use_flag', 'rebroadcast_use_flag'], 'integer'],
-            [['shifting_method','rebroadcast_method'], 'string']
+            [['shifting_method','rebroadcast_method'], 'string'],
+            ['channel_number','default','value' => 0]
         ];
     }
 
@@ -92,7 +93,6 @@ class OttChannel extends \yii\db\ActiveRecord
         return $this->hasOne(MainClass::className(), ['id' => 'main_class_id'])
                     ->via('subClass');
     }
-
 
 
     public function beforeDelete()

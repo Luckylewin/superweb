@@ -67,6 +67,7 @@ class ParadeController extends BaseController
 
     public function actionCreate()
     {
+
         $model = new Parade();
 
         if ( $name = Yii::$app->request->get('name')) {
@@ -87,9 +88,11 @@ class ParadeController extends BaseController
             $model->parade_data = json_encode($paradeData);
             $model->source = '手动添加';
 
+
             if ($model->save()) {
-                $this->setFlash('success', Yii::t('backend', 'Success'));
-                return $this->redirect(['parade/list', 'name' => $model->channel_name]);
+                $this->success();
+
+                return $this->redirect(Url::to(['parade/index']));
             }
         }
 
