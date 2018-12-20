@@ -20,7 +20,7 @@ class CBA extends common implements collector
     public function getPage()
     {
         $start = strtotime('today');
-        $end = strtotime('2019-03-01');
+        $end = strtotime('+7 day');
 
         for ($i = $start; $i <= $end;) {
             $data = [];

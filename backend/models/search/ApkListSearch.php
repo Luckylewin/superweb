@@ -22,7 +22,7 @@ class ApkListSearch extends ApkList
     {
         return [
             [['ID', 'sort'], 'integer'],
-            [['typeName', 'type', 'class',  'scheme_id'], 'safe'],
+            [['typeName', 'type', 'class'], 'safe'],
         ];
     }
 
@@ -35,13 +35,7 @@ class ApkListSearch extends ApkList
         return Model::scenarios();
     }
 
-    /**
-     * Creates data provider instance with search query applied
-     *
-     * @param array $params
-     *
-     * @return ActiveDataProvider
-     */
+
     public function search($params)
     {   
         // 判断身份
@@ -95,8 +89,7 @@ class ApkListSearch extends ApkList
 
         $query->andFilterWhere(['like', 'typeName', $this->typeName])
             ->andFilterWhere(['like', 'type', $this->type])
-            ->andFilterWhere(['like', 'class', $this->class])
-            ->andFilterWhere(['like', 'scheme_id', $this->scheme_id]);
+            ->andFilterWhere(['like', 'class', $this->class]);
 
         return $dataProvider;
     }

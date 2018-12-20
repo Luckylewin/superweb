@@ -62,6 +62,7 @@ class ParadeController extends Controller
         try {
             $live = new CBA();
             $live->start();
+            $this->actionMatchChannel();
 
         } catch (\Exception $e) {}
     }
@@ -71,6 +72,7 @@ class ParadeController extends Controller
         try {
             $live = new NBA();
             $live->start();
+            $this->actionMatchChannel();
 
         } catch (\Exception $e) {}
     }

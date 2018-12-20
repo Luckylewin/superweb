@@ -8,6 +8,9 @@ use common\widgets\Jsblock;
 /* @var $this yii\web\View */
 /* @var $model backend\models\ApkList */
 /* @var $form yii\widgets\ActiveForm */
+
+$schemes = \yii\helpers\ArrayHelper::map(Scheme::getAll(),'id', 'schemeName');
+
 ?>
 
 <?php $form = ActiveForm::begin(); ?>
@@ -17,7 +20,7 @@ use common\widgets\Jsblock;
     <tbody>
     <tr>
         <td>
-            <?= $form->field($model, "scheme_id")->checkboxList(\yii\helpers\ArrayHelper::map(Scheme::getAll(),'id', 'schemeName')); ?>
+            <?= $form->field($model, "scheme_id")->checkboxList($schemes); ?>
         </td>
     </tr>
     <tr>

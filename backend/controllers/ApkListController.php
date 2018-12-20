@@ -41,7 +41,8 @@ class ApkListController extends BaseController
         $model = new ApkList();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            $this->success('success', Yii::t('backend', 'Success'));
+            $this->success();
+
             return $this->redirect(['view', 'id' => $model->ID]);
         }
 
@@ -67,7 +68,8 @@ class ApkListController extends BaseController
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
-        $this->setFlash('success', Yii::t('backend', 'Success'));
+        $this->success();
+
         return $this->redirect(['index']);
     }
 
@@ -89,18 +91,17 @@ class ApkListController extends BaseController
      */
     public function actionSetScheme($id)
     {
-        $model = $this->findModel($id);
+        $model = ApkList::find()->with('schemes')->where(['ID' => $id])->one();
+
         $model->setScenario('set-scheme');
+        $model->scheme_id = ArrayHelper::getColumn($model->schemes, 'id');
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $this->success();
-            return $this->redirect(['view', 'id' => $model->ID]);
+
+            return $this->refresh();
         }
 
-
-        if (!empty($model->scheme_id)) {
-            $model->scheme_id = ArrayHelper::getColumn($model->getScheme(), 'id');
-        }
 
         return $this->render('set-scheme', [
             'model' => $model,

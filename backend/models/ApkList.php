@@ -18,11 +18,13 @@ use yii\web\Linkable;
  * @property string $class
  * @property string $img
  * @property int $sort
- * @property string $scheme_id
+
  */
 class ApkList extends \yii\db\ActiveRecord implements Linkable
 {
     public $dir = 'Android/apk/img/';
+
+    public $scheme_id;
 
     /**
      * @inheritdoc
@@ -66,19 +68,7 @@ class ApkList extends \yii\db\ActiveRecord implements Linkable
 
     public function getScheme()
     {
-        if ($this->scheme_id == 'all') {
-            return Scheme::find()->all();
-        }
 
-        $scheme_id = explode(',', $this->scheme_id);
-
-        if (($key = array_search('all', $scheme_id)) !== false) {
-            unset($scheme_id[$key]);
-        }
-
-        $this->scheme_id = implode(',', $scheme_id);
-
-        return Scheme::find()->where("id in ({$this->scheme_id})")->all();
     }
 
     public function getNewest()
@@ -178,6 +168,8 @@ class ApkList extends \yii\db\ActiveRecord implements Linkable
      * 管理设置关联
      * @param $scheme_ids
      * @return bool
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
     public function setScheme($scheme_ids)
     {
@@ -251,7 +243,6 @@ class ApkList extends \yii\db\ActiveRecord implements Linkable
             }
         ];
     }
-
 
     public function getSchemes()
     {
