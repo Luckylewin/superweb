@@ -241,6 +241,12 @@ class CommonParade
      */
     public function createParade($channelName, $paradeDate, $paradeData, $source, $url)
     {
+        foreach ($paradeData as $key => $parade) {
+            $parade['parade_time'] = substr($parade['parade_time'], 0 ,5);
+            $parade['parade_timestamp'] = strtotime($paradeDate . " " . $parade['parade_time']);
+            $paradeData[$key] = $parade;
+        }
+
         //查找频道是否存在
         $channel = OttChannel::find()->where(['or', ['name' => $channelName], ['alias_name' => $channelName]])->one();
         if (!is_null(Parade::findOne(['channel_name' => $channelName, 'parade_date' => $paradeDate])) || empty($paradeData)) {

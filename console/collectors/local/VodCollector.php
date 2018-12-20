@@ -43,6 +43,10 @@ class VodCollector extends common
      */
     public $language;
 
+    /**
+     * @var string 分类
+     */
+    public $genre;
 
     public $address = 'http://vod.newpo.cn:8080';
 
@@ -57,12 +61,15 @@ class VodCollector extends common
                 $this->$field = $options[$field];
             }
         }
+
+        if (isset($options['genre'])) {
+            $this->genre = $options['genre'];
+        }
+
     }
 
     public function doCollect()
     {
-
-
         if (is_dir($this->dir) == false) {
             $this->color("不存在目录: {$this->dir}", 'ERROR');
             return false;
@@ -165,6 +172,20 @@ class VodCollector extends common
                         $profile['vod_area'] = $data['vod_area'];
                         $data = array_merge($data, $profile);
                         $data['vod_fill_flag'] = 1;
+                        if (strpos($directory, 'yueyuban') !== false) {
+                            $data['genre'] .= ' 粤语';
+                        }
+
+                    } else if ($this->type == 'Serial') {
+                         $data['genre'] = $this->genre;
+                    }
+
+                    if (isset($data['vod_year']) && $data['vod_year'] >= 2018) {
+                        if (isset($data['vod_genre'])) {
+                            $data['genre'] .= ' 最新';
+                        } else {
+                            $data['genre'] = '最新';
+                        }
                     }
 
                     $data['vod_language'] = $this->language;

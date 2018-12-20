@@ -8,11 +8,10 @@
 
 namespace console\controllers;
 
+use Yii;
 use common\models\Vod;
-use common\models\VodList;
 use console\models\Tv;
 use console\traits\Similar;
-use Yii;
 use console\collectors\local\VodCollector;
 use console\models\Cartoon;
 use console\models\Movie;
@@ -114,7 +113,8 @@ class VodController extends Controller
             'playpath' => '/vod/hanju',
             'type'     => 'serial',
             'language' => '韩语',
-            'area'     => '韩国'
+            'area'     => '韩国',
+            'genre'    => '韩剧'
         ]);
     }
 
@@ -125,7 +125,8 @@ class VodController extends Controller
             'playpath' => '/vod/neidi',
             'type'     => 'serial',
             'language' => '中文',
-            'area'     => '中国内地'
+            'area'     => '中国内地',
+            'genre'    => '内地'
         ]);
     }
 
@@ -136,7 +137,8 @@ class VodController extends Controller
             'playpath' => '/vod/gangju',
             'type'     => 'serial',
             'language' => '中文',
-            'area'     => '中国香港'
+            'area'     => '中国香港',
+            'genre'    => '港剧'
         ]);
     }
 
@@ -147,7 +149,8 @@ class VodController extends Controller
             'playpath' => '/vod/meiju',
             'type'     => 'serial',
             'language' => '英语',
-            'area'     => '美国'
+            'area'     => '美国',
+            'genre'    => '美剧'
         ]);
     }
 
