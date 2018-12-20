@@ -175,7 +175,7 @@ function install_nginx()
 			}
 
 			tar xvzf "${version}.tar.gz"
-			cd ${version} && ./configure --user=nginx --group=nginx --prefix=/application/${version}/ --with-http_stub_status_module --with-http_ssl_module -with-http_secure_link_module --add-module=${EXTENSION_PATH}/nginx-accesskey-master
+			cd ${version} && ./configure --user=nginx --group=nginx --prefix=/application/${version}/ --with-http_stub_status_module --with-http_ssl_module --with-http_secure_link_module --add-module=${EXTENSION_PATH}/nginx-accesskey-master
 			make && make install
 			[ $? -eq 0 ] && {
 			     ln -s /application/${version} /application/nginx
@@ -490,6 +490,11 @@ function service_queue()
    fi
 }
 
+function service_crontab()
+{
+    echo 'TO DO'
+}
+
 function service_php_fpm()
 {
    ps -ef | grep php-fpm | grep -v grep > /dev/null
@@ -669,7 +674,10 @@ function set_php_timezone()
 function set_linux_timezone()
 {
    timedatectl set-timezone Asia/Shanghai
-   ntpdate ntp1.aliyun.com
+   for n in {1..7};
+   do
+        ntpdate ntp${n}.aliyun.com;sleep 2;
+   done;
 }
 
 function api_manage()
@@ -739,8 +747,9 @@ function service_menu()
    mecho "      ➤ (2) 日志服务" "green-blue"
    mecho "      ➤ (3) 队列服务" "green-blue"
    mecho "      ➤ (4) 定时任务" "green-blue"
-   mecho "      ➤ (5) 返回上级" "white"
-   mecho "      ➤ (6) 退出" "white"
+   mecho "      ➤ (5) Nginx服务" "green-blue"
+   mecho "      ➤ (6) 返回上级" "white"
+   mecho "      ➤ (7) 退出" "white"
 
     read -p "请输入选择: " input
     case ${input} in
@@ -748,8 +757,9 @@ function service_menu()
     2) service_log;;
     3) service_queue;;
     4) service_crontab;;
-    5) menu;;
-    5) goodbye;;
+    5) service_nginx;;
+    6) menu;;
+    7) goodbye;;
     esac
 }
 

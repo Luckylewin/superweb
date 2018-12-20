@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50556
 File Encoding         : 65001
 
-Date: 2018-11-05 17:54:35
+Date: 2018-12-20 17:20:59
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -32,7 +32,7 @@ CREATE TABLE `apk_detail` (
   `is_newest` char(1) COLLATE utf8_unicode_ci NOT NULL DEFAULT '0',
   `save_position` char(5) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'oss',
   PRIMARY KEY (`ID`)
-) ENGINE=MyISAM AUTO_INCREMENT=322 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Table structure for apk_list
@@ -45,9 +45,8 @@ CREATE TABLE `apk_list` (
   `class` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `img` text COLLATE utf8_unicode_ci,
   `sort` int(11) NOT NULL DEFAULT '0',
-  `scheme_id` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'all',
   PRIMARY KEY (`ID`)
-) ENGINE=MyISAM AUTO_INCREMENT=91 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=93 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Table structure for app_boot_picture
@@ -95,7 +94,7 @@ CREATE TABLE `dvb_order` (
   `order_count` varchar(20) CHARACTER SET utf8 DEFAULT NULL COMMENT '订单数量',
   `client_id` int(11) DEFAULT NULL COMMENT '客户id',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Table structure for firmware_class
@@ -107,7 +106,7 @@ CREATE TABLE `firmware_class` (
   `is_use` char(1) DEFAULT '1',
   `order_id` int(11) NOT NULL COMMENT '订单id',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Table structure for firmware_detail
@@ -124,7 +123,7 @@ CREATE TABLE `firmware_detail` (
   `force_update` char(1) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '0' COMMENT '是否强制更新',
   `is_use` char(1) CHARACTER SET utf8 DEFAULT '1' COMMENT '是否使用',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Table structure for iptv_channel
@@ -187,6 +186,7 @@ CREATE TABLE `iptv_list` (
   `list_extend` text COMMENT '扩展配置',
   `list_icon` varchar(255) NOT NULL,
   `list_sort` smallint(6) NOT NULL,
+  `supported_language` varchar(255) NOT NULL DEFAULT '',
   PRIMARY KEY (`list_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
 
@@ -254,7 +254,7 @@ CREATE TABLE `iptv_parade` (
   `url` varchar(255) CHARACTER SET utf8 NOT NULL,
   `parade_timestamp` int(10) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7564 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Table structure for iptv_play_group
@@ -265,8 +265,9 @@ CREATE TABLE `iptv_play_group` (
   `vod_id` int(11) DEFAULT NULL,
   `group_name` varchar(32) DEFAULT NULL,
   `sort` int(11) DEFAULT '0',
+  `use_flag` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=346 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=990 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for iptv_renew
@@ -317,8 +318,11 @@ CREATE TABLE `iptv_type` (
   `field` varchar(20) CHARACTER SET utf8 NOT NULL COMMENT '字段',
   `vod_list_id` int(11) NOT NULL COMMENT '关联类型id',
   `sort` int(10) NOT NULL DEFAULT '0',
+  `image` varchar(255) NOT NULL DEFAULT '',
+  `image_hover` varchar(255) DEFAULT NULL,
+  `is_show` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Table structure for iptv_type_item
@@ -330,8 +334,10 @@ CREATE TABLE `iptv_type_item` (
   `name` varchar(255) CHARACTER SET utf8 NOT NULL COMMENT '名称',
   `zh_name` varchar(255) CHARACTER SET utf8 NOT NULL COMMENT '中文名称',
   `sort` int(11) DEFAULT '0' COMMENT '排序',
+  `exist_num` smallint(6) NOT NULL DEFAULT '0',
+  `is_show` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=109 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=191 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Table structure for iptv_upgrade_record
@@ -428,6 +434,8 @@ CREATE TABLE `iptv_vod` (
   `sort` int(8) NOT NULL DEFAULT '0',
   `vod_imdb_id` char(16) NOT NULL DEFAULT '',
   `vod_imdb_score` char(4) NOT NULL DEFAULT '0.0',
+  `vod_origin_url` varchar(255) DEFAULT NULL,
+  `is_top` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`vod_id`),
   KEY `vod_cid` (`vod_cid`),
   KEY `vod_up` (`vod_up`),
@@ -435,7 +443,19 @@ CREATE TABLE `iptv_vod` (
   KEY `vod_gold` (`vod_gold`),
   KEY `vod_addtime` (`vod_addtime`,`vod_cid`),
   KEY `vod_hits` (`vod_hits`,`vod_cid`)
-) ENGINE=MyISAM AUTO_INCREMENT=346 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for iptv_vod_profile
+-- ----------------------------
+DROP TABLE IF EXISTS `iptv_vod_profile`;
+CREATE TABLE `iptv_vod_profile` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) DEFAULT NULL,
+  `profile` text,
+  `language` char(5) NOT NULL DEFAULT 'en-US',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=792 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for iptv_vodlink
@@ -453,9 +473,11 @@ CREATE TABLE `iptv_vodlink` (
   `group_id` int(11) DEFAULT NULL,
   `save_type` char(10) NOT NULL DEFAULT 'external',
   `pic` varchar(255) DEFAULT NULL,
+  `title` varchar(100) DEFAULT NULL,
+  `during` varchar(20) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   KEY `fk_vod_id` (`video_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5492 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for log_interface
@@ -480,7 +502,48 @@ CREATE TABLE `log_interface` (
   `getCountryList` varchar(1000) CHARACTER SET utf8 DEFAULT NULL COMMENT '获取国家列表',
   `notify` varchar(1000) CHARACTER SET utf8 DEFAULT NULL COMMENT '支付异步/同步通知',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=640 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=756 DEFAULT CHARSET=latin1;
+
+-- ----------------------------
+-- Table structure for log_ott_activity
+-- ----------------------------
+DROP TABLE IF EXISTS `log_ott_activity`;
+CREATE TABLE `log_ott_activity` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `date` date DEFAULT NULL,
+  `timestamp` int(10) DEFAULT NULL,
+  `mac` varchar(32) DEFAULT NULL,
+  `genre` varchar(30) DEFAULT NULL,
+  `code` varchar(32) DEFAULT NULL,
+  `scheme` char(20) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1651 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for log_ott_genre
+-- ----------------------------
+DROP TABLE IF EXISTS `log_ott_genre`;
+CREATE TABLE `log_ott_genre` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `date` date DEFAULT NULL,
+  `genre` varchar(30) DEFAULT NULL,
+  `download_time` int(11) DEFAULT NULL,
+  `person_time` int(11) DEFAULT NULL,
+  `same_version_time` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for log_ott_genre_tmp
+-- ----------------------------
+DROP TABLE IF EXISTS `log_ott_genre_tmp`;
+CREATE TABLE `log_ott_genre_tmp` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `mac` varchar(32) DEFAULT NULL,
+  `genre` varchar(30) DEFAULT NULL,
+  `code` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for log_statics
@@ -509,7 +572,7 @@ CREATE TABLE `log_statics` (
   `getServerTime` int(7) DEFAULT '0' COMMENT '服务器时间',
   `play` int(7) DEFAULT '0' COMMENT '播放接口',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=313 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=410 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Table structure for log_tmp_interface
@@ -517,7 +580,8 @@ CREATE TABLE `log_statics` (
 DROP TABLE IF EXISTS `log_tmp_interface`;
 CREATE TABLE `log_tmp_interface` (
   `header` varchar(20) DEFAULT NULL,
-  `mac` varchar(32) DEFAULT NULL
+  `mac` varchar(32) DEFAULT NULL,
+  `code` char(5) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- ----------------------------
@@ -544,7 +608,7 @@ CREATE TABLE `mac` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `mac_sn` (`MAC`,`SN`) USING BTREE COMMENT 'mac_sn索引',
   KEY `access_token` (`access_token`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=136026 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=136030 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for ott_access
@@ -593,8 +657,12 @@ CREATE TABLE `ott_channel` (
   `image` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `alias_name` varchar(100) CHARACTER SET utf8 NOT NULL,
   `is_recommend` char(1) COLLATE utf8_unicode_ci NOT NULL DEFAULT '0' COMMENT '是否被推荐',
+  `rebroadcast_use_flag` tinyint(1) NOT NULL DEFAULT '0',
+  `rebroadcast_method` char(20) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
+  `shifting_use_flag` tinyint(1) NOT NULL DEFAULT '0',
+  `shifting_method` char(20) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=9128 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=10930 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Table structure for ott_event
@@ -609,7 +677,7 @@ CREATE TABLE `ott_event` (
   `event_icon_big` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '大图标',
   `sort` smallint(6) NOT NULL DEFAULT '0' COMMENT '排序',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Table structure for ott_event_team
@@ -627,7 +695,7 @@ CREATE TABLE `ott_event_team` (
   `team_info` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '附加属性',
   `team_alias_name` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '别名',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=72 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=92 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Table structure for ott_genre_probation
@@ -662,7 +730,7 @@ CREATE TABLE `ott_link` (
   `decode` char(1) NOT NULL DEFAULT '1' COMMENT '硬软解',
   `scheme_id` varchar(500) NOT NULL DEFAULT 'all',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=11888 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=961 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for ott_main_class
@@ -688,8 +756,9 @@ CREATE TABLE `ott_main_class` (
   `six_month_price` decimal(8,2) DEFAULT '0.00',
   `one_year_price` decimal(8,2) DEFAULT '0.00',
   `free_trail_days` smallint(6) NOT NULL DEFAULT '1',
+  `is_log` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Table structure for ott_major_event
@@ -705,7 +774,7 @@ CREATE TABLE `ott_major_event` (
   `sort` smallint(6) NOT NULL DEFAULT '0' COMMENT '排序',
   `unique` char(32) CHARACTER SET utf8 NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=114 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=501 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Table structure for ott_order
@@ -756,7 +825,7 @@ CREATE TABLE `ott_recommend` (
   `sort` char(3) NOT NULL DEFAULT '0' COMMENT '排序',
   `url` varchar(255) NOT NULL COMMENT '资源地址',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Table structure for ott_sub_class
@@ -772,7 +841,7 @@ CREATE TABLE `ott_sub_class` (
   `keyword` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '导入识别关键字',
   `created_at` int(10) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=352 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Table structure for sys__admin_scheme
@@ -883,6 +952,38 @@ CREATE TABLE `sys_client` (
 ) ENGINE=MyISAM AUTO_INCREMENT=60 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
+-- Table structure for sys_country
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_country`;
+CREATE TABLE `sys_country` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(25) CHARACTER SET utf8 NOT NULL COMMENT '英文名称',
+  `zh_name` varchar(30) CHARACTER SET utf8 NOT NULL COMMENT '中文名称',
+  `code` char(2) CHARACTER SET utf8 NOT NULL COMMENT '代码',
+  `icon` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '小图标',
+  `icon_big` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '大图标',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=203 DEFAULT CHARSET=latin1;
+
+-- ----------------------------
+-- Table structure for sys_crontab
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_crontab`;
+CREATE TABLE `sys_crontab` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) CHARACTER SET utf8 NOT NULL COMMENT '定时任务名称',
+  `route` varchar(50) CHARACTER SET utf8 NOT NULL COMMENT '任务路由',
+  `crontab_str` varchar(50) CHARACTER SET utf8 NOT NULL COMMENT 'crontab格式',
+  `switch` tinyint(1) NOT NULL DEFAULT '0' COMMENT '任务开关 0关闭 1开启',
+  `status` tinyint(1) DEFAULT '0' COMMENT '任务运行状态 0正常 1任务报错',
+  `last_rundate` datetime DEFAULT NULL COMMENT '任务上次运行时间',
+  `next_rundate` datetime DEFAULT NULL COMMENT '任务下次运行时间',
+  `execmemory` decimal(9,2) NOT NULL DEFAULT '0.00' COMMENT '任务执行消耗内存(单位/byte)',
+  `exectime` decimal(9,2) NOT NULL DEFAULT '0.00' COMMENT '任务执行消耗时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=latin1;
+
+-- ----------------------------
 -- Table structure for sys_karaoke
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_karaoke`;
@@ -929,6 +1030,23 @@ CREATE TABLE `sys_karaoke` (
 ) ENGINE=MyISAM AUTO_INCREMENT=3047 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
+-- Table structure for sys_multi_lang
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_multi_lang`;
+CREATE TABLE `sys_multi_lang` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `fid` int(11) DEFAULT NULL,
+  `table` varchar(20) DEFAULT 'iptv_type_item' COMMENT '表名',
+  `field` varchar(20) DEFAULT NULL COMMENT '字段名',
+  `origin` varchar(800) DEFAULT '' COMMENT '原值',
+  `value` varchar(800) DEFAULT NULL COMMENT '值',
+  `language` varchar(10) DEFAULT NULL COMMENT '语言',
+  PRIMARY KEY (`id`),
+  KEY `fid` (`fid`),
+  KEY `unique` (`table`,`field`,`language`)
+) ENGINE=InnoDB AUTO_INCREMENT=360 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
 -- Table structure for sys_program_log
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_program_log`;
@@ -940,7 +1058,7 @@ CREATE TABLE `sys_program_log` (
   `all_program` text CHARACTER SET utf8,
   `all_program_sum` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=379 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=409 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Table structure for sys_renewal_card
@@ -989,6 +1107,112 @@ CREATE TABLE `sys_timeline_log` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2426 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
+-- Table structure for yii2_admin
+-- ----------------------------
+DROP TABLE IF EXISTS `yii2_admin`;
+CREATE TABLE `yii2_admin` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `username` varchar(255) NOT NULL COMMENT '用户名',
+  `auth_key` varchar(32) NOT NULL,
+  `password_hash` varchar(255) NOT NULL COMMENT '密码',
+  `email` varchar(255) NOT NULL COMMENT '邮箱',
+  `reg_ip` int(11) NOT NULL DEFAULT '0' COMMENT '创建或注册IP',
+  `last_login_time` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '最后登录时间',
+  `last_login_ip` int(11) NOT NULL DEFAULT '0' COMMENT '最后登录IP',
+  `status` tinyint(4) NOT NULL DEFAULT '1' COMMENT '用户状态 1正常 0禁用',
+  `created_at` int(11) NOT NULL COMMENT '创建或注册时间',
+  `updated_at` int(11) NOT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username` (`username`),
+  UNIQUE KEY `email` (`email`),
+  KEY `status` (`status`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for yii2_auth_assignment
+-- ----------------------------
+DROP TABLE IF EXISTS `yii2_auth_assignment`;
+CREATE TABLE `yii2_auth_assignment` (
+  `item_name` varchar(64) NOT NULL,
+  `user_id` varchar(64) NOT NULL,
+  `created_at` int(11) DEFAULT NULL,
+  PRIMARY KEY (`item_name`,`user_id`),
+  CONSTRAINT `yii2_auth_assignment_ibfk_1` FOREIGN KEY (`item_name`) REFERENCES `yii2_auth_item` (`name`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for yii2_auth_item
+-- ----------------------------
+DROP TABLE IF EXISTS `yii2_auth_item`;
+CREATE TABLE `yii2_auth_item` (
+  `name` varchar(64) NOT NULL,
+  `type` int(11) NOT NULL,
+  `description` text,
+  `rule_name` varchar(64) DEFAULT NULL,
+  `data` text,
+  `created_at` int(11) DEFAULT NULL,
+  `updated_at` int(11) DEFAULT NULL,
+  PRIMARY KEY (`name`),
+  KEY `rule_name` (`rule_name`),
+  KEY `type` (`type`),
+  CONSTRAINT `yii2_auth_item_ibfk_1` FOREIGN KEY (`rule_name`) REFERENCES `yii2_auth_rule` (`name`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for yii2_auth_item_child
+-- ----------------------------
+DROP TABLE IF EXISTS `yii2_auth_item_child`;
+CREATE TABLE `yii2_auth_item_child` (
+  `parent` varchar(64) NOT NULL,
+  `child` varchar(64) NOT NULL,
+  PRIMARY KEY (`parent`,`child`),
+  KEY `child` (`child`),
+  CONSTRAINT `yii2_auth_item_child_ibfk_1` FOREIGN KEY (`parent`) REFERENCES `yii2_auth_item` (`name`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `yii2_auth_item_child_ibfk_2` FOREIGN KEY (`child`) REFERENCES `yii2_auth_item` (`name`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for yii2_auth_rule
+-- ----------------------------
+DROP TABLE IF EXISTS `yii2_auth_rule`;
+CREATE TABLE `yii2_auth_rule` (
+  `name` varchar(64) NOT NULL,
+  `data` text,
+  `created_at` int(11) DEFAULT NULL,
+  `updated_at` int(11) DEFAULT NULL,
+  PRIMARY KEY (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for yii2_config
+-- ----------------------------
+DROP TABLE IF EXISTS `yii2_config`;
+CREATE TABLE `yii2_config` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `keyid` varchar(20) NOT NULL DEFAULT '',
+  `title` varchar(100) NOT NULL DEFAULT '',
+  `data` text NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `keyid` (`keyid`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for yii2_menu
+-- ----------------------------
+DROP TABLE IF EXISTS `yii2_menu`;
+CREATE TABLE `yii2_menu` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `pid` int(10) unsigned NOT NULL DEFAULT '0',
+  `name` varchar(50) NOT NULL DEFAULT '',
+  `url` varchar(255) NOT NULL DEFAULT '/',
+  `icon_style` varchar(50) NOT NULL DEFAULT '',
+  `display` tinyint(3) unsigned NOT NULL DEFAULT '1',
+  `sort` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `type` char(10) NOT NULL DEFAULT 'all',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=129 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
 -- Table structure for yii2_migration
 -- ----------------------------
 DROP TABLE IF EXISTS `yii2_migration`;
@@ -1035,9 +1259,6 @@ CREATE TABLE `yii2_user` (
   UNIQUE KEY `password_reset_token` (`password_reset_token`)
 ) ENGINE=InnoDB AUTO_INCREMENT=86 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- --------------------------
-
-
 
 /*
 Navicat MySQL Data Transfer
@@ -1051,10 +1272,101 @@ Target Server Type    : MYSQL
 Target Server Version : 50556
 File Encoding         : 65001
 
-Date: 2018-11-05 17:55:02
+Date: 2018-12-20 17:24:05
 */
 
 SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for iptv_list
+-- ----------------------------
+DROP TABLE IF EXISTS `iptv_list`;
+CREATE TABLE `iptv_list` (
+  `list_id` smallint(6) unsigned NOT NULL AUTO_INCREMENT,
+  `list_pid` smallint(3) NOT NULL DEFAULT '0' COMMENT '父id',
+  `list_sid` tinyint(1) NOT NULL COMMENT '模型id',
+  `list_name` char(20) NOT NULL COMMENT '分类名称',
+  `list_dir` varchar(90) NOT NULL COMMENT '分类英文别名',
+  `list_status` tinyint(1) NOT NULL DEFAULT '1',
+  `list_keywords` varchar(255) NOT NULL COMMENT '分类SEO关键词',
+  `list_title` varchar(50) NOT NULL COMMENT '分类SEO标题',
+  `list_description` varchar(255) NOT NULL COMMENT '分类SEO描述',
+  `list_ispay` tinyint(1) NOT NULL DEFAULT '0' COMMENT '影片观看权限',
+  `list_price` smallint(6) NOT NULL DEFAULT '0' COMMENT '影片单独付费',
+  `list_trysee` smallint(6) NOT NULL DEFAULT '0' COMMENT '影片试看时间',
+  `list_extend` text COMMENT '扩展配置',
+  `list_icon` varchar(255) NOT NULL,
+  `list_sort` smallint(6) NOT NULL,
+  `supported_language` varchar(255) NOT NULL DEFAULT '',
+  PRIMARY KEY (`list_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of iptv_list
+-- ----------------------------
+INSERT INTO `iptv_list` VALUES ('1', '0', '1', '电影', 'Movie', '1', '电影,电影大全,电影天堂,最新电影,好看的电影,电影排行榜', '动作', '为您提供更新电影、好看的电影排行榜及电影迅雷下载，免费在线观看伦理电影、动作片、喜剧片、爱情片、搞笑片等全新电影。', '1', '1', '5', '{\"type\":\"\\u559c\\u5267,\\u7231\\u60c5,\\u6050\\u6016,\\u52a8\\u4f5c,\\u79d1\\u5e7b,\\u5267\\u60c5,\\u6218\\u4e89,\\u8b66\\u532a,\\u72af\\u7f6a,\\u52a8\\u753b,\\u5947\\u5e7b,\\u6b66\\u4fa0,\\u5192\\u9669,\\u67aa\\u6218,\\u6050\\u6016,\\u60ac\\u7591,\\u60ca\\u609a,\\u7ecf\\u5178,\\u9752\\u6625,\\u6587\\u827a,\\u5fae\\u7535\\u5f71,\\u53e4\\u88c5,\\u5386\\u53f2,\\u8fd0\\u52a8,\\u519c\\u6751,\\u513f\\u7ae5,\\u7f51\\u7edc\\u7535\\u5f71\",\"area\":\"\\u5185\\u5730,\\u7f8e\\u56fd,\\u9999\\u6e2f,\\u53f0\\u6e7e,\\u97e9\\u56fd,\\u65e5\\u672c,\\u6cd5\\u56fd,\\u82f1\\u56fd,\\u5fb7\\u56fd,\\u6cf0\\u56fd,\\u5370\\u5ea6,\\u6b27\\u6d32,\\u4e1c\\u5357\\u4e9a,\\u5176\\u4ed6\",\"year\":\"2018,2017,2016,2015,2014,2013,2012,2011,2010,2009,2008,2007,2006,2005,2004,2003,2002,2001,2000\",\"star\":\"\\u738b\\u5b9d\\u5f3a,\\u9ec4\\u6e24,\\u5468\\u8fc5,\\u5468\\u51ac\\u96e8,\\u8303\\u51b0\\u51b0,\\u9648\\u5b66\\u51ac,\\u9648\\u4f1f\\u9706,\\u90ed\\u91c7\\u6d01,\\u9093\\u8d85,\\u6210\\u9f99,\\u845b\\u4f18,\\u6797\\u6b63\\u82f1,\\u5f20\\u5bb6\\u8f89,\\u6881\\u671d\\u4f1f,\\u5f90\\u5ce5,\\u90d1\\u607a,\\u5434\\u5f66\\u7956,\\u5218\\u5fb7\\u534e,\\u5468\\u661f\\u9a70,\\u6797\\u9752\\u971e,\\u5468\\u6da6\\u53d1,\\u674e\\u8fde\\u6770,\\u7504\\u5b50\\u4e39,\\u53e4\\u5929\\u4e50,\\u6d2a\\u91d1\\u5b9d,\\u59da\\u6668,\\u502a\\u59ae,\\u9ec4\\u6653\\u660e,\\u5f6d\\u4e8e\\u664f,\\u6c64\\u552f,\\u9648\\u5c0f\\u6625\",\"state\":\"\\u6b63\\u7247,\\u9884\\u544a\\u7247,\\u82b1\\u7d6e\",\"language\":\"\\u56fd\\u8bed,\\u82f1\\u8bed,\\u7ca4\\u8bed,\\u95fd\\u5357\\u8bed,\\u97e9\\u8bed,\\u65e5\\u8bed,\\u5176\\u5b83\",\"version\":\"\\u9ad8\\u6e05\\u7248,\\u5267\\u573a\\u7248,\\u62a2\\u5148\\u7248,OVA,TV,\\u5f71\\u9662\\u7248\",\"weekday\":\"\\u4e00,\\u4e8c,\\u4e09,\\u56db,\\u4e94,\\u516d,\\u65e5\"}', '/images/20180423165905227.jpg', '2', '[\"en_US\",\"zh_CN\",\"vi_VN\"]');
+INSERT INTO `iptv_list` VALUES ('2', '0', '1', '电视剧', 'Serial', '1', '电视剧,最新电视剧,好看的电视剧,热播电视剧,电视剧在线观看', '爱情', '为您提供2017新电视剧排行榜，韩国电视剧、泰国电视剧、香港TVB全新电视剧排行榜、好看的电视剧等热播电视剧排行榜，并提供免费高清电视剧下载及在线观看。', '0', '0', '5', '{\"type\":\"\\u53e4\\u88c5,\\u6218\\u4e89,\\u9752\\u6625\\u5076\\u50cf,\\u559c\\u5267,\\u5bb6\\u5ead,\\u72af\\u7f6a,\\u52a8\\u4f5c,\\u5947\\u5e7b,\\u5267\\u60c5,\\u5386\\u53f2,\\u7ecf\\u5178,\\u4e61\\u6751,\\u60c5\\u666f,\\u5546\\u6218,\\u7f51\\u5267,\\u5176\\u4ed6\",\"area\":\"\\u5185\\u5730,\\u97e9\\u56fd,\\u9999\\u6e2f,\\u53f0\\u6e7e,\\u65e5\\u672c,\\u7f8e\\u56fd,\\u6cf0\\u56fd,\\u82f1\\u56fd,\\u65b0\\u52a0\\u5761,\\u5176\\u4ed6\",\"year\":\"2018,2017,2016,2015,2014,2013,2012,2011,2010,2009,2008,2006,2005,2004\",\"star\":\"\\u738b\\u5b9d\\u5f3a,\\u80e1\\u6b4c,\\u970d\\u5efa\\u534e,\\u8d75\\u4e3d\\u9896,\\u5218\\u6d9b,\\u5218\\u8bd7\\u8bd7,\\u9648\\u4f1f\\u9706,\\u5434\\u5947\\u9686,\\u9646\\u6bc5,\\u5510\\u5ae3,\\u5173\\u6653\\u5f64,\\u5b59\\u4fea,\\u674e\\u6613\\u5cf0,\\u5f20\\u7ff0,\\u674e\\u6668,\\u8303\\u51b0\\u51b0,\\u6797\\u5fc3\\u5982,\\u6587\\u7ae0,\\u9a6c\\u4f0a\\u740d,\\u4f5f\\u5927\\u4e3a,\\u5b59\\u7ea2\\u96f7,\\u9648\\u5efa\\u658c,\\u674e\\u5c0f\\u7490\",\"state\":\"\\u6b63\\u7247,\\u9884\\u544a\\u7247,\\u82b1\\u7d6e\",\"language\":\"\\u56fd\\u8bed,\\u82f1\\u8bed,\\u7ca4\\u8bed,\\u95fd\\u5357\\u8bed,\\u97e9\\u8bed,\\u65e5\\u8bed,\\u5176\\u5b83\",\"version\":\"\\u9ad8\\u6e05\\u7248,\\u5267\\u573a\\u7248,\\u62a2\\u5148\\u7248,OVA,TV,\\u5f71\\u9662\\u7248\",\"weekday\":\"\\u4e00,\\u4e8c,\\u4e09,\\u56db,\\u4e94,\\u516d,\\u65e5\"}', '/images/20180423165905227.jpg', '2', '[\"en_US\",\"zh_CN\",\"vi_VN\"]');
+INSERT INTO `iptv_list` VALUES ('26', '0', '1', '动漫', 'Cartoon', '1', 'Cartoon', 'Cartoon', 'Cartoon', '0', '0', '5', null, '/images/20180423165905227.jpg', '3', '[\"en_US\",\"zh_CN\",\"vi_VN\"]');
+INSERT INTO `iptv_list` VALUES ('27', '0', '1', '综艺', 'Variety', '1', 'Variety', 'Variety', 'Variety', '0', '0', '5', null, '/images/20180423165905227.jpg', '4', '[\"en_US\",\"zh_CN\",\"vi_VN\"]');
+
+-- ----------------------------
+-- Table structure for ott_main_class
+-- ----------------------------
+DROP TABLE IF EXISTS `ott_main_class`;
+CREATE TABLE `ott_main_class` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) CHARACTER SET utf8 NOT NULL COMMENT '名字',
+  `zh_name` varchar(255) CHARACTER SET utf8 NOT NULL COMMENT '中文名字',
+  `description` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+  `icon` varchar(255) CHARACTER SET utf8 DEFAULT NULL COMMENT '图标',
+  `icon_hover` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+  `icon_bg` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+  `icon_bg_hover` varchar(255) DEFAULT NULL,
+  `sort` char(3) CHARACTER SET utf8 DEFAULT '0' COMMENT '排序',
+  `is_show` char(1) CHARACTER SET utf8 NOT NULL DEFAULT '1' COMMENT '是否显示',
+  `is_charge` char(1) NOT NULL DEFAULT '0' COMMENT '是否收费',
+  `price` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '价格',
+  `use_flag` char(1) NOT NULL DEFAULT '1',
+  `list_name` varchar(50) NOT NULL,
+  `one_month_price` decimal(8,2) DEFAULT '0.00',
+  `three_month_price` decimal(8,2) DEFAULT '0.00',
+  `six_month_price` decimal(8,2) DEFAULT '0.00',
+  `one_year_price` decimal(8,2) DEFAULT '0.00',
+  `free_trail_days` smallint(6) NOT NULL DEFAULT '1',
+  `is_log` tinyint(1) DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+
+-- ----------------------------
+-- Records of ott_main_class
+-- ----------------------------
+INSERT INTO `ott_main_class` VALUES ('1', 'br', 'br', '', '', '', '', '', '1', '1', '0', '0.00', '1', 'br', '0.00', '0.00', '0.00', '0.00', '1', '0');
+INSERT INTO `ott_main_class` VALUES ('2', 'ltn', 'ltn', '', '', '', '', '', '2', '1', '0', '0.00', '1', 'ltn', '0.00', '0.00', '0.00', '0.00', '1', '0');
+INSERT INTO `ott_main_class` VALUES ('3', 'sport', '体育', '', '', '', '', '', '', '1', '0', '0.00', '0', 'sport', null, null, null, null, '7', '1');
+
+-- ----------------------------
+-- Table structure for sys_client
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_client`;
+CREATE TABLE `sys_client` (
+  `id` int(30) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) DEFAULT NULL COMMENT '名称',
+  `phone` varchar(30) DEFAULT NULL COMMENT '手机',
+  `admin_id` int(30) DEFAULT NULL,
+  `client_age` int(30) DEFAULT NULL COMMENT '名称',
+  `client_address` varchar(100) DEFAULT NULL COMMENT '地址',
+  `client_email` varchar(100) DEFAULT NULL COMMENT '邮箱',
+  `client_qq` varchar(30) DEFAULT NULL COMMENT 'qq',
+  `client_engname` varchar(100) NOT NULL DEFAULT '' COMMENT '英文名',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=60 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of sys_client
+-- ----------------------------
+INSERT INTO `sys_client` VALUES ('54', '泰普森科技有限公司', '0862075521535616', '1', '2017', '中国广东深圳', '', '', '');
+INSERT INTO `sys_client` VALUES ('55', 'someone', '13802435180', '2', '2017', '', '', '', '');
+INSERT INTO `sys_client` VALUES ('58', 'TIrmao', '00', '13', null, '', '', '', 'TIrmao');
 
 -- ----------------------------
 -- Table structure for sys_country
@@ -1297,13 +1609,13 @@ CREATE TABLE `sys_crontab` (
 -- ----------------------------
 -- Records of sys_crontab
 -- ----------------------------
-INSERT INTO `sys_crontab` VALUES ('3', '周天凌晨3点备份数据库', 'dump/create -db=db -gz -s', '0 3 * * 0', '1', '0', '2018-11-05 09:08:00', '2018-11-11 03:00:00', '0.00', '16.29');
-INSERT INTO `sys_crontab` VALUES ('10', '维护订单表状态', 'order/update', '*/30 * * * *', '1', '0', '2018-11-05 17:30:00', '2018-11-05 18:00:00', '0.00', '0.55');
-INSERT INTO `sys_crontab` VALUES ('12', '每个小时更新统计日志', 'log/daily-log', '0 * * * *', '1', '0', '2018-11-05 17:00:00', '2018-11-05 18:00:00', '0.00', '0.99');
-INSERT INTO `sys_crontab` VALUES ('15', '同步用户在线状态', 'mac/sync', '*/15 * * * *', '1', '0', '2018-11-05 17:45:00', '2018-11-05 18:00:00', '0.00', '1.77');
-INSERT INTO `sys_crontab` VALUES ('16', '离线统计昨天的日志', 'log/offline', '30 0 * * *', '1', '0', '2018-11-05 09:08:00', '2018-11-06 00:30:00', '0.00', '11.22');
-INSERT INTO `sys_crontab` VALUES ('17', '更新预告中间表', 'parade/create-cache', '10 0 * * *', '1', '0', '2018-11-05 09:08:00', '2018-11-06 00:10:00', '0.00', '11.83');
-INSERT INTO `sys_crontab` VALUES ('19', 'TEST', 'hello/test', '*/1 * * * *', '1', '0', '2018-11-05 17:55:00', '2018-11-05 17:56:00', '0.00', '0.80');
+INSERT INTO `sys_crontab` VALUES ('3', '周天凌晨3点备份数据库', 'dump/create -db=db -gz -s', '0 3 * * 0', '1', '0', '2018-12-17 09:15:00', '2018-12-23 03:00:00', '0.00', '7.06');
+INSERT INTO `sys_crontab` VALUES ('10', '维护订单表状态', 'order/update', '*/30 * * * *', '1', '0', '2018-12-20 17:00:00', '2018-12-20 17:30:00', '0.00', '0.69');
+INSERT INTO `sys_crontab` VALUES ('12', '每个小时更新统计日志', 'log/daily-log', '0 * * * *', '1', '0', '2018-12-20 17:00:00', '2018-12-20 18:00:00', '0.00', '0.70');
+INSERT INTO `sys_crontab` VALUES ('15', '同步用户在线状态', 'mac/sync', '*/15 * * * *', '1', '0', '2018-12-20 17:15:00', '2018-12-20 17:30:00', '0.00', '2.11');
+INSERT INTO `sys_crontab` VALUES ('16', '离线统计昨天的日志', 'log/offline', '30 0 * * *', '1', '0', '2018-12-20 00:30:00', '2018-12-21 00:30:00', '0.00', '0.53');
+INSERT INTO `sys_crontab` VALUES ('17', '更新预告中间表', 'parade/create-cache', '10 0 * * *', '1', '0', '2018-12-20 00:10:00', '2018-12-21 00:10:00', '0.00', '0.43');
+INSERT INTO `sys_crontab` VALUES ('19', 'TEST', 'hello/test', '*/1 * * * *', '1', '0', '2018-12-20 17:21:00', '2018-12-20 17:22:00', '0.00', '0.04');
 
 -- ----------------------------
 -- Table structure for yii2_admin
@@ -1325,13 +1637,14 @@ CREATE TABLE `yii2_admin` (
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`),
   KEY `status` (`status`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of yii2_admin
 -- ----------------------------
-INSERT INTO `yii2_admin` VALUES ('1', 'admin', 'SbSY36BLw3V2lU-GB7ZAzCVJKDFx82IJ', '$2y$13$8/lchlfwG1xrO.gd5MWHfuuBpqQeK/6aDtZvvMUliTmKbfUAkK.v6', '876505905@qq.com', '2130706433', '1541387411', '2147483647', '1', '1482305564', '1541398061');
+INSERT INTO `yii2_admin` VALUES ('1', 'admin', 'SbSY36BLw3V2lU-GB7ZAzCVJKDFx82IJ', '$2y$13$8/lchlfwG1xrO.gd5MWHfuuBpqQeK/6aDtZvvMUliTmKbfUAkK.v6', '876505905@qq.com', '2130706433', '1545015321', '2147483647', '1', '1482305564', '1545015321');
 INSERT INTO `yii2_admin` VALUES ('2', 'apk_manager', 'iv8Ck65kWUJzqPwxf9TQHIEWj8hGP98K', '$2y$13$q7Ck2t1N78JbneQkfgVjcuT6EvxSXOPLYfTGRIjldBw.SUENA8Kgm', 'newpoyang@163.com', '2004602048', '1539834796', '1934492162', '1', '1534213384', '1539834796');
+INSERT INTO `yii2_admin` VALUES ('3', 'order', 'uhwIBOKNMiJM_lNg6dssnbHaEVuejiUp', '$2y$13$TTq.yte.5vWPiQSIv7CW.etWVsINr4eJO7C1cETED03opk/yMlpHC', '', '2147483647', '1543806230', '2147483647', '1', '1543805794', '1544781230');
 
 -- ----------------------------
 -- Table structure for yii2_auth_assignment
@@ -1349,7 +1662,8 @@ CREATE TABLE `yii2_auth_assignment` (
 -- Records of yii2_auth_assignment
 -- ----------------------------
 INSERT INTO `yii2_auth_assignment` VALUES ('app管理员', '2', '1534213387');
-INSERT INTO `yii2_auth_assignment` VALUES ('超级管理员', '1', '1520270508');
+INSERT INTO `yii2_auth_assignment` VALUES ('订单管理员', '3', '1543805804');
+INSERT INTO `yii2_auth_assignment` VALUES ('超级管理员', '1', '1544781315');
 INSERT INTO `yii2_auth_assignment` VALUES ('超级管理员', '9', '1519830838');
 
 -- ----------------------------
@@ -1373,64 +1687,89 @@ CREATE TABLE `yii2_auth_item` (
 -- ----------------------------
 -- Records of yii2_auth_item
 -- ----------------------------
-INSERT INTO `yii2_auth_item` VALUES ('#', '2', '', '#', null, '1519808376', '1534397550');
-INSERT INTO `yii2_auth_item` VALUES ('admin/auth', '2', '', 'admin/auth', null, '1484734191', '1534401436');
-INSERT INTO `yii2_auth_item` VALUES ('admin/create', '2', '', 'admin/create', null, '1484734191', '1534401436');
-INSERT INTO `yii2_auth_item` VALUES ('admin/delete', '2', '', 'admin/delete', null, '1484734191', '1534401436');
-INSERT INTO `yii2_auth_item` VALUES ('admin/index', '2', '', 'admin/index', null, '1484734191', '1534401436');
-INSERT INTO `yii2_auth_item` VALUES ('admin/update', '2', '', 'admin/update', null, '1484734191', '1534401436');
-INSERT INTO `yii2_auth_item` VALUES ('apk-detail/create', '2', '', 'apk-detail/create', null, '1534323523', '1534401437');
-INSERT INTO `yii2_auth_item` VALUES ('apk-detail/delete', '2', '', 'apk-detail/delete', null, '1534323801', '1534401437');
-INSERT INTO `yii2_auth_item` VALUES ('apk-detail/index', '2', '', 'apk-detail/index', null, '1534324049', '1534401437');
-INSERT INTO `yii2_auth_item` VALUES ('apk-detail/update', '2', '', 'apk-detail/update', null, '1534323523', '1534401437');
-INSERT INTO `yii2_auth_item` VALUES ('apk-detail/view', '2', '', 'apk-detail/view', null, '1534323801', '1534401437');
-INSERT INTO `yii2_auth_item` VALUES ('apk-list/create', '2', '', 'apk-list/create', null, '1534397461', '1534401437');
-INSERT INTO `yii2_auth_item` VALUES ('apk-list/delete', '2', '', 'apk-list/delete', null, '1534304609', '1534401437');
-INSERT INTO `yii2_auth_item` VALUES ('apk-list/index', '2', '', 'apk-list/index', null, '1534213343', '1534401436');
-INSERT INTO `yii2_auth_item` VALUES ('apk-list/set-scheme', '2', '', 'apk-list/set-scheme', null, '1534401437', '1534401437');
-INSERT INTO `yii2_auth_item` VALUES ('apk-list/update', '2', '', 'apk-list/update', null, '1534304535', '1534401437');
-INSERT INTO `yii2_auth_item` VALUES ('apk-list/view', '2', '', 'apk-list/view', null, '1534304609', '1534401436');
-INSERT INTO `yii2_auth_item` VALUES ('app-boot-picture/index', '2', '', 'app-boot-picture/index', null, '1534213911', '1534213911');
+INSERT INTO `yii2_auth_item` VALUES ('#', '2', '', '#', null, '1519808376', '1544780453');
+INSERT INTO `yii2_auth_item` VALUES ('admin/auth', '2', '', 'admin/auth', null, '1484734191', '1543567675');
+INSERT INTO `yii2_auth_item` VALUES ('admin/create', '2', '', 'admin/create', null, '1484734191', '1543567675');
+INSERT INTO `yii2_auth_item` VALUES ('admin/delete', '2', '', 'admin/delete', null, '1484734191', '1543567675');
+INSERT INTO `yii2_auth_item` VALUES ('admin/index', '2', '', 'admin/index', null, '1484734191', '1543567675');
+INSERT INTO `yii2_auth_item` VALUES ('admin/update', '2', '', 'admin/update', null, '1484734191', '1543567675');
+INSERT INTO `yii2_auth_item` VALUES ('apk-detail/create', '2', '', 'apk-detail/create', null, '1534323523', '1544780453');
+INSERT INTO `yii2_auth_item` VALUES ('apk-detail/delete', '2', '', 'apk-detail/delete', null, '1534323801', '1544780453');
+INSERT INTO `yii2_auth_item` VALUES ('apk-detail/index', '2', '', 'apk-detail/index', null, '1534324049', '1544780453');
+INSERT INTO `yii2_auth_item` VALUES ('apk-detail/update', '2', '', 'apk-detail/update', null, '1534323523', '1544780453');
+INSERT INTO `yii2_auth_item` VALUES ('apk-detail/view', '2', '', 'apk-detail/view', null, '1534323801', '1544780453');
+INSERT INTO `yii2_auth_item` VALUES ('apk-list/create', '2', '', 'apk-list/create', null, '1534397461', '1544780453');
+INSERT INTO `yii2_auth_item` VALUES ('apk-list/delete', '2', '', 'apk-list/delete', null, '1534304609', '1544780453');
+INSERT INTO `yii2_auth_item` VALUES ('apk-list/index', '2', '', 'apk-list/index', null, '1534213343', '1544780453');
+INSERT INTO `yii2_auth_item` VALUES ('apk-list/set-scheme', '2', '', 'apk-list/set-scheme', null, '1534401437', '1543567676');
+INSERT INTO `yii2_auth_item` VALUES ('apk-list/update', '2', '', 'apk-list/update', null, '1534304535', '1544780453');
+INSERT INTO `yii2_auth_item` VALUES ('apk-list/view', '2', '', 'apk-list/view', null, '1534304609', '1544780453');
+INSERT INTO `yii2_auth_item` VALUES ('app-boot-picture/index', '2', '', 'app-boot-picture/index', null, '1534213911', '1543567676');
 INSERT INTO `yii2_auth_item` VALUES ('app-list/set-scheme', '2', '', 'app-list/set-scheme', null, '1534401297', '1534401297');
-INSERT INTO `yii2_auth_item` VALUES ('app-list/update', '2', '', 'app-list/update', null, '1534304535', '1534401436');
+INSERT INTO `yii2_auth_item` VALUES ('app-list/update', '2', '', 'app-list/update', null, '1534304535', '1544780453');
 INSERT INTO `yii2_auth_item` VALUES ('app-menu/index', '2', '', 'app-menu/index', null, '1534213911', '1534213911');
-INSERT INTO `yii2_auth_item` VALUES ('app管理员', '1', 'app管理员', null, null, '1534213325', '1534213325');
+INSERT INTO `yii2_auth_item` VALUES ('app管理员', '1', 'app管理员', null, null, '1534213325', '1544595551');
 INSERT INTO `yii2_auth_item` VALUES ('backup/default/index', '2', '', 'backup/default/index', null, '1519808877', '1519811523');
+INSERT INTO `yii2_auth_item` VALUES ('banner/index', '2', '', 'banner/index', null, '1543485828', '1543567676');
+INSERT INTO `yii2_auth_item` VALUES ('client/index', '2', '', 'client/index', null, '1543485828', '1543567675');
 INSERT INTO `yii2_auth_item` VALUES ('combo/create', '2', '', 'combo/create', null, '1519808877', '1520059861');
 INSERT INTO `yii2_auth_item` VALUES ('combo/delete', '2', '', 'combo/delete', null, '1519808877', '1520059861');
 INSERT INTO `yii2_auth_item` VALUES ('combo/index', '2', '', 'combo/index', null, '1517996186', '1520059861');
 INSERT INTO `yii2_auth_item` VALUES ('combo/update', '2', '', 'combo/update', null, '1519808877', '1520059861');
 INSERT INTO `yii2_auth_item` VALUES ('combo/view', '2', '', 'combo/view', null, '1519378925', '1520059861');
-INSERT INTO `yii2_auth_item` VALUES ('config/attachment', '2', '', 'config/attachment', null, '1484734191', '1534401435');
-INSERT INTO `yii2_auth_item` VALUES ('config/basic', '2', '', 'config/basic', null, '1484734191', '1534401435');
-INSERT INTO `yii2_auth_item` VALUES ('config/send-mail', '2', '', 'config/send-mail', null, '1484734191', '1534401435');
+INSERT INTO `yii2_auth_item` VALUES ('config/attachment', '2', '', 'config/attachment', null, '1484734191', '1543567675');
+INSERT INTO `yii2_auth_item` VALUES ('config/basic', '2', '', 'config/basic', null, '1484734191', '1543567675');
+INSERT INTO `yii2_auth_item` VALUES ('config/send-mail', '2', '', 'config/send-mail', null, '1484734191', '1543567675');
+INSERT INTO `yii2_auth_item` VALUES ('country/index', '2', '', 'country/index', null, '1543485827', '1543567675');
+INSERT INTO `yii2_auth_item` VALUES ('crontab/index', '2', '', 'crontab/index', null, '1543485827', '1543567675');
 INSERT INTO `yii2_auth_item` VALUES ('database/export', '2', '', 'database/export', null, '1484734305', '1520059861');
+INSERT INTO `yii2_auth_item` VALUES ('db-manager/default', '2', '', 'db-manager/default', null, '1543485827', '1543567675');
+INSERT INTO `yii2_auth_item` VALUES ('dvb-order/index', '2', '', 'dvb-order/index', null, '1543485828', '1543567676');
 INSERT INTO `yii2_auth_item` VALUES ('excel-setting/update', '2', '', 'excel-setting/update', null, '1519451875', '1519451875');
 INSERT INTO `yii2_auth_item` VALUES ('excel/import', '2', '', 'excel/import', null, '1519436284', '1520059861');
 INSERT INTO `yii2_auth_item` VALUES ('excel/index', '2', '', 'excel/index', null, '1519436031', '1520059861');
-INSERT INTO `yii2_auth_item` VALUES ('index/frame', '2', '', 'index/frame', null, '1518057962', '1534401436');
-INSERT INTO `yii2_auth_item` VALUES ('index/index', '2', '', 'index/index', null, '1484734191', '1534401436');
-INSERT INTO `yii2_auth_item` VALUES ('log/index', '2', '', 'log/index', null, '1534213984', '1534397550');
-INSERT INTO `yii2_auth_item` VALUES ('menu/create', '2', '', 'menu/create', null, '1484734191', '1534401435');
-INSERT INTO `yii2_auth_item` VALUES ('menu/delete', '2', '', 'menu/delete', null, '1484734191', '1534401436');
-INSERT INTO `yii2_auth_item` VALUES ('menu/index', '2', '', 'menu/index', null, '1484734191', '1534401435');
-INSERT INTO `yii2_auth_item` VALUES ('menu/update', '2', '', 'menu/update', null, '1484734191', '1534401436');
-INSERT INTO `yii2_auth_item` VALUES ('note/index', '2', '', 'note/index', null, '1534213984', '1534397550');
+INSERT INTO `yii2_auth_item` VALUES ('firmware-class/index', '2', '', 'firmware-class/index', null, '1543485828', '1543567676');
+INSERT INTO `yii2_auth_item` VALUES ('http://ott.topertv.com:10080/showdoc/index.php?s=/5&page_id=65', '2', '', 'http://ott.topertv.com:10080/showdoc/index.php?s=/5&page_id=65', null, '1543485828', '1543567676');
+INSERT INTO `yii2_auth_item` VALUES ('index/frame', '2', '', 'index/frame', null, '1518057962', '1544780453');
+INSERT INTO `yii2_auth_item` VALUES ('index/index', '2', '', 'index/index', null, '1484734191', '1544780453');
+INSERT INTO `yii2_auth_item` VALUES ('karaoke/index', '2', '', 'karaoke/index', null, '1543485828', '1543567675');
+INSERT INTO `yii2_auth_item` VALUES ('log/index', '2', '', 'log/index', null, '1534213984', '1544780453');
+INSERT INTO `yii2_auth_item` VALUES ('log/now', '2', '', 'log/now', null, '1543485828', '1543567675');
+INSERT INTO `yii2_auth_item` VALUES ('mac/index', '2', '', 'mac/index', null, '1543485828', '1543567675');
+INSERT INTO `yii2_auth_item` VALUES ('main-class/index', '2', '', 'main-class/index', null, '1543485828', '1543567676');
+INSERT INTO `yii2_auth_item` VALUES ('major-event/index', '2', '', 'major-event/index', null, '1543485828', '1543567676');
+INSERT INTO `yii2_auth_item` VALUES ('menu/create', '2', '', 'menu/create', null, '1484734191', '1543567675');
+INSERT INTO `yii2_auth_item` VALUES ('menu/delete', '2', '', 'menu/delete', null, '1484734191', '1543567675');
+INSERT INTO `yii2_auth_item` VALUES ('menu/index', '2', '', 'menu/index', null, '1484734191', '1543567675');
+INSERT INTO `yii2_auth_item` VALUES ('menu/update', '2', '', 'menu/update', null, '1484734191', '1543567675');
+INSERT INTO `yii2_auth_item` VALUES ('note/index', '2', '', 'note/index', null, '1534213984', '1544780453');
 INSERT INTO `yii2_auth_item` VALUES ('order/create', '2', '', 'order/create', null, '1518074401', '1520059861');
 INSERT INTO `yii2_auth_item` VALUES ('order/delete', '2', '', 'order/delete', null, '1519450583', '1520059861');
-INSERT INTO `yii2_auth_item` VALUES ('order/index', '2', '', 'order/index', null, '1517996186', '1534401437');
+INSERT INTO `yii2_auth_item` VALUES ('order/index', '2', '', 'order/index', null, '1517996186', '1543805716');
+INSERT INTO `yii2_auth_item` VALUES ('order/statics', '2', '', 'order/statics', null, '1543567676', '1543805716');
 INSERT INTO `yii2_auth_item` VALUES ('order/update', '2', '', 'order/update', null, '1519450583', '1520059861');
 INSERT INTO `yii2_auth_item` VALUES ('order/view', '2', '', 'order/view', null, '1519377930', '1520059861');
+INSERT INTO `yii2_auth_item` VALUES ('ott-access/index', '2', '', 'ott-access/index', null, '1543485828', '1543567676');
+INSERT INTO `yii2_auth_item` VALUES ('ott-banner/index', '2', '', 'ott-banner/index', null, '1543485828', '1543567676');
+INSERT INTO `yii2_auth_item` VALUES ('ott-channel/global-search', '2', '', 'ott-channel/global-search', null, '1543485828', '1543567676');
+INSERT INTO `yii2_auth_item` VALUES ('ott-channel/recommend', '2', '', 'ott-channel/recommend', null, '1543485828', '1543567676');
+INSERT INTO `yii2_auth_item` VALUES ('ott-event/index', '2', '', 'ott-event/index', null, '1543485828', '1543567676');
+INSERT INTO `yii2_auth_item` VALUES ('ott-order/index', '2', '', 'ott-order/index', null, '1543485828', '1543567676');
+INSERT INTO `yii2_auth_item` VALUES ('ott-price-list/index', '2', '', 'ott-price-list/index', null, '1543485828', '1543567676');
+INSERT INTO `yii2_auth_item` VALUES ('parade/index', '2', '', 'parade/index', null, '1543485828', '1543567676');
 INSERT INTO `yii2_auth_item` VALUES ('product/delete', '2', '', 'product/delete', null, '1519808877', '1520059861');
 INSERT INTO `yii2_auth_item` VALUES ('product/index', '2', '', 'product/index', null, '1517996186', '1520059861');
 INSERT INTO `yii2_auth_item` VALUES ('product/update', '2', '', 'product/update', null, '1519808877', '1520059861');
 INSERT INTO `yii2_auth_item` VALUES ('product/view', '2', '', 'product/view', null, '1519378499', '1520059861');
-INSERT INTO `yii2_auth_item` VALUES ('role/auth', '2', '', 'role/auth', null, '1484734191', '1534401436');
-INSERT INTO `yii2_auth_item` VALUES ('role/create', '2', '', 'role/create', null, '1484734191', '1534401436');
-INSERT INTO `yii2_auth_item` VALUES ('role/delete', '2', '', 'role/delete', null, '1484734191', '1534401436');
+INSERT INTO `yii2_auth_item` VALUES ('renewal-card/batch-create', '2', '', 'renewal-card/batch-create', null, '1543485828', '1543567676');
+INSERT INTO `yii2_auth_item` VALUES ('renewal-card/index', '2', '', 'renewal-card/index', null, '1543485828', '1543805716');
+INSERT INTO `yii2_auth_item` VALUES ('role/auth', '2', '', 'role/auth', null, '1484734191', '1543567675');
+INSERT INTO `yii2_auth_item` VALUES ('role/create', '2', '', 'role/create', null, '1484734191', '1543567675');
+INSERT INTO `yii2_auth_item` VALUES ('role/delete', '2', '', 'role/delete', null, '1484734191', '1543567675');
 INSERT INTO `yii2_auth_item` VALUES ('role/export-setting', '2', '', 'role/export-setting', null, '1519438814', '1519451875');
-INSERT INTO `yii2_auth_item` VALUES ('role/index', '2', '', 'role/index', null, '1484734191', '1534401436');
-INSERT INTO `yii2_auth_item` VALUES ('role/update', '2', '', 'role/update', null, '1484734191', '1534401436');
+INSERT INTO `yii2_auth_item` VALUES ('role/index', '2', '', 'role/index', null, '1484734191', '1543567675');
+INSERT INTO `yii2_auth_item` VALUES ('role/update', '2', '', 'role/update', null, '1484734191', '1543567675');
+INSERT INTO `yii2_auth_item` VALUES ('scheme/index', '2', '', 'scheme/index', null, '1543485828', '1543567676');
 INSERT INTO `yii2_auth_item` VALUES ('servicer/create', '2', '', 'servicer/create', null, '1519810140', '1520059861');
 INSERT INTO `yii2_auth_item` VALUES ('servicer/index', '2', '', 'servicer/index', null, '1517996187', '1520059861');
 INSERT INTO `yii2_auth_item` VALUES ('servicer/view', '2', '', 'servicer/view', null, '1519884478', '1520059861');
@@ -1438,6 +1777,9 @@ INSERT INTO `yii2_auth_item` VALUES ('transator/delete', '2', '', 'transator/del
 INSERT INTO `yii2_auth_item` VALUES ('transator/index', '2', '', 'transator/index', null, '1517996187', '1520059861');
 INSERT INTO `yii2_auth_item` VALUES ('transator/update', '2', '', 'transator/update', null, '1519810140', '1520059861');
 INSERT INTO `yii2_auth_item` VALUES ('transator/view', '2', '', 'transator/view', null, '1519884478', '1520059861');
+INSERT INTO `yii2_auth_item` VALUES ('user/index', '2', '', 'user/index', null, '1543485828', '1543567675');
+INSERT INTO `yii2_auth_item` VALUES ('vod-list/index', '2', '', 'vod-list/index', null, '1543485828', '1543567676');
+INSERT INTO `yii2_auth_item` VALUES ('订单管理员', '1', '订单管理', null, null, '1543805677', '1543805677');
 INSERT INTO `yii2_auth_item` VALUES ('超级管理员', '1', '授权所有权限', null, null, '1484712662', '1519884549');
 
 -- ----------------------------
@@ -1472,6 +1814,7 @@ INSERT INTO `yii2_auth_item_child` VALUES ('app管理员', 'index/frame');
 INSERT INTO `yii2_auth_item_child` VALUES ('app管理员', 'index/index');
 INSERT INTO `yii2_auth_item_child` VALUES ('app管理员', 'log/index');
 INSERT INTO `yii2_auth_item_child` VALUES ('app管理员', 'note/index');
+INSERT INTO `yii2_auth_item_child` VALUES ('超级管理员', '#');
 INSERT INTO `yii2_auth_item_child` VALUES ('超级管理员', 'admin/auth');
 INSERT INTO `yii2_auth_item_child` VALUES ('超级管理员', 'admin/create');
 INSERT INTO `yii2_auth_item_child` VALUES ('超级管理员', 'admin/delete');
@@ -1488,22 +1831,52 @@ INSERT INTO `yii2_auth_item_child` VALUES ('超级管理员', 'apk-list/index');
 INSERT INTO `yii2_auth_item_child` VALUES ('超级管理员', 'apk-list/set-scheme');
 INSERT INTO `yii2_auth_item_child` VALUES ('超级管理员', 'apk-list/update');
 INSERT INTO `yii2_auth_item_child` VALUES ('超级管理员', 'apk-list/view');
+INSERT INTO `yii2_auth_item_child` VALUES ('超级管理员', 'app-boot-picture/index');
 INSERT INTO `yii2_auth_item_child` VALUES ('超级管理员', 'app-list/update');
+INSERT INTO `yii2_auth_item_child` VALUES ('超级管理员', 'banner/index');
+INSERT INTO `yii2_auth_item_child` VALUES ('超级管理员', 'client/index');
 INSERT INTO `yii2_auth_item_child` VALUES ('超级管理员', 'config/attachment');
 INSERT INTO `yii2_auth_item_child` VALUES ('超级管理员', 'config/basic');
 INSERT INTO `yii2_auth_item_child` VALUES ('超级管理员', 'config/send-mail');
+INSERT INTO `yii2_auth_item_child` VALUES ('超级管理员', 'country/index');
+INSERT INTO `yii2_auth_item_child` VALUES ('超级管理员', 'crontab/index');
+INSERT INTO `yii2_auth_item_child` VALUES ('超级管理员', 'db-manager/default');
+INSERT INTO `yii2_auth_item_child` VALUES ('超级管理员', 'dvb-order/index');
+INSERT INTO `yii2_auth_item_child` VALUES ('超级管理员', 'firmware-class/index');
+INSERT INTO `yii2_auth_item_child` VALUES ('超级管理员', 'http://ott.topertv.com:10080/showdoc/index.php?s=/5&page_id=65');
 INSERT INTO `yii2_auth_item_child` VALUES ('超级管理员', 'index/frame');
 INSERT INTO `yii2_auth_item_child` VALUES ('超级管理员', 'index/index');
+INSERT INTO `yii2_auth_item_child` VALUES ('超级管理员', 'karaoke/index');
+INSERT INTO `yii2_auth_item_child` VALUES ('超级管理员', 'log/index');
+INSERT INTO `yii2_auth_item_child` VALUES ('超级管理员', 'log/now');
+INSERT INTO `yii2_auth_item_child` VALUES ('超级管理员', 'mac/index');
+INSERT INTO `yii2_auth_item_child` VALUES ('超级管理员', 'main-class/index');
+INSERT INTO `yii2_auth_item_child` VALUES ('超级管理员', 'major-event/index');
 INSERT INTO `yii2_auth_item_child` VALUES ('超级管理员', 'menu/create');
 INSERT INTO `yii2_auth_item_child` VALUES ('超级管理员', 'menu/delete');
 INSERT INTO `yii2_auth_item_child` VALUES ('超级管理员', 'menu/index');
 INSERT INTO `yii2_auth_item_child` VALUES ('超级管理员', 'menu/update');
+INSERT INTO `yii2_auth_item_child` VALUES ('超级管理员', 'note/index');
 INSERT INTO `yii2_auth_item_child` VALUES ('超级管理员', 'order/index');
+INSERT INTO `yii2_auth_item_child` VALUES ('超级管理员', 'order/statics');
+INSERT INTO `yii2_auth_item_child` VALUES ('超级管理员', 'ott-access/index');
+INSERT INTO `yii2_auth_item_child` VALUES ('超级管理员', 'ott-banner/index');
+INSERT INTO `yii2_auth_item_child` VALUES ('超级管理员', 'ott-channel/global-search');
+INSERT INTO `yii2_auth_item_child` VALUES ('超级管理员', 'ott-channel/recommend');
+INSERT INTO `yii2_auth_item_child` VALUES ('超级管理员', 'ott-event/index');
+INSERT INTO `yii2_auth_item_child` VALUES ('超级管理员', 'ott-order/index');
+INSERT INTO `yii2_auth_item_child` VALUES ('超级管理员', 'ott-price-list/index');
+INSERT INTO `yii2_auth_item_child` VALUES ('超级管理员', 'parade/index');
+INSERT INTO `yii2_auth_item_child` VALUES ('超级管理员', 'renewal-card/batch-create');
+INSERT INTO `yii2_auth_item_child` VALUES ('超级管理员', 'renewal-card/index');
 INSERT INTO `yii2_auth_item_child` VALUES ('超级管理员', 'role/auth');
 INSERT INTO `yii2_auth_item_child` VALUES ('超级管理员', 'role/create');
 INSERT INTO `yii2_auth_item_child` VALUES ('超级管理员', 'role/delete');
 INSERT INTO `yii2_auth_item_child` VALUES ('超级管理员', 'role/index');
 INSERT INTO `yii2_auth_item_child` VALUES ('超级管理员', 'role/update');
+INSERT INTO `yii2_auth_item_child` VALUES ('超级管理员', 'scheme/index');
+INSERT INTO `yii2_auth_item_child` VALUES ('超级管理员', 'user/index');
+INSERT INTO `yii2_auth_item_child` VALUES ('超级管理员', 'vod-list/index');
 
 -- ----------------------------
 -- Table structure for yii2_auth_rule
@@ -1521,63 +1894,88 @@ CREATE TABLE `yii2_auth_rule` (
 -- Records of yii2_auth_rule
 -- ----------------------------
 INSERT INTO `yii2_auth_rule` VALUES ('', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:0:\"\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1484734191;s:9:\"updatedAt\";i:1518057980;}', '1484734191', '1518057980');
-INSERT INTO `yii2_auth_rule` VALUES ('#', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:1:\"#\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1519808376;s:9:\"updatedAt\";i:1534397550;}', '1519808376', '1534397550');
-INSERT INTO `yii2_auth_rule` VALUES ('admin/auth', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:10:\"admin/auth\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1484734191;s:9:\"updatedAt\";i:1534401436;}', '1484734191', '1534401436');
-INSERT INTO `yii2_auth_rule` VALUES ('admin/create', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:12:\"admin/create\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1484734191;s:9:\"updatedAt\";i:1534401436;}', '1484734191', '1534401436');
-INSERT INTO `yii2_auth_rule` VALUES ('admin/delete', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:12:\"admin/delete\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1484734191;s:9:\"updatedAt\";i:1534401436;}', '1484734191', '1534401436');
-INSERT INTO `yii2_auth_rule` VALUES ('admin/index', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:11:\"admin/index\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1484734191;s:9:\"updatedAt\";i:1534401436;}', '1484734191', '1534401436');
-INSERT INTO `yii2_auth_rule` VALUES ('admin/update', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:12:\"admin/update\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1484734191;s:9:\"updatedAt\";i:1534401436;}', '1484734191', '1534401436');
-INSERT INTO `yii2_auth_rule` VALUES ('apk-detail/create', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:17:\"apk-detail/create\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1534323523;s:9:\"updatedAt\";i:1534401436;}', '1534323523', '1534401436');
-INSERT INTO `yii2_auth_rule` VALUES ('apk-detail/delete', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:17:\"apk-detail/delete\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1534323801;s:9:\"updatedAt\";i:1534401437;}', '1534323801', '1534401437');
-INSERT INTO `yii2_auth_rule` VALUES ('apk-detail/index', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:16:\"apk-detail/index\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1534324048;s:9:\"updatedAt\";i:1534401437;}', '1534324048', '1534401437');
-INSERT INTO `yii2_auth_rule` VALUES ('apk-detail/update', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:17:\"apk-detail/update\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1534323523;s:9:\"updatedAt\";i:1534401437;}', '1534323523', '1534401437');
-INSERT INTO `yii2_auth_rule` VALUES ('apk-detail/view', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:15:\"apk-detail/view\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1534323801;s:9:\"updatedAt\";i:1534401437;}', '1534323801', '1534401437');
-INSERT INTO `yii2_auth_rule` VALUES ('apk-list/create', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:15:\"apk-list/create\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1534397461;s:9:\"updatedAt\";i:1534401437;}', '1534397461', '1534401437');
-INSERT INTO `yii2_auth_rule` VALUES ('apk-list/delete', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:15:\"apk-list/delete\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1534304609;s:9:\"updatedAt\";i:1534401437;}', '1534304609', '1534401437');
-INSERT INTO `yii2_auth_rule` VALUES ('apk-list/index', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:14:\"apk-list/index\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1534213343;s:9:\"updatedAt\";i:1534401436;}', '1534213343', '1534401436');
-INSERT INTO `yii2_auth_rule` VALUES ('apk-list/set-scheme', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:19:\"apk-list/set-scheme\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1534401437;s:9:\"updatedAt\";i:1534401437;}', '1534401437', '1534401437');
-INSERT INTO `yii2_auth_rule` VALUES ('apk-list/update', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:15:\"apk-list/update\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1534304535;s:9:\"updatedAt\";i:1534401437;}', '1534304535', '1534401437');
-INSERT INTO `yii2_auth_rule` VALUES ('apk-list/view', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:13:\"apk-list/view\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1534304609;s:9:\"updatedAt\";i:1534401436;}', '1534304609', '1534401436');
-INSERT INTO `yii2_auth_rule` VALUES ('app-boot-picture/index', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:22:\"app-boot-picture/index\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1534213911;s:9:\"updatedAt\";i:1534213911;}', '1534213911', '1534213911');
+INSERT INTO `yii2_auth_rule` VALUES ('#', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:1:\"#\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1519808376;s:9:\"updatedAt\";i:1544780453;}', '1519808376', '1544780453');
+INSERT INTO `yii2_auth_rule` VALUES ('admin/auth', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:10:\"admin/auth\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1484734191;s:9:\"updatedAt\";i:1543567675;}', '1484734191', '1543567675');
+INSERT INTO `yii2_auth_rule` VALUES ('admin/create', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:12:\"admin/create\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1484734191;s:9:\"updatedAt\";i:1543567675;}', '1484734191', '1543567675');
+INSERT INTO `yii2_auth_rule` VALUES ('admin/delete', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:12:\"admin/delete\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1484734191;s:9:\"updatedAt\";i:1543567675;}', '1484734191', '1543567675');
+INSERT INTO `yii2_auth_rule` VALUES ('admin/index', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:11:\"admin/index\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1484734191;s:9:\"updatedAt\";i:1543567675;}', '1484734191', '1543567675');
+INSERT INTO `yii2_auth_rule` VALUES ('admin/update', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:12:\"admin/update\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1484734191;s:9:\"updatedAt\";i:1543567675;}', '1484734191', '1543567675');
+INSERT INTO `yii2_auth_rule` VALUES ('apk-detail/create', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:17:\"apk-detail/create\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1534323523;s:9:\"updatedAt\";i:1544780453;}', '1534323523', '1544780453');
+INSERT INTO `yii2_auth_rule` VALUES ('apk-detail/delete', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:17:\"apk-detail/delete\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1534323801;s:9:\"updatedAt\";i:1544780453;}', '1534323801', '1544780453');
+INSERT INTO `yii2_auth_rule` VALUES ('apk-detail/index', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:16:\"apk-detail/index\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1534324048;s:9:\"updatedAt\";i:1544780453;}', '1534324048', '1544780453');
+INSERT INTO `yii2_auth_rule` VALUES ('apk-detail/update', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:17:\"apk-detail/update\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1534323523;s:9:\"updatedAt\";i:1544780453;}', '1534323523', '1544780453');
+INSERT INTO `yii2_auth_rule` VALUES ('apk-detail/view', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:15:\"apk-detail/view\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1534323801;s:9:\"updatedAt\";i:1544780453;}', '1534323801', '1544780453');
+INSERT INTO `yii2_auth_rule` VALUES ('apk-list/create', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:15:\"apk-list/create\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1534397461;s:9:\"updatedAt\";i:1544780453;}', '1534397461', '1544780453');
+INSERT INTO `yii2_auth_rule` VALUES ('apk-list/delete', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:15:\"apk-list/delete\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1534304609;s:9:\"updatedAt\";i:1544780453;}', '1534304609', '1544780453');
+INSERT INTO `yii2_auth_rule` VALUES ('apk-list/index', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:14:\"apk-list/index\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1534213343;s:9:\"updatedAt\";i:1544780453;}', '1534213343', '1544780453');
+INSERT INTO `yii2_auth_rule` VALUES ('apk-list/set-scheme', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:19:\"apk-list/set-scheme\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1534401437;s:9:\"updatedAt\";i:1543567676;}', '1534401437', '1543567676');
+INSERT INTO `yii2_auth_rule` VALUES ('apk-list/update', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:15:\"apk-list/update\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1534304535;s:9:\"updatedAt\";i:1544780453;}', '1534304535', '1544780453');
+INSERT INTO `yii2_auth_rule` VALUES ('apk-list/view', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:13:\"apk-list/view\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1534304609;s:9:\"updatedAt\";i:1544780453;}', '1534304609', '1544780453');
+INSERT INTO `yii2_auth_rule` VALUES ('app-boot-picture/index', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:22:\"app-boot-picture/index\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1534213911;s:9:\"updatedAt\";i:1543567676;}', '1534213911', '1543567676');
 INSERT INTO `yii2_auth_rule` VALUES ('app-list/set-scheme', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:19:\"app-list/set-scheme\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1534401297;s:9:\"updatedAt\";i:1534401297;}', '1534401297', '1534401297');
-INSERT INTO `yii2_auth_rule` VALUES ('app-list/update', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:15:\"app-list/update\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1534304535;s:9:\"updatedAt\";i:1534401436;}', '1534304535', '1534401436');
+INSERT INTO `yii2_auth_rule` VALUES ('app-list/update', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:15:\"app-list/update\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1534304535;s:9:\"updatedAt\";i:1544780453;}', '1534304535', '1544780453');
 INSERT INTO `yii2_auth_rule` VALUES ('app-menu/index', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:14:\"app-menu/index\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1534213911;s:9:\"updatedAt\";i:1534213911;}', '1534213911', '1534213911');
 INSERT INTO `yii2_auth_rule` VALUES ('backup/default/index', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:20:\"backup/default/index\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1519808877;s:9:\"updatedAt\";i:1519811523;}', '1519808877', '1519811523');
+INSERT INTO `yii2_auth_rule` VALUES ('banner/index', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:12:\"banner/index\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1543485828;s:9:\"updatedAt\";i:1543567676;}', '1543485828', '1543567676');
+INSERT INTO `yii2_auth_rule` VALUES ('client/index', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:12:\"client/index\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1543485828;s:9:\"updatedAt\";i:1543567675;}', '1543485828', '1543567675');
 INSERT INTO `yii2_auth_rule` VALUES ('combo/create', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:12:\"combo/create\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1519808877;s:9:\"updatedAt\";i:1520059861;}', '1519808877', '1520059861');
 INSERT INTO `yii2_auth_rule` VALUES ('combo/delete', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:12:\"combo/delete\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1519808877;s:9:\"updatedAt\";i:1520059861;}', '1519808877', '1520059861');
 INSERT INTO `yii2_auth_rule` VALUES ('combo/index', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:11:\"combo/index\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1517996186;s:9:\"updatedAt\";i:1520059861;}', '1517996186', '1520059861');
 INSERT INTO `yii2_auth_rule` VALUES ('combo/update', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:12:\"combo/update\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1519808877;s:9:\"updatedAt\";i:1520059861;}', '1519808877', '1520059861');
 INSERT INTO `yii2_auth_rule` VALUES ('combo/view', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:10:\"combo/view\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1519378925;s:9:\"updatedAt\";i:1520059861;}', '1519378925', '1520059861');
-INSERT INTO `yii2_auth_rule` VALUES ('config/attachment', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:17:\"config/attachment\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1484734191;s:9:\"updatedAt\";i:1534401435;}', '1484734191', '1534401435');
-INSERT INTO `yii2_auth_rule` VALUES ('config/basic', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:12:\"config/basic\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1484734191;s:9:\"updatedAt\";i:1534401435;}', '1484734191', '1534401435');
-INSERT INTO `yii2_auth_rule` VALUES ('config/send-mail', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:16:\"config/send-mail\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1484734191;s:9:\"updatedAt\";i:1534401435;}', '1484734191', '1534401435');
+INSERT INTO `yii2_auth_rule` VALUES ('config/attachment', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:17:\"config/attachment\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1484734191;s:9:\"updatedAt\";i:1543567675;}', '1484734191', '1543567675');
+INSERT INTO `yii2_auth_rule` VALUES ('config/basic', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:12:\"config/basic\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1484734191;s:9:\"updatedAt\";i:1543567675;}', '1484734191', '1543567675');
+INSERT INTO `yii2_auth_rule` VALUES ('config/send-mail', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:16:\"config/send-mail\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1484734191;s:9:\"updatedAt\";i:1543567675;}', '1484734191', '1543567675');
+INSERT INTO `yii2_auth_rule` VALUES ('country/index', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:13:\"country/index\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1543485827;s:9:\"updatedAt\";i:1543567675;}', '1543485827', '1543567675');
+INSERT INTO `yii2_auth_rule` VALUES ('crontab/index', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:13:\"crontab/index\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1543485827;s:9:\"updatedAt\";i:1543567675;}', '1543485827', '1543567675');
 INSERT INTO `yii2_auth_rule` VALUES ('database/export', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:15:\"database/export\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1484734305;s:9:\"updatedAt\";i:1520059861;}', '1484734305', '1520059861');
+INSERT INTO `yii2_auth_rule` VALUES ('db-manager/default', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:18:\"db-manager/default\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1543485827;s:9:\"updatedAt\";i:1543567675;}', '1543485827', '1543567675');
+INSERT INTO `yii2_auth_rule` VALUES ('dvb-order/index', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:15:\"dvb-order/index\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1543485828;s:9:\"updatedAt\";i:1543567676;}', '1543485828', '1543567676');
 INSERT INTO `yii2_auth_rule` VALUES ('excel-setting/update', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:20:\"excel-setting/update\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1519451875;s:9:\"updatedAt\";i:1519451875;}', '1519451875', '1519451875');
 INSERT INTO `yii2_auth_rule` VALUES ('excel/import', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:12:\"excel/import\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1519436284;s:9:\"updatedAt\";i:1520059861;}', '1519436284', '1520059861');
 INSERT INTO `yii2_auth_rule` VALUES ('excel/index', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:11:\"excel/index\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1519436031;s:9:\"updatedAt\";i:1520059861;}', '1519436031', '1520059861');
-INSERT INTO `yii2_auth_rule` VALUES ('index/frame', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:11:\"index/frame\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1518057962;s:9:\"updatedAt\";i:1534401436;}', '1518057962', '1534401436');
-INSERT INTO `yii2_auth_rule` VALUES ('index/index', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:11:\"index/index\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1484734191;s:9:\"updatedAt\";i:1534401436;}', '1484734191', '1534401436');
-INSERT INTO `yii2_auth_rule` VALUES ('log/index', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:9:\"log/index\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1534213984;s:9:\"updatedAt\";i:1534397550;}', '1534213984', '1534397550');
-INSERT INTO `yii2_auth_rule` VALUES ('menu/create', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:11:\"menu/create\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1484734191;s:9:\"updatedAt\";i:1534401435;}', '1484734191', '1534401435');
-INSERT INTO `yii2_auth_rule` VALUES ('menu/delete', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:11:\"menu/delete\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1484734191;s:9:\"updatedAt\";i:1534401436;}', '1484734191', '1534401436');
-INSERT INTO `yii2_auth_rule` VALUES ('menu/index', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:10:\"menu/index\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1484734191;s:9:\"updatedAt\";i:1534401435;}', '1484734191', '1534401435');
-INSERT INTO `yii2_auth_rule` VALUES ('menu/update', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:11:\"menu/update\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1484734191;s:9:\"updatedAt\";i:1534401436;}', '1484734191', '1534401436');
-INSERT INTO `yii2_auth_rule` VALUES ('note/index', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:10:\"note/index\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1534213984;s:9:\"updatedAt\";i:1534397550;}', '1534213984', '1534397550');
+INSERT INTO `yii2_auth_rule` VALUES ('firmware-class/index', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:20:\"firmware-class/index\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1543485828;s:9:\"updatedAt\";i:1543567676;}', '1543485828', '1543567676');
+INSERT INTO `yii2_auth_rule` VALUES ('http://ott.topertv.com:10080/showdoc/index.php?s=/5&page_id=65', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:62:\"http://ott.topertv.com:10080/showdoc/index.php?s=/5&page_id=65\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1543485828;s:9:\"updatedAt\";i:1543567676;}', '1543485828', '1543567676');
+INSERT INTO `yii2_auth_rule` VALUES ('index/frame', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:11:\"index/frame\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1518057962;s:9:\"updatedAt\";i:1544780453;}', '1518057962', '1544780453');
+INSERT INTO `yii2_auth_rule` VALUES ('index/index', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:11:\"index/index\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1484734191;s:9:\"updatedAt\";i:1544780453;}', '1484734191', '1544780453');
+INSERT INTO `yii2_auth_rule` VALUES ('karaoke/index', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:13:\"karaoke/index\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1543485828;s:9:\"updatedAt\";i:1543567675;}', '1543485828', '1543567675');
+INSERT INTO `yii2_auth_rule` VALUES ('log/index', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:9:\"log/index\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1534213984;s:9:\"updatedAt\";i:1544780453;}', '1534213984', '1544780453');
+INSERT INTO `yii2_auth_rule` VALUES ('log/now', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:7:\"log/now\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1543485828;s:9:\"updatedAt\";i:1543567675;}', '1543485828', '1543567675');
+INSERT INTO `yii2_auth_rule` VALUES ('mac/index', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:9:\"mac/index\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1543485828;s:9:\"updatedAt\";i:1543567675;}', '1543485828', '1543567675');
+INSERT INTO `yii2_auth_rule` VALUES ('main-class/index', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:16:\"main-class/index\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1543485828;s:9:\"updatedAt\";i:1543567676;}', '1543485828', '1543567676');
+INSERT INTO `yii2_auth_rule` VALUES ('major-event/index', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:17:\"major-event/index\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1543485828;s:9:\"updatedAt\";i:1543567676;}', '1543485828', '1543567676');
+INSERT INTO `yii2_auth_rule` VALUES ('menu/create', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:11:\"menu/create\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1484734191;s:9:\"updatedAt\";i:1543567675;}', '1484734191', '1543567675');
+INSERT INTO `yii2_auth_rule` VALUES ('menu/delete', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:11:\"menu/delete\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1484734191;s:9:\"updatedAt\";i:1543567675;}', '1484734191', '1543567675');
+INSERT INTO `yii2_auth_rule` VALUES ('menu/index', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:10:\"menu/index\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1484734191;s:9:\"updatedAt\";i:1543567675;}', '1484734191', '1543567675');
+INSERT INTO `yii2_auth_rule` VALUES ('menu/update', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:11:\"menu/update\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1484734191;s:9:\"updatedAt\";i:1543567675;}', '1484734191', '1543567675');
+INSERT INTO `yii2_auth_rule` VALUES ('note/index', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:10:\"note/index\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1534213984;s:9:\"updatedAt\";i:1544780453;}', '1534213984', '1544780453');
 INSERT INTO `yii2_auth_rule` VALUES ('order/create', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:12:\"order/create\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1518074401;s:9:\"updatedAt\";i:1520059861;}', '1518074401', '1520059861');
 INSERT INTO `yii2_auth_rule` VALUES ('order/delete', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:12:\"order/delete\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1519450583;s:9:\"updatedAt\";i:1520059861;}', '1519450583', '1520059861');
-INSERT INTO `yii2_auth_rule` VALUES ('order/index', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:11:\"order/index\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1517996186;s:9:\"updatedAt\";i:1534401437;}', '1517996186', '1534401437');
+INSERT INTO `yii2_auth_rule` VALUES ('order/index', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:11:\"order/index\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1517996186;s:9:\"updatedAt\";i:1543805716;}', '1517996186', '1543805716');
+INSERT INTO `yii2_auth_rule` VALUES ('order/statics', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:13:\"order/statics\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1543567676;s:9:\"updatedAt\";i:1543805716;}', '1543567676', '1543805716');
 INSERT INTO `yii2_auth_rule` VALUES ('order/update', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:12:\"order/update\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1519450583;s:9:\"updatedAt\";i:1520059861;}', '1519450583', '1520059861');
 INSERT INTO `yii2_auth_rule` VALUES ('order/view', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:10:\"order/view\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1519377930;s:9:\"updatedAt\";i:1520059861;}', '1519377930', '1520059861');
+INSERT INTO `yii2_auth_rule` VALUES ('ott-access/index', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:16:\"ott-access/index\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1543485828;s:9:\"updatedAt\";i:1543567676;}', '1543485828', '1543567676');
+INSERT INTO `yii2_auth_rule` VALUES ('ott-banner/index', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:16:\"ott-banner/index\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1543485828;s:9:\"updatedAt\";i:1543567676;}', '1543485828', '1543567676');
+INSERT INTO `yii2_auth_rule` VALUES ('ott-channel/global-search', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:25:\"ott-channel/global-search\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1543485828;s:9:\"updatedAt\";i:1543567676;}', '1543485828', '1543567676');
+INSERT INTO `yii2_auth_rule` VALUES ('ott-channel/recommend', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:21:\"ott-channel/recommend\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1543485828;s:9:\"updatedAt\";i:1543567676;}', '1543485828', '1543567676');
+INSERT INTO `yii2_auth_rule` VALUES ('ott-event/index', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:15:\"ott-event/index\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1543485828;s:9:\"updatedAt\";i:1543567676;}', '1543485828', '1543567676');
+INSERT INTO `yii2_auth_rule` VALUES ('ott-order/index', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:15:\"ott-order/index\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1543485828;s:9:\"updatedAt\";i:1543567676;}', '1543485828', '1543567676');
+INSERT INTO `yii2_auth_rule` VALUES ('ott-price-list/index', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:20:\"ott-price-list/index\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1543485828;s:9:\"updatedAt\";i:1543567676;}', '1543485828', '1543567676');
+INSERT INTO `yii2_auth_rule` VALUES ('parade/index', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:12:\"parade/index\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1543485828;s:9:\"updatedAt\";i:1543567676;}', '1543485828', '1543567676');
 INSERT INTO `yii2_auth_rule` VALUES ('product/delete', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:14:\"product/delete\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1519808877;s:9:\"updatedAt\";i:1520059861;}', '1519808877', '1520059861');
 INSERT INTO `yii2_auth_rule` VALUES ('product/index', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:13:\"product/index\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1517996186;s:9:\"updatedAt\";i:1520059861;}', '1517996186', '1520059861');
 INSERT INTO `yii2_auth_rule` VALUES ('product/update', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:14:\"product/update\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1519808877;s:9:\"updatedAt\";i:1520059861;}', '1519808877', '1520059861');
 INSERT INTO `yii2_auth_rule` VALUES ('product/view', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:12:\"product/view\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1519378499;s:9:\"updatedAt\";i:1520059861;}', '1519378499', '1520059861');
-INSERT INTO `yii2_auth_rule` VALUES ('role/auth', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:9:\"role/auth\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1484734191;s:9:\"updatedAt\";i:1534401436;}', '1484734191', '1534401436');
-INSERT INTO `yii2_auth_rule` VALUES ('role/create', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:11:\"role/create\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1484734191;s:9:\"updatedAt\";i:1534401436;}', '1484734191', '1534401436');
-INSERT INTO `yii2_auth_rule` VALUES ('role/delete', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:11:\"role/delete\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1484734191;s:9:\"updatedAt\";i:1534401436;}', '1484734191', '1534401436');
+INSERT INTO `yii2_auth_rule` VALUES ('renewal-card/batch-create', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:25:\"renewal-card/batch-create\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1543485828;s:9:\"updatedAt\";i:1543567676;}', '1543485828', '1543567676');
+INSERT INTO `yii2_auth_rule` VALUES ('renewal-card/index', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:18:\"renewal-card/index\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1543485828;s:9:\"updatedAt\";i:1543805716;}', '1543485828', '1543805716');
+INSERT INTO `yii2_auth_rule` VALUES ('role/auth', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:9:\"role/auth\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1484734191;s:9:\"updatedAt\";i:1543567675;}', '1484734191', '1543567675');
+INSERT INTO `yii2_auth_rule` VALUES ('role/create', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:11:\"role/create\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1484734191;s:9:\"updatedAt\";i:1543567675;}', '1484734191', '1543567675');
+INSERT INTO `yii2_auth_rule` VALUES ('role/delete', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:11:\"role/delete\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1484734191;s:9:\"updatedAt\";i:1543567675;}', '1484734191', '1543567675');
 INSERT INTO `yii2_auth_rule` VALUES ('role/export-setting', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:19:\"role/export-setting\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1519438814;s:9:\"updatedAt\";i:1519451875;}', '1519438814', '1519451875');
-INSERT INTO `yii2_auth_rule` VALUES ('role/index', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:10:\"role/index\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1484734191;s:9:\"updatedAt\";i:1534401436;}', '1484734191', '1534401436');
-INSERT INTO `yii2_auth_rule` VALUES ('role/update', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:11:\"role/update\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1484734191;s:9:\"updatedAt\";i:1534401436;}', '1484734191', '1534401436');
+INSERT INTO `yii2_auth_rule` VALUES ('role/index', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:10:\"role/index\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1484734191;s:9:\"updatedAt\";i:1543567675;}', '1484734191', '1543567675');
+INSERT INTO `yii2_auth_rule` VALUES ('role/update', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:11:\"role/update\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1484734191;s:9:\"updatedAt\";i:1543567675;}', '1484734191', '1543567675');
+INSERT INTO `yii2_auth_rule` VALUES ('scheme/index', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:12:\"scheme/index\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1543485828;s:9:\"updatedAt\";i:1543567676;}', '1543485828', '1543567676');
 INSERT INTO `yii2_auth_rule` VALUES ('servicer/create', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:15:\"servicer/create\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1519810140;s:9:\"updatedAt\";i:1520059861;}', '1519810140', '1520059861');
 INSERT INTO `yii2_auth_rule` VALUES ('servicer/index', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:14:\"servicer/index\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1517996187;s:9:\"updatedAt\";i:1520059861;}', '1517996187', '1520059861');
 INSERT INTO `yii2_auth_rule` VALUES ('servicer/view', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:13:\"servicer/view\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1519884478;s:9:\"updatedAt\";i:1520059861;}', '1519884478', '1520059861');
@@ -1585,6 +1983,8 @@ INSERT INTO `yii2_auth_rule` VALUES ('transator/delete', 'O:23:\"backend\\models
 INSERT INTO `yii2_auth_rule` VALUES ('transator/index', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:15:\"transator/index\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1517996187;s:9:\"updatedAt\";i:1520059861;}', '1517996187', '1520059861');
 INSERT INTO `yii2_auth_rule` VALUES ('transator/update', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:16:\"transator/update\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1519810140;s:9:\"updatedAt\";i:1520059861;}', '1519810140', '1520059861');
 INSERT INTO `yii2_auth_rule` VALUES ('transator/view', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:14:\"transator/view\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1519884478;s:9:\"updatedAt\";i:1520059861;}', '1519884478', '1520059861');
+INSERT INTO `yii2_auth_rule` VALUES ('user/index', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:10:\"user/index\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1543485828;s:9:\"updatedAt\";i:1543567675;}', '1543485828', '1543567675');
+INSERT INTO `yii2_auth_rule` VALUES ('vod-list/index', 'O:23:\"backend\\models\\AuthRule\":4:{s:4:\"name\";s:14:\"vod-list/index\";s:30:\"\0backend\\models\\AuthRule\0_rule\";r:1;s:9:\"createdAt\";i:1543485828;s:9:\"updatedAt\";i:1543567676;}', '1543485828', '1543567676');
 
 -- ----------------------------
 -- Table structure for yii2_config
@@ -1597,15 +1997,17 @@ CREATE TABLE `yii2_config` (
   `data` text NOT NULL,
   PRIMARY KEY (`id`),
   KEY `keyid` (`keyid`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of yii2_config
 -- ----------------------------
-INSERT INTO `yii2_config` VALUES ('1', 'basic', '', '{\"sitename\":\"IPTV Management System\",\"url\":\"\",\"logo\":\"\\/statics\\/themes\\/admin\\/images\\/logo.png\",\"seo_keywords\":\"\",\"seo_description\":\"\",\"copyright\":\"@Yii2 CMS\",\"statcode\":\"\",\"close\":\"0\",\"close_reason\":\"\\u7ad9\\u70b9\\u5347\\u7ea7\\u4e2d, \\u8bf7\\u7a0d\\u540e\\u8bbf\\u95ee!\"}');
+INSERT INTO `yii2_config` VALUES ('1', 'basic', '', '{\"name\":\"IPTV \\u540e\\u53f0\\u7ba1\\u7406\\u7cfb\\u7edf\",\"host\":\"topthinker.com\",\"email\":\"876505905@qq.com\"}');
 INSERT INTO `yii2_config` VALUES ('2', 'sendmail', '', '{\"mail_type\":\"0\",\"smtp_server\":\"smtp.qq.com\",\"smtp_port\":\"25\",\"auth\":\"1\",\"openssl\":\"1\",\"smtp_user\":\"771405950\",\"smtp_pwd\":\"qiaoBo1989122\",\"send_email\":\"771405950@qq.com\",\"nickname\":\"\\u8fb9\\u8d70\\u8fb9\\u4e54\",\"sign\":\"<hr \\/>\\r\\n\\u90ae\\u4ef6\\u7b7e\\u540d\\uff1a\\u6b22\\u8fce\\u8bbf\\u95ee <a href=\\\"http:\\/\\/www.test-yii2cms.com\\\" target=\\\"_blank\\\">Yii2 CMS<\\/a>\"}');
 INSERT INTO `yii2_config` VALUES ('3', 'attachment', '', '{\"attachment_size\":\"2048\",\"attachment_suffix\":\"jpg|jpeg|gif|bmp|png\",\"watermark_enable\":\"1\",\"watermark_pos\":\"0\",\"watermark_text\":\"Yii2 CMS\"}');
 INSERT INTO `yii2_config` VALUES ('4', 'ottcharge', '', '{\"mode\":\"2\",\"mode_desc\":\"模式一:会员开通后可观看所有直播分类\",\"free_day\":\"7\"}');
+INSERT INTO `yii2_config` VALUES ('6', 'other', '', '{\"oss_access_id\":\"LTAI5DU5vuKMsOrz\",\"oss_access_key\":\"ycC4Imtkgrda8QQOSXHGPoEp02R17M\",\"oss_endpoint\":\"oss-cn-shenzhen.aliyuncs.com\",\"oss_bucket\":\"yii2shop\",\"nginx_port\":\"10082\",\"nginx_secret\":\"topthinker\",\"nginx_dir\":\"\\/home\\/upload\",\"baidu_translate_id\":\"20151216000007878\",\"baidu_translate_key\":\"9z2bTRXr7V7B4UrP3ozc\"}');
+INSERT INTO `yii2_config` VALUES ('7', 'email', '', '{\"SMTP_HOST\":\"smtp.qq.com\",\"SMTP_PORT\":\"587\",\"SMTP_AUTHENTICATE\":\"0\",\"ENCRYPTION\":\"0\",\"EMAIL_USERNAME\":\"876505905@qq.com\",\"EMAIL_PASSWORD\":\"clqchjbwhkjqbdgd\",\"EMAIL_NICKNAME\":\"\\u5341\\u5e74\"}');
 
 -- ----------------------------
 -- Table structure for yii2_menu
@@ -1615,89 +2017,168 @@ CREATE TABLE `yii2_menu` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `pid` int(10) unsigned NOT NULL DEFAULT '0',
   `name` varchar(50) NOT NULL DEFAULT '',
-  `url` varchar(60) NOT NULL DEFAULT '',
+  `url` varchar(255) NOT NULL DEFAULT '/',
   `icon_style` varchar(50) NOT NULL DEFAULT '',
   `display` tinyint(3) unsigned NOT NULL DEFAULT '1',
   `sort` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `type` char(10) NOT NULL DEFAULT 'all',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=124 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=129 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of yii2_menu
 -- ----------------------------
-INSERT INTO `yii2_menu` VALUES ('1', '0', 'My panel', '#', 'fa-home', '0', '0');
-INSERT INTO `yii2_menu` VALUES ('2', '0', 'System', 'config/basic', 'fa-cogs', '1', '94');
-INSERT INTO `yii2_menu` VALUES ('3', '0', 'Admin', 'admin/index', 'fa-user', '1', '80');
-INSERT INTO `yii2_menu` VALUES ('8', '1', 'System info', '#', '', '1', '0');
-INSERT INTO `yii2_menu` VALUES ('9', '2', 'Site configuration', 'config/basic', '', '0', '0');
-INSERT INTO `yii2_menu` VALUES ('10', '2', 'Menu List', 'menu/index', '', '1', '0');
-INSERT INTO `yii2_menu` VALUES ('11', '3', 'Admin', 'admin/index', '', '1', '1');
-INSERT INTO `yii2_menu` VALUES ('12', '3', 'Role', 'role/index', '', '1', '0');
-INSERT INTO `yii2_menu` VALUES ('16', '5', '用户管理', '', '', '0', '0');
-INSERT INTO `yii2_menu` VALUES ('17', '2', 'Database', 'db-manager/default', '', '1', '0');
-INSERT INTO `yii2_menu` VALUES ('20', '9', 'Basic configuration', 'config/basic', '', '1', '0');
-INSERT INTO `yii2_menu` VALUES ('21', '9', 'Mailbox configuration', 'config/send-mail', '', '1', '0');
-INSERT INTO `yii2_menu` VALUES ('22', '9', 'Accessory configuration', 'config/attachment', '', '1', '0');
-INSERT INTO `yii2_menu` VALUES ('23', '10', 'Create', 'menu/create', '', '1', '0');
-INSERT INTO `yii2_menu` VALUES ('24', '10', 'Update', 'menu/update', '', '1', '0');
-INSERT INTO `yii2_menu` VALUES ('25', '10', 'Delete', 'menu/delete', '', '1', '0');
-INSERT INTO `yii2_menu` VALUES ('26', '11', 'Create', 'admin/create', '', '1', '0');
-INSERT INTO `yii2_menu` VALUES ('27', '11', 'Update', 'admin/update', '', '1', '0');
-INSERT INTO `yii2_menu` VALUES ('28', '11', 'Auth', 'admin/auth', '', '1', '0');
-INSERT INTO `yii2_menu` VALUES ('29', '11', 'Delete', 'admin/delete', '', '1', '0');
-INSERT INTO `yii2_menu` VALUES ('30', '12', 'Create', 'role/create', '', '1', '0');
-INSERT INTO `yii2_menu` VALUES ('31', '12', 'Update', 'role/update', '', '1', '0');
-INSERT INTO `yii2_menu` VALUES ('32', '12', 'Auth', 'role/auth', '', '1', '0');
-INSERT INTO `yii2_menu` VALUES ('33', '12', 'Delete', 'role/delete', '', '1', '0');
-INSERT INTO `yii2_menu` VALUES ('41', '40', '国家列表', 'country/index', 'fa-flag', '1', '1');
-INSERT INTO `yii2_menu` VALUES ('48', '0', 'System Information', 'index/index', 'fa-home', '1', '0');
-INSERT INTO `yii2_menu` VALUES ('49', '48', 'System Information', 'index/index', '', '1', '0');
-INSERT INTO `yii2_menu` VALUES ('51', '48', 'Left Menu', 'index/frame', '', '0', '0');
-INSERT INTO `yii2_menu` VALUES ('72', '0', 'Karaoke', 'karaoke/index', ' fa-microphone', '0', '98');
-INSERT INTO `yii2_menu` VALUES ('73', '72', 'Karaoke List', 'karaoke/index', '', '1', '1');
-INSERT INTO `yii2_menu` VALUES ('74', '0', 'User', 'mac/index', 'fa-group', '1', '97');
-INSERT INTO `yii2_menu` VALUES ('75', '74', 'TV User', 'mac/index', '', '1', '0');
-INSERT INTO `yii2_menu` VALUES ('76', '48', 'Interface log', 'log/index', '', '1', '4');
-INSERT INTO `yii2_menu` VALUES ('78', '2', 'Timed task', 'crontab/index', '', '1', '5');
-INSERT INTO `yii2_menu` VALUES ('79', '0', 'App', 'apk-list/index', 'fa-android', '1', '96');
-INSERT INTO `yii2_menu` VALUES ('80', '79', 'APP List', 'apk-list/index', '', '1', '0');
-INSERT INTO `yii2_menu` VALUES ('81', '48', 'Update Information', 'note/index', '', '0', '0');
-INSERT INTO `yii2_menu` VALUES ('82', '0', 'Order', '/', 'fa-list', '1', '97');
-INSERT INTO `yii2_menu` VALUES ('83', '82', 'Order List', 'order/index', '', '1', '0');
-INSERT INTO `yii2_menu` VALUES ('84', '0', 'IPTV', '/', 'fa-tv', '1', '98');
-INSERT INTO `yii2_menu` VALUES ('85', '84', 'IPTV Genre', 'vod-list/index', '', '1', '0');
-INSERT INTO `yii2_menu` VALUES ('86', '74', 'Mobile User', 'user/index', '', '1', '2');
-INSERT INTO `yii2_menu` VALUES ('87', '84', 'Banner List', 'banner/index', '', '1', '0');
-INSERT INTO `yii2_menu` VALUES ('88', '0', 'OTT', '/', 'fa-globe', '1', '99');
-INSERT INTO `yii2_menu` VALUES ('89', '88', 'OTT Genre', 'main-class/index', '', '1', '0');
-INSERT INTO `yii2_menu` VALUES ('91', '88', 'Banner List', 'ott-banner/index', '', '1', '2');
-INSERT INTO `yii2_menu` VALUES ('92', '88', 'Recommend List', 'ott-channel/recommend', '', '1', '4');
-INSERT INTO `yii2_menu` VALUES ('93', '88', 'EPG', 'parade/index', '', '1', '99');
-INSERT INTO `yii2_menu` VALUES ('94', '88', 'Event Genre', 'ott-event/index', '', '1', '5');
-INSERT INTO `yii2_menu` VALUES ('95', '88', 'Main Event', 'major-event/index', '', '1', '6');
-INSERT INTO `yii2_menu` VALUES ('98', '2', 'Country List', 'country/index', '', '0', '1');
-INSERT INTO `yii2_menu` VALUES ('99', '0', 'Firmware', '/', 'fa-cloud-upload', '1', '95');
-INSERT INTO `yii2_menu` VALUES ('100', '99', 'Firmware List', 'firmware-class/index', '', '1', '1');
-INSERT INTO `yii2_menu` VALUES ('101', '99', 'Associated order', 'dvb-order/index', '', '1', '0');
-INSERT INTO `yii2_menu` VALUES ('102', '74', 'Client', 'client/index', '', '0', '3');
-INSERT INTO `yii2_menu` VALUES ('103', '48', 'Real-time statistics', 'log/now', '', '1', '5');
-INSERT INTO `yii2_menu` VALUES ('104', '88', 'OTT Orders', 'ott-order/index', '', '1', '9');
-INSERT INTO `yii2_menu` VALUES ('105', '88', 'Price List', 'ott-price-list/index', '', '1', '8');
-INSERT INTO `yii2_menu` VALUES ('106', '79', 'Boot Picture', 'app-boot-picture/index', '', '1', '0');
-INSERT INTO `yii2_menu` VALUES ('107', '82', 'Recharge card', 'renewal-card/index', '', '1', '0');
-INSERT INTO `yii2_menu` VALUES ('108', '88', 'Scheme', 'scheme/index', '', '1', '12');
-INSERT INTO `yii2_menu` VALUES ('109', '88', 'Global Search', 'ott-channel/global-search', '', '1', '2');
-INSERT INTO `yii2_menu` VALUES ('110', '80', 'Update', 'app-list/update', '', '1', '0');
-INSERT INTO `yii2_menu` VALUES ('111', '80', 'Create', 'apk-list/update', '', '1', '0');
-INSERT INTO `yii2_menu` VALUES ('112', '80', 'Delete', 'apk-list/delete', '', '1', '0');
-INSERT INTO `yii2_menu` VALUES ('113', '80', 'View', 'apk-list/view', '', '1', '0');
-INSERT INTO `yii2_menu` VALUES ('114', '80', 'Edit apk', 'apk-detail/create', '', '1', '0');
-INSERT INTO `yii2_menu` VALUES ('115', '80', 'Update app', 'apk-detail/update', '', '0', '0');
-INSERT INTO `yii2_menu` VALUES ('116', '80', 'Delete Apk', 'apk-detail/delete', '', '1', '0');
-INSERT INTO `yii2_menu` VALUES ('117', '80', 'View Apk', 'apk-detail/view', '', '1', '0');
-INSERT INTO `yii2_menu` VALUES ('118', '80', 'Apk List', 'apk-detail/index', '', '0', '0');
-INSERT INTO `yii2_menu` VALUES ('119', '80', 'create App', 'apk-list/create', '', '0', '0');
-INSERT INTO `yii2_menu` VALUES ('120', '80', 'update app', 'apk-list/update', '', '0', '0');
-INSERT INTO `yii2_menu` VALUES ('121', '80', 'Delete App ', 'apk-list/delete', '', '0', '0');
-INSERT INTO `yii2_menu` VALUES ('122', '80', 'set scheme', 'apk-list/set-scheme', '', '1', '0');
-INSERT INTO `yii2_menu` VALUES ('123', '82', '分类权限', 'ott-access/index', '', '1', '3');
+INSERT INTO `yii2_menu` VALUES ('1', '0', 'My panel', '#', 'fa-home', '1', '0', 'all');
+INSERT INTO `yii2_menu` VALUES ('2', '0', 'System', 'config/basic', 'fa-cogs', '1', '94', 'all');
+INSERT INTO `yii2_menu` VALUES ('3', '0', 'Admin', 'admin/index', 'fa-user', '1', '80', 'all');
+INSERT INTO `yii2_menu` VALUES ('8', '1', 'System info', '#', '', '1', '0', 'all');
+INSERT INTO `yii2_menu` VALUES ('9', '2', 'Site configuration', 'config/basic', '', '1', '0', 'all');
+INSERT INTO `yii2_menu` VALUES ('10', '2', 'Menu List', 'menu/index', '', '1', '0', 'rule');
+INSERT INTO `yii2_menu` VALUES ('11', '3', 'Admin', 'admin/index', '', '1', '1', 'all');
+INSERT INTO `yii2_menu` VALUES ('12', '3', 'Role', 'role/index', '', '1', '0', 'all');
+INSERT INTO `yii2_menu` VALUES ('16', '5', '用户管理', '', '', '0', '0', 'all');
+INSERT INTO `yii2_menu` VALUES ('17', '2', 'Database', 'db-manager/default', '', '1', '0', 'all');
+INSERT INTO `yii2_menu` VALUES ('20', '9', 'Basic configuration', 'config/basic', '', '0', '0', 'rule');
+INSERT INTO `yii2_menu` VALUES ('21', '9', 'Mailbox configuration', 'config/send-mail', '', '0', '0', 'rule');
+INSERT INTO `yii2_menu` VALUES ('22', '9', 'Accessory configuration', 'config/attachment', '', '0', '0', 'rule');
+INSERT INTO `yii2_menu` VALUES ('23', '10', 'Create', 'menu/create', '', '0', '0', 'all');
+INSERT INTO `yii2_menu` VALUES ('24', '10', 'Update', 'menu/update', '', '0', '0', 'all');
+INSERT INTO `yii2_menu` VALUES ('25', '10', 'Delete', 'menu/delete', '', '0', '0', 'all');
+INSERT INTO `yii2_menu` VALUES ('26', '11', 'Create', 'admin/create', '', '0', '0', 'rule');
+INSERT INTO `yii2_menu` VALUES ('27', '11', 'Update', 'admin/update', '', '0', '0', 'rule');
+INSERT INTO `yii2_menu` VALUES ('28', '11', 'Auth', 'admin/auth', '', '1', '0', 'rule');
+INSERT INTO `yii2_menu` VALUES ('29', '11', 'Delete', 'admin/delete', '', '0', '0', 'rule');
+INSERT INTO `yii2_menu` VALUES ('30', '12', 'Create', 'role/create', '', '0', '0', 'rule');
+INSERT INTO `yii2_menu` VALUES ('31', '12', 'Update', 'role/update', '', '0', '0', 'rule');
+INSERT INTO `yii2_menu` VALUES ('32', '12', 'Auth', 'role/auth', '', '0', '0', 'rule');
+INSERT INTO `yii2_menu` VALUES ('33', '12', 'Delete', 'role/delete', '', '0', '0', 'rule');
+INSERT INTO `yii2_menu` VALUES ('41', '40', '国家列表', 'country/index', 'fa-flag', '1', '1', 'all');
+INSERT INTO `yii2_menu` VALUES ('48', '0', 'System Information', 'index/index', 'fa-home', '1', '0', 'all');
+INSERT INTO `yii2_menu` VALUES ('49', '48', 'System Information', 'index/index', '', '1', '0', 'all');
+INSERT INTO `yii2_menu` VALUES ('51', '48', 'Left Menu', 'index/frame', '', '0', '0', 'rule');
+INSERT INTO `yii2_menu` VALUES ('72', '0', 'Karaoke', 'karaoke/index', ' fa-microphone', '1', '98', 'all');
+INSERT INTO `yii2_menu` VALUES ('73', '72', 'Karaoke List', 'karaoke/index', '', '1', '1', 'all');
+INSERT INTO `yii2_menu` VALUES ('74', '0', 'User', 'mac/index', 'fa-group', '1', '97', 'all');
+INSERT INTO `yii2_menu` VALUES ('75', '74', 'TV User', 'mac/index', '', '1', '0', 'all');
+INSERT INTO `yii2_menu` VALUES ('76', '48', 'Interface log', 'log/index', '', '1', '4', 'all');
+INSERT INTO `yii2_menu` VALUES ('78', '2', 'Timed task', 'crontab/index', '', '1', '5', 'all');
+INSERT INTO `yii2_menu` VALUES ('79', '0', 'App', 'apk-list/index', 'fa-android', '1', '96', 'all');
+INSERT INTO `yii2_menu` VALUES ('80', '79', 'APP List', 'apk-list/index', '', '1', '0', 'all');
+INSERT INTO `yii2_menu` VALUES ('81', '48', 'Update Information', 'note/index', '', '0', '0', 'all');
+INSERT INTO `yii2_menu` VALUES ('82', '0', 'Order', '/', 'fa-list', '1', '97', 'all');
+INSERT INTO `yii2_menu` VALUES ('83', '82', 'Order List', 'order/index', '', '1', '0', 'all');
+INSERT INTO `yii2_menu` VALUES ('84', '0', 'IPTV', '/', 'fa-tv', '1', '98', 'all');
+INSERT INTO `yii2_menu` VALUES ('85', '84', 'IPTV Genre', 'vod-list/index', '', '1', '0', 'all');
+INSERT INTO `yii2_menu` VALUES ('86', '74', 'Mobile User', 'user/index', '', '1', '2', 'all');
+INSERT INTO `yii2_menu` VALUES ('87', '84', 'Banner List', 'banner/index', '', '1', '0', 'all');
+INSERT INTO `yii2_menu` VALUES ('88', '0', 'OTT', '/', 'fa-globe', '1', '99', 'all');
+INSERT INTO `yii2_menu` VALUES ('89', '88', 'OTT Genre', 'main-class/index', '', '1', '0', 'all');
+INSERT INTO `yii2_menu` VALUES ('91', '88', 'Banner List', 'ott-banner/index', '', '1', '2', 'all');
+INSERT INTO `yii2_menu` VALUES ('92', '88', 'Recommend List', 'ott-channel/recommend', '', '1', '4', 'all');
+INSERT INTO `yii2_menu` VALUES ('93', '88', 'EPG', 'parade/index', '', '1', '99', 'all');
+INSERT INTO `yii2_menu` VALUES ('94', '88', 'Event Genre', 'ott-event/index', '', '1', '5', 'all');
+INSERT INTO `yii2_menu` VALUES ('95', '88', 'Main Event', 'major-event/index', '', '1', '6', 'all');
+INSERT INTO `yii2_menu` VALUES ('98', '2', 'Country List', 'country/index', '', '1', '1', 'all');
+INSERT INTO `yii2_menu` VALUES ('99', '0', 'Firmware', '/', 'fa-cloud-upload', '1', '95', 'all');
+INSERT INTO `yii2_menu` VALUES ('100', '99', 'Firmware List', 'firmware-class/index', '', '1', '1', 'all');
+INSERT INTO `yii2_menu` VALUES ('101', '99', 'Associated order', 'dvb-order/index', '', '1', '0', 'all');
+INSERT INTO `yii2_menu` VALUES ('102', '74', 'Client', 'client/index', '', '0', '3', 'all');
+INSERT INTO `yii2_menu` VALUES ('103', '48', 'Real-time statistics', 'log/now', '', '1', '5', 'all');
+INSERT INTO `yii2_menu` VALUES ('104', '88', 'OTT Orders', 'ott-order/index', '', '1', '9', 'all');
+INSERT INTO `yii2_menu` VALUES ('105', '88', 'Price List', 'ott-price-list/index', '', '1', '8', 'all');
+INSERT INTO `yii2_menu` VALUES ('106', '79', 'Boot Picture', 'app-boot-picture/index', '', '1', '0', 'all');
+INSERT INTO `yii2_menu` VALUES ('107', '82', 'Recharge card', 'renewal-card/index', '', '1', '0', 'all');
+INSERT INTO `yii2_menu` VALUES ('108', '88', 'Scheme', 'scheme/index', '', '1', '12', 'all');
+INSERT INTO `yii2_menu` VALUES ('109', '88', 'Global Search', 'ott-channel/global-search', '', '1', '2', 'all');
+INSERT INTO `yii2_menu` VALUES ('110', '80', 'Update', 'app-list/update', '', '0', '0', 'rule');
+INSERT INTO `yii2_menu` VALUES ('111', '80', 'Create', 'apk-list/update', '', '0', '0', 'rule');
+INSERT INTO `yii2_menu` VALUES ('112', '80', 'Delete', 'apk-list/delete', '', '0', '0', 'rule');
+INSERT INTO `yii2_menu` VALUES ('113', '80', 'View', 'apk-list/view', '', '0', '0', 'rule');
+INSERT INTO `yii2_menu` VALUES ('114', '80', 'Edit apk', 'apk-detail/create', '', '0', '0', 'rule');
+INSERT INTO `yii2_menu` VALUES ('115', '80', 'Update app', 'apk-detail/update', '', '0', '0', 'rule');
+INSERT INTO `yii2_menu` VALUES ('116', '80', 'Delete Apk', 'apk-detail/delete', '', '0', '0', 'rule');
+INSERT INTO `yii2_menu` VALUES ('117', '80', 'View Apk', 'apk-detail/view', '', '0', '0', 'rule');
+INSERT INTO `yii2_menu` VALUES ('118', '80', 'Apk List', 'apk-detail/index', '', '0', '0', 'rule');
+INSERT INTO `yii2_menu` VALUES ('119', '80', 'create App', 'apk-list/create', '', '0', '0', 'rule');
+INSERT INTO `yii2_menu` VALUES ('120', '80', 'update app', 'apk-list/update', '', '0', '0', 'rule');
+INSERT INTO `yii2_menu` VALUES ('121', '80', 'Delete App', 'apk-list/delete', '', '0', '0', 'rule');
+INSERT INTO `yii2_menu` VALUES ('122', '80', 'set scheme', 'apk-list/set-scheme', '', '0', '0', 'rule');
+INSERT INTO `yii2_menu` VALUES ('123', '82', '分类权限', 'ott-access/index', '', '1', '3', 'all');
+INSERT INTO `yii2_menu` VALUES ('124', '0', '开发者', '/', 'fa-code', '1', '100', 'all');
+INSERT INTO `yii2_menu` VALUES ('125', '124', '接口文档', 'http://ott.topertv.com:10080/showdoc/index.php?s=/5&page_id=65', '', '1', '99', 'all');
+INSERT INTO `yii2_menu` VALUES ('126', '82', '新增充值卡', 'renewal-card/batch-create', '', '0', '0', 'all');
+INSERT INTO `yii2_menu` VALUES ('127', '82', '订单统计', 'order/statics', '', '1', '0', 'all');
+INSERT INTO `yii2_menu` VALUES ('128', '48', '路由管理', 'menu/routes', '', '1', '0', 'all');
+
+-- ----------------------------
+-- Table structure for yii2_migration
+-- ----------------------------
+DROP TABLE IF EXISTS `yii2_migration`;
+CREATE TABLE `yii2_migration` (
+  `version` varchar(180) NOT NULL,
+  `apply_time` int(11) DEFAULT NULL,
+  PRIMARY KEY (`version`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of yii2_migration
+-- ----------------------------
+INSERT INTO `yii2_migration` VALUES ('m000000_000000_base', '1482231528');
+INSERT INTO `yii2_migration` VALUES ('m130524_201442_init', '1482231534');
+INSERT INTO `yii2_migration` VALUES ('m180725_103112_add_flag_of_fill_profile', '1532516902');
+INSERT INTO `yii2_migration` VALUES ('m180725_104021_add_vod_sort', '1532516902');
+INSERT INTO `yii2_migration` VALUES ('m180725_105118_modify_vod_area_column', '1532516903');
+INSERT INTO `yii2_migration` VALUES ('m180726_020947_add_imdb_id_and_score', '1532601150');
+INSERT INTO `yii2_migration` VALUES ('m180727_060845_add_use_flag_to_main_class', '1532672690');
+INSERT INTO `yii2_migration` VALUES ('m180727_080817_add_Renewal_card_table', '1532688768');
+INSERT INTO `yii2_migration` VALUES ('m180730_083115_add_scheme_admin_table', '1533175767');
+INSERT INTO `yii2_migration` VALUES ('m180730_103820_create_sys__apk_scheme__table', '1533175767');
+INSERT INTO `yii2_migration` VALUES ('m180814_022104_add_sort_to_iptv_item', '1534217459');
+INSERT INTO `yii2_migration` VALUES ('m180816_080747_add_is_newest_column', '1534409704');
+INSERT INTO `yii2_migration` VALUES ('m180817_065120_modify_channel_alias_column', '1534490836');
+INSERT INTO `yii2_migration` VALUES ('m180820_030821_alter_image_coloum', '1534734898');
+INSERT INTO `yii2_migration` VALUES ('m180820_073029_add_client_id_column_to_mac', '1534751452');
+INSERT INTO `yii2_migration` VALUES ('m180820_081744_ott_probation_table', '1534755227');
+INSERT INTO `yii2_migration` VALUES ('m180822_102725_middle_parade_query_table', '1535008664');
+INSERT INTO `yii2_migration` VALUES ('m180824_034106_add_list_flag_to_main_class_table', '1535085992');
+INSERT INTO `yii2_migration` VALUES ('m180905_025432_add_probation_table', '1536302162');
+INSERT INTO `yii2_migration` VALUES ('m180907_013906_add_genre_price_list', '1536302163');
+INSERT INTO `yii2_migration` VALUES ('m180907_024702_create_table_ott_access', '1536302163');
+INSERT INTO `yii2_migration` VALUES ('m180907_065325_add_app_locker_switch_table', '1536314172');
+INSERT INTO `yii2_migration` VALUES ('m180912_025035_add_is_online_column_to_mac', '1536723691');
+INSERT INTO `yii2_migration` VALUES ('m180912_090033_add_free_trail_day_to_main_class', '1536744172');
+INSERT INTO `yii2_migration` VALUES ('m180914_070748_add_del_flag_to_order', '1536909275');
+INSERT INTO `yii2_migration` VALUES ('m180917_031529_add_column_access_key_to_ott_access', '1537174868');
+INSERT INTO `yii2_migration` VALUES ('m180919_060913_remove_locker_table', '1537339015');
+INSERT INTO `yii2_migration` VALUES ('m180921_055436_add_serial_number_to_iptv_order', '1537841823');
+INSERT INTO `yii2_migration` VALUES ('m180925_014922_add_id_to_ott_access_table', '1537841823');
+INSERT INTO `yii2_migration` VALUES ('m180925_095729_create_log_statics_table', '1537929981');
+INSERT INTO `yii2_migration` VALUES ('m180926_091333_add_savepostion_to_apk_detail_table', '1537953797');
+INSERT INTO `yii2_migration` VALUES ('m180927_015808_create_sys__vod_scheme_table', '1538026563');
+INSERT INTO `yii2_migration` VALUES ('m181010_064801_create_iptv_play_group_table', '1539163684');
+INSERT INTO `yii2_migration` VALUES ('m181019_065858_add_vod_link_from', '1539934829');
+INSERT INTO `yii2_migration` VALUES ('m181105_012531_add_pic_column_to_vodlink', '1541389094');
+INSERT INTO `yii2_migration` VALUES ('m181106_034033_add_use_flag_to_iptv_play_group_table', '1541475782');
+INSERT INTO `yii2_migration` VALUES ('m181108_072624_add_link_title_to_vod_link_table', '1541662212');
+INSERT INTO `yii2_migration` VALUES ('m181109_053641_add_origin_url_to_table_iptv_vod', '1541741933');
+INSERT INTO `yii2_migration` VALUES ('m181113_093026_add_is_exist_to_iptv_type_item', '1542101571');
+INSERT INTO `yii2_migration` VALUES ('m181114_095157_add_image_to_iptv_item', '1542189677');
+INSERT INTO `yii2_migration` VALUES ('m181115_093029_add_during_to_link', '1542274407');
+INSERT INTO `yii2_migration` VALUES ('m181115_100517_add_big_pic_to_iptv_type', '1542276390');
+INSERT INTO `yii2_migration` VALUES ('m181116_055307_add_columb_is_show_to_iptv_type_table', '1542347859');
+INSERT INTO `yii2_migration` VALUES ('m181116_064001_add_columb_is_show_to_iptv_type_item_table', '1542350449');
+INSERT INTO `yii2_migration` VALUES ('m181122_085448_modify_menu_column', '1542876980');
+INSERT INTO `yii2_migration` VALUES ('m181126_062955_add_mutiple_language_table', '1543309432');
+INSERT INTO `yii2_migration` VALUES ('m181126_064039_modify_iptv_type_add_suport_language', '1543309432');
+INSERT INTO `yii2_migration` VALUES ('m181203_022220_add_use_time_recored_table', '1543817831');
+INSERT INTO `yii2_migration` VALUES ('m181204_080653_add_reboardcase_to_ott_channel', '1543915050');
+INSERT INTO `yii2_migration` VALUES ('m181210_055050_create_iptv_vod_profile_table', '1544426147');
+INSERT INTO `yii2_migration` VALUES ('m181212_072148_modify_profile_table', '1544599495');
+INSERT INTO `yii2_migration` VALUES ('m181217_061856_create_log_ott_genre_table', '1545028347');
+INSERT INTO `yii2_migration` VALUES ('m181217_072641_alter_log_temp_interface_table', '1545032241');
+INSERT INTO `yii2_migration` VALUES ('m181217_101834_modify_tmp_table', '1545044749');
+INSERT INTO `yii2_migration` VALUES ('m181218_021906_add_log_ott_activity_table', '1545101194');
+INSERT INTO `yii2_migration` VALUES ('m181218_060313_add_is_top_to_vod', '1545113119');
+INSERT INTO `yii2_migration` VALUES ('m181219_030209_modify_activity_table', '1545188647');
+INSERT INTO `yii2_migration` VALUES ('m181220_014150_remove_scheme_id', '1545270479');
+
