@@ -120,7 +120,7 @@ class Parade extends \yii\db\ActiveRecord
         }
 
         foreach ($paradeData as $key => $parade) {
-            $paradeData[$key]['parade_time'] = substr($parade['time'], 0,5);
+            $paradeData[$key]['parade_time'] = substr($parade['parade_time'], 0,5);
         }
 
         $this->parade_data = json_encode($paradeData);
