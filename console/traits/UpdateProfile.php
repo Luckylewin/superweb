@@ -90,7 +90,7 @@ trait UpdateProfile
         $tv->vod_area = $this->area;
         $tv->vod_cid = $genre->list_id;
         $tv->vod_trysee = 0;
-        $tv->vod_total = count($data['links']);
+        $tv->vod_total = isset($data['links']) ? count($data['links']) : 1;
         $tv->vod_multiple = 1;
         $tv->vod_isend = 1;
 
