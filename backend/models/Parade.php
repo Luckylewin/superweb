@@ -116,11 +116,12 @@ class Parade extends \yii\db\ActiveRecord
         if ($this->parade_data && !is_array($this->parade_data)) {
              $paradeData = json_decode($this->parade_data, true);
         } else {
-            $paradeData = $this->parade_data;
+             $paradeData = $this->parade_data;
         }
 
         foreach ($paradeData as $key => $parade) {
             $paradeData[$key]['parade_time'] = substr($parade['parade_time'], 0,5);
+            $paradeData[$key]['parade_timestamp'] = strtotime($this->parade_date . ' ' . $parade['parade_time']);
         }
 
         $this->parade_data = json_encode($paradeData);
