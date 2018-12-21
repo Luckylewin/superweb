@@ -15,6 +15,7 @@ use common\models\Vod;
 use console\collectors\profile\ProfilesSearcher;
 use console\collectors\common;
 use common\components\FileHelper;
+use yii\helpers\Console;
 
 class VodCollector extends common
 {
@@ -52,6 +53,11 @@ class VodCollector extends common
 
     public function __construct(Model $model, $options)
     {
+        if (empty(Yii::$app->params['vod_play_host'])) {
+            Console::error("请到console/config/params-local中配置CDN播放域名 'vod_play_host' => 'http://demo.com'");
+            exit;
+        }
+
         $this->model = $model;
         $fields = ['dir', 'playpath', 'type','area','language'];
         foreach ($fields as $field) {
@@ -181,7 +187,7 @@ class VodCollector extends common
                         $data = $this->setGenre($data, $this->genre);
                     }
 
-                    if (strpos($directory, 'yueyuban') !== false) {
+                    if (strpos($fileName, 'yueyuban') !== false) {
                         $data = $this->setGenre($data, '粤语');
                     }
 

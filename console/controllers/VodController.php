@@ -184,9 +184,9 @@ class VodController extends Controller
 
     public function actionTruncate()
     {
-        Yii::$app->db->createCommand('truncate ' . Vod::tableName());
-        Yii::$app->db->createCommand('truncate ' . Vodlink::tableName());
-        Yii::$app->db->createCommand('truncate ' . PlayGroup::tableName());
+        Yii::$app->db->createCommand('truncate ' . Vod::tableName())->execute();
+        Yii::$app->db->createCommand('truncate ' . Vodlink::tableName())->execute();
+        Yii::$app->db->createCommand('truncate ' . PlayGroup::tableName())->execute();
     }
 
 }
