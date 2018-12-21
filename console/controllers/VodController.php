@@ -8,6 +8,8 @@
 
 namespace console\controllers;
 
+use backend\models\PlayGroup;
+use common\models\Vodlink;
 use Yii;
 use common\models\Vod;
 use console\models\Tv;
@@ -177,6 +179,14 @@ class VodController extends Controller
 
            }
        }
+    }
+
+
+    public function actionTruncate()
+    {
+        Yii::$app->db->createCommand('truncate ' . Vod::tableName());
+        Yii::$app->db->createCommand('truncate ' . Vodlink::tableName());
+        Yii::$app->db->createCommand('truncate ' . PlayGroup::tableName());
     }
 
 }

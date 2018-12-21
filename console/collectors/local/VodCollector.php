@@ -148,7 +148,7 @@ class VodCollector extends common
     protected function getLink($path,$fileName)
     {
         $dirName = basename($path);
-        return $this->address . $this->playpath . '/'. $dirName .'/' . $fileName . '/index.m3u8';
+        return Yii::$app->params['vod_play_host'] . $this->playpath . '/'. $dirName .'/' . $fileName . '/index.m3u8';
     }
 
     /**
@@ -172,20 +172,21 @@ class VodCollector extends common
                         $profile['vod_area'] = $data['vod_area'];
                         $data = array_merge($data, $profile);
                         $data['vod_fill_flag'] = 1;
-                        if (strpos($directory, 'yueyuban') !== false) {
-                            $data['genre'] .= ' 粤语';
-                        }
 
                     } else if ($this->type == 'Serial') {
                          $data['genre'] = $this->genre;
                     }
 
+                    if ($this->genre) {
+                        $data = $this->setGenre($data, $this->genre);
+                    }
+
+                    if (strpos($directory, 'yueyuban') !== false) {
+                        $data = $this->setGenre($data, '粤语');
+                    }
+
                     if (isset($data['vod_year']) && $data['vod_year'] >= 2018) {
-                        if (isset($data['vod_genre'])) {
-                            $data['genre'] .= ' 最新';
-                        } else {
-                            $data['genre'] = '最新';
-                        }
+                       $data = $this->setGenre($data, '最新');
                     }
 
                     $data['vod_language'] = $this->language;
@@ -198,6 +199,17 @@ class VodCollector extends common
         }
 
         return $mediaArr;
+    }
+
+    private function setGenre($data,$value)
+    {
+        if (isset($data['vod_genre'])) {
+            $data['vod_genre'] .= " {$value}";
+        } else {
+            $data['vod_genre'] = "{$value}";
+        }
+
+        return $data;
     }
 
     protected function saveToDb($data)
