@@ -32,11 +32,15 @@ function init()
 	fi
 
 	/bin/cp -rf ${SCRIPT_PATH}/download/* ${DOWNLOAD_PATH}/
+
+	install_log $? "初始化"
 }
 
 function installBasic()
 {
 	yum install -y gcc glibc libxml2 libxml2-devel openssl openssl-devel bzip2 bzip2-devel libcurl libcurl-devel libjpeg libjpeg-devel libpng libpng-devel freetype freetype-devel gmp gmp-devel libmcrypt libmcrypt-devel readline readline-devel libxslt libxslt-devel libicu-devel vim wget autoconf git screen ntp
+
+	install_log $? "安装基本软件"
 }
 
 function installPHP7()
@@ -117,6 +121,8 @@ cd "${DOWNLOAD_PATH}/${php_version}"
 --enable-opcache
 
 make && make install
+
+install_log $? "安装php7"
 }
 
 function setup_link()
@@ -124,12 +130,16 @@ function setup_link()
 	[ ! -e /application/php ] && {
 		ln -s /application/${php_version}    /application/php
 	}
+
 	[ ! -e /usr/local/bin/php ] && {
 		ln -s /application/php/bin/php  /usr/local/bin/php
 	}
+
 	[ ! -e /usr/local/bin/php-fpm ] && {
 		ln -s /application/php/sbin/php-fpm  /usr/local/bin/php-fpm
 	}
+
+	install_log $? "软连接设置"
 }
 
 function init_config()
@@ -137,12 +147,16 @@ function init_config()
 	[ ! -e /application/php/lib/php.ini ] && {
 		cp ${DOWNLOAD_PATH}/${php_version}/php.ini-production /application/php/lib/php.ini
 	}
+
 	[ ! -e /application/php/etc/php-fpm.conf ] && {
 		cp /application/php/etc/php-fpm.conf.default /application/php/etc/php-fpm.conf
 	}
+
 	[ ! -e /application/php/etc/php-fpm.d/www.conf ] && {
 		cp /application/php/etc/php-fpm.d/www.conf.default /application/php/etc/php-fpm.d/www.conf
 	}
+
+    install_log $? "php配置文件设置"
 
 	# 设置时区
 	set_php_timezone
@@ -177,9 +191,13 @@ function install_nginx()
 			tar xvzf "${version}.tar.gz"
 			cd ${version} && ./configure --user=nginx --group=nginx --prefix=/application/${version}/ --with-http_stub_status_module --with-http_ssl_module --with-http_secure_link_module --add-module=${EXTENSION_PATH}/nginx-accesskey-master
 			make && make install
+
+			install_log $? "安装nginx"
+
 			[ $? -eq 0 ] && {
 			     ln -s /application/${version} /application/nginx
-			     ln -s /application/nginx/sbin/nginx /usr/bin/nginx	
+			     ln -s /application/nginx/sbin/nginx /usr/bin/nginx
+			     install_log $? "设置 nginx 软链接"
 			}
 		}
 	}
@@ -189,12 +207,13 @@ function install_nginx()
 function install_phpredis()
 {
 	cat /application/php/lib/php.ini | grep 'extension=redis.so' > /dev/null 2>&1
+
 	if [ $? -eq 0 ]
 	then
 	    tips 'php-redis'
 	    return
 	else
-	 # 检测到未进行安装 进行安装
+	   # 检测到未进行安装 进行安装
        version='redis-4.1.1'
 	   file_name="${version}.tgz"
 	   cd "${DOWNLOAD_PATH}"
@@ -203,6 +222,8 @@ function install_phpredis()
 	   ${phpize}
 	   ./configure --with-php-config=${php_config}
 	   make && make install
+	   install_log $? "安装php-redis"
+
 	   [ $? -eq 0 ] && {
 	   	cat>>${php_ini}<<EOF
 extension=redis.so
@@ -230,6 +251,9 @@ function install_phpSeaslog()
 	   ${phpize}
 	   ./configure --with-php-config=${php_config}
 	   make && make install
+
+	   install_log $? "安装php日志组件"
+
 	   cat>>${php_ini}<<EOF
 [SeasLog]
 ;configuration for php SeasLog module
@@ -292,6 +316,9 @@ function install_mysql()
 		yum -y install mariadb mariadb-server
 		systemctl start mariadb
 		systemctl enable mariadb
+
+		install_log $? "安装mysql"
+
 		echo "now let's begin mysql_secure_installation "
 		if [ ! -e /usr/bin/expect ] 
 			then  yum install expect -y 
@@ -330,6 +357,9 @@ function install_redis()
 	tar -zvxf "redis-5.0.0.tar.gz"
 	cd redis-5.0.0
 	make && make install > /dev/null 2>&1
+
+	install_log $? "安装redis"
+
 	cd utils/
 	echo | /bin/bash install_server.sh
 	mkdir /etc/systems/system -p
@@ -346,17 +376,24 @@ ExeStop =/etc/init.d/redis_6379 stop
 WantedBy=multi-user.target
 EOF
 
-cat /etc/redis/6379.conf | grep '# requirepass foobared' > /dev/null
-[ $? -eq 0 ] && {
-   sed -i "s/# requirepass foobared/requirepass ${REDIS_PASSWD}/" /etc/redis/6379.conf
-   redis-cli shutdown
-   redis-server /etc/redis/6379.conf
-}
+        cat /etc/redis/6379.conf | grep '# requirepass foobared' > /dev/null
+        [ $? -eq 0 ] && {
+           sed -i "s/# requirepass foobared/requirepass ${REDIS_PASSWD}/" /etc/redis/6379.conf
+           redis-cli shutdown
+           redis-server /etc/redis/6379.conf
+        }
    }
 }
 
 function install_web()
 {
+   # 先检查 nginx 是否被安装
+   nginx -v
+   if [ $? -eq 0 ];then
+       error "nginx未安装"
+       exit 1
+   fi
+
    [ ! -e ${SCRIPT_PATH}superweb.tar.gz ] && {
    	   error "web压缩包不存在";
    	   exit 1
@@ -379,10 +416,20 @@ use superweb;
 source /var/www/superweb/console/install/install.sql;
 EOF
 }
+
+  install_log $? "安装web"
+
   #赋予权限
   chmod 777 -R ${WWW_PATH}/superweb/storage
   mv /application/nginx/conf/nginx.conf /application/nginx/conf/nginx.conf.backup
-  cp -r ${WWW_PATH}/superweb/vagrant/nginx/nginx.dev.conf /application/nginx/conf/nginx.conf
+  [ -d /application/nginx/conf/conf.d ] && {
+     mkdir /application/nginx/conf/conf.d
+  }
+
+  cp ${WWW_PATH}/superweb/vagrant/nginx/nginx.dev.conf /application/nginx/conf/nginx.conf
+  cp ${WWW_PATH}/superweb/vagrant/nginx/superweb.conf /application/nginx/conf/conf.d/superweb.conf
+  install_log $? "配置web-nginx配置文件"
+
   echo "*/1 * * * * /var/www/superweb/crontab.sh > /dev/null 2>&1" >>  /var/spool/cron/root
   systemctl restart crond
 }
@@ -401,7 +448,8 @@ function install_api()
         tips 'API'
    else
         tar xvzf ./superAPI.tar.gz -C /var/www/
-    fi
+        install_log $? "安装API"
+   fi
 }
 
 function setting_firewalld()
@@ -415,7 +463,8 @@ function setting_firewalld()
   [ $? -ne 0 ] && {
   	firewall-cmd --add-port=12389/tcp --permanent > /dev/null
   }
-  
+
+  install_log $? "设置防火墙"
   systemctl restart firewalld > /dev/null
 }
 
@@ -680,6 +729,8 @@ function set_linux_timezone()
    done;
 }
 
+
+
 function api_manage()
 {
     mecho "★★★★★★★★★★ API服务管理 ★★★★★★★★★★" "blue" "white"
@@ -803,24 +854,69 @@ esac
 
 function one_key_install()
 {
+    #创建日志
+    create_log_file;
+    #初始化
 	init
+	#安装基本软件
 	installBasic
+	#安装nginx
 	install_nginx
+	#安装php7
 	installPHP7
+	#安装php日志组件
 	install_phpSeaslog
+	#创建软连接
 	setup_link
+	#初始化php配置
 	init_config
+	#安装redis
 	install_redis
+	#安装php-redis
 	install_phpredis
+	#安装mysql
 	install_mysql
+	#安装web
     install_web
+    #安装api
     install_api
+    #关闭APACHE
     close_apache
+    #启动
     boot
+    #防火墙设置
 	setting_firewalld
+	#注册管理shell
 	register_to_global
+	#设置时区
 	set_linux_timezone
+	#结束
 	finish
+}
+
+function create_log_file()
+{
+   log="$(cd "$(dirname "$0")";pwd)/install.log";
+   if [ ! -e ${log} ]; then
+       touch ${log};
+   else
+       echo "" > ${log};
+   fi
+}
+
+function install_log()
+{
+    log="$(cd "$(dirname "$0")";pwd)/install.log";
+
+    result=$1
+
+    if [ ${result} -eq 0 ]; then
+        msg=`date +"%H:%M:%S : "`${2} "√"
+    else
+        msg=`date +"%H:%M:%S : "`${3} "×"
+    fi
+
+    echo ${msg} >> ${log};
 }
 
 function main()

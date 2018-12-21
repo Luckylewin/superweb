@@ -128,4 +128,9 @@ class Parade extends \yii\db\ActiveRecord
         
         return true;
     }
+
+    public function getData()
+    {
+        return json_decode($this->parade_data, true);
+    }
 }

@@ -178,6 +178,72 @@ class ParadeController extends Controller
         } catch (\Exception $e) {}
     }
 
+    private function pushParade($channel_name, $date, $data)
+    {
+        $parade = Parade::findOne(['parade_date' => $date, 'channel_name' => $channel_name]);
+        if (!is_null($parade)) {
+            $paradeData = $parade->getData();
+            $paradeData = array_merge($paradeData, $data);
+
+            array_multisort(array_column($paradeData,'parade_timestamp'), SORT_ASC,$paradeData);
+
+            $parade->parade_data = json_encode($paradeData);
+            $parade->save(false);
+        }
+    }
+
+    private function copyData($channel_name,$data)
+    {
+        $insertData = [];
+
+        foreach ($data as $value) {
+            $readyTimestamp = $value['parade_timestamp'] - 3600 * 4;
+            $beginTime = date('H:i', $value['parade_timestamp']);
+            $data = [
+                'parade_timestamp' => $readyTimestamp,
+                'parade_time' => date('H:i:s', $readyTimestamp),
+                'parade_name' => $value['parade_name'] . "(readying，begin：{$beginTime})"
+            ];
+
+            $date = date('Y-m-d', $readyTimestamp);
+            $insertData[$date][] = $data;
+        }
+
+        if (!empty($insertData)) {
+            foreach ($insertData as $date => $data) {
+                $this->pushParade($channel_name, $date, $data);
+            }
+        }
+
+        return false;
+    }
+
+    public function actionReadyRace()
+    {
+        // 遍历所有预告 删除掉所有ready
+        $parades = Parade::find()->where(['like','channel_name','sport'])->all();
+        foreach ($parades as $parade) {
+            $parade_data = $parade->getData();
+            if (!empty($parade_data)) {
+                foreach ($parade_data as $key => $value) {
+                    if (strpos($value['parade_name'], 'readying，begin')) {
+                        unset($parade_data[$key]);
+                    }
+                }
+
+                $parade->parade_data = json_encode($parade_data);
+                $parade->save(false);
+            }
+        }
+        
+        $parades = Parade::find()->where(['like','channel_name','sport'])->all();
+        foreach ($parades as $parade) {
+            $parade_data = $parade->getData();
+            if (!empty($parade_data)) {
+                $this->copyData($parade->channel_name, $parade_data);
+            }
+        }
+    }
 
     public function actionMatchChannel()
     {
@@ -218,6 +284,7 @@ class ParadeController extends Controller
             foreach ($channelArr as $channelName => $dateArr) {
                 foreach ($dateArr as $date => $parade) {
                      $paradeObject = new Parade();
+               
                      $paradeObject->parade_data = json_encode($parade);
                      $paradeObject->parade_date = $date;
                      $paradeObject->upload_date = date('Y-m-d');
