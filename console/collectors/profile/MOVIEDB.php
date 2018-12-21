@@ -21,6 +21,8 @@ class MOVIEDB extends searcher implements searchByName
 {
     private static $api_key = '64c1188ae2bd62ac5620b429037adaf8';
     private static $url;
+    public static $actor_switch = true;
+    public static $detail_switch = true;
 
     public function setSupportedLanguage()
     {
@@ -81,23 +83,27 @@ class MOVIEDB extends searcher implements searchByName
                     $profile['vod_total'] = 1;
 
                     // 获取演员
-                    $actorInfo = self::getActorInfo($data['id']);
+                    if (self::$actor_switch) {
+                        $actorInfo = self::getActorInfo($data['id']);
 
-                    if ($actorInfo) {
-                        $profile['vod_actor'] = $actorInfo['vod_actor'];
-                        $profile['vod_director'] = $actorInfo['vod_director'];
+                        if ($actorInfo) {
+                            $profile['vod_actor'] = $actorInfo['vod_actor']??'';
+                            $profile['vod_director'] = $actorInfo['vod_director']??'';
+                        }
+
+                        sleep(1);
                     }
 
-                    sleep(1);
-
                     // 获取语言 地区 分类
-                    $detailInfo = self::getDetailInfo($data['id'], $lang);
+                    if (self::$detail_switch) {
+                        $detailInfo = self::getDetailInfo($data['id'], $lang);
 
-                    if ($detailInfo) {
-                        if (isset($detailInfo['vod_language'])) $profile['vod_language'] = $detailInfo['vod_language'];
-                        if (isset($detailInfo['vod_area'])) $profile['vod_area'] = $detailInfo['vod_area'];
-                        if (isset($detailInfo['vod_type'])) $profile['vod_type'] = $detailInfo['vod_type'];
-                        if (isset($detailInfo['vod_keyword'])) $profile['vod_keyword'] = $detailInfo['vod_keyword'];
+                        if ($detailInfo) {
+                            if (isset($detailInfo['vod_language'])) $profile['vod_language'] = $detailInfo['vod_language'];
+                            if (isset($detailInfo['vod_area'])) $profile['vod_area'] = $detailInfo['vod_area'];
+                            if (isset($detailInfo['vod_type'])) $profile['vod_type'] = $detailInfo['vod_type'];
+                            if (isset($detailInfo['vod_keyword'])) $profile['vod_keyword'] = $detailInfo['vod_keyword'];
+                        }
                     }
 
                     return $profile;

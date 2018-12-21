@@ -175,14 +175,16 @@ class VodCollector extends common
 
                     if ($this->type == 'movie' && $profile = ProfilesSearcher::search($data['vod_name'], ['language' => 'zh-CN'])) {
                         $profile['vod_language'] = $data['vod_language'];
-                        $profile['vod_area'] = $data['vod_area'];
+                        $profile['vod_area']     = $data['vod_area'];
                         $data = array_merge($data, $profile);
                         $data['vod_fill_flag'] = 1;
 
-                    } else if ($this->type == 'Serial') {
-                         $data['genre'] = $this->genre;
+                    } else if ($profile = ProfilesSearcher::quickSearchInDB($data['vod_name'], ['language' => 'zh-CN'])) {
+                        $profile['vod_language'] = $data['vod_language'];
+                        $profile['vod_area']     = $data['vod_area'];
+                        $data = array_merge($data, $profile);
                     }
-
+                    
                     if (isset($data['vod_gold']) && !empty($data['vod_gold']) &&
                         isset($data['vod_year']) && !empty($data['vod_year'])
                     ) {

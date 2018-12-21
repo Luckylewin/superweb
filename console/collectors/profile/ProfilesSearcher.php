@@ -28,10 +28,29 @@ class ProfilesSearcher
 
     public static function quickSearchInDB($name, $language = 'en-US')
     {
-        // 先使用自身的数据库搜索
-        if ($profile = VodProfile::findByName($name, $language)) {
+        // 豆瓣最基本的数据
+        $douban = VodProfiles::findByName($name);
+        $profile = VodProfile::findByName($name, $language);
+
+        if ($profile && $douban) {
+            foreach ($profile as $key => $value) {
+                if (empty($profile[$key]) && !empty($douban[$key])) {
+                    $profile[$key] = $douban[$key];
+                }
+                if ($key == 'vod_actor' && !empty($douban[$key])) {
+                    $profile[$key] = $douban[$key];
+                }
+            }
+        }
+
+        if($profile){
             return $profile;
         }
+
+        if ($douban) {
+            return $douban;
+        }
+
 
         return false;
     }
