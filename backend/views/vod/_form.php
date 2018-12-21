@@ -308,6 +308,8 @@ $this->registerJsFile('/statics/js/miniUtils.js')
             <div class="panel panel-default" style="margin-top: 20px;">
                 <div class="panel-body">
 
+                    <?= $form->field($model, 'vod_gold')->textInput(['maxlength' => true]) ?>
+
                     <!-- 豆瓣评分  -->
                     <?= $form->field($model, 'vod_douban_score')->textInput(['maxlength' => true]) ?>
 
@@ -339,7 +341,7 @@ $this->registerJsFile('/statics/js/miniUtils.js')
 
                     <?php $form->field($model, 'vod_skin')->textInput(['maxlength' => true]) ?>
 
-                    <?php $form->field($model, 'vod_gold')->textInput(['maxlength' => true]) ?>
+
 
                     <?php $form->field($model, 'vod_golder')->textInput() ?>
 

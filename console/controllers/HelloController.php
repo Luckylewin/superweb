@@ -11,6 +11,7 @@ namespace console\controllers;
 use backend\models\MiddleParade;
 use backend\models\Parade;
 use backend\models\VodProfile;
+use backend\models\VodProfiles;
 use common\models\MainClass;
 use common\models\OttChannel;
 use common\models\OttLink;
@@ -24,6 +25,7 @@ use console\collectors\profile\SOKU;
 use console\jobs\TranslateJob;
 use yii\console\Controller;
 use yii\console\ExitCode;
+use Yii;
 
 /**
  * This command echoes the first argument that you have entered.
@@ -149,6 +151,4 @@ class HelloController extends Controller
         /*$name = "大秦帝国 电视剧";
         $profile = BAIDU::searchByName($name, ['language' => 'zh-CN']);*/
     }
-
-
 }
