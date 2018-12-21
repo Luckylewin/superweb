@@ -183,6 +183,15 @@ class VodCollector extends common
                          $data['genre'] = $this->genre;
                     }
 
+                    if (isset($data['vod_gold']) && !empty($data['vod_gold']) &&
+                        isset($data['vod_year']) && !empty($data['vod_year'])
+                    ) {
+                        if ($data['vod_gold']*10 > 80 ) {
+                            $data = $this->setGenre($data, '最热');
+                            $data['is_top'] = 1;
+                        }
+                    }
+
                     if ($this->genre) {
                         $data = $this->setGenre($data, $this->genre);
                     }
