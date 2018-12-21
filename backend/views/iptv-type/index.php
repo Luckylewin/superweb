@@ -87,13 +87,11 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js'
                             }
                         }
 
-                        $str .= Html::button(Html::tag('i','', ['class' => 'fa fa-plus']) , [
-                            'title'       => '添加新的子搜索项',
-                            'class'       => 'btn btn-success create',
-                            'style'       => 'margin:2px;',
-                            'data-toggle' => 'modal',
-                            'data-target' => '#create-modal',
-                            'data-id'     =>  $model->id,
+                        $str .= \common\widgets\frameButton::widget([
+                                'url' => Url::to(['type-item/create', 'type_id' => $model->id]),
+                                'content' => '',
+                                'icon' => 'fa-plus',
+                                'options' => ['class' => 'btn btn-success']
                         ]);
 
                         return $str;
@@ -117,72 +115,5 @@ $this->registerJsFile('/statics/themes/default-admin/plugins/layer/layer.min.js'
     ]); ?>
 </div>
 
-
-
-<!--新增Modal-->
-<?php
-Modal::begin([
-    'id' => 'create-modal',
-    'size' => Modal::SIZE_DEFAULT,
-    'header' => '<h4 class="modal-title">添加搜索项</h4>',
-    'footer' => '<a href="#" class="btn btn-default" data-dismiss="modal">关闭</a>',
-]);
-$requestUrl = Url::to(['type-item/create']);
-$requestJs=<<<JS
-     $(document).on('click', '.create', function() {
-                var id = $(this).attr('data-id');
-                $.get('{$requestUrl}', {'type_id':id},
-                    function (data) {
-                        $('.modal-body').html(data);
-                    }
-                )
-            })
-JS;
-$this->registerJs($requestJs);
-Modal::end();
-
-$requestUrl = \yii\helpers\Url::to(['type-item/create']);
-$js =<<<JS
-    $(document).on('beforeSubmit', 'form#form-save', function () { 
-    var form = $(this); 
-    //返回错误的表单信息 
-    if (form.find('.has-error').length) 
-    { 
-        return false; 
-    } 
-    //表单提交 
-    $.ajax({ 
-      url  : form.attr('action'), 
-      type  : 'post', 
-      data  : form.serialize(), 
-      success: function (response){ 
-        layer.alert(11);
-        if(response.status === 'success'){ 
-           layer.confirm('添加成功，是否继续添加？', {
-                  icon: 1,
-                  offset: ['130px',''],
-                  btn: ['是','否'] //按钮
-                }, function(){
-                  $('#iptvtypeitem-name').val('');
-                  $('#iptvtypeitem-zh_name').val('');
-                  layer.closeAll();
-                }, function(){
-                   layer.msg('刷新当前页面');
-                   setTimeout(function(){
-                     window.location.reload();
-                   },600);
-                });
-        } 
-      }, 
-      error : function (){ 
-        alert('系统错误'); 
-        return false; 
-      } 
-    }); 
-    return false; 
-  }); 
-JS;
-
-$this->registerJs($js);
 
 ?>

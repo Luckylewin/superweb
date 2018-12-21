@@ -2,16 +2,15 @@
 
 namespace backend\controllers;
 
-use backend\models\form\RenameForm;
-use backend\models\IptvType;
-use backend\models\MultiLang;
-use common\models\Type;
-use common\models\VodList;
 use Yii;
-use backend\models\IptvTypeItem;
 use yii\data\ActiveDataProvider;
+use yii\helpers\Url;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
+use backend\models\form\RenameForm;
+use backend\models\IptvType;
+use backend\models\IptvTypeItem;
+
 
 class TypeItemController extends BaseController
 {
@@ -44,7 +43,6 @@ class TypeItemController extends BaseController
         ]);
     }
 
-
     public function actionView($id)
     {
         return $this->render('view', [
@@ -57,19 +55,20 @@ class TypeItemController extends BaseController
     {
         $model = new IptvTypeItem();
         if ($this->getRequest()->isPost) {
-            Yii::$app->response->format = Response::FORMAT_JSON;
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
-                return ['status' => 'success'];
+                $this->success();
+
+                return $this->redirect(Url::to(['type-item/update', 'id' => $model->id]));
             }
 
-            return ['status' => 'fail'];
+            $this->error();
         }
 
         $model->type_id = Yii::$app->request->get('type_id');
         $model->sort    = 0;
         $model->is_show = 1;
 
-        return $this->renderAjax('create', [
+        return $this->render('create', [
             'model' => $model,
         ]);
     }
@@ -148,7 +147,4 @@ class TypeItemController extends BaseController
             'model' => $model
         ]);
     }
-    
-
-    
 }

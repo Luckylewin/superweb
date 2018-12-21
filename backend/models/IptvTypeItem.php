@@ -32,7 +32,7 @@ class IptvTypeItem extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['type_id', 'name', 'zh_name', 'sort'], 'required'],
+            [['type_id', 'name'], 'required'],
             [['type_id', 'sort'], 'integer'],
             [['name', 'zh_name'], 'string', 'max' => 255],
             [['exist_num', 'is_show'], 'safe']
