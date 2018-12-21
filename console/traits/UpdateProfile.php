@@ -99,7 +99,7 @@ trait UpdateProfile
             'vod_area', 'vod_length', 'vod_filmtime', 'vod_year',
             'vod_hits', 'vod_up', 'vod_pic_bg', 'vod_pic_slide',
             'vod_reurl', 'vod_language', 'vod_area', 'vod_origin_url',
-            'vod_gold', 'vod_golder'
+            'vod_gold', 'vod_golder','vod_genre'
         ];
 
         foreach ($perhapsFields as $field) {

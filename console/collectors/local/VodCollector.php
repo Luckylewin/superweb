@@ -210,9 +210,9 @@ class VodCollector extends common
     private function setGenre($data,$value)
     {
         if (isset($data['vod_genre'])) {
-            $data['vod_genre'] .= " {$value}";
+            $data['vod_type'] .= " {$value}";
         } else {
-            $data['vod_genre'] = "{$value}";
+            $data['vod_type'] = "{$value}";
         }
 
         return $data;
