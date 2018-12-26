@@ -308,7 +308,7 @@ class HplusSearcher extends common
 
         $cookieJar = $this->getJar()->fromArray($cookies, $domain);
 
-        return $this->getDom($url, 'html', 'UTF-8', $cookieJar);
+        return $this->getDom($url, ['format' =>'html', 'charset' => 'UTF-8', 'cookie' => $cookieJar]);
     }
 
     public function createVod($data)

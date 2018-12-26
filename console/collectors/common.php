@@ -29,10 +29,10 @@ class common
         return clone $this->crawler;
     }
 
-    public function getHttpClient()
+    public function getHttpClient($options=[])
     {
         if (empty($this->httpClient)) {
-            $this->httpClient  = new Client();
+            $this->httpClient  = new Client($options);
         }
 
         return $this->httpClient;
@@ -101,16 +101,19 @@ class common
 
     /**
      * @param $url
-     * @param string $format
-     * @param string $charset
-     * @param array $cookies
+     * @param array $options
      * @return bool|Crawler
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function getDom($url, $format ='html', $charset = "UTF-8", $cookies = null)
+    public function getDom($url, $options = [])
     {
         $redis = MyRedis::init(2);
         $md5 = md5($url);
+
+        $format = $options['format']??'html';
+        $charset = $options['charset']??'UTF-8';
+
+        unset($options['format'], $options['charset']);
 
         try {
 
@@ -125,7 +128,7 @@ class common
             } else {
                 $this->isCached = false;
                 $client  = $this->getHttpClient();
-                $options = [
+                $settingOptions = [
                     'headers' => [
                         'User-Agent' => 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36',
                         'Referer'    => 'https://www.google.com/',
@@ -134,9 +137,7 @@ class common
 
                 ];
 
-                if ($cookies) {
-                    $options['cookies'] = $cookies;
-                }
+                $options = array_merge($settingOptions, $options);
 
                 $result = $client->request('GET', $url, $options);
                 $data = $result->getBody()->getContents();

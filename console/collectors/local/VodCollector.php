@@ -184,7 +184,7 @@ class VodCollector extends common
                         $profile['vod_area']     = $data['vod_area'];
                         $data = array_merge($data, $profile);
                     }
-                    
+
                     if (isset($data['vod_gold']) && !empty($data['vod_gold']) &&
                         isset($data['vod_year']) && !empty($data['vod_year'])
                     ) {

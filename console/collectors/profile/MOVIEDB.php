@@ -80,10 +80,8 @@ class MOVIEDB extends searcher implements searchByName
                     if (isset($data['release_date'])) $profile['vod_filmtime'] = $data['release_date'];
                     if (isset($data['imdb_id'])) $profile['vod_imdb_id'] = $data['imdb_id'];
 
-                    $profile['vod_total'] = 1;
-
                     // 获取演员
-                    if (self::$actor_switch) {
+                    if (!empty($data) && self::$actor_switch) {
                         $actorInfo = self::getActorInfo($data['id']);
 
                         if ($actorInfo) {
@@ -94,8 +92,10 @@ class MOVIEDB extends searcher implements searchByName
                         sleep(1);
                     }
 
+                    $profile['vod_total'] = 1;
+
                     // 获取语言 地区 分类
-                    if (self::$detail_switch) {
+                    if (!empty($data) && self::$detail_switch) {
                         $detailInfo = self::getDetailInfo($data['id'], $lang);
 
                         if ($detailInfo) {
@@ -110,7 +110,7 @@ class MOVIEDB extends searcher implements searchByName
                 }
             }
 
-                echo "the movie db 接口返回数据异常/没有返回" . PHP_EOL;
+                //echo "the movie db 接口返回数据异常/没有返回" . PHP_EOL;
                 return false;
 
         } catch (\Exception $e) {

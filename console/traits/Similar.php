@@ -50,7 +50,8 @@ trait Similar
      * @param $str2
      * @return float|int
      */
-    public function getSimilar($str1, $str2) {
+    public function getSimilar($str1, $str2)
+    {
         $len1 = strlen($str1);
         $len2 = strlen($str2);
         $len = strlen($this->getLCS($str1, $str2, $len1, $len2));

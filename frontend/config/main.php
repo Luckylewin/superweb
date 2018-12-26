@@ -45,14 +45,14 @@ return [
             'charset' => 'utf8',
             'tablePrefix' => 'yii2_',
         ],
-        /*
+
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
             ],
         ],
-        */
+
     ],
     'params' => $params,
 ];

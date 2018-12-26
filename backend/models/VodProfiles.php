@@ -11,11 +11,13 @@ use Yii;
  * @property string $name 影片名称
  * @property string $alias_name 别名
  * @property string $director 导演
+ * @property int $screen_writer 编剧
  * @property string $actor 演员
  * @property string $area 地区
  * @property string $language 语言
  * @property string $type 类型
- * @property string $tab 标签
+ * @property string $tag 标签
+ * @property string $user_tag 用户标签
  * @property string $plot 剧情
  * @property string $year 发行年份
  * @property string $date 发行日期
@@ -24,12 +26,19 @@ use Yii;
  * @property int $tmdb_id the moviedb 评分
  * @property string $tmdb_score the moviedb
  * @property int $douban_id 豆瓣id
- * @property string $douban_score 豆瓣频繁
+ * @property string $douban_score 豆瓣评分
+ * @property int $douban_voters 评分人数
  * @property string $length 时长
  * @property string $cover 封面
+ * @property string $image 大图
  * @property string $banner banner 图
  * @property string $comment 影评
- * @property int $fill_status 填充状态
+ * @property int $fill_status 数据完整状态
+ * @property int $douban_search 豆瓣是否查询过的状态
+ * @property int $imdb_search IMDB是否查询过的状态
+ * @property int $tmdb_search The Movie Db 是否查询过的状态
+ * @property int $profile_language 资料语言
+ * @property int $media_type 所属分类
  */
 class VodProfiles extends \yii\db\ActiveRecord
 {
@@ -47,18 +56,14 @@ class VodProfiles extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['imdb_id', 'tmdb_id', 'douban_id'], 'integer'],
-            [['name', 'alias_name', 'actor'], 'string', 'max' => 60],
-            [['director', 'area', 'language', 'tab'], 'string', 'max' => 20],
-            [['type'], 'string', 'max' => 50],
-            [['plot'], 'string', 'max' => 500],
+            [['tmdb_id', 'douban_id', 'douban_voters'], 'integer'],
+            [['type','tag','user_tag', 'actor', 'name', 'alias_name','director','language','area','screen_writer'], 'string', 'max' => 255],
             [['year'], 'string', 'max' => 4],
             [['date'], 'string', 'max' => 10],
             [['imdb_score', 'tmdb_score', 'douban_score'], 'string', 'max' => 3],
             [['length'], 'string', 'max' => 6],
-            [['cover', 'banner'], 'string', 'max' => 255],
-            [['comment'], 'string', 'max' => 2000],
-            [['fill_status'], 'string', 'max' => 1],
+            [['cover', 'banner', 'image'], 'string', 'max' => 255],
+            [['fill_status','comment','plot','tmdb_search', 'imdb_search','douban_search','profile_language','tag','user_tag','media_type'], 'safe'],
         ];
     }
 
@@ -72,6 +77,7 @@ class VodProfiles extends \yii\db\ActiveRecord
             'name' => 'Name',
             'alias_name' => 'Alias Name',
             'director' => 'Director',
+            'screen_writer' => 'Screenwriter',
             'actor' => 'Actor',
             'area' => 'Area',
             'language' => 'Language',
