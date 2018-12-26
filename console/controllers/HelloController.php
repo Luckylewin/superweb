@@ -153,10 +153,11 @@ class HelloController extends Controller
         if ($time < 60) {
             return $time . ' s';
         } else if ($time > 60 && $time < 3600) {
-            return ceil($time/60) . ' min';
+            return ceil($time/60) . ' min ' . ($time  % 60 ) . ' s';
         } else {
             $hour = ceil($time/3600);
-            return  $hour. ' h ' . ceil(($time - 3600 * $hour)/60) . ' min';
+            $lastSecond =$time % 3600;
+            return  $hour. ' h ' . ceil($lastSecond/60) . ' min ' . ($lastSecond % 60) . 's';
         }
     }
 
@@ -182,15 +183,33 @@ class HelloController extends Controller
         return true;
     }
 
+    public function sleepPrint($min,$max)
+    {
+        $time = mt_rand($min, $max);
+        while ($time > 0) {
+            $this->stdout('.', Console::FG_GREY);
+            $time --;
+            sleep(1);
+        }
+    }
+
     public function actionFill()
     {
         $start = time();
-        foreach (VodProfiles::find()->where(['fill_status' => 0])->batch(10) as $profiles) {
+        foreach (VodProfiles::find()->where(['tmdb_search' => 0])->batch(10) as $profiles) {
             foreach ($profiles as $profile) {
 
+               $this->stdout(date('Y-m-d H:i:s  ') . "TMDB采集: {$profile->name}", Console::FG_CYAN);
+
                try {
+
+                   if (empty($profile->name)) continue;
+
                    if ($this->isSearch($profile->id) == false) {
-                       $this->stdout("没有数据，跳过".PHP_EOL, Console::FG_RED);
+                       /* @var $profile VodProfiles */
+                       VodProfiles::updateAll(['tmdb_search' => 1],['name' => $profile->name]);
+                       $this->stdout("X ",Console::FG_RED);
+                       $this->stdout("没有数据，跳过".PHP_EOL, Console::FG_GREY);
                        continue;
                    }
 
@@ -200,31 +219,38 @@ class HelloController extends Controller
                        'language' => 'zh-CN'
                    ]);
 
+                   /* @var $profile VodProfiles */
+
+                   $time = $this->getWasteTime(time() - $start);
+
                    if ($data) {
-                       /* @var $profile VodProfiles */
                        $profile->alias_name = $data['vod_ename']??'';
                        $profile->cover = $data['vod_pic']??'';
-                       $profile->banner = $data['vod_pic_bg']??'';
+                       $profile->image = $data['vod_pic_bg']??'';
                        $profile->plot = $data['vod_content']??'';
                        $profile->language = $data['vod_language']??'';
                        $profile->year = $data['vod_year']??'';
                        $profile->date = $data['vod_filmtime']??'';
-                       $profile->tab = $data['vod_type']??'';
-                       $profile->fill_status = 1;
-
+                       $profile->tag = $data['vod_type']??'';
+                       $profile->imdb_id = $data['vod_imdb_id']??'';
+                       $profile->profile_language = 'zh-CN';
+                       $profile->tmdb_search = 1;
                        $profile->save(false);
-
-                       $time = $this->getWasteTime(time() - $start);
-                       $this->stdout(date('Y-m-d H:i:s  ') . "{$profile->name} 更新, 任务已运行{$time}" . PHP_EOL,Console::FG_BLUE);
-                       sleep(mt_rand(1,2));
+                       $this->stdout("√ ",Console::FG_GREEN);
 
                    } else {
+                       VodProfiles::updateAll(['tmdb_search' => 1],['name' => $profile->name]);
                        $tmdb = $this->getNoDataID();
                        $tmdb[] = $profile->id;
-
                        Yii::$app->cache->set('tmdb', json_encode($tmdb));
+                       $this->stdout("X ",Console::FG_RED);
                    }
+
+                   $this->sleepPrint(1,3);
+                   $this->stdout("任务已运行{$time}" . PHP_EOL,Console::FG_BLUE);
+
                } catch (\Exception $e) {
+                   $this->stdout("Error:" . $e->getMessage() . PHP_EOL,Console::FG_RED);
                    continue;
                }
 

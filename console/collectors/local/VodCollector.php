@@ -88,8 +88,8 @@ class VodCollector extends common
 
     protected function getCover($path, $fileName)
     {
-        return 'http://' . (Yii::$app->params['serverDomain']?:Yii::$app->params['serverIP'] ) .
-                '/' . basename($this->playpath) . "/". basename($path) . "/" . $fileName;
+        return urlencode('http://' . (Yii::$app->params['serverDomain']?:Yii::$app->params['serverIP'] ) .
+            '/' . basename($this->playpath) . "/". basename($path) . "/" . $fileName);
     }
 
     protected function getProfile($path)
