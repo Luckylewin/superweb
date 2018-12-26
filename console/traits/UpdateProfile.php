@@ -8,6 +8,7 @@
 
 namespace console\traits;
 
+use common\models\OttLink;
 use common\models\Vod;
 use common\models\VodList;
 use common\models\Vodlink;
@@ -127,15 +128,7 @@ trait UpdateProfile
         // 新增播放链接
         if (!empty($data['links'])) {
             foreach ($data['links'] as $_link) {
-                $link = new Vodlink();
-                $link->url      = $_link['url'];
-                $link->episode  = $_link['episode'];
-                $link->group_id = $playGroup->id;
-                if (isset($_link['during'])) $link->during = $_link['during'];
-                if (isset($_link['title']))  $link->title  = $_link['title'];
-                if (isset($_link['pic']))    $link->pic    = $_link['pic'];
-
-                $link->save(false);
+                $this->createLinks($playGroup->id, $_link);
             }
         }
 
@@ -181,8 +174,33 @@ trait UpdateProfile
             }
         }
 
+        // 获取该剧集的 group_id
+        $playGroup = PlayGroup::findOne(['vod_id' => $vod->vod_id]);
+
+        // 判断剧集是否更新
+        foreach ($data['links'] as $_link) {
+
+            if (Vodlink::find()->where(['url' => $_link['url'], 'group_id' => $playGroup->id])->exists() == false) {
+                 $this->createLinks($playGroup->id, $_link);
+                 echo $vod->vod_name . "更新剧集" . PHP_EOL;
+            }
+        }
+
         $update && $vod->save(false);
         echo $vod->vod_name . "存在" . PHP_EOL;
+    }
+
+    private function createLinks($playGroupId, $_link)
+    {
+        $link = new Vodlink();
+        $link->url      = $_link['url'];
+        $link->episode  = $_link['episode'];
+        $link->group_id = $playGroupId;
+        if (isset($_link['during'])) $link->during = $_link['during'];
+        if (isset($_link['title']))  $link->title  = $_link['title'];
+        if (isset($_link['pic']))    $link->pic    = $_link['pic'];
+        
+        $link->save(false);
     }
 
     protected function getImagePath($playGroupName, $path)

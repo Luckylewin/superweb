@@ -8,9 +8,9 @@
 
 namespace console\collectors\local;
 
+use backend\models\VodProfiles;
 use Yii;
 use yii\base\Model;
-use common\models\Type;
 use common\models\Vod;
 use console\collectors\profile\ProfilesSearcher;
 use console\collectors\common;
@@ -99,19 +99,37 @@ class VodCollector extends common
         }
 
         $list = scandir($path);
+        $profile = [];
         foreach ($list as $fileName) {
+            if (preg_match('/info\.txt/', $fileName)) {
+                $info =  file_get_contents($path . '/'. $fileName);
+                $info = array_filter(preg_split('/\n/', $info));
+                array_walk($info, function(&$v) {
+                    $v = explode(':', $v);
+                });
+
+                if (!empty($info)) {
+                    foreach ($info as $_info) {
+                        if ($_info[0] == 'info') {
+                            $profile['vod_content'] = $_info[1];
+                        } else {
+                            $profile["vod_{$_info[0]}"] = preg_replace('/\s/','', $_info[1]);
+                        }
+                    }
+                }
+            }
+
             preg_match('/(\S)+(?=(.jepg|.jpg|.png))/', $fileName, $match);
             if (isset($match[0]) && !empty($match[0])) {
-                return [
-                    'vod_name' => $match[0],
-                    'vod_pic' => $this->getCover($path, $fileName),
-                    'vod_area' => $this->area,
-                    'vod_language' => $this->language
-                ];
+                $profile['vod_name'] = $match[0];
+                $profile['vod_pic'] = $this->getCover($path, $fileName);
+                $profile['vod_area'] = $this->area;
+                $profile['vod_language'] = $this->language;
             }
         }
 
-        return false;
+       return empty($profile) ? false : $profile;
+
     }
 
     protected function getEpisodeNumber($fileName)
@@ -157,6 +175,35 @@ class VodCollector extends common
         return Yii::$app->params['vod_play_host'] . $this->playpath . '/'. $dirName .'/' . $fileName . '/index.m3u8';
     }
 
+    protected function fillWithProfiles($profiles)
+    {
+        $profile = VodProfiles::find()->where(['name' => $profiles['vod_name']])->limit(1)->one();
+        if (is_null($profile)) {
+            $profile = new VodProfiles();
+            foreach ($profiles as $field => $value) {
+                $_field = str_replace('vod_','', $field);
+                if ($_field == 'pic') continue;
+                $profile->$_field = $value;
+            }
+
+            $profile->save(false);
+        } else {
+            // 判断数据是否有填充
+            $needUpdate = false;
+            foreach ($profiles as $field => $value) {
+                $_field = str_replace('vod_','', $field);
+                if ($_field != 'pic' && $value) {
+                    if (empty($profile->$_field)) {
+                        $needUpdate = true;
+                        $profile->$_field = $value;
+                    }
+                }
+            }
+
+            if ($needUpdate) $profile->save(false);
+        }
+    }
+
     /**
      * @param $directory
      * @return array
@@ -169,9 +216,12 @@ class VodCollector extends common
             foreach ($list as $fileName) {
                 $path = $directory . $fileName;
                 $data = $this->getProfile($path);
+
+                $this->fillWithProfiles($data);
+
                 $data['links'] = $this->getEpisodes($path);
 
-                if (!empty($data) && isset($data['vod_name']) && !empty($data['links']) && is_null(Vod::findOne(['vod_name' => $data['vod_name']]))) {
+                if (!empty($data) && isset($data['vod_name']) && !empty($data['links']) ) {
 
                     if ($this->type == 'movie' && $profile = ProfilesSearcher::search($data['vod_name'], ['language' => 'zh-CN'])) {
                         $profile['vod_language'] = $data['vod_language'];
@@ -232,6 +282,7 @@ class VodCollector extends common
     protected function saveToDb($data)
     {
         try {
+
             $this->createVod($data, 'local');
         } catch (\Exception $e) {
             $this->color("File:" . $e->getFile(),'ERROR');
