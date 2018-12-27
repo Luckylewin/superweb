@@ -27,7 +27,25 @@
             </ul>
         </div>
         <div data-v-4f7b9f4e="" class="content">
-            <div data-v-fc334010="" data-v-4f7b9f4e="" class="nav" style="max-height: 1038px; height: 625px;"></div>
+            <div data-v-fc334010="" data-v-4f7b9f4e="" class="nav" style="max-height: 1038px; height: 625px;">
+                <div data-v-fc334010="" class="nav-items scroll-gamelist">
+                    <div data-v-57afac5a="" data-v-fc334010="" class="items-stable">
+                        <a data-v-57afac5a="" href="javascript:void(0)" data-module="hot" data-target="hotEvent" class="stable-nav nav-item checked" >
+                            <span data-v-57afac5a="" class="match-name" >
+                                广告
+                            </span>
+                        </a>
+                    </div>
+
+                    <div data-v-57afac5a="" data-v-fc334010="" class="items-stable">
+                        <a data-v-57afac5a="" href="javascript:void(0)" data-module="hot" data-target="hotEvent" class="stable-nav nav-item checked" >
+                            <span data-v-57afac5a="" class="match-name" >
+                                下载
+                            </span>
+                        </a>
+                    </div>
+                </div>
+            </div>
             <div data-v-4f7b9f4e="" class="section">
                 <!---->
                 <div data-v-18aa5687="" data-v-4f7b9f4e="" class="cal-wrapper">
@@ -73,7 +91,7 @@
                                         </div>
 
                                         <div v-for="event in item.event_list">
-                                            <a data-v-ef8b519a="" data-v-3550de9d="" href="?mid=100005:2018122400"
+                                            <a data-v-ef8b519a="" data-v-3550de9d="" href="javascript:void(0);"
                                                target="_blank" ref="schedule-item" class="schedule-item boss game-in">
                                                 <div data-v-ef8b519a="" class="date">
                                                     <span v-text="event.event_time"></span>
@@ -115,18 +133,10 @@
 
                                                 <div data-v-1fb506d0="" data-v-ef8b519a="" class="source t-right game-in">
                                                     <!-- source-btn  即将开始的比赛加上这个  -->
-                                                    <div data-v-1fb506d0="" data-module="schedule" data-target="btnLive" class="normal">
-                                                        <span data-v-1fb506d0="" class="live-type-icon ">
-                                                            <span data-v-1fb506d0="" class="path1">
-                                                            </span>
-                                                            <span data-v-1fb506d0="" class="path2">
-                                                            </span>
-                                                        </span>
+                                                    <div data-v-1fb506d0=""  class="normal source-btn">
                                                         <span data-v-1fb506d0="" class="default" v-text="supportedChannel(event)">
                                                             Sport Tv
                                                     </span>
-
-
                                                     </div>
                                                 </div>
                                                 <!---->
@@ -144,7 +154,7 @@
                                     </a>
                                     |
 
-                                    <a data-v-f96ad44e="" href="http://www.qq.com/map/" target="_blank" rel="nofollow">
+                                    <a data-v-f96ad44e="" href="#" target="_blank" rel="nofollow">
                                         网站导航
                                     </a>
                                 </div>
@@ -201,18 +211,34 @@
 
     methods: {
       url() {
-        return  'http://' + window.location.hostname + ':12389/events';
+        return  'http://' + window.location.hostname + ':12389/events?lang=zh_CN';
       },
 
       fetch() {
-        axios.get(this.url())
-          .then(res => {
-            this.items = res.data.data;
-            console.log(this.items);
-          })
-          .catch(err => {
-            // console.log(err)
-          });
+        let cacheName = 'NBA-events';
+        let expire_key = 'NBA-expire-time';
+
+        let storageEvents = localStorage.getItem(cacheName),
+            expireTime = localStorage.getItem(expire_key),
+            currentTime = this.time();
+
+        if (expireTime >= currentTime && storageEvents ) {
+          this.items = JSON.parse(storageEvents);
+
+        } else {
+          axios.get(this.url())
+            .then(response => {
+              this.items = response.data.data;
+              localStorage.setItem(cacheName,JSON.stringify(this.items));
+              localStorage.setItem(expire_key, this.time() + 86400);
+            })
+            .catch(err => {
+                console.log(err)
+            });
+        }
+
+        this.print(this.items)
+
       },
 
       print(item){
@@ -233,22 +259,26 @@
         return date ===  this.timestampToDate((new Date()).getTime());
       },
 
+      time() {
+        return parseInt((new Date()).getTime().toString().substring(0,10));
+      },
+
       getDateClass (date,index) {
         return  this.dateSelectedIndex === index ? 'active' : '';
         // return this.isToday(date) ? 'active' : '';
       },
 
-      timestampToDate(obj){
+      timestampToDate(obj) {
         let date =  new Date(obj);
-        let y = 1900+date.getYear();
-        let m = "0"+(date.getMonth()+1);
-        let d = "0"+date.getDate();
-        return y+"-"+m.substring(m.length-2,m.length)+"-"+d.substring(d.length-2,d.length);
+        let y = 1900 + date.getYear();
+        let m = "0" + (date.getMonth()+1);
+        let d = "0" + date.getDate();
+
+        return y + "-" + m.substring(m.length-2,m.length) + "-" + d.substring(d.length - 2,d.length);
       },
 
       scrollTop(index) {
         let top = index ? document.getElementsByClassName('schedule-block')[index].offsetTop : 0;
-       // document.getElementsByClassName('scroll-area')[0].style = "top:-" + top + 'px';
         this.dateSelectedIndex = index;
 
         let scrollDiv = document.getElementsByClassName('scroll-area')[0];
@@ -264,11 +294,8 @@
 
         //绑定事件
         scrollDiv.addEventListener('scroll', function() {
-
         });
       }
-
-
     }
   })
 
