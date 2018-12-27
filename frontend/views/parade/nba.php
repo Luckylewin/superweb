@@ -210,7 +210,7 @@
     methods: {
 
       url() {
-        return  'http://' + window.location.hostname + ':12389/events?lang=zh_CN';
+        return  'http://' + window.location.hostname + ':2052/events?lang=zh_CN';
       },
 
       fetch() {
