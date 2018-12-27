@@ -102,7 +102,7 @@
                                                     <span data-v-ef8b519a="" v-text="event.event_information.A.name" :title="event.event_information.A.name" class="team-name boss"></span>
                                                     <span data-v-ef8b519a="" class="team-score"></span>
                                                     <img data-v-4b7e6442="" data-v-ef8b519a="" :src="event.event_information.A.icon"
-                                                         :title="event.event_information.A.name" class="team-logo boss" style="width: 36px;" :onerror="defaultImg" />
+                                                         :title="event.event_information.A.name" class="team-logo boss" style="width: 36px;" />
                                                 </div>
 
                                                 <!-- 比分  -->
