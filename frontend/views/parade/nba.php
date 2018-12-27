@@ -2,8 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="/css/nba.css" />
-
+    <link rel="stylesheet" type="text/css" href="/css/nba.css?v=1227" />
     <title>NBA</title>
 </head>
 
@@ -191,7 +190,6 @@
 <script>
   new Vue({
     el: '#app',
-
     data() {
       return {
         items:[],
@@ -210,6 +208,7 @@
     },
 
     methods: {
+
       url() {
         return  'http://' + window.location.hostname + ':12389/events?lang=zh_CN';
       },
