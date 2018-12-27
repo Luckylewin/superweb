@@ -125,7 +125,7 @@
                                                 </div>
                                                 <div data-v-ef8b519a="" class="team">
                                                     <img data-v-4b7e6442="" data-v-ef8b519a="" :src="event.event_information.B.icon"
-                                                         :title="event.event_information.B.name" class="team-logo boss" style="width: 36px;" :onerror="defaultImg" />
+                                                         :title="event.event_information.B.name" class="team-logo boss" style="width: 36px;"  />
                                                     <span data-v-ef8b519a="" v-text="event.event_information.B.name" :title="event.event_information.B.name" class="team-name boss"></span>
                                                     <span data-v-ef8b519a="" class="team-score"></span>
                                                 </div>
