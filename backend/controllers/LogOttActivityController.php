@@ -14,10 +14,7 @@ use yii\filters\VerbFilter;
 class LogOttActivityController extends BaseController
 {
 
-    /**
-     * Lists all LogOttActivity models.
-     * @return mixed
-     */
+
     public function actionIndex()
     {
         $searchModel = new LogOttActivitySearch();
@@ -30,12 +27,7 @@ class LogOttActivityController extends BaseController
         ]);
     }
 
-    /**
-     * Displays a single LogOttActivity model.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+
     public function actionView($id)
     {
         return $this->render('view', [
@@ -43,11 +35,6 @@ class LogOttActivityController extends BaseController
         ]);
     }
 
-    /**
-     * Creates a new LogOttActivity model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
     public function actionCreate()
     {
         $model = new LogOttActivity();
@@ -61,13 +48,7 @@ class LogOttActivityController extends BaseController
         ]);
     }
 
-    /**
-     * Updates an existing LogOttActivity model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
@@ -81,13 +62,6 @@ class LogOttActivityController extends BaseController
         ]);
     }
 
-    /**
-     * Deletes an existing LogOttActivity model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
@@ -95,13 +69,7 @@ class LogOttActivityController extends BaseController
         return $this->redirect(['index']);
     }
 
-    /**
-     * Finds the LogOttActivity model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return LogOttActivity the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+
     protected function findModel($id)
     {
         if (($model = LogOttActivity::findOne($id)) !== null) {

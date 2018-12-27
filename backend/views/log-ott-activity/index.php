@@ -46,7 +46,7 @@ $genre = \yii\helpers\ArrayHelper::map(\common\models\MainClass::find()->where([
 
 
             'mac',
-
+            'scheme',
             [
                     'attribute' => 'code',
                     'filter' => ['0' => '成功下载', '16' => '版本一致', '17' => '没有数据','36' => '没有权限'],

@@ -199,7 +199,7 @@ trait UpdateProfile
         if (isset($_link['during'])) $link->during = $_link['during'];
         if (isset($_link['title']))  $link->title  = $_link['title'];
         if (isset($_link['pic']))    $link->pic    = $_link['pic'];
-        
+
         $link->save(false);
     }
 
