@@ -265,6 +265,12 @@ class VodCollector extends common
                        $data = $this->setGenre($data, '最新');
                     }
 
+                    if (isset($data['vod_type'])) {
+                        $data['vod_type'] = preg_replace('/,,/',',', $data['vod_type']);
+                        $data['vod_type'] = trim($data['vod_type'], ',');
+                        $data['vod_type'] = preg_replace('/\//',',', $data['vod_type']);
+                    }
+
                     $data['vod_language'] = $this->language;
                     $data['vod_area']     = $this->area;
 
@@ -280,6 +286,7 @@ class VodCollector extends common
     private function setGenre($data,$value)
     {
         $value = trim($value);
+        $value = trim($value,',');
         if ($value) {
             if (isset($data['vod_type'])) {
                 if (!empty($data['vod_type'])) {
