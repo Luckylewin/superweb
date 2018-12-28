@@ -110,11 +110,14 @@ class VodCollector extends common
 
                 if (!empty($info)) {
                     foreach ($info as $_info) {
-                        if ($_info[0] == 'info') {
-                            $profile['vod_content'] = $_info[1];
-                        } else {
-                            $profile["vod_{$_info[0]}"] = preg_replace('/\s/','', $_info[1]);
+                        if (isset($_info[1])) {
+                            if ($_info[0] == 'info') {
+                                $profile['vod_content'] = $_info[1];
+                            } else {
+                                $profile["vod_{$_info[0]}"] = preg_replace('/\s/','', $_info[1]);
+                            }
                         }
+
                     }
                 }
             }
@@ -184,8 +187,10 @@ class VodCollector extends common
             $profile = new VodProfiles();
             foreach ($profiles as $field => $value) {
                 $_field = str_replace('vod_','', $field);
-                if ($_field == 'pic') continue;
-                $profile->$_field = $value;
+                if (empty($profile->$_field) && in_array($_field,['actor','director','year','info','area'])) {
+                   $profile->$_field = $value;
+                }
+
             }
 
             $profile->save(false);
@@ -195,7 +200,7 @@ class VodCollector extends common
             foreach ($profiles as $field => $value) {
                 $_field = str_replace('vod_','', $field);
                 if ($_field != 'pic' && $value) {
-                    if (empty($profile->$_field)) {
+                    if (empty($profile->$_field) && in_array($_field,['actor','director','year','info','area'])) {
                         $needUpdate = true;
                         $profile->$_field = $value;
                     }

@@ -198,11 +198,6 @@ class VodController extends Controller
         }
     }
 
-    public function actionDb()
-    {
-        print_r(Douban::searchByName('不能说的秘密', ['language' => 'zh-CN']));
-    }
-
     /**
      * 清除数据
      */
@@ -437,14 +432,17 @@ class VodController extends Controller
     {
         $start = time();
 
-        foreach (VodProfiles::find()->where(['douban_search' => 0])->andWhere(['<=', 'id', '45000'])->batch() as $profiles) {
+        foreach (VodProfiles::find()->where(['douban_search' => 0])->andWhere(['<=', 'id', '45000'])->batch(1) as $profiles) {
            foreach ($profiles as $profile) {
               $this->taskPrint("采集豆瓣数据:{$profile->name}");
 
               try {
                   $doubanProfile =  Douban::searchByName($profile->name, ['language' => 'zh-CN']);
               } catch (\Exception $e) {
+                  echo $e->getCode().PHP_EOL;
                   echo $e->getMessage() .PHP_EOL;
+
+
                   continue;
               }
 
@@ -457,7 +455,7 @@ class VodController extends Controller
                 $profile->douban_search = 1;
 
                 /* @var $profile VodProfiles*/
-                $profile->save(true);
+                $profile->save(false);
                 $this->stdout("√" , Console::FG_GREEN);
 
                 if ($profile->hasErrors()) {
@@ -465,12 +463,13 @@ class VodController extends Controller
                     $this->stdout("Save:X" , Console::FG_RED);
                 }
 
-              } else {
+               } else {
                   VodProfiles::updateAll(['douban_search' => 1], ['name' => $profile->name]);
                   $this->stdout("X"  , Console::FG_RED);
-              }
+               }
 
-               $this->sleepPrint(15,31);
+               $this->sleepPrint(1,2);
+
                $time = $this->getWasteTime(time() - $start);
                $this->stdout(" 任务已运行:{$time}".PHP_EOL );
            }
@@ -492,6 +491,18 @@ class VodController extends Controller
         Yii::$app->db->createCommand('truncate ' . Vod::tableName())->execute();
         Yii::$app->db->createCommand('truncate ' . Vodlink::tableName())->execute();
         Yii::$app->db->createCommand('truncate ' . PlayGroup::tableName())->execute();
+    }
+
+    public function actionProxy()
+    {
+        $proxies = Yii::$app->cache->getOrSet('proxies1', function () {
+           $client = new Client();
+           return $client->get('http://dps.kdlapi.com/api/getdps/?orderid=984589736126781&num=5&pt=1&ut=2&dedup=1&format=json&sep=1')
+                ->getBody()
+                ->getContents();
+        });
+
+        print_r($proxies);
     }
 
 }
