@@ -277,7 +277,11 @@ class VodCollector extends common
     {
         if ($value) {
             if (isset($data['vod_type'])) {
-                $data['vod_type'] .= ",{$value}";
+                if (!empty($data['vod_type'])) {
+                    $data['vod_type'] .= ",{$value}";
+                } else {
+                    $data['vod_type'] = "{$value}";
+                }
             } else {
                 $data['vod_type'] = "{$value}";
             }
