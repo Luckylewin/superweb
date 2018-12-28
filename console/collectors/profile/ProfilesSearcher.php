@@ -43,14 +43,9 @@ class ProfilesSearcher
             }
         }
 
-        if($profile){
-            return $profile;
-        }
+        if($profile) return $profile;
 
-        if ($douban) {
-            return $douban;
-        }
-
+        if ($douban) return $douban;
 
         return false;
     }
@@ -66,11 +61,13 @@ class ProfilesSearcher
 
         if (static::isSupported(new IMDB(), $language) && $profile = IMDB::searchByName($name, $options)) {
             self::recordToProfile($name, $profile, $language);
+            sleep(1);
             return $profile;
         }
 
         if (static::isSupported(new MOVIEDB(), $language) && $profile = MOVIEDB::searchByName($name, $options)) {
             self::recordToProfile($name, $profile, $language);
+            sleep(1);
             return $profile;
         }
 

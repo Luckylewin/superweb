@@ -105,6 +105,10 @@ new Vue({
       //绑定事件
       scrollDiv.addEventListener('scroll', function() {
       });
+    },
+
+    downloadApp() {
+      window.location.href = 'http://www.hdiptv.vip/index.php?r=index%2Fdownload&app=7';
     }
   }
 })

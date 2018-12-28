@@ -38,7 +38,7 @@
 
                     <div data-v-57afac5a="" data-v-fc334010="" class="items-stable">
                         <a data-v-57afac5a="" href="javascript:void(0)" data-module="hot" data-target="hotEvent" class="stable-nav nav-item checked" >
-                            <span data-v-57afac5a="" class="match-name" >
+                            <span data-v-57afac5a="" class="match-name" @click="downloadApp">
                                 下载
                             </span>
                         </a>
@@ -133,7 +133,7 @@
                                                 <div data-v-1fb506d0="" data-v-ef8b519a="" class="source t-right game-in">
                                                     <!-- source-btn  即将开始的比赛加上这个  -->
                                                     <div data-v-1fb506d0=""  class="normal source-btn">
-                                                        <span data-v-1fb506d0="" class="default" v-text="supportedChannel(event)">
+                                                        <span data-v-1fb506d0="" class="default" v-text="supportedChannel(event)" @click="downloadApp">
                                                             Sport Tv
                                                     </span>
                                                     </div>
@@ -186,6 +186,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/vue@2.5.21/dist/vue.js"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-<script src="/js/nba.js"></script>
+<script src="/js/nba.js?v=12281334"></script>
 </html>
 

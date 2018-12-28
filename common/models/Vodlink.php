@@ -18,7 +18,7 @@ use backend\models\PlayGroup;
  * @property string $save_type 链接类型
  * @property string $pic 图片
  * @property string $title 链接小标题
- * @property string $during 链接小标题
+ * @property string $during 时长
  */
 
 class Vodlink extends \yii\db\ActiveRecord
@@ -88,6 +88,10 @@ class Vodlink extends \yii\db\ActiveRecord
     {
         parent::beforeSave($insert);
         if ($insert) {
+
+            if (empty($this->title) && $this->episode) {
+                $this->title = $this->episode;
+            }
 
             // 添加video_id
             if (empty($this->video_id)) {

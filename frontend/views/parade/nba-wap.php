@@ -51,7 +51,7 @@
                                     <div class="game-desc" ><span v-text="event.event_time"></span>
                                         <span class="vip"></span>
                                     </div>
-                                    <div class="game-icon end"><i class="icon video"></i><span v-text="supportedChannel(event)"></span></div>
+                                    <div class="game-icon end"><i class="icon video"></i><span v-text="supportedChannel(event)" @click="downloadApp"></span></div>
                                 </div>
                             </div>
                         </a>
@@ -68,4 +68,4 @@
 
 <script src="https://cdn.jsdelivr.net/npm/vue@2.5.21/dist/vue.js"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-<script src="/js/nba.js"></script>
+<script src="/js/nba.js?v=12281334"></script>
