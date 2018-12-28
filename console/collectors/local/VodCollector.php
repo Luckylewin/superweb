@@ -114,7 +114,7 @@ class VodCollector extends common
                             if ($_info[0] == 'info') {
                                 $profile['vod_content'] = $_info[1];
                             } else {
-                                if($info[0] == 'actor') {
+                                if($_info[0] == 'actor') {
                                     if (strpos($_info[1], '/') === false) {
                                         $_info[1] = preg_replace ( "/\s(?=\s)/","\\1", $_info[1] );
                                         $profile["vod_{$_info[0]}"] = preg_replace('/\s/','/', $_info[1]);
