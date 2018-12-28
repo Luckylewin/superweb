@@ -232,7 +232,7 @@ class AnnaIptv extends base
 
         $total = count($data);
         foreach ($data as $key => $val) {
-            $sort = $total - $key;
+            $sort = $key;
             $vod = $this->getOrSetVod($vodList->list_id,  $val['tvg-name'],  $val['group-title'], $val['tvg-logo'], $lang, $sort,'电视剧');
 
             $this->pushIn($this->programSet, $vod->vod_name);
@@ -279,7 +279,7 @@ class AnnaIptv extends base
 
         $total = count($data);
         foreach ($data as $key => $val) {
-            $sort = $total - $key;
+            $sort = $key;
             $vod = $this->getOrSetVod($vodList->list_id,  $val['tvg-name'],  $val['group-title'], $val['tvg-logo'], $lang, $sort);
 
             $this->pushIn($this->movieSet, $vod->vod_name);
