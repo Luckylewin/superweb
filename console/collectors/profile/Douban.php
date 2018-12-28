@@ -12,44 +12,173 @@ namespace console\collectors\profile;
 use common\components\Func;
 use console\collectors\common;
 use console\collectors\profile\interfaces\searchByName;
+use GuzzleHttp\Client;
 use Symfony\Component\DomCrawler\Crawler;
-
+use Yii;
 /**
- * 豆瓣电影资料采集器
+ * 豆瓣电影资料采集器 https://movie.douban.com/subject/30192043/?from=showing
  * Class Douban
  * @package console\collectors\profile
  */
 class Douban extends searcher implements searchByName
 {
 
-    //https://movie.douban.com/subject/30192043/?from=showing
     protected static $url = 'https://movie.douban.com/subject/{ID}/?from=showing';
+    protected static $currentProxy = '';
+    protected static $proxyKey = 'myDaili2';
+    protected static $initialProxyNumber = 2;
+    protected static $timeout = 12;
 
     public function setSupportedLanguage()
     {
         return $this->supportedLanguages = 'zh-CN';
     }
 
-    public static function getProxy()
+    public static function loadProxy()
     {
-        return "http://122.243.15.27:9000";
+        $proxy_list = Yii::$app->cache->getOrSet(self::$proxyKey, function() {
+            return json_encode([]);
+        });
+
+        return json_decode($proxy_list, true);
     }
 
-    private function getOptions()
+    private static function setProxyAttr($proxy,$key)
     {
-        return $options = 0 ? ['proxy' =>  self::getProxy()] : [];
+        $proxy_list = self::loadProxy();
+        if (isset($proxy_list[$proxy][$key])) {
+            $proxy_list[$proxy][$key]++;
+            isset($proxy_list[$proxy]['error']) ? $proxy_list[$proxy]['error']++ : $proxy_list[$proxy]['error'] = 1;
+        } else {
+            $proxy_list[$proxy][$key] = 1;
+            isset($proxy_list[$proxy]['error']) ? $proxy_list[$proxy]['error']++ : $proxy_list[$proxy]['error'] = 1;
+        }
+
+        self::saveProxy($proxy_list);
+    }
+
+    protected static function saveProxy($proxy_list)
+    {
+        Yii::$app->cache->set(self::$proxyKey, json_encode($proxy_list));
+    }
+
+    private static function timeoutProxyIncrement($ip)
+    {
+        self::setProxyAttr($ip,'timeout');
+    }
+
+    private static function refusedIncrement($ip)
+    {
+        self::setProxyAttr($ip, 'refused');
+    }
+
+    private static function forbiddenIncrement($ip)
+    {
+        self::setProxyAttr($ip,'forbidden');
+    }
+
+    private static function otherErrorIncrement($ip)
+    {
+        self::setProxyAttr($ip,'other');
+    }
+
+    protected static function getProxyFromApi($num = 2)
+    {
+
+        $client = new Client();
+        $proxies =  $client->get("http://dps.kdlapi.com/api/getdps/?orderid=994596123406690&num={$num}&pt=1&ut=2&format=json&sep=1")
+                        ->getBody()
+                        ->getContents();
+
+        $proxies = json_decode($proxies, true);
+        return $proxies['data']['proxy_list']??false;
+    }
+
+    protected static function addNewProxy($num)
+    {
+        echo "添加新的代理{$num}" . PHP_EOL;
+
+        if ($num <= 0) return false;
+        $proxy_list = static::getProxyFromApi($num);
+        $proxies = [];
+
+        if ($proxy_list) {
+            foreach ($proxy_list as $key => $proxy) {
+                $proxies[$proxy] = [
+                    'error' => 0,
+                    'refused' => 0,
+                    'timeout' => 0
+                ];
+            }
+        }
+
+        return $proxies;
+    }
+
+    protected static function getProxy()
+    {
+        $proxies = self::loadProxy();
+        if (empty($proxies)) {
+           $proxies = static::addNewProxy(self::$initialProxyNumber);
+        } else {
+            // 剔除错误数大于10的代理
+            $needToAdd = 0;
+            foreach ($proxies as $key => $cal) {
+                if (    isset($cal['error']) && $cal['error'] >= 15 ||
+                        isset($cal['forbidden']) && $cal['forbidden'] >= 1 ||
+                        isset($cal['refused']) && $cal['refused'] >= 3 ) {
+
+                    echo "移除代理" . $key . PHP_EOL;
+                    unset($proxies[$key]);
+                    if (count($proxies) < self::$initialProxyNumber) {
+                        $needToAdd++;
+                    }
+                }
+            }
+
+            if ($needToAdd) {
+                $addProxy = static::addNewProxy($needToAdd);
+                $proxies = array_merge($proxies, $addProxy);
+            }
+        }
+
+        echo "当前代理池有" . count($proxies) . '个 ';
+
+
+        self::saveProxy($proxies);
+
+        $proxies = array_keys($proxies);
+        return $proxies[mt_rand(0, count($proxies) - 1)];
+    }
+
+    private static function getOptions()
+    {
+        self::$currentProxy = self::getProxy();
+        echo "使用代理" . self::$currentProxy . PHP_EOL;
+
+        return [
+            'proxy' =>  self::$currentProxy,
+            'User-Agent'      => 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36',
+            'connect_timeout' => self::$timeout,
+        ];
     }
 
     public static function searchByName($name, $options)
     {
-         $url = static::getQueryUrl($name);
+         $clientOptions = self::getOptions();
+         $url = static::getQueryUrl($name, $clientOptions);
 
-         //$url = 'https://movie.douban.com/subject/2124724/?from=showing';
-
-        if ($url) {
+         if ($url) {
             $common = new common();
             /* @var $dom Crawler */
-            $dom = $common->getDom($url, self::getOptions());
+
+            try {
+                $dom = $common->getDom($url, $clientOptions);
+            } catch (\Exception $e) {
+                self::dealProxyError($e);
+                return false;
+            }
+
             $doubanProfile = [];
 
             $content= $dom->filter('#content');
@@ -159,8 +288,23 @@ class Douban extends searcher implements searchByName
         return false;
     }
 
+    protected static function dealProxyError(\Exception $error)
+    {
+        echo "Message：" . $error->getMessage() . PHP_EOL;
+
+        if (strpos($error, 'Connection refused') !== false) {
+            static::refusedIncrement(self::$currentProxy);
+        } else if (strpos($error, 'Connection timed out')) {
+            static::timeoutProxyIncrement(self::$currentProxy);
+        } else if (strpos($error, '403')) {
+            static::forbiddenIncrement(self::$currentProxy);
+        }else {
+            static::otherErrorIncrement(self::$currentProxy);
+        }
+    }
+
     // 豆瓣搜索建议
-    private static function getQueryUrl($name)
+    private static function getQueryUrl($name,$options)
     {
         $suggestUrl = "https://movie.douban.com/j/subject_suggest?q={QUERY_NAME}";
         $suggestUrl = str_replace('{QUERY_NAME}', urlencode($name), $suggestUrl);
@@ -168,12 +312,19 @@ class Douban extends searcher implements searchByName
         $common = new common();
         $client = $common->getHttpClient();
 
-        $response = $client->request('GET',$suggestUrl,self::getOptions())->getBody()->getContents();
+        try {
+
+            $response = $client->request('GET',$suggestUrl,$options)->getBody()->getContents();
+            sleep(1);
+        } catch (\Exception $e) {
+            self::dealProxyError($e);
+            return false;
+        }
 
         if ($response) {
             $suggests = json_decode($response, true);
             if (!empty($suggests) && !empty($suggests[0]['id'])) {
-                sleep(mt_rand(5,12));
+                //sleep(1);
                 return str_replace('{ID}',$suggests[0]['id'], self::$url);
             }
         }

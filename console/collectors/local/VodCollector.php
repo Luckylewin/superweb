@@ -88,8 +88,8 @@ class VodCollector extends common
 
     protected function getCover($path, $fileName)
     {
-        return urlencode('http://' . (Yii::$app->params['serverDomain']?:Yii::$app->params['serverIP'] ) .
-            '/' . basename($this->playpath) . "/". basename($path) . "/" . $fileName);
+        return 'http://' . (Yii::$app->params['serverDomain']?:Yii::$app->params['serverIP'] ) .
+            '/' . basename($this->playpath) . "/". basename($path) . "/" .urlencode( $fileName);
     }
 
     protected function getProfile($path)
@@ -199,11 +199,9 @@ class VodCollector extends common
             $needUpdate = false;
             foreach ($profiles as $field => $value) {
                 $_field = str_replace('vod_','', $field);
-                if ($_field != 'pic' && $value) {
-                    if (empty($profile->$_field) && in_array($_field,['actor','director','year','info','area'])) {
-                        $needUpdate = true;
-                        $profile->$_field = $value;
-                    }
+                if ($value && empty($profile->$_field) && in_array($_field,['actor','director','year','info','area'])) {
+                    $needUpdate = true;
+                    $profile->$_field = $value;
                 }
             }
 
@@ -277,10 +275,12 @@ class VodCollector extends common
 
     private function setGenre($data,$value)
     {
-        if (isset($data['vod_type'])) {
-            $data['vod_type'] .= ",{$value}";
-        } else {
-            $data['vod_type'] = "{$value}";
+        if ($value) {
+            if (isset($data['vod_type'])) {
+                $data['vod_type'] .= ",{$value}";
+            } else {
+                $data['vod_type'] = "{$value}";
+            }
         }
 
         return $data;
