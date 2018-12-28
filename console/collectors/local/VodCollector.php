@@ -104,6 +104,7 @@ class VodCollector extends common
             if (preg_match('/info\.txt/', $fileName)) {
                 $info =  file_get_contents($path . '/'. $fileName);
                 $info = array_filter(preg_split('/\n/', $info));
+
                 array_walk($info, function(&$v) {
                     $v = explode(':', $v);
                 });
@@ -111,21 +112,23 @@ class VodCollector extends common
                 if (!empty($info)) {
                     foreach ($info as $_info) {
                         if (isset($_info[1])) {
+
                             if ($_info[0] == 'info') {
                                 $profile['vod_content'] = $_info[1];
                             } else {
                                 if($_info[0] == 'actor') {
                                     if (strpos($_info[1], '/') === false) {
-                                        $_info[1] = preg_replace ( "/\s(?=\s)/","\\1", $_info[1] );
+                                        $_info[1] = preg_replace ( "/\s(?=\s)/","\\1", $_info[1]);
                                         $_info[1] = trim($_info[1]);
                                         $profile["vod_{$_info[0]}"] = preg_replace('/\s/','/', $_info[1]);
+                                    } else {
+                                        $profile["vod_{$_info[0]}"] = preg_replace('/\s/','', $_info[1]);
                                     }
                                 } else {
                                     $profile["vod_{$_info[0]}"] = preg_replace('/\s/','', $_info[1]);
                                 }
                             }
                         }
-
                     }
                 }
             }
@@ -133,14 +136,13 @@ class VodCollector extends common
             preg_match('/(\S)+(?=(.jepg|.jpg|.png))/', $fileName, $match);
             if (isset($match[0]) && !empty($match[0])) {
                 $profile['vod_name'] = $match[0];
-                $profile['vod_pic'] = $this->getCover($path, $fileName);
+                $profile['vod_pic']  = $this->getCover($path, $fileName);
                 $profile['vod_area'] = $this->area;
                 $profile['vod_language'] = $this->language;
             }
         }
 
-       return empty($profile) ? false : $profile;
-
+        return empty($profile) ? false : $profile;
     }
 
     protected function getEpisodeNumber($fileName)
