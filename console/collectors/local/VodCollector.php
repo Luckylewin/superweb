@@ -177,6 +177,8 @@ class VodCollector extends common
 
     protected function fillWithProfiles($profiles)
     {
+        if (!isset($profiles['vod_name'])) return false;
+
         $profile = VodProfiles::find()->where(['name' => $profiles['vod_name']])->limit(1)->one();
         if (is_null($profile)) {
             $profile = new VodProfiles();
