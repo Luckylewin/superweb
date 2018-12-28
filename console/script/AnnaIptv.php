@@ -204,7 +204,9 @@ class AnnaIptv extends base
             $this->stdout("没有影片数据" . PHP_EOL, Console::BG_RED);
         }
 
-        foreach ($data as $sort => $val) {
+        $total = count($data);
+        foreach ($data as $key => $val) {
+            $sort = $total - $key;
             $vod = $this->getOrSetVod($vodList->list_id,  $val['tvg-name'],  $val['group-title'], $val['tvg-logo'], $lang, $sort,'电视剧');
 
             $this->pushIn($this->programSet, $vod->vod_name);
@@ -249,8 +251,9 @@ class AnnaIptv extends base
             return $this->stdout("没有电影数据" . PHP_EOL, Console::BG_RED);
         }
 
-        foreach ($data as $sort => $val) {
-
+        $total = count($data);
+        foreach ($data as $key => $val) {
+            $sort = $total - $key;
             $vod = $this->getOrSetVod($vodList->list_id,  $val['tvg-name'],  $val['group-title'], $val['tvg-logo'], $lang, $sort);
 
             $this->pushIn($this->movieSet, $vod->vod_name);
