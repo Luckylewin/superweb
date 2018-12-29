@@ -83,7 +83,7 @@ class VodController extends Controller
     {
         return $vodCollector = new VodCollector(new Movie(),[
             'dir'      => '/home/newpo/pinyin/movie/',
-            'playpath' => '/vod/movie',
+            'playpath' => '/movie',
             'type'     => 'movie',
             'language' => '中文',
             'area'     => '中国'
@@ -94,7 +94,7 @@ class VodController extends Controller
     {
         return $vodCollector = new VodCollector(new Cartoon(),[
             'dir'      => '/home/newpo/pinyin/dongman/',
-            'playpath' => '/vod/dongman',
+            'playpath' => '/dongman',
             'type'     => 'cartoon',
             'language' => '中文',
             'area'     => '中国'
@@ -105,7 +105,7 @@ class VodController extends Controller
     {
         return $vodCollector = new VodCollector(new Variety(),[
             'dir'      => '/home/newpo/pinyin/zongyi/',
-            'playpath' => '/vod/zongyi',
+            'playpath' => '/zongyi',
             'type'     => 'variety',
             'language' => '中文',
             'area'     => '中国'
@@ -116,7 +116,7 @@ class VodController extends Controller
     {
         return $vodCollector = new VodCollector(new Tv(),[
             'dir'      => '/home/newpo/pinyin/hanju/',
-            'playpath' => '/vod/hanju',
+            'playpath' => '/hanju',
             'type'     => 'serial',
             'language' => '韩语',
             'area'     => '韩国',
@@ -128,7 +128,7 @@ class VodController extends Controller
     {
         return $vodCollector = new VodCollector(new Tv(),[
             'dir'      => '/home/newpo/pinyin/neidi/',
-            'playpath' => '/vod/neidi',
+            'playpath' => '/neidi',
             'type'     => 'serial',
             'language' => '中文',
             'area'     => '中国内地',
@@ -140,7 +140,7 @@ class VodController extends Controller
     {
         return $vodCollector = new VodCollector(new Tv(),[
             'dir'      => '/home/newpo/pinyin/gangju/',
-            'playpath' => '/vod/gangju',
+            'playpath' => '/gangju',
             'type'     => 'serial',
             'language' => '中文',
             'area'     => '中国香港',
@@ -152,7 +152,7 @@ class VodController extends Controller
     {
         return $vodCollector = new VodCollector(new Tv(),[
             'dir'      => '/home/newpo/pinyin/meiju/',
-            'playpath' => '/vod/meiju',
+            'playpath' => '/meiju',
             'type'     => 'serial',
             'language' => '英语',
             'area'     => '美国',
@@ -180,7 +180,6 @@ class VodController extends Controller
                         $this->stdout("{$vod->vod_name} 设置系列为 :{$vod->vod_series}" . PHP_EOL ,Console::FG_BLUE);
                    }
                }
-
            }
        }
     }
@@ -431,6 +430,7 @@ class VodController extends Controller
     public function actionDouban()
     {
         $start = time();
+        $crawlerCal = 0;
 
         foreach (VodProfiles::find()->where(['douban_search' => 0])->andWhere(['<=', 'id', '45000'])->batch(1) as $profiles) {
            foreach ($profiles as $profile) {
@@ -470,6 +470,12 @@ class VodController extends Controller
 
                $this->sleepPrint(1,2);
 
+               if (!Douban::$isUseProxy && $crawlerCal % 3 == 0 && $crawlerCal != 0) {
+                    $this->sleepPrint(20,35);
+               }
+
+               $crawlerCal++;
+
                $time = $this->getWasteTime(time() - $start);
                $this->stdout(" 任务已运行:{$time}".PHP_EOL );
            }
@@ -486,23 +492,25 @@ class VodController extends Controller
         }
     }
 
-    public function actionTruncate()
+    public function actionTruncate($table)
     {
-        Yii::$app->db->createCommand('truncate ' . Vod::tableName())->execute();
-        Yii::$app->db->createCommand('truncate ' . Vodlink::tableName())->execute();
-        Yii::$app->db->createCommand('truncate ' . PlayGroup::tableName())->execute();
-    }
+        if ($table == 'vod') {
+            Yii::$app->db->createCommand('truncate ' . Vod::tableName())->execute();
+        }
 
-    public function actionProxy()
-    {
-        $proxies = Yii::$app->cache->getOrSet('proxies1', function () {
-           $client = new Client();
-           return $client->get('http://dps.kdlapi.com/api/getdps/?orderid=984589736126781&num=5&pt=1&ut=2&dedup=1&format=json&sep=1')
-                ->getBody()
-                ->getContents();
-        });
+        if ($table == 'link') {
+            Yii::$app->db->createCommand('truncate ' . Vodlink::tableName())->execute();
+        }
 
-        print_r($proxies);
+        if ($table == 'group') {
+            Yii::$app->db->createCommand('truncate ' . PlayGroup::tableName())->execute();
+        }
+
+        if ($table == 'all') {
+            Yii::$app->db->createCommand('truncate ' . Vod::tableName())->execute();
+            Yii::$app->db->createCommand('truncate ' . Vodlink::tableName())->execute();
+            Yii::$app->db->createCommand('truncate ' . PlayGroup::tableName())->execute();
+        }
     }
 
 }

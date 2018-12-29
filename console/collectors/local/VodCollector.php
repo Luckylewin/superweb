@@ -185,7 +185,7 @@ class VodCollector extends common
     protected function getLink($path,$fileName)
     {
         $dirName = basename($path);
-        return Yii::$app->params['vod_play_host'] . $this->playpath . '/'. $dirName .'/' . $fileName . '/index.m3u8';
+        return Yii::$app->params['vod_play_host'] . $this->playpath . '/'. $dirName .'/' . $fileName;
     }
 
     protected function fillWithProfiles($profiles)
