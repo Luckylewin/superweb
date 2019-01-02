@@ -46,7 +46,15 @@ class DoubanController extends Controller
                 $uri = 'https://api.github.com/users/' . $user;
                 yield function() use ($client, $uri, $proxy) {
                     echo "使用代理" . $proxy.PHP_EOL;
-                    return $client->getAsync($uri);
+                    return $client->getAsync($uri,[
+                        'headers' => [
+                            'User-Agent'      => 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36',
+                            'Referer'         =>  'https://movie.douban.com/',
+                            'Accept-Language' => 'en-US,en;q=0.5',
+                        ],
+                        'connect_timeout' => 15,
+                        'proxy' => 'http://27.154.34.146:43592'
+                    ]);
                 };
             }
         };

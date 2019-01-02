@@ -102,8 +102,7 @@ class Douban extends searcher implements searchByName
         echo "添加新的代理{$num}" . PHP_EOL;
 
         if ($num <= 0) return false;
-        //$proxy_list = static::getProxyFromApi($num);
-        $proxy_list = false;
+        $proxy_list = static::getProxyFromApi($num);
         $proxies = [];
 
         if ($proxy_list) {

@@ -11,7 +11,6 @@ namespace console\collectors\local;
 use backend\models\VodProfiles;
 use Yii;
 use yii\base\Model;
-use common\models\Vod;
 use console\collectors\profile\ProfilesSearcher;
 use console\collectors\common;
 use common\components\FileHelper;
@@ -48,8 +47,6 @@ class VodCollector extends common
      * @var string 分类
      */
     public $genre;
-
-    public $address = 'http://hvod.imirun.net:8080';
 
     public function __construct(Model $model, $options)
     {
@@ -259,7 +256,7 @@ class VodCollector extends common
                     ) {
                         if ($data['vod_gold']*10 > 80 ) {
                             $data = $this->setGenre($data, '最热');
-                            $data['is_top'] = 1;
+                            $data['sort'] = 0;
                         }
                     }
 

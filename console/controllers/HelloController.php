@@ -213,7 +213,7 @@ class HelloController extends Controller
                        continue;
                    }
 
-                   MOVIEDB::$actor_switch = false;
+                   // MOVIEDB::$actor_switch = false;
 
                    $data = MOVIEDB::searchByName($profile->name, [
                        'language' => 'zh-CN'
@@ -224,6 +224,8 @@ class HelloController extends Controller
                    $time = $this->getWasteTime(time() - $start);
 
                    if ($data) {
+                       $profile->tmdb_id = $data['tmdb_id']??'';
+                       $profile->tmdb_score = $data['vod_gold']??'';
                        $profile->alias_name = $data['vod_ename']??'';
                        $profile->cover = $data['vod_pic']??'';
                        $profile->image = $data['vod_pic_bg']??'';
@@ -246,7 +248,7 @@ class HelloController extends Controller
                        $this->stdout("X ",Console::FG_RED);
                    }
 
-                   $this->sleepPrint(1,3);
+                   $this->sleepPrint(2,3);
                    $this->stdout("任务已运行{$time}" . PHP_EOL,Console::FG_BLUE);
 
                } catch (\Exception $e) {

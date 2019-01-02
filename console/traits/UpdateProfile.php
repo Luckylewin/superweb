@@ -7,8 +7,6 @@
  */
 
 namespace console\traits;
-
-use common\models\OttLink;
 use common\models\Vod;
 use common\models\VodList;
 use common\models\Vodlink;
@@ -18,7 +16,6 @@ use yii\helpers\Console;
 trait UpdateProfile
 {
     public $language;
-
     public $area;
 
 
