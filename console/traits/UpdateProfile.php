@@ -140,6 +140,7 @@ trait UpdateProfile
     public function updateProfile(Vod $vod, $data)
     {
         $update = false;
+
         $fields = ['vod_actor', 'vod_director','vod_language','vod_area','vod_content','vod_gold','vod_golder'];
 
         foreach ($fields as $field) {

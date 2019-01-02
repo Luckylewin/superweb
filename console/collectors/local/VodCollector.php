@@ -216,6 +216,19 @@ class VodCollector extends common
         }
     }
 
+    public function myMerge($data,$profile)
+    {
+        if (!empty($profile)) {
+            foreach ($profile as $field => $value) {
+                if ((!isset($data[$field]) || empty($data[$field]) ) && !empty($value)) {
+                    $data[$field] = $value;
+                }
+            }
+        }
+
+        return $data;
+    }
+
     /**
      * @param $directory
      * @return array
@@ -240,7 +253,7 @@ class VodCollector extends common
                         $profile['vod_area']     = $data['vod_area'];
                         $profile['vod_pic'] = $data['vod_pic'];
 
-                        $data = array_merge($data, $profile);
+                        $data = $this->myMerge($data, $profile);
                         $data['vod_fill_flag'] = 1;
 
                     } else if ($profile = ProfilesSearcher::quickSearchInDB($data['vod_name'], ['language' => 'zh-CN'])) {
@@ -248,7 +261,7 @@ class VodCollector extends common
                         $profile['vod_area']     = $data['vod_area'];
                         $profile['vod_pic'] = $data['vod_pic'];
 
-                        $data = array_merge($data, $profile);
+                        $data = $this->myMerge($data, $profile);
                     }
 
                     if (isset($data['vod_gold']) && !empty($data['vod_gold']) &&
