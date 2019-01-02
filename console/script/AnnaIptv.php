@@ -22,6 +22,7 @@ use console\models\common;
 use console\collectors\profile\MOVIEDB;
 use backend\models\PlayGroup;
 use console\collectors\profile\ProfilesSearcher;
+use console\traits\Similar;
 
 /**
  * 安娜IPTV处理脚本
@@ -30,6 +31,8 @@ use console\collectors\profile\ProfilesSearcher;
  */
 class AnnaIptv extends base
 {
+    use Similar;
+
     /**
      * @var Controller
      */
@@ -50,8 +53,32 @@ class AnnaIptv extends base
         $this->saveDataFromArray($this->getOriginData());
         $this->saveNewLang();
         $this->clearDeleteData();
+        $this->dealSameSeries();
         $this->updateProfile();
     }
+
+    public function dealSameSeries()
+    {
+        $vods = Vod::find()->all();
+        foreach ($vods as $vod) {
+            $this->stdout("检测{$vod->vod_name}" . PHP_EOL);
+            foreach ($vods as $_vod) {
+                if ($vod->vod_id != $_vod->vod_id) {
+                    $similarValue = ceil($this->getSimilar($vod->vod_name, $_vod->vod_name) * 10);
+                    if ($similarValue > 9) {
+                        $vod->vod_series = $this->getLCS($vod->vod_name, $_vod->vod_name);
+                        $vod->vod_series = trim(preg_replace('/\s*S\d+\s*/', '', $vod->vod_series));
+                        $vod->vod_series = preg_replace('/\s(?=\s)/', "\\1", $vod->vod_series);
+
+                        $vod->save(false);
+                        $this->stdout("{$vod->vod_name} 设置系列为 :{$vod->vod_series}" . PHP_EOL ,Console::FG_BLUE);
+                    }
+                }
+
+            }
+        }
+    }
+
 
     /**
      * 下载文件 变成数组 保存
@@ -262,12 +289,18 @@ class AnnaIptv extends base
     {
         $vods = Vod::find()->all();
         foreach ($vods as $vod) {
-            $data = ProfilesSearcher::quickSearchInDB($vod->vod_name);
+            if ($vod->vod_series) {
+                $data = ProfilesSearcher::quickSearchInDB($vod->vod_series);
+            } else {
+                $data = ProfilesSearcher::quickSearchInDB($vod->vod_name);
+            }
+
             $this->fillWithMovieProfile($vod,$data);
         }
 
         foreach ($vods as $vod) {
-            $data = ProfilesSearcher::search($vod->vod_name);
+            echo "查询{$vod->vod_name}" . PHP_EOL;
+            $data = ProfilesSearcher::search($vod->vod_name,['language' => 'en-US']);
             $this->fillWithMovieProfile($vod,$data);
         }
     }

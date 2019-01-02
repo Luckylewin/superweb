@@ -181,6 +181,9 @@ trait UpdateProfile
         foreach ($data['links'] as $_link) {
 
             if (Vodlink::find()->where(['url' => $_link['url'], 'group_id' => $playGroup->id])->exists() == false) {
+
+                 $vod->vod_addtime = time();
+                 $update = true;
                  $this->createLinks($playGroup->id, $_link);
                  echo $vod->vod_name . "更新剧集" . PHP_EOL;
             }

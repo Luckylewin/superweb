@@ -29,6 +29,8 @@ class VodController extends Controller
 {
     use Similar;
 
+    public $douban;
+
     // 清除旧数据
     public function actionClearData()
     {
@@ -427,25 +429,57 @@ class VodController extends Controller
         $this->stdout(date('Y-m-d H:i:s  ') . $taskName, Console::FG_CYAN);
     }
 
-    public function actionDouban()
+    protected function viaProxy($name)
+    {
+        if (empty($this->douban)) {
+            $this->douban = new Douban();
+        }
+
+        return $this->douban->searchByNameViaProxy($name,  ['language' => 'zh-CN']);
+    }
+
+    protected function viaLocal($name)
+    {
+        return Douban::searchByName($name, ['language' => 'zh-CN']);
+    }
+
+    public function actionPushInRedis()
+    {
+        Yii::$app->redis->select(12);
+        Yii::$app->redis->del('vod_queue');
+        foreach (VodProfiles::find()->where(['douban_search' => 0])->batch(100) as $profiles) {
+            foreach ($profiles as $profile) {
+                Yii::$app->redis->lpush('vod_queue', $profile->id);
+            }
+        }
+
+    }
+
+    /**
+     * 是否使用代理
+     * @param bool $useProxy
+     */
+    public function actionDouban($useProxy = false)
     {
         $start = time();
         $crawlerCal = 0;
 
-        foreach (VodProfiles::find()->where(['douban_search' => 0])->andWhere(['<=', 'id', '45000'])->batch(1) as $profiles) {
+        foreach (VodProfiles::find()->where(['douban_search' => 0])->batch(1) as $profiles) {
            foreach ($profiles as $profile) {
               $this->taskPrint("采集豆瓣数据:{$profile->name}");
 
               try {
-                  $doubanProfile =  Douban::searchByName($profile->name, ['language' => 'zh-CN']);
+                  if ($useProxy) {
+                      $doubanProfile =  $this->viaProxy($profile->name);
+                  } else {
+                      $doubanProfile = $this->viaLocal($profile->name);
+                  }
+
               } catch (\Exception $e) {
                   echo $e->getCode().PHP_EOL;
                   echo $e->getMessage() .PHP_EOL;
-
-
                   continue;
               }
-
 
               if ($doubanProfile) {
                 foreach ($doubanProfile as $field => $value) {
@@ -459,12 +493,13 @@ class VodController extends Controller
                 $this->stdout("√" , Console::FG_GREEN);
 
                 if ($profile->hasErrors()) {
-                    print_r($profile->getFirstErrors());
                     $this->stdout("Save:X" , Console::FG_RED);
                 }
 
                } else {
-                  VodProfiles::updateAll(['douban_search' => 1], ['name' => $profile->name]);
+                  if (is_null($doubanProfile)) {
+                      VodProfiles::updateAll(['douban_search' => 1], ['name' => $profile->name]);
+                  }
                   $this->stdout("X"  , Console::FG_RED);
                }
 
@@ -481,6 +516,7 @@ class VodController extends Controller
            }
        }
     }
+
 
     public function sleepPrint($min,$max)
     {

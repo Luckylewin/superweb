@@ -71,13 +71,6 @@ class ProfilesSearcher
             return $profile;
         }
 
-        if (static::isSupported(new OMDB(), $language) && $profile = OMDB::searchByName($name, $options)) {
-            self::recordToProfile($name, $profile, $language);
-            sleep(1);
-
-            return $profile;
-        }
-
         return false;
     }
 

@@ -79,6 +79,7 @@ class MOVIEDB extends searcher implements searchByName
                     if (isset($data['release_date'])) $profile['vod_year'] = substr($data['release_date'], 0 ,4);
                     if (isset($data['release_date'])) $profile['vod_filmtime'] = $data['release_date'];
                     if (isset($data['imdb_id'])) $profile['vod_imdb_id'] = $data['imdb_id'];
+                    if (isset($data['id'])) $profile['tmdb_id'] = $data['id'];
 
                     // 获取演员
                     if (!empty($data) && self::$actor_switch) {

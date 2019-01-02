@@ -25,9 +25,12 @@ class Douban extends searcher implements searchByName
 
     protected static $url = 'https://movie.douban.com/subject/{ID}/?from=showing';
     protected static $currentProxy = '';
-    protected static $proxyKey = 'myDaili2';
+    protected static $proxyKey = 'kuai11';
     protected static $initialProxyNumber = 2;
     protected static $timeout = 12;
+    public static $isUseProxy = false;
+    public static $runTimeLog = '/tmp/douban-proxy.log';
+    public static $whenForbiddenSleepTime = 3700;
 
     public function setSupportedLanguage()
     {
@@ -86,7 +89,7 @@ class Douban extends searcher implements searchByName
     {
 
         $client = new Client();
-        $proxies =  $client->get("http://dps.kdlapi.com/api/getdps/?orderid=994596123406690&num={$num}&pt=1&ut=2&format=json&sep=1")
+        $proxies =  $client->get("http://dps.kdlapi.com/api/getdps/?orderid=994596123406690&num={$num}&pt=1&dedup=1&format=json&sep=1")
                         ->getBody()
                         ->getContents();
 
@@ -99,7 +102,8 @@ class Douban extends searcher implements searchByName
         echo "添加新的代理{$num}" . PHP_EOL;
 
         if ($num <= 0) return false;
-        $proxy_list = static::getProxyFromApi($num);
+        //$proxy_list = static::getProxyFromApi($num);
+        $proxy_list = false;
         $proxies = [];
 
         if ($proxy_list) {
@@ -123,9 +127,11 @@ class Douban extends searcher implements searchByName
         } else {
             // 剔除错误数大于10的代理
             $needToAdd = 0;
+
             foreach ($proxies as $key => $cal) {
-                if (    isset($cal['error']) && $cal['error'] >= 15 ||
-                        isset($cal['forbidden']) && $cal['forbidden'] >= 1 ||
+                if (    isset($cal['error']) && $cal['error'] >= 12 ||
+                        isset($cal['forbidden']) && $cal['forbidden'] >= 2 ||
+                        isset($cal['timeout']) && $cal['timeout'] >= 4 ||
                         isset($cal['refused']) && $cal['refused'] >= 3 ) {
 
                     echo "移除代理" . $key . PHP_EOL;
@@ -148,19 +154,50 @@ class Douban extends searcher implements searchByName
         self::saveProxy($proxies);
 
         $proxies = array_keys($proxies);
+
         return $proxies[mt_rand(0, count($proxies) - 1)];
     }
 
     private static function getOptions()
     {
-        self::$currentProxy = self::getProxy();
-        echo "使用代理" . self::$currentProxy . PHP_EOL;
+        if (self::$isUseProxy) {
+            self::$currentProxy = self::getProxy();
+            echo "使用代理" . self::$currentProxy . PHP_EOL;
 
-        return [
-            'proxy' =>  self::$currentProxy,
-            'User-Agent'      => 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36',
-            'connect_timeout' => self::$timeout,
-        ];
+            return [
+                'proxy' =>  self::$currentProxy,
+                'User-Agent'      => 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36',
+                'connect_timeout' => self::$timeout,
+            ];
+        } else {
+            return [
+                'User-Agent'      => 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36',
+                'connect_timeout' => self::$timeout,
+            ];
+        }
+
+    }
+
+    public function searchByNameViaProxy($name, $options)
+    {
+        self::$isUseProxy = true;
+        touch(self::$runTimeLog);
+        file_put_contents(self::$runTimeLog,time());
+
+        return self::searchByName($name, $options);
+    }
+
+    protected static function whenTaskReceive403(\Exception $e)
+    {
+        if (strpos($e->getMessage(), '403')) {
+            if (self::$isUseProxy == false) {
+
+                for($i=1; $i<=self::$whenForbiddenSleepTime; $i++) {
+                    echo "喜提403,休息一下 剩余" . (self::$whenForbiddenSleepTime - $i) . "秒"  . PHP_EOL;
+                    sleep(1);
+                }
+            }
+        }
     }
 
     public static function searchByName($name, $options)
@@ -175,6 +212,7 @@ class Douban extends searcher implements searchByName
             try {
                 $dom = $common->getDom($url, $clientOptions);
             } catch (\Exception $e) {
+                self::whenTaskReceive403($e);
                 self::dealProxyError($e);
                 return false;
             }
@@ -285,7 +323,7 @@ class Douban extends searcher implements searchByName
             }
         }
 
-        return false;
+        return null;
     }
 
     protected static function dealProxyError(\Exception $error)
@@ -313,10 +351,10 @@ class Douban extends searcher implements searchByName
         $client = $common->getHttpClient();
 
         try {
-
             $response = $client->request('GET',$suggestUrl,$options)->getBody()->getContents();
-            sleep(1);
+            self::$isUseProxy ? sleep(1) : sleep(2);
         } catch (\Exception $e) {
+            self::whenTaskReceive403($e);
             self::dealProxyError($e);
             return false;
         }

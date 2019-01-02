@@ -94,7 +94,9 @@ CSS;
                       'style' => 'word-break:break-all'
                   ],
             ],
+
             //'vod_id',
+
             [
                 'attribute' => 'vod_type',
                 'headerOptions' => ['class' => 'col-md-3'],

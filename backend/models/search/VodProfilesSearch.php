@@ -65,7 +65,7 @@ class VodProfilesSearch extends VodProfiles
             'douban_voters' => $this->douban_voters,
         ]);
 
-        $query->andFilterWhere(['like', 'name', $this->name])
+        $query->andFilterWhere(['like', 'name', "{$this->name}%", false])
             ->andFilterWhere(['like', 'alias_name', $this->alias_name])
             ->andFilterWhere(['like', 'screen_writer', $this->screen_writer])
             ->andFilterWhere(['like', 'director', $this->director])

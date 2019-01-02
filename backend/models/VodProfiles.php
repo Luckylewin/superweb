@@ -78,30 +78,51 @@ class VodProfiles extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
-            'alias_name' => 'Alias Name',
-            'director' => 'Director',
-            'screen_writer' => 'Screenwriter',
-            'actor' => 'Actor',
-            'area' => 'Area',
-            'language' => 'Language',
-            'type' => 'Type',
-            'tab' => 'Tab',
-            'plot' => 'Plot',
-            'year' => 'Year',
-            'date' => 'Date',
-            'imdb_id' => 'Imdb ID',
-            'imdb_score' => 'Imdb Score',
-            'tmdb_id' => 'Tmdb ID',
-            'tmdb_score' => 'Tmdb Score',
-            'douban_id' => 'Douban ID',
-            'douban_score' => 'Douban Score',
-            'length' => 'Length',
-            'cover' => 'Cover',
-            'banner' => 'Banner',
-            'comment' => 'Comment',
-            'fill_status' => 'Fill Status',
+            'name' => Yii::t('backend', 'Name'),
+            'alias_name' => Yii::t('backend', 'Alias Name'),
+            'director' => Yii::t('backend', 'Director'),
+            'screen_writer' => Yii::t('backend', 'Screenwriter'),
+            'actor' => Yii::t('backend', 'Actor'),
+            'area' => Yii::t('backend', 'Area'),
+            'language' => Yii::t('backend', 'Language'),
+            'type' => Yii::t('backend', 'Type'),
+            'tag' => Yii::t('backend', 'Tag'),
+            'plot' => Yii::t('backend', 'Plot'),
+            'year' => Yii::t('backend', 'Year'),
+            'date' => Yii::t('backend', 'Release date'),
+            'imdb_id' => Yii::t('backend', 'Imdb ID'),
+            'imdb_score' => Yii::t('backend', 'Imdb Score'),
+            'tmdb_id' => Yii::t('backend', 'Tmdb ID'),
+            'tmdb_score' => Yii::t('backend', 'Tmdb Score'),
+            'douban_id' => Yii::t('backend', 'Douban ID'),
+            'douban_score' => Yii::t('backend', 'Douban Score'),
+            'douban_voters' => Yii::t('backend', 'Douban Voters'),
+            'douban_search' => Yii::t('backend', 'douban is search'),
+            'imdb_search' => Yii::t('backend', 'imdb is search'),
+            'tmdb_search' => Yii::t('backend', 'tmdb is search'),
+            'length' => Yii::t('backend', 'Length'),
+            'cover' => Yii::t('backend', 'Cover'),
+            'banner' => Yii::t('backend', 'Banner'),
+            'comment' => Yii::t('backend', 'Comment'),
+            'fill_status' => Yii::t('backend', 'Fill Status'),
+            'user_tag' => Yii::t('backend', 'User Tag'),
+            'image' => Yii::t('backend', 'Image'),
+            'media_type' => Yii::t('backend', 'Media Type'),
         ];
+    }
+
+    public function getFillStatus()
+    {
+        $fields = ['name', 'director', 'actor', 'area', 'language' , 'type', 'plot', 'year', 'date', 'douban_score', 'length', 'cover'];
+        $point = 0;
+        foreach ($fields as $field) {
+
+            if (!is_null($this->$field) && !empty($this->$field)) {
+                $point++;
+            }
+        }
+
+        return ceil($point/count($fields) * 100)  . '%';
     }
 
     public static function findByName($name)
@@ -126,7 +147,7 @@ class VodProfiles extends \yii\db\ActiveRecord
                 'vod_length' => $profile->length,
                 'vod_pic' => $profile->cover,
                 'vod_pic_slide' => $profile->banner,
-                'vod_fill_flag' => $profile->fill_status
+                'vod_fill_flag' => $profile->fill_status,
             ];
         }
 
