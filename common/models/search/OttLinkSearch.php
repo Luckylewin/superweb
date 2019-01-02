@@ -51,6 +51,7 @@ class OttLinkSearch extends OttLink
             'query' => $query,
             'sort' => [
                 'defaultOrder' => [
+                    'use_flag' => SORT_DESC,
                     'sort' => SORT_ASC
                 ]
             ]
