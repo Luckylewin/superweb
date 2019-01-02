@@ -28,7 +28,7 @@ new Vue({
       let cacheDateKey = 'NBA-events-date';
       let storageEvents = localStorage.getItem(cacheName);
 
-      if (localStorage.getItem(cacheDateKey) && cacheDateKey !== this.getTodayDate()) {
+      if (localStorage.getItem(cacheDateKey) === this.getTodayDate()) {
         this.items = JSON.parse(storageEvents);
 
       } else {

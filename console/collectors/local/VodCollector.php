@@ -248,15 +248,7 @@ class VodCollector extends common
 
                 if (!empty($data) && isset($data['vod_name']) && !empty($data['links']) ) {
 
-                    if ($this->type == 'movie' && $profile = ProfilesSearcher::search($data['vod_name'], ['language' => 'zh-CN'])) {
-                        $profile['vod_language'] = $data['vod_language'];
-                        $profile['vod_area']     = $data['vod_area'];
-                        $profile['vod_pic'] = $data['vod_pic'];
-
-                        $data = $this->myMerge($data, $profile);
-                        $data['vod_fill_flag'] = 1;
-
-                    } else if ($profile = ProfilesSearcher::quickSearchInDB($data['vod_name'], ['language' => 'zh-CN'])) {
+                    if ($profile = ProfilesSearcher::quickSearchInDB($data['vod_name'], ['language' => 'zh-CN'])) {
                         $profile['vod_language'] = $data['vod_language'];
                         $profile['vod_area']     = $data['vod_area'];
                         $profile['vod_pic'] = $data['vod_pic'];

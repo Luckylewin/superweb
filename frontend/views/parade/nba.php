@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="/css/nba.css?v=1227" />
+    <link rel="stylesheet" type="text/css" href="/css/nba.css?v=0102" />
     <title>NBA</title>
 </head>
 

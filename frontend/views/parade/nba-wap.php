@@ -68,4 +68,4 @@
 
 <script src="https://cdn.jsdelivr.net/npm/vue@2.5.21/dist/vue.js"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-<script src="/js/nba.js?v=12281334"></script>
+<script src="/js/nba.js?v=0102"></script>

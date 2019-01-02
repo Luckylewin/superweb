@@ -9,15 +9,15 @@ use common\libs\Tree;
  *
  * @property integer $id
  * @property integer $pid
- * @property string $name
- * @property string $icon_style
- * @property string $url
- * @property string $group
+ * @property string $name 名称
+ * @property string $icon_style 图标
+ * @property string $url 路由
+ * @property string $group 分组
 
- * @property integer $hide
+ * @property integer $hide 是否隐藏
  * @property integer $sort
- * @property integer $display
- * @property integer $type
+ * @property integer $display 是否显示
+ * @property integer $type 类型
  */
 class Menu extends \yii\db\ActiveRecord
 {
