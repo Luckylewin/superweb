@@ -140,24 +140,15 @@ trait UpdateProfile
     public function updateProfile(Vod $vod, $data)
     {
         $update = false;
+        $fields = ['vod_actor', 'vod_director','vod_language','vod_area','vod_content','vod_gold','vod_golder'];
 
-        if (isset($data['vod_gold']) && empty($vod->vod_gold)) {
-            $vod->vod_gold   = $data['vod_gold'];
-            $vod->vod_golder = $data['vod_golder'];
-            $update = true;
+        foreach ($fields as $field) {
+            if (isset($data[$field]) && (empty($vod->$field) || $data[$field] != $vod->$field)) {
+                $vod->$field = $data[$field];
+                $update = true;
+            }
         }
 
-        // 判断地区是否有了数据
-        if (isset($data['vod_area']) && (empty($vod->vod_area) || $data['vod_area'] != $vod->vod_area)) {
-            $vod->vod_area = $data['vod_area'];
-            $update = true;
-        }
-
-        // 判断语言是否有了数据
-        if (isset($data['vod_language']) && (empty($vod->vod_language) || $data['vod_language'] != $vod->vod_language )) {
-            $vod->vod_language = $data['vod_language'];
-            $update = true;
-        }
 
         // 判断类型是否一致 取出vod_type 字段
         if (isset($data['vod_type']) && !empty($data['vod_type'])) {
@@ -180,6 +171,7 @@ trait UpdateProfile
             if (Vodlink::find()->where(['url' => $_link['url'], 'group_id' => $playGroup->id])->exists() == false) {
 
                  $vod->vod_addtime = time();
+                 $vod->sort = 0;
                  $update = true;
                  $this->createLinks($playGroup->id, $_link);
                  echo $vod->vod_name . "更新剧集" . PHP_EOL;
