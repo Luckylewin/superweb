@@ -45,6 +45,15 @@ function installBasic()
 
 function installPHP7()
 {
+
+whereis php
+[ $? -eq 0 ] && {
+    php -v | grep 'PHP 5.4'
+    [ $? -eq 0 ] && {
+        mv /usr/bin/php /usr/bin/php54
+    }
+}
+
 [ -f /application/php/bin/php ] && {
     tips 'PHP7'
 	return
@@ -155,6 +164,10 @@ function init_config()
 	[ ! -e /application/php/etc/php-fpm.d/www.conf ] && {
 		cp /application/php/etc/php-fpm.d/www.conf.default /application/php/etc/php-fpm.d/www.conf
 	}
+
+    # 文件上传大小
+    sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 200M/g'  /application/php/lib/php.ini
+    sed -i 's/post_max_size = 8M/post_max_size = 150M/g'  /application/php/lib/php.ini
 
     install_log $? "php配置文件设置"
 

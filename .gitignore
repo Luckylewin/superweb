@@ -1,4 +1,6 @@
 # yii console commands
+frontend/web/images/
+frontend/web/storage/
 /yii
 /yii_test
 /yii_test.bat
