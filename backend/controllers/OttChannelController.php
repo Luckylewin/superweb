@@ -30,7 +30,6 @@ class OttChannelController extends BaseController
         if ($sub_class_id) {
             $this->subClass = SubClass::find()->where(['id' => $sub_class_id])->one();
             $this->mainClass = $this->subClass->mainClass;
-
         }
 
         return true;

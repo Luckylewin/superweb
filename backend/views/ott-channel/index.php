@@ -62,29 +62,22 @@ $this->params['breadcrumbs'][] = $this->title;
                         'contentOptions' => ['class' => 'ajax-td'],
                         'options' => ['style' => 'min-width:120px;'],
                         'format' => 'raw',
-                        'value' => function($model) {
-                            $str =  Html::textInput('name', $model->name, [
-                                'class' => 'form-control ajax-update',
-                                'field' => 'name',
-                                'data-id' => $model->id,
-                                'old-value' => $model->name
-                            ]);
-                            return $str = "<div class='text'>{$model->name}</div>" . "<div class='input' style='display: none'>$str</div>";
-                        }
+
                     ],
                     [
-                        'attribute' => 'zh_name',
-                        'contentOptions' => ['class' => 'ajax-td'],
+                        'label' => Yii::t('backend', 'EPG'),
                         'options' => ['style' => 'min-width:120px;'],
                         'format' => 'raw',
                         'value' => function($model) {
-                            $str =  Html::textInput('sort', $model->zh_name, [
-                                'class' => 'form-control ajax-update',
-                                'field' => 'zh_name',
-                                'data-id' => $model->id,
-                                'old-value' => $model->zh_name
-                            ]);
-                            return $str = "<div class='text'>{$model->zh_name}</div>" . "<div class='input' style='display: none'>$str</div>";
+                            if (!is_null($model->relatedParade)) {
+                                return \common\widgets\frameButton::widget([
+                                        'url' => Url::to(['parade/list-channel','name' => $model->name]),
+                                        'content' => Yii::t('backend', 'EPG'),
+                                        'icon' => 'fa-info'
+                                ]);
+                            }
+
+                            return '-';
                         }
                     ],
 

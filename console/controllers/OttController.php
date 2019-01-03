@@ -11,6 +11,9 @@ namespace console\controllers;
 use backend\models\OttAccess;
 use backend\models\OttGenreProbation;
 use backend\models\OttOrder;
+use common\models\OttChannel;
+use common\models\OttLink;
+use common\models\SubClass;
 use yii\console\Controller;
 
 class OttController extends Controller
@@ -39,6 +42,33 @@ class OttController extends Controller
                  }
 
                  OttAccess::updateAll($data, ['mac' => $access['mac'], 'genre' => $access['genre']]);
+            }
+        }
+    }
+
+    public function actionClear()
+    {
+        $subclass = SubClass::find()->all();
+        foreach ($subclass as $class) {
+            if (is_null($class->mainClass)) {
+                $class->delete();
+                $this->stdout("删除" . $class->name . PHP_EOL);
+            }
+        }
+
+        $channels = OttChannel::find()->all();
+        foreach ($channels as $channel) {
+            if (is_null($channel->subClass)) {
+                $channel->delete();
+                $this->stdout('删除' . $channel->name . PHP_EOL);
+            }
+        }
+
+        $links = OttLink::find()->all();
+        foreach ($links as $link) {
+            if (is_null($link->channel)) {
+                $link->delete();
+                $this->stdout('删除' . $link->link . PHP_EOL);
             }
         }
     }

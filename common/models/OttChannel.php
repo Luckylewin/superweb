@@ -2,6 +2,8 @@
 
 namespace common\models;
 
+use backend\models\MiddleParade;
+use backend\models\Parade;
 use Yii;
 use yii\helpers\ArrayHelper;
 use backend\models\OttBanner;
@@ -160,6 +162,7 @@ class OttChannel extends \yii\db\ActiveRecord
         return $channels;
     }
 
+
     public static function getChannelParadeInfo($mainClassName,$subClassName,$channelName,$lang)
     {
         $mainClass = MainClass::findOne(['name' => $mainClassName]);
@@ -181,6 +184,12 @@ class OttChannel extends \yii\db\ActiveRecord
         }
 
         return false;
+    }
+
+
+    public function getRelatedParade()
+    {
+        return $this->hasOne(MiddleParade::className(),['channel' => 'name']);
     }
 
 }

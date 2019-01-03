@@ -42,7 +42,7 @@ class OttChannelSearch extends OttChannel
      */
     public function search($params, $where = null)
     {
-        $query = OttChannel::find();
+        $query = OttChannel::find()->with('relatedParade');
 
         if ($sub_id = Yii::$app->request->get('sub-id')) {
             $query->where(['sub_class_id' => $sub_id]);

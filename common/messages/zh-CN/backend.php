@@ -96,7 +96,7 @@ return [
     'Event Genre' => '赛事分类',
     'Main Event' => '主要赛事',
     'OTT Orders' => '直播订单',
-    'EPG' => '预告管理',
+    'EPG' => '预告',
     'View Detail' => '查看详细',
     'APP Menus' => "APP菜单管理",
     'Total number' => '请求总数',

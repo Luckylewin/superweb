@@ -82,32 +82,7 @@ class HelloController extends Controller
 
     }
 
-    public function actionMaintain()
-    {
-        $subclass = SubClass::find()->all();
-        foreach ($subclass as $class) {
-            if (is_null($class->mainClass)) {
-                $class->delete();
-                $this->stdout("删除" . $class->name . PHP_EOL);
-            }
-        }
 
-        $channels = OttChannel::find()->all();
-        foreach ($channels as $channel) {
-            if (is_null($channel->subClass)) {
-                $channel->delete();
-                $this->stdout('删除' . $channel->name . PHP_EOL);
-            }
-        }
-
-        $links = OttLink::find()->all();
-        foreach ($links as $link) {
-            if (is_null($link->channel)) {
-                $link->delete();
-                $this->stdout('删除' . $link->link . PHP_EOL);
-            }
-        }
-    }
 
     public function actionAnna()
     {
