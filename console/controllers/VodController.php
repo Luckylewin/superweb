@@ -173,7 +173,7 @@ class VodController extends Controller
            foreach ($vods as $_vod) {
                if ($vod->vod_id != $_vod->vod_id) {
                    $similarValue = ceil($this->getSimilar($vod->vod_name, $_vod->vod_name) * 10);
-                   if ($similarValue > 9) {
+                   if ($similarValue > 8) {
                         $vod->vod_series = $this->getLCS($vod->vod_name, $_vod->vod_name);
                         $vod->vod_series = trim(preg_replace('/\s*S\d+\s*/', '', $vod->vod_series));
                         $vod->vod_series = preg_replace('/\s(?=\s)/', "\\1", $vod->vod_series);

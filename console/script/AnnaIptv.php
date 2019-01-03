@@ -305,14 +305,17 @@ class AnnaIptv extends base
         }
 
         foreach ($vods as $vod) {
-            echo "查询{$vod->vod_name}" . PHP_EOL;
-            $data = ProfilesSearcher::search($vod->vod_name,['language' => 'en-US']);
-            sleep(mt_rand(1,2));
-            if (empty($data) && !empty($vod->vod_title)) {
-                $data = ProfilesSearcher::search($vod->vod_title,['language' => 'en-US']);
+            if (empty($vod->vod_content) && !$vod->vod_fill_flag) {
+                echo "查询{$vod->vod_name}" . PHP_EOL;
+                $data = ProfilesSearcher::search($vod->vod_name,['language' => 'en-US']);
+                sleep(mt_rand(1,2));
+                if (empty($data) && !empty($vod->vod_title)) {
+                    $data = ProfilesSearcher::search($vod->vod_title,['language' => 'en-US']);
+                }
+                sleep(mt_rand(1,2));
+                $this->fillWithMovieProfile($vod,$data);
             }
-            sleep(mt_rand(1,2));
-            $this->fillWithMovieProfile($vod,$data);
+
         }
     }
 
