@@ -310,6 +310,7 @@ class AnnaIptv extends base
             if (empty($data) && !empty($vod->vod_title)) {
                 $data = ProfilesSearcher::search($vod->vod_title,['language' => 'en-US']);
             }
+            sleep(mt_rand(1,2));
             $this->fillWithMovieProfile($vod,$data);
         }
     }
@@ -380,7 +381,7 @@ class AnnaIptv extends base
             $preg['tvg-name']    = $this->getRightVodName($orinName);
             $preg['en-name']     = $this->getOriginVodName($orinName);
             $preg['group-title'] = $this->resetGroup($preg['group-title']);
-            
+
             if ($mode == 'program') {
                 if (strpos($orinName, '|') !== false) {
                     $preg['tvg-name'] = $this->resetName($orinName);
