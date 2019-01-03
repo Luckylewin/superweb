@@ -380,7 +380,7 @@ class AnnaIptv extends base
             $preg['tvg-name']    = $this->getRightVodName($orinName);
             $preg['en-name']     = $this->getOriginVodName($orinName);
             $preg['group-title'] = $this->resetGroup($preg['group-title']);
-
+            
             if ($mode == 'program') {
                 if (strpos($orinName, '|') !== false) {
                     $preg['tvg-name'] = $this->resetName($orinName);
@@ -442,7 +442,7 @@ class AnnaIptv extends base
         $season = $this->getSeason($tvg_name);
 
         // 去掉可能错误的格式
-        $tvg_name = strpos( self::get($tvg_name), '|') ? strstr($tvg_name, '|', true) : $tvg_name ;
+        $tvg_name = strpos( $tvg_name, '|') !== false ? strstr($tvg_name, '|', true) : $tvg_name ;
         $tvg_name = preg_replace('/S\d+(?=EP)/','', $tvg_name);
         $tvg_name = preg_replace('/(?<=E)P:?(?=\d+)/','', $tvg_name);
 
