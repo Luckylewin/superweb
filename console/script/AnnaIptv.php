@@ -244,6 +244,12 @@ class AnnaIptv extends base
         foreach ($data as $key => $val) {
             $sort = $total - $key;
             $vod = $this->getOrSetVod($vodList->list_id,  $val['tvg-name'],  $val['group-title'], $val['tvg-logo'], $lang, $sort);
+            // vod-title 保存原标题
+            if (!empty($val['en-name']) && (empty($vod->vod_title) || $vod->vod_title != $val['en-name'])) {
+                $vod->vod_title = $val['en-name'];
+                $vod->save(false);
+            }
+
             // 如果更改了类别 则更新
             if ($vod->vod_type != $val['group-title'] || $vod->vod_keywords != $val['group-title']) {
                 $vod->vod_type = $val['group-title'];
@@ -301,6 +307,9 @@ class AnnaIptv extends base
         foreach ($vods as $vod) {
             echo "查询{$vod->vod_name}" . PHP_EOL;
             $data = ProfilesSearcher::search($vod->vod_name,['language' => 'en-US']);
+            if (empty($data) && !empty($vod->vod_title)) {
+                $data = ProfilesSearcher::search($vod->vod_title,['language' => 'en-US']);
+            }
             $this->fillWithMovieProfile($vod,$data);
         }
     }
@@ -369,6 +378,7 @@ class AnnaIptv extends base
             $preg['type']        = $this->getIptvOrOtt($preg['ts']);
             $preg['episode']     = $this->getEpisode($orinName);
             $preg['tvg-name']    = $this->getRightVodName($orinName);
+            $preg['en-name']     = $this->getOriginVodName($orinName);
             $preg['group-title'] = $this->resetGroup($preg['group-title']);
 
             if ($mode == 'program') {
@@ -414,6 +424,17 @@ class AnnaIptv extends base
         }
 
         return 1;
+    }
+
+
+    private function getOriginVodName($tvg_name)
+    {
+        $pos = strpos($tvg_name, '|');
+        if ( $pos !== false) {
+            return substr($tvg_name,$pos + 1);
+        }
+
+        return false;
     }
 
     private function getRightVodName($tvg_name)
