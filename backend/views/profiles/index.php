@@ -50,6 +50,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 'headerOptions' => ['class' => 'col-md-1']
             ],
             [
+                'attribute' => 'media_type',
+                'filter' => [ 'movie' => 'movie',
+                              'serial' => 'serial',
+                              'cartoon' => 'cartoon',
+                              'variety' => 'variety'],
+                'headerOptions' => ['class' => 'col-md-1']
+            ],
+
+            [
                 'attribute' => 'douban_score',
                 'format' => 'raw',
                 'value' => function ($model) {

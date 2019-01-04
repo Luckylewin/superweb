@@ -28,6 +28,26 @@ class Func
         return $fileSize;
     }
 
+    public static function strToGBK($strText)
+    {
+        $encode = mb_detect_encoding($strText, array('UTF-8','GB2312','GBK'));
+        if($encode == "UTF-8") {
+            return @iconv('UTF-8','GB18030',$strText);
+        } else {
+            return $strText;
+        }
+    }
+
+    public static function strToUTF8($strText)
+    {
+        $encode = mb_detect_encoding($strText, array('UTF-8','GB2312','GBK'));
+        if(in_array($encode,['GB2312','GBK','GB18030'])) {
+            return @iconv('GB18030','UTF-8',$strText);
+        } else {
+            return $strText;
+        }
+    }
+
     /**
      * 转换数值大小
      * @param $size
